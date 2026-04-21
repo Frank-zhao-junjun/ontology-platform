@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ontology.platform.infrastructure.persistence.OntologyPOMapper">
+
+    <!-- Result Map -->
+    <resultMap id="BaseResultMap" type="com.ontology.platform.infrastructure.persistence.OntologyPO">
+        <id column="id" property="id"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="name" property="name"/>
+        <result column="display_name" property="displayName"/>
+        <result column="description" property="description"/>
+        <result column="version" property="version"/>
+        <result column="status" property="status"/>
+        <result column="published_at" property="publishedAt"/>
+        <result column="object_type_count" property="objectTypeCount"/>
+        <result column="action_type_count" property="actionTypeCount"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <!-- Base Columns -->
+    <sql id="Base_Column_List">
+        id, tenant_id, name, display_name, description, version, status,
+        published_at, object_type_count, action_type_count, created_by,
+        created_at, updated_at
+    </sql>
+
+    <!-- 根据租户ID和名称查询 -->
+    <select id="selectByTenantIdAndName" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM ontology
+        WHERE tenant_id = #{tenantId} AND name = #{name}
+    </select>
+
+    <!-- 根据租户ID和名称查询（排除指定ID） -->
+    <select id="selectByTenantIdAndNameExcludingId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM ontology
+        WHERE tenant_id = #{tenantId} AND name = #{name} AND id != #{excludeId}
+    </select>
+
+    <!-- 根据租户ID分页查询 -->
+    <select id="selectByTenantIdWithPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM ontology
+        WHERE tenant_id = #{tenantId}
+        ORDER BY created_at DESC
+        OFFSET #{offset} LIMIT #{limit}
+    </select>
+
+    <!-- 根据租户ID统计数量 -->
+    <select id="countByTenantId" resultType="long">
+        SELECT COUNT(*)
+        FROM ontology
+        WHERE tenant_id = #{tenantId}
+    </select>
+
+    <!-- 根据租户ID和状态查询 -->
+    <select id="selectByTenantIdAndStatus" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM ontology
+        WHERE tenant_id = #{tenantId} AND status = #{status}
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 检查是否存在（租户ID+名称） -->
+    <select id="countByTenantIdAndName" resultType="int">
+        SELECT COUNT(*)
+        FROM ontology
+        WHERE tenant_id = #{tenantId} AND name = #{name}
+    </select>
+
+    <!-- 检查是否存在（租户ID+名称，排除指定ID） -->
+    <select id="countByTenantIdAndNameExcludingId" resultType="int">
+        SELECT COUNT(*)
+        FROM ontology
+        WHERE tenant_id = #{tenantId} AND name = #{name} AND id != #{excludeId}
+    </select>
+
+</mapper>
