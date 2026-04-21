@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ontology.platform.infrastructure.persistence.PropertyMapper">
+
+    <resultMap id="BaseResultMap" type="com.ontology.platform.infrastructure.persistence.PropertyPO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="object_type_id" property="objectTypeId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="display_name" property="displayName" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="data_type" property="dataType" jdbcType="VARCHAR"/>
+        <result column="is_computed" property="isComputed" jdbcType="BOOLEAN"/>
+        <result column="is_required" property="isRequired" jdbcType="BOOLEAN"/>
+        <result column="is_unique" property="isUnique" jdbcType="BOOLEAN"/>
+        <result column="is_searchable" property="isSearchable" jdbcType="BOOLEAN"/>
+        <result column="is_sortable" property="isSortable" jdbcType="BOOLEAN"/>
+        <result column="default_value" property="defaultValue" jdbcType="VARCHAR"/>
+        <result column="sort_order" property="sortOrder" jdbcType="INTEGER"/>
+        <result column="extended_data" property="extendedData" jdbcType="VARCHAR"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectByObjectTypeId" resultMap="BaseResultMap">
+        SELECT id, object_type_id, name, display_name, description, data_type,
+               is_computed, is_required, is_unique, is_searchable, is_sortable,
+               default_value, sort_order, extended_data, created_at, updated_at
+        FROM property_definition
+        WHERE object_type_id = #{objectTypeId}
+        ORDER BY sort_order ASC, created_at ASC
+    </select>
+
+    <select id="selectByObjectTypeIdAndName" resultMap="BaseResultMap">
+        SELECT id, object_type_id, name, display_name, description, data_type,
+               is_computed, is_required, is_unique, is_searchable, is_sortable,
+               default_value, sort_order, extended_data, created_at, updated_at
+        FROM property_definition
+        WHERE object_type_id = #{objectTypeId} AND name = #{name}
+    </select>
+
+    <select id="selectByObjectTypeIdAndNameExcludingId" resultMap="BaseResultMap">
+        SELECT id, object_type_id, name, display_name, description, data_type,
+               is_computed, is_required, is_unique, is_searchable, is_sortable,
+               default_value, sort_order, extended_data, created_at, updated_at
+        FROM property_definition
+        WHERE object_type_id = #{objectTypeId} AND name = #{name} AND id != #{excludeId}
+    </select>
+
+    <select id="countByObjectTypeIdAndName" resultType="int">
+        SELECT COUNT(*) FROM property_definition WHERE object_type_id = #{objectTypeId} AND name = #{name}
+    </select>
+
+    <select id="countByObjectTypeIdAndNameExcludingId" resultType="int">
+        SELECT COUNT(*) FROM property_definition WHERE object_type_id = #{objectTypeId} AND name = #{name} AND id != #{excludeId}
+    </select>
+
+    <select id="countByObjectTypeId" resultType="long">
+        SELECT COUNT(*) FROM property_definition WHERE object_type_id = #{objectTypeId}
+    </select>
+
+    <delete id="deleteAllByObjectTypeId">
+        DELETE FROM property_definition WHERE object_type_id = #{objectTypeId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ontology.platform.infrastructure.persistence.ObjectTypeMapper">
+
+    <resultMap id="BaseResultMap" type="com.ontology.platform.infrastructure.persistence.ObjectTypePO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="ontology_id" property="ontologyId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="display_name" property="displayName" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="primary_key" property="primaryKey" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="VARCHAR"/>
+        <result column="instance_count" property="instanceCount" jdbcType="INTEGER"/>
+        <result column="interface_names" property="interfaceNames" jdbcType="VARCHAR"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectByOntologyId" resultMap="BaseResultMap">
+        SELECT id, ontology_id, name, display_name, description, primary_key, parent_id,
+               instance_count, interface_names, created_at, updated_at
+        FROM object_type
+        WHERE ontology_id = #{ontologyId}
+        ORDER BY created_at ASC
+    </select>
+
+    <select id="selectByOntologyIdAndName" resultMap="BaseResultMap">
+        SELECT id, ontology_id, name, display_name, description, primary_key, parent_id,
+               instance_count, interface_names, created_at, updated_at
+        FROM object_type
+        WHERE ontology_id = #{ontologyId} AND name = #{name}
+    </select>
+
+    <select id="selectByOntologyIdAndNameExcludingId" resultMap="BaseResultMap">
+        SELECT id, ontology_id, name, display_name, description, primary_key, parent_id,
+               instance_count, interface_names, created_at, updated_at
+        FROM object_type
+        WHERE ontology_id = #{ontologyId} AND name = #{name} AND id != #{excludeId}
+    </select>
+
+    <select id="selectByParentId" resultMap="BaseResultMap">
+        SELECT id, ontology_id, name, display_name, description, primary_key, parent_id,
+               instance_count, interface_names, created_at, updated_at
+        FROM object_type
+        WHERE parent_id = #{parentId}
+        ORDER BY created_at ASC
+    </select>
+
+    <select id="countByOntologyIdAndName" resultType="int">
+        SELECT COUNT(*) FROM object_type WHERE ontology_id = #{ontologyId} AND name = #{name}
+    </select>
+
+    <select id="countByOntologyIdAndNameExcludingId" resultType="int">
+        SELECT COUNT(*) FROM object_type WHERE ontology_id = #{ontologyId} AND name = #{name} AND id != #{excludeId}
+    </select>
+
+    <select id="countByOntologyId" resultType="long">
+        SELECT COUNT(*) FROM object_type WHERE ontology_id = #{ontologyId}
+    </select>
+
+</mapper>
