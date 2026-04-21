@@ -42,10 +42,37 @@ public enum ErrorCode {
     // 资源冲突 (7000-7999)
     RESOURCE_CONFLICT(7001, "Resource conflict"),
     DUPLICATE_NAME(7002, "Duplicate name"),
+    DUPLICATE_ENTRY(7003, "Duplicate entry"),
 
     // 外部服务错误 (8000-8999)
     DATA_SOURCE_ERROR(8001, "Data source connection error"),
-    SYNC_FAILED(8002, "Synchronization failed");
+    SYNC_FAILED(8002, "Synchronization failed"),
+
+    // 图遍历错误 (9000-9999)
+    GRAPH_TRAVERSAL_ERROR(9001, "Graph traversal error"),
+    INVALID_TRAVERSAL_REQUEST(9002, "Invalid traversal request"),
+    INVALID_FILTER(9003, "Invalid filter parameter"),
+    INVALID_RELATION_TYPE(9004, "Invalid relation type"),
+    INVALID_OBJECT_TYPE(9005, "Invalid object type"),
+    TRAVERSAL_DEPTH_EXCEEDED(9006, "Traversal depth exceeds maximum limit"),
+    TRAVERSAL_LIMIT_EXCEEDED(9007, "Traversal result limit exceeded"),
+    // 文件上传错误 (9100-9199)
+    FILE_TOO_LARGE(9101, "File size exceeds limit"),
+    UNSUPPORTED_FILE_TYPE(9102, "Unsupported file type"),
+    UPLOAD_EXPIRED(9103, "Upload task expired"),
+    CHUNK_OUT_OF_RANGE(9104, "Chunk number out of range"),
+    CHUNK_MD5_MISMATCH(9105, "Chunk MD5 mismatch"),
+    UPLOAD_NOT_FOUND(9106, "Upload task not found"),
+    CHUNK_ALREADY_EXISTS(9107, "Chunk already uploaded"),
+    FILE_VERIFICATION_FAILED(9108, "File verification failed"),
+
+    // 导入导出错误 (9200-9299)
+    IMPORT_FILE_PARSING_ERROR(9201, "Import file parsing error"),
+    IMPORT_COLUMN_MAPPING_ERROR(9202, "Column mapping error"),
+    IMPORT_VALIDATION_ERROR(9203, "Import data validation error"),
+    IMPORT_OBJECT_TYPE_NOT_FOUND(9204, "Object type not found for import"),
+    EXPORT_GENERATION_ERROR(9205, "Export file generation error"),
+    IMPORT_TEMPLATE_NOT_FOUND(9206, "Import template not found");
 
     private final int code;
     private final String message;

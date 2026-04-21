@@ -4,7 +4,6 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 对象列表查询响应DTO
@@ -14,34 +13,38 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ObjectListResponse {
+public class ObjectListResponse<T> {
 
     @Builder.Default
-    private List<ObjectData> items = new ArrayList<>();
+    private List<T> items = new ArrayList<>();
 
-    private PaginationMeta meta;
+    /**
+     * 总数
+     */
+    private long total;
 
-    @Getter
-    @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ObjectData {
-        private String id;
-        private String objectType;
-        private Map<String, Object> properties;
-    }
+    /**
+     * 过滤后的总数
+     */
+    private long totalFiltered;
 
-    @Getter
-    @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class PaginationMeta {
-        private int total;
-        private int offset;
-        private int limit;
-        private boolean hasMore;
-        private String nextCursor;
-    }
+    /**
+     * 当前页码
+     */
+    private int page;
+
+    /**
+     * 每页大小
+     */
+    private int pageSize;
+
+    /**
+     * 是否有更多数据
+     */
+    private boolean hasMore;
+
+    /**
+     * 游标（用于游标分页）
+     */
+    private String cursor;
 }
