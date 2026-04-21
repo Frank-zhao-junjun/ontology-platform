@@ -10,7 +10,7 @@ import com.ontology.platform.domain.repository.ObjectTypeRepository;
 import com.ontology.platform.domain.repository.OntologyRepository;
 import com.ontology.platform.domain.repository.RelationRepository;
 import com.ontology.platform.domain.vo.RelationProperty;
-import com.ontology.platform.infrastructure.service.AgeGraphService;
+import com.ontology.platform.infrastructure.graph.GraphService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class RelationServiceImpl implements RelationService {
     private final RelationRepository relationRepository;
     private final ObjectTypeRepository objectTypeRepository;
     private final OntologyRepository ontologyRepository;
-    private final AgeGraphService ageGraphService;
+    private final GraphService graphService;
 
     @Override
     @Transactional
@@ -104,8 +104,12 @@ public class RelationServiceImpl implements RelationService {
         // 保存关系到关系数据库
         relation = relationRepository.save(relation);
 
-        // 同步创建图数据库中的边
-        ageGraphService.createEdge(relation);
+        // 同步创建图数据库中的边（使用源类型和目标类型的ID作为关系标识）
+        graphService.createEdge(
+                sourceType.getId(),
+                targetType.getId(),
+                relation.getName()
+        );
 
         log.info("Relation created: id={}", relation.getId());
         return toRelationResponse(relation);
@@ -175,9 +179,6 @@ public class RelationServiceImpl implements RelationService {
         // 更新关系数据库
         relation = relationRepository.update(relation);
 
-        // 同步更新图数据库中的边
-        ageGraphService.updateEdge(relation);
-
         log.info("Relation updated: id={}", id);
         return toRelationResponse(relation);
     }
@@ -189,8 +190,18 @@ public class RelationServiceImpl implements RelationService {
         Relation relation = relationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Relation", id));
 
+        // 获取源和目标类型信息用于图数据库删除
+        ObjectType sourceType = objectTypeRepository.findById(relation.getSourceTypeId())
+                .orElseThrow(() -> new ResourceNotFoundException("ObjectType (source)", relation.getSourceTypeId()));
+        ObjectType targetType = objectTypeRepository.findById(relation.getTargetTypeId())
+                .orElseThrow(() -> new ResourceNotFoundException("ObjectType (target)", relation.getTargetTypeId()));
+
         // 删除图数据库中的边
-        ageGraphService.deleteEdge(id);
+        graphService.deleteEdge(
+                sourceType.getId(),
+                targetType.getId(),
+                relation.getName()
+        );
 
         // 删除关系数据库中的关系
         relationRepository.deleteById(id);

@@ -12,13 +12,12 @@ import com.ontology.platform.domain.entity.Relation;
 import com.ontology.platform.domain.repository.ObjectTypeRepository;
 import com.ontology.platform.domain.repository.OntologyRepository;
 import com.ontology.platform.domain.repository.RelationRepository;
-import com.ontology.platform.infrastructure.service.AgeGraphService;
+import com.ontology.platform.infrastructure.graph.GraphService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,6 +28,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
@@ -48,7 +48,7 @@ class RelationServiceTest {
     private OntologyRepository ontologyRepository;
 
     @Mock
-    private AgeGraphService ageGraphService;
+    private GraphService graphService;
 
     @InjectMocks
     private RelationServiceImpl relationService;
@@ -102,7 +102,7 @@ class RelationServiceTest {
             assertEquals(RelationCardinality.MANY_TO_ONE, response.getCardinality());
 
             verify(relationRepository).save(any(Relation.class));
-            verify(ageGraphService).createEdge(any(Relation.class));
+            verify(graphService).createEdge(eq(sourceObjectType.getId()), eq(targetObjectType.getId()), eq("WORKS_IN"));
         }
 
         @Test
@@ -156,6 +156,30 @@ class RelationServiceTest {
             when(objectTypeRepository.findById(sourceObjectType.getId())).thenReturn(Optional.of(sourceObjectType));
             when(objectTypeRepository.findById(targetObjectType.getId())).thenReturn(Optional.of(targetObjectType));
             when(relationRepository.existsByOntologyIdAndName(testOntology.getId(), "WORKS_IN")).thenReturn(true);
+
+            assertThrows(ValidationException.class, () -> relationService.createRelation(request));
+        }
+
+        @Test
+        @DisplayName("源类型不属于本体应该抛出异常")
+        void shouldThrowExceptionWhenSourceTypeNotBelongToOntology() {
+            CreateRelationRequest request = CreateRelationRequest.builder()
+                    .ontologyId(testOntology.getId())
+                    .sourceTypeId(sourceObjectType.getId())
+                    .targetTypeId(targetObjectType.getId())
+                    .name("WORKS_IN")
+                    .displayName("所属部门")
+                    .cardinality(RelationCardinality.ONE_TO_ONE)
+                    .build();
+
+            // 修改sourceObjectType的ontologyId使其不匹配
+            ObjectType wrongSourceType = ObjectType.create(
+                    "different-ontology", "EMPLOYEE", "员工", "员工对象类型", "emp_id"
+            );
+
+            when(ontologyRepository.findById(testOntology.getId())).thenReturn(Optional.of(testOntology));
+            when(objectTypeRepository.findById(sourceObjectType.getId())).thenReturn(Optional.of(wrongSourceType));
+            when(objectTypeRepository.findById(targetObjectType.getId())).thenReturn(Optional.of(targetObjectType));
 
             assertThrows(ValidationException.class, () -> relationService.createRelation(request));
         }
@@ -249,7 +273,6 @@ class RelationServiceTest {
 
             assertEquals("新名称", response.getDisplayName());
             assertEquals("新描述", response.getDescription());
-            verify(ageGraphService).updateEdge(any(Relation.class));
         }
 
         @Test
@@ -263,6 +286,40 @@ class RelationServiceTest {
 
             assertThrows(ResourceNotFoundException.class,
                     () -> relationService.updateRelation("non-existent", request));
+        }
+
+        @Test
+        @DisplayName("应该支持更新关系属性")
+        void shouldUpdateRelationProperties() {
+            Relation existingRelation = Relation.create(
+                    testOntology.getId(),
+                    sourceObjectType.getId(),
+                    targetObjectType.getId(),
+                    "WORKS_IN",
+                    "所属部门",
+                    "描述",
+                    RelationCardinality.MANY_TO_ONE
+            );
+
+            UpdateRelationRequest request = UpdateRelationRequest.builder()
+                    .properties(List.of(
+                            RelationPropertyDTO.builder()
+                                    .name("WEIGHT")
+                                    .displayName("权重")
+                                    .dataType(PropertyDataType.DECIMAL)
+                                    .isRequired(false)
+                                    .build()
+                    ))
+                    .build();
+
+            when(relationRepository.findById(existingRelation.getId())).thenReturn(Optional.of(existingRelation));
+            when(relationRepository.update(any())).thenAnswer(invocation -> invocation.getArgument(0));
+
+            RelationResponse response = relationService.updateRelation(existingRelation.getId(), request);
+
+            assertNotNull(response.getProperties());
+            assertEquals(1, response.getProperties().size());
+            assertEquals("WEIGHT", response.getProperties().get(0).getName());
         }
     }
 
@@ -284,10 +341,12 @@ class RelationServiceTest {
             );
 
             when(relationRepository.findById(existingRelation.getId())).thenReturn(Optional.of(existingRelation));
+            when(objectTypeRepository.findById(sourceObjectType.getId())).thenReturn(Optional.of(sourceObjectType));
+            when(objectTypeRepository.findById(targetObjectType.getId())).thenReturn(Optional.of(targetObjectType));
 
             relationService.deleteRelation(existingRelation.getId());
 
-            verify(ageGraphService).deleteEdge(existingRelation.getId());
+            verify(graphService).deleteEdge(eq(sourceObjectType.getId()), eq(targetObjectType.getId()), eq("WORKS_IN"));
             verify(relationRepository).deleteById(existingRelation.getId());
         }
 
@@ -369,6 +428,58 @@ class RelationServiceTest {
             List<ObjectTypeResponse> result = relationService.findRelatedObjectTypes(relation.getId());
 
             assertEquals(2, result.size());
+        }
+
+        @Test
+        @DisplayName("应该获取关系列表")
+        void shouldListRelations() {
+            Relation relation1 = Relation.create(
+                    testOntology.getId(),
+                    sourceObjectType.getId(),
+                    targetObjectType.getId(),
+                    "WORKS_IN",
+                    "所属部门",
+                    "描述",
+                    RelationCardinality.MANY_TO_ONE
+            );
+            Relation relation2 = Relation.create(
+                    testOntology.getId(),
+                    targetObjectType.getId(),
+                    sourceObjectType.getId(),
+                    "MANAGES",
+                    "管理部门",
+                    "描述",
+                    RelationCardinality.ONE_TO_ONE
+            );
+
+            when(relationRepository.findByOntologyId(testOntology.getId()))
+                    .thenReturn(List.of(relation1, relation2));
+
+            List<RelationResponse> result = relationService.listRelations(testOntology.getId());
+
+            assertEquals(2, result.size());
+        }
+
+        @Test
+        @DisplayName("应该获取关系详情")
+        void shouldGetRelationById() {
+            Relation relation = Relation.create(
+                    testOntology.getId(),
+                    sourceObjectType.getId(),
+                    targetObjectType.getId(),
+                    "WORKS_IN",
+                    "所属部门",
+                    "描述",
+                    RelationCardinality.MANY_TO_ONE
+            );
+
+            when(relationRepository.findById(relation.getId())).thenReturn(Optional.of(relation));
+
+            RelationResponse response = relationService.getRelationById(relation.getId());
+
+            assertNotNull(response);
+            assertEquals("WORKS_IN", response.getName());
+            assertEquals("所属部门", response.getDisplayName());
         }
     }
 }
