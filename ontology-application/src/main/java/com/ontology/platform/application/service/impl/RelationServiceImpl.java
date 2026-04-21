@@ -104,7 +104,7 @@ public class RelationServiceImpl implements RelationService {
         // 保存关系到关系数据库
         relation = relationRepository.save(relation);
 
-        // 同步创建图数据库中的边（使用源类型和目标类型的ID作为关系标识）
+        // 同步创建图数据库中的边
         graphService.createEdge(
                 sourceType.getId(),
                 targetType.getId(),

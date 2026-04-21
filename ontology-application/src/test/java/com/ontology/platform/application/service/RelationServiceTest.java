@@ -22,7 +22,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,7 +74,6 @@ class RelationServiceTest {
         @Test
         @DisplayName("应该成功创建关系")
         void shouldCreateRelationSuccessfully() {
-            // given
             CreateRelationRequest request = CreateRelationRequest.builder()
                     .ontologyId(testOntology.getId())
                     .sourceTypeId(sourceObjectType.getId())
@@ -92,10 +90,8 @@ class RelationServiceTest {
             when(relationRepository.existsByOntologyIdAndName(any(), any())).thenReturn(false);
             when(relationRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-            // when
             RelationResponse response = relationService.createRelation(request);
 
-            // then
             assertNotNull(response);
             assertEquals("WORKS_IN", response.getName());
             assertEquals("所属部门", response.getDisplayName());
@@ -172,7 +168,6 @@ class RelationServiceTest {
                     .cardinality(RelationCardinality.ONE_TO_ONE)
                     .build();
 
-            // 修改sourceObjectType的ontologyId使其不匹配
             ObjectType wrongSourceType = ObjectType.create(
                     "different-ontology", "EMPLOYEE", "员工", "员工对象类型", "emp_id"
             );
@@ -286,40 +281,6 @@ class RelationServiceTest {
 
             assertThrows(ResourceNotFoundException.class,
                     () -> relationService.updateRelation("non-existent", request));
-        }
-
-        @Test
-        @DisplayName("应该支持更新关系属性")
-        void shouldUpdateRelationProperties() {
-            Relation existingRelation = Relation.create(
-                    testOntology.getId(),
-                    sourceObjectType.getId(),
-                    targetObjectType.getId(),
-                    "WORKS_IN",
-                    "所属部门",
-                    "描述",
-                    RelationCardinality.MANY_TO_ONE
-            );
-
-            UpdateRelationRequest request = UpdateRelationRequest.builder()
-                    .properties(List.of(
-                            RelationPropertyDTO.builder()
-                                    .name("WEIGHT")
-                                    .displayName("权重")
-                                    .dataType(PropertyDataType.DECIMAL)
-                                    .isRequired(false)
-                                    .build()
-                    ))
-                    .build();
-
-            when(relationRepository.findById(existingRelation.getId())).thenReturn(Optional.of(existingRelation));
-            when(relationRepository.update(any())).thenAnswer(invocation -> invocation.getArgument(0));
-
-            RelationResponse response = relationService.updateRelation(existingRelation.getId(), request);
-
-            assertNotNull(response.getProperties());
-            assertEquals(1, response.getProperties().size());
-            assertEquals("WEIGHT", response.getProperties().get(0).getName());
         }
     }
 

@@ -3,12 +3,9 @@ package com.ontology.platform.domain.entity;
 import com.ontology.platform.common.enums.RelationCardinality;
 import com.ontology.platform.domain.vo.RelationProperty;
 import com.ontology.platform.common.enums.PropertyDataType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
