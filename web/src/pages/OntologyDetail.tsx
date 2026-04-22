@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useLocation, Link } from 'wouter';
 import type { Ontology, ObjectType, ValidationResult } from '../types';
 import {
   getOntology,
@@ -15,8 +15,9 @@ const statusLabels: Record<string, { text: string; class: string }> = {
 };
 
 function OntologyDetail() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  const params = useParams();
+  const id = params.id;
+  const [, setLocation] = useLocation();
   const [ontology, setOntology] = useState<Ontology | null>(null);
   const [objectTypes, setObjectTypes] = useState<ObjectType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -85,7 +86,7 @@ function OntologyDetail() {
       <div className="text-center py-12">
         <p className="text-gray-500">本体不存在或已被删除</p>
         <button
-          onClick={() => navigate('/ontologies')}
+          onClick={() => setLocation('/ontologies')}
           className="mt-4 text-blue-600 hover:text-blue-700"
         >
           返回列表
@@ -101,7 +102,7 @@ function OntologyDetail() {
       {/* Breadcrumb */}
       <div className="mb-4">
         <button
-          onClick={() => navigate('/ontologies')}
+          onClick={() => setLocation('/ontologies')}
           className="text-blue-600 hover:text-blue-700 flex items-center gap-1"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -235,13 +236,13 @@ function OntologyDetail() {
           <h3 className="text-lg font-bold text-gray-900">对象类型</h3>
           <div className="flex gap-2">
             <Link
-              to={`/ontologies/${id}/object-types`}
+              href={`/ontologies/${id}/object-types`}
               className="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50"
             >
               管理对象类型
             </Link>
             <Link
-              to={`/ontologies/${id}/graph`}
+              href={`/ontologies/${id}/graph`}
               className="px-4 py-2 text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50"
             >
               图遍历查询
@@ -253,7 +254,7 @@ function OntologyDetail() {
           <div className="text-center py-8 text-gray-500">
             <p>暂无对象类型</p>
             <Link
-              to={`/ontologies/${id}/object-types`}
+              href={`/ontologies/${id}/object-types`}
               className="mt-2 text-blue-600 hover:text-blue-700 inline-block"
             >
               创建对象类型

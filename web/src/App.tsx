@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Route, Router, Switch, Redirect } from 'wouter';
 import Layout from './components/Layout';
 import OntologyList from './pages/OntologyList';
 import OntologyDetail from './pages/OntologyDetail';
@@ -7,15 +7,26 @@ import GraphTraversal from './pages/GraphTraversal';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Navigate to="/ontologies" replace />} />
-        <Route path="ontologies" element={<OntologyList />} />
-        <Route path="ontologies/:id" element={<OntologyDetail />} />
-        <Route path="ontologies/:id/object-types" element={<ObjectTypeList />} />
-        <Route path="ontologies/:id/graph" element={<GraphTraversal />} />
-      </Route>
-    </Routes>
+    <Router>
+      <Switch>
+        <Route path="/" component={() => <Redirect to="/ontologies" />} />
+        <Route path="/ontologies">
+          <Layout><OntologyList /></Layout>
+        </Route>
+        <Route path="/ontologies/:id">
+          <Layout><OntologyDetail /></Layout>
+        </Route>
+        <Route path="/ontologies/:id/object-types">
+          <Layout><ObjectTypeList /></Layout>
+        </Route>
+        <Route path="/ontologies/:id/graph">
+          <Layout><GraphTraversal /></Layout>
+        </Route>
+        <Route>
+          <Layout><OntologyList /></Layout>
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 

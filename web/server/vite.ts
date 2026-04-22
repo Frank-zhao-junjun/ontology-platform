@@ -17,10 +17,18 @@ export async function setupViteMiddleware(app: Application) {
   const vite = await createViteServer({
     ...viteConfig,
     server: {
-      ...viteConfig.server,
       middlewareMode: true,
     },
     appType: 'spa',
+    optimizeDeps: {
+      force: true,
+      esbuildOptions: {
+        target: 'esnext',
+      },
+    },
+    esbuild: {
+      target: 'esnext',
+    },
   });
 
   // 使用 Vite middleware

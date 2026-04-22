@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useLocation } from 'wouter';
 import type { GraphTraversalRequest, GraphTraversalResponse } from '../types';
 import { traverseGraph, findShortestPath, extractSubgraph } from '../api/client';
 
 function GraphTraversal() {
-  const { id: ontologyId } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  const params = useParams();
+  const ontologyId = params.id;
+  const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState<'traverse' | 'path' | 'subgraph'>('traverse');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -207,7 +208,7 @@ function GraphTraversal() {
     <div>
       <div className="mb-4">
         <button
-          onClick={() => navigate(`/ontologies/${ontologyId}`)}
+          onClick={() => setLocation(`/ontologies/${ontologyId}`)}
           className="text-blue-600 hover:text-blue-700 flex items-center gap-1"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

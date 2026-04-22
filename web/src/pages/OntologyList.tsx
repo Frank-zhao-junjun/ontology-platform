@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 import type { Ontology, CreateOntologyRequest } from '../types';
 import {
   listOntologies,
@@ -16,7 +16,7 @@ const statusLabels: Record<string, { text: string; class: string }> = {
 };
 
 function OntologyList() {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const [ontologies, setOntologies] = useState<Ontology[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -166,7 +166,7 @@ function OntologyList() {
                     <td className="px-6 py-4 text-right text-sm font-medium">
                       <div className="flex justify-end gap-2">
                         <button
-                          onClick={() => navigate(`/ontologies/${ontology.id}`)}
+                          onClick={() => setLocation(`/ontologies/${ontology.id}`)}
                           className="text-blue-600 hover:text-blue-900"
                         >
                           详情

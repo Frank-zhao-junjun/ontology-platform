@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useLocation } from 'wouter';
 import type { ObjectType, Property, CreateObjectTypeRequest, CreatePropertyRequest } from '../types';
 import {
   listObjectTypes,
@@ -11,8 +11,9 @@ import {
 } from '../api/client';
 
 function ObjectTypeList() {
-  const { id: ontologyId } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  const params = useParams();
+  const ontologyId = params.id;
+  const [, setLocation] = useLocation();
   const [objectTypes, setObjectTypes] = useState<ObjectType[]>([]);
   const [selectedObjectType, setSelectedObjectType] = useState<ObjectType | null>(null);
   const [properties, setProperties] = useState<Property[]>([]);
@@ -139,7 +140,7 @@ function ObjectTypeList() {
     <div>
       <div className="mb-4">
         <button
-          onClick={() => navigate(`/ontologies/${ontologyId}`)}
+          onClick={() => setLocation(`/ontologies/${ontologyId}`)}
           className="text-blue-600 hover:text-blue-700 flex items-center gap-1"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
