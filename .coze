@@ -1,11 +1,15 @@
 [project]
-entrypoint = "ontology-platform/docker/docker-compose.yml"
-requires = ["docker"]
+requires = [ "nodejs-24" ]
+template = "vite"
+version = "0.0.18"
+appliedPatches = [ ]
 
 [dev]
-build = ["docker-compose", "-f", "ontology-platform/docker/docker-compose.yml", "build"]
-run = ["docker-compose", "-f", "ontology-platform/docker/docker-compose.yml", "up", "-d"]
+build = [ "bash", "./scripts/prepare.sh" ]
+run = [ "bash", "./scripts/dev.sh" ]
+deps = [ "git" ]
 
 [deploy]
-build = ["docker-compose", "-f", "ontology-platform/docker/docker-compose.yml", "build", "--no-cache"]
-run = ["docker-compose", "-f", "ontology-platform/docker/docker-compose.yml", "up", "-d"]
+build = [ "bash", "./scripts/build.sh" ]
+run = [ "bash", "./scripts/start.sh" ]
+deps = [ "git" ]
