@@ -1,0 +1,11 @@
+[project]
+entrypoint = "ontology-platform/docker/docker-compose.yml"
+requires = ["docker"]
+
+[dev]
+build = ["docker-compose", "-f", "ontology-platform/docker/docker-compose.yml", "build"]
+run = ["docker-compose", "-f", "ontology-platform/docker/docker-compose.yml", "up", "-d"]
+
+[deploy]
+build = ["docker-compose", "-f", "ontology-platform/docker/docker-compose.yml", "build", "--no-cache"]
+run = ["docker-compose", "-f", "ontology-platform/docker/docker-compose.yml", "up", "-d"]
