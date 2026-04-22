@@ -74,3 +74,4 @@ docker/logs/
 jacoco/
 *.exec
 *.html
+!web/index.html

@@ -16,6 +16,18 @@ import type {
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
 
+interface ValidationIssueDto {
+  severity: string;
+  entityName?: string;
+  message: string;
+  suggestion?: string;
+}
+
+interface ValidationResultDto {
+  valid: boolean;
+  issues?: ValidationIssueDto[];
+}
+
 async function fetchApi<T>(
   path: string,
   options?: RequestInit
@@ -40,6 +52,32 @@ async function fetchApi<T>(
     throw new Error(result.message || `API Error: ${result.code}`);
   }
   return result.data;
+}
+
+function mapValidationResult(result: ValidationResultDto): ValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  for (const issue of result.issues || []) {
+    const detail = [issue.entityName, issue.message, issue.suggestion]
+      .filter(Boolean)
+      .join(' - ');
+
+    if (issue.severity === 'ERROR') {
+      errors.push(detail);
+      continue;
+    }
+
+    if (issue.severity === 'WARNING') {
+      warnings.push(detail);
+    }
+  }
+
+  return {
+    valid: result.valid,
+    errors,
+    warnings,
+  };
 }
 
 // ==================== Ontology APIs ====================
@@ -94,9 +132,11 @@ export async function archiveOntology(id: string): Promise<Ontology> {
 }
 
 export async function validateOntology(id: string): Promise<ValidationResult> {
-  return fetchApi<ValidationResult>(`/v1/ontologies/${id}/validate`, {
+  const result = await fetchApi<ValidationResultDto>(`/v1/ontologies/${id}/validate`, {
     method: 'POST',
   });
+
+  return mapValidationResult(result);
 }
 
 // ==================== Object Type APIs ====================

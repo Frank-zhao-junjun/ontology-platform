@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/ontologies/{ontologyId}/relations")
+@RequestMapping("/v1/ontologies/{ontologyId}/relations")
 @RequiredArgsConstructor
 @Tag(name = "Relation", description = "关系管理API")
 public class RelationController {

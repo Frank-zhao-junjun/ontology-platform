@@ -104,7 +104,7 @@ export interface GraphTraversalRequest {
   direction?: 'OUTGOING' | 'INCOMING' | 'BOTH';
   limit?: number;
   filters?: TraversalFilter[];
-  returnFormat?: 'FULL' | 'SUMMARY' | 'IDS_ONLY';
+  returnFormat?: 'GRAPH' | 'TREE' | 'FLAT';
   includeProperties?: string[];
   excludeProperties?: string[];
 }

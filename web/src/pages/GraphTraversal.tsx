@@ -19,7 +19,7 @@ function GraphTraversal() {
     maxDepth: 3,
     direction: 'OUTGOING',
     limit: 100,
-    returnFormat: 'FULL',
+    returnFormat: 'GRAPH',
   });
 
   // Path form
@@ -292,7 +292,9 @@ function GraphTraversal() {
                     value={traverseForm.startObjectId}
                     onChange={(e) => setTraverseForm({ ...traverseForm, startObjectId: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    placeholder="如：prod-001"
+                    placeholder="如：550e8400-e29b-41d4-a716-446655440000"
+                    pattern="^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+                    title="请输入 UUID 格式的对象 ID"
                     required
                   />
                 </div>
@@ -306,7 +308,7 @@ function GraphTraversal() {
                     onChange={(e) => setTraverseForm({ ...traverseForm, maxDepth: parseInt(e.target.value) })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     min={1}
-                    max={10}
+                    max={5}
                   />
                 </div>
                 <div>
@@ -337,12 +339,12 @@ function GraphTraversal() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">返回格式</label>
                 <select
                   value={traverseForm.returnFormat}
-                  onChange={(e) => setTraverseForm({ ...traverseForm, returnFormat: e.target.value as 'FULL' | 'SUMMARY' | 'IDS_ONLY' })}
+                  onChange={(e) => setTraverseForm({ ...traverseForm, returnFormat: e.target.value as 'GRAPH' | 'TREE' | 'FLAT' })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="FULL">完整</option>
-                  <option value="SUMMARY">摘要</option>
-                  <option value="IDS_ONLY">仅ID</option>
+                  <option value="GRAPH">图结构</option>
+                  <option value="TREE">树结构</option>
+                  <option value="FLAT">扁平列表</option>
                 </select>
               </div>
               <button

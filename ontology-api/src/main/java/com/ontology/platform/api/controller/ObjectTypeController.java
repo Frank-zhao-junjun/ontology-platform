@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/ontologies/{ontologyId}/object-types")
+@RequestMapping("/v1/ontologies/{ontologyId}/object-types")
 @RequiredArgsConstructor
 @Tag(name = "ObjectType", description = "对象类型管理API")
 public class ObjectTypeController {

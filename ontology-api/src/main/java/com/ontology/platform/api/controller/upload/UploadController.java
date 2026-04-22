@@ -24,7 +24,7 @@ import java.io.IOException;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/v1")
 @RequiredArgsConstructor
 @Tag(name = "文件上传", description = "大文件分片上传接口")
 public class UploadController {

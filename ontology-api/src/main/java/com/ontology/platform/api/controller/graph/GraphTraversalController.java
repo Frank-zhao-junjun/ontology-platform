@@ -22,13 +22,13 @@ import java.util.stream.Collectors;
  * Graph Traversal Controller
  * 
  * 提供图遍历查询API：
- * - POST /api/v1/ontologies/{ontologyId}/graph/traverse - 执行图遍历
- * - GET /api/v1/ontologies/{ontologyId}/graph/paths - 查询最短路径
- * - GET /api/v1/ontologies/{ontologyId}/graph/subgraph - 提取子图
+ * - POST /v1/ontologies/{ontologyId}/graph/traverse - 执行图遍历
+ * - GET /v1/ontologies/{ontologyId}/graph/paths - 查询最短路径
+ * - GET /v1/ontologies/{ontologyId}/graph/subgraph - 提取子图
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/ontologies/{ontologyId}/graph")
+@RequestMapping("/v1/ontologies/{ontologyId}/graph")
 @RequiredArgsConstructor
 @Tag(name = "Graph Traversal", description = "图遍历查询API")
 public class GraphTraversalController {
@@ -37,7 +37,7 @@ public class GraphTraversalController {
     
     /**
      * 执行图遍历查询
-     * POST /api/v1/ontologies/{ontologyId}/graph/traverse
+        * POST /v1/ontologies/{ontologyId}/graph/traverse
      */
     @PostMapping("/traverse")
     @Operation(summary = "执行图遍历查询", 
@@ -58,7 +58,7 @@ public class GraphTraversalController {
     
     /**
      * 查询最短路径
-     * GET /api/v1/ontologies/{ontologyId}/graph/paths
+        * GET /v1/ontologies/{ontologyId}/graph/paths
      */
     @GetMapping("/paths")
     @Operation(summary = "查询最短路径", 
@@ -78,7 +78,7 @@ public class GraphTraversalController {
     
     /**
      * 提取子图
-     * GET /api/v1/ontologies/{ontologyId}/graph/subgraph
+        * GET /v1/ontologies/{ontologyId}/graph/subgraph
      */
     @GetMapping("/subgraph")
     @Operation(summary = "提取子图", 
