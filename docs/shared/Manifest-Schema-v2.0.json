@@ -1,0 +1,456 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ontology-platform.com/schemas/manifest-v2.0.json",
+  "title": "Agent Manifest",
+  "description": "本体建模平台 — Agent Manifest JSON Schema v2.0。本 Schema 定义了官方唯一交付物——Agent Manifest 的完整结构，消费方（MCP Server / AI Agent / 第三方系统）依据此 Schema 验证 Manifest 合法性。",
+  "type": "object",
+  "required": [
+    "manifestVersion",
+    "ontology",
+    "boundedContext",
+    "entities",
+    "behaviors",
+    "events",
+    "permissions",
+    "sandbox",
+    "dataSources"
+  ],
+  "properties": {
+
+    "manifestVersion": {
+      "type": "string",
+      "description": "Manifest 格式版本号",
+      "const": "2.0"
+    },
+
+    "ontology": {
+      "$ref": "#/$defs/OntologyMeta"
+    },
+
+    "boundedContext": {
+      "$ref": "#/$defs/BoundedContext"
+    },
+
+    "entities": {
+      "type": "array",
+      "description": "实体定义（含聚合根 + 子对象 + 属性 + 状态机）",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/Entity" }
+    },
+
+    "relations": {
+      "type": "array",
+      "description": "关系定义",
+      "items": { "$ref": "#/$defs/Relation" }
+    },
+
+    "behaviors": {
+      "type": "array",
+      "description": "行为定义（含参数、校验规则、事务边界、副作用、事件发布）",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/Behavior" }
+    },
+
+    "events": {
+      "type": "array",
+      "description": "事件定义（领域事件 + 集成事件 + 路由 + 处理器矩阵）",
+      "items": { "$ref": "#/$defs/Event" }
+    },
+
+    "permissions": {
+      "$ref": "#/$defs/Permissions"
+    },
+
+    "sandbox": {
+      "$ref": "#/$defs/Sandbox"
+    },
+
+    "dataSources": {
+      "type": "array",
+      "description": "数据源元数据（仅记录获取方式，不包含凭证明文）",
+      "items": { "$ref": "#/$defs/DataSourceEntry" }
+    }
+  },
+
+  "$defs": {
+
+    "OntologyMeta": {
+      "type": "object",
+      "required": ["id", "name", "version", "compiledAt"],
+      "properties": {
+        "id":          { "type": "string", "format": "uuid", "description": "本体唯一标识" },
+        "name":        { "type": "string", "description": "本体名称，如'生产制造'" },
+        "version":     { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$", "description": "语义化版本 1.0.0" },
+        "compiledAt":  { "type": "string", "format": "date-time" },
+        "compiledBy":  { "type": "string", "description": "编译人" },
+        "changeLog":   { "type": "string", "description": "版本变更说明" }
+      }
+    },
+
+    "BoundedContext": {
+      "type": "object",
+      "required": ["name", "code"],
+      "properties": {
+        "name":        { "type": "string", "description": "限界上下文名称" },
+        "code":        { "type": "string", "description": "限界上下文代码" },
+        "domainTag":   { "type": "string", "enum": ["manufacturing", "quality", "equipment", "supply_chain"] },
+        "description": { "type": "string" },
+        "scenarios": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["code", "name"],
+            "properties": {
+              "code":        { "type": "string" },
+              "name":        { "type": "string" },
+              "description": { "type": "string" },
+              "isActive":    { "type": "boolean", "default": true }
+            }
+          }
+        }
+      }
+    },
+
+    "Entity": {
+      "type": "object",
+      "required": ["code", "name", "objectKind"],
+      "properties": {
+        "code":             { "type": "string", "description": "对象代码，如 ProductionOrder" },
+        "name":             { "type": "string", "description": "对象名称，如 生产订单" },
+        "description":      { "type": "string" },
+        "isAggregateRoot":  { "type": "boolean", "default": false },
+        "objectKind":       { "type": "string", "enum": ["ENTITY", "VALUE_OBJECT", "INTERFACE_ABSTRACT"] },
+        "parentObjectCode": { "type": "string", "description": "继承父对象代码（接口实现）" },
+        "states": {
+          "type": "array",
+          "description": "状态机——生命周期状态列表（按顺序）",
+          "items": {
+            "type": "object",
+            "required": ["code", "name"],
+            "properties": {
+              "code":       { "type": "string" },
+              "name":       { "type": "string" },
+              "isInitial":  { "type": "boolean", "default": false },
+              "isTerminal": { "type": "boolean", "default": false }
+            }
+          }
+        },
+        "stateTransitions": {
+          "type": "array",
+          "description": "状态转换——由驱动行为触发",
+          "items": {
+            "type": "object",
+            "required": ["fromState", "toState", "drivingBehavior"],
+            "properties": {
+              "fromState":       { "type": "string" },
+              "toState":         { "type": "string" },
+              "drivingBehavior": { "type": "string", "description": "驱动行为代码" },
+              "publishedEvent":  { "type": "string", "description": "转换后发布的领域事件代码" }
+            }
+          }
+        },
+        "attributes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Attribute" }
+        },
+        "children": {
+          "type": "array",
+          "description": "子对象（聚合内的实体/值对象）",
+          "items": { "$ref": "#/$defs/Entity" }
+        }
+      }
+    },
+
+    "Attribute": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name":         { "type": "string", "description": "属性字段名" },
+        "label":        { "type": "string", "description": "属性中文标签" },
+        "type":         { "type": "string", "enum": ["STRING", "INT", "DECIMAL", "DATE", "DATETIME", "ENUM", "BOOLEAN", "JSON", "MONEY", "QUANTITY"] },
+        "required":     { "type": "boolean", "default": false },
+        "primaryKey":   { "type": "boolean", "default": false },
+        "enumValues":   { "type": "array", "items": { "type": "string" } },
+        "defaultValue": { "type": "string" },
+        "sensitive":    { "type": "boolean", "default": false, "description": "敏感字段——需字段级权限控制" },
+        "description":  { "type": "string" }
+      }
+    },
+
+    "Relation": {
+      "type": "object",
+      "required": ["code", "source", "target", "cardinality", "kind"],
+      "properties": {
+        "code":         { "type": "string" },
+        "name":         { "type": "string" },
+        "source":       { "type": "string", "description": "源对象代码" },
+        "target":       { "type": "string", "description": "目标对象代码" },
+        "cardinality":  { "type": "string", "enum": ["1:1", "1:N", "N:1", "N:M"] },
+        "kind":         { "type": "string", "enum": ["COMPOSITION", "AGGREGATION", "REFERENCE", "DEPENDENCY"] },
+        "isCrossContext": { "type": "boolean", "default": false },
+        "targetContext":  { "type": "string", "description": "跨上下文时目标上下文代码" }
+      }
+    },
+
+    "Behavior": {
+      "type": "object",
+      "required": ["code", "name", "aggregateRoot", "invocationMode"],
+      "properties": {
+        "code":             { "type": "string", "description": "行为代码" },
+        "name":             { "type": "string", "description": "行为名称" },
+        "description":      { "type": "string" },
+        "aggregateRoot":    { "type": "string", "description": "关联聚合根代码" },
+        "invocationMode":   { "type": "string", "enum": ["DIRECT", "EVENT_DRIVEN", "BOTH"], "description": "DIRECT=仅主动调用, EVENT_DRIVEN=仅事件触发, BOTH=两者皆可" },
+        "inputParams": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "type"],
+            "properties": {
+              "name":        { "type": "string" },
+              "type":        { "type": "string", "enum": ["STRING", "INT", "DECIMAL", "DATE", "DATETIME", "BOOLEAN", "JSON"] },
+              "required":    { "type": "boolean", "default": false },
+              "description": { "type": "string" },
+              "defaultValue": { "type": "string" }
+            }
+          }
+        },
+        "validationRules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["code", "name", "type"],
+            "properties": {
+              "code":                       { "type": "string" },
+              "name":                       { "type": "string" },
+              "type":                       { "type": "string", "enum": ["PRE_CHECK", "POST_CHECK", "INVARIANT"] },
+              "expression":                 { "type": "object", "description": "结构化规则表达式 JSON" },
+              "violationMessageTemplate":   { "type": "string" },
+              "executionOrder":             { "type": "integer", "default": 0 }
+            }
+          }
+        },
+        "publishedEvents": {
+          "type": "array",
+          "description": "声明式事件发布——行为执行成功后自动发布这些事件",
+          "items": {
+            "type": "object",
+            "required": ["eventCode"],
+            "properties": {
+              "eventCode": { "type": "string" },
+              "eventName": { "type": "string" }
+            }
+          }
+        },
+        "transactionBoundary": {
+          "type": "object",
+          "description": "事务边界——这些操作必须原子执行",
+          "properties": {
+            "operations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["objectCode", "field"],
+                "properties": {
+                  "objectCode": { "type": "string" },
+                  "field":      { "type": "string" },
+                  "newValue":   { "type": "string" },
+                  "delta":      { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "sideEffects": {
+          "type": "array",
+          "description": "副作用——异步执行，不纳入事务边界",
+          "items": {
+            "type": "object",
+            "required": ["type", "target"],
+            "properties": {
+              "type":           { "type": "string", "enum": ["NOTIFICATION", "SYNC", "LOG", "WEBHOOK"] },
+              "target":         { "type": "string" },
+              "contentTemplate": { "type": "string" },
+              "isAsync":        { "type": "boolean", "default": true }
+            }
+          }
+        }
+      }
+    },
+
+    "Event": {
+      "type": "object",
+      "required": ["code", "name", "kind"],
+      "properties": {
+        "code":               { "type": "string" },
+        "name":               { "type": "string" },
+        "kind":               { "type": "string", "enum": ["DOMAIN", "INTEGRATION"] },
+        "triggeringBehavior": { "type": "string", "description": "触发该事件的源行为代码" },
+        "sourceEventCode":    { "type": "string", "description": "集成事件的源领域事件代码（仅 INTEGRATION 类型）" },
+        "payloadSchema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "type"],
+            "properties": {
+              "name":     { "type": "string" },
+              "type":     { "type": "string" },
+              "required": { "type": "boolean", "default": false },
+              "source":   { "type": "string", "description": "字段来源路径" }
+            }
+          }
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["targetType"],
+            "properties": {
+              "targetType":     { "type": "string", "enum": ["CONTEXT", "EXTERNAL_SYSTEM"] },
+              "targetContext":  { "type": "string" },
+              "targetSystem":   { "type": "string" },
+              "routeCondition": { "type": "object" }
+            }
+          }
+        },
+        "handlers": {
+          "type": "array",
+          "description": "事件处理器矩阵——事件×场景×状态→处理行为",
+          "items": {
+            "type": "object",
+            "required": ["handlerBehavior"],
+            "properties": {
+              "scenarioCode":      { "type": "string", "description": "适用业务场景代码（null=任意场景）" },
+              "requiredState":     { "type": "string", "description": "对象前置状态（null=任意状态）" },
+              "handlerBehavior":   { "type": "string", "description": "处理行为代码（必须存在于 behaviors[] 中）" },
+              "description":       { "type": "string" },
+              "priority":          { "type": "integer", "default": 0 }
+            }
+          }
+        }
+      }
+    },
+
+    "Permissions": {
+      "type": "object",
+      "required": ["roles"],
+      "properties": {
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["code", "name"],
+            "properties": {
+              "code":        { "type": "string" },
+              "name":        { "type": "string" },
+              "description": { "type": "string" },
+              "isGlobal":    { "type": "boolean", "default": false },
+              "objectPermissions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["objectType"],
+                  "properties": {
+                    "objectType":  { "type": "string" },
+                    "read":        { "type": "boolean", "default": false },
+                    "write":       { "type": "boolean", "default": false },
+                    "delete":      { "type": "boolean", "default": false },
+                    "execute":     { "type": "boolean", "default": false }
+                  }
+                }
+              },
+              "fieldPermissions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["objectType", "field"],
+                  "properties": {
+                    "objectType": { "type": "string" },
+                    "field":      { "type": "string" },
+                    "visible":    { "type": "boolean", "default": true },
+                    "editable":   { "type": "boolean", "default": false }
+                  }
+                }
+              },
+              "conditionalRules": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "conditionType": { "type": "string", "enum": ["TIME_WINDOW", "ORG_SCOPE", "DATA_SCOPE"] },
+                    "expression":    { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "Sandbox": {
+      "type": "object",
+      "required": ["defaultDenyAll"],
+      "properties": {
+        "allowedTools": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "MCP 工具白名单。MVP 须含 resolve_intent、query_ontology、execute_action（见 USM v1.2.1 / TDD §5）"
+        },
+        "allowedAggregateRoots": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "允许访问的聚合根代码白名单"
+        },
+        "allowedBehaviors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["code"],
+            "properties": {
+              "code":               { "type": "string" },
+              "maxCallsPerMinute":  { "type": "integer", "default": 60 }
+            }
+          },
+          "description": "允许执行的行为白名单（含频率限制）"
+        },
+        "defaultDenyAll": {
+          "type": "boolean",
+          "const": true,
+          "description": "最小权限原则——默认拒绝一切，仅白名单放行（必须为 true）"
+        },
+        "maxOpsPerSecond": {
+          "type": "integer",
+          "default": 10,
+          "description": "全局操作频率上限"
+        }
+      }
+    },
+
+    "DataSourceEntry": {
+      "type": "object",
+      "required": ["objectType", "methods"],
+      "properties": {
+        "objectType": { "type": "string", "description": "对象类型代码" },
+        "methods": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "sourceName"],
+            "properties": {
+              "type":         { "type": "string", "enum": ["SQL_QUERY", "API_CALL", "MCP_TOOL"] },
+              "sourceName":   { "type": "string" },
+              "sourceCode":   { "type": "string" },
+              "endpoint":     { "type": "string", "description": "API 端点或 SQL 模板" },
+              "method":       { "type": "string", "enum": ["GET", "POST", "PUT", "DELETE"] },
+              "authType":     { "type": "string", "enum": ["NONE", "BASIC", "OAUTH2", "API_KEY"] },
+              "credentialRef": { "type": "string", "description": "凭证引用，不包含明文！格式：vault:<name>" },
+              "responseMapping": { "type": "object", "description": "响应字段→属性映射" },
+              "cacheTtlSec":  { "type": "integer", "default": 300 }
+            }
+          }
+        }
+      }
+    }
+  }
+}
