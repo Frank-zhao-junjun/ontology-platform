@@ -45,12 +45,34 @@ mvn -pl ontology-application,ontology-api -am test `
 
 ---
 
-## A. 目标态（US-A01 正式 import API — 待实现）
+## A. Round 2 — 写库 import（已实现）
 
-1. `POST /api/v1/manifests/import`（或等价）上传 YAML/JSON body。
-2. 服务端执行 V01–V11；失败返回 AC-4 结构：`elementType` + `id` + `field` + `message`。
-3. 成功返回：`draftId`、`importedCounts`、`warnings`。
-4. 管理员 `POST /contexts/{id}/approve` 触发 publish，写入 `manifests` 表（TDD §3）。
+| 方法 | URL | 说明 |
+|------|-----|------|
+| POST | `/api/ontology/import/import` | dry-run 通过后写入语义/治理/数据源表 |
+| POST | `/api/ontology/import/import/us-a01-smoke` | 内置制造域样例一键 import |
+
+成功 **201**：`data.valid=true`，`data.draftId` = `data.contextId`（限界上下文 UUID），`importedCounts` 同 dry-run。  
+校验失败 **400**：`errors[]` 结构同 dry-run。
+
+落库映射（调用现有 Service，等价于手工 B 节）：
+
+- `boundedContext` → `POST /v1/contexts`（`ontologyId` = `metadata.id`）
+- `aggregate_root` → `/aggregate-roots` + `/object-types`（`AGGREGATE_ROOT`）
+- `entity` → `/object-types`（`ENTITY`，`aggregateRootId` 指向平台聚合根）
+- `properties[].nameEn` → `PUT /object-types/{id}/attributes` JSON
+- `relations` → `/relationships`
+- `governance` → `/roles`、`/object-permissions`、`/field-permissions`（`propertyNameEn` → `fieldName`）、`/sandboxes`
+- `dataSources` → `/data-sources` + `/data-access-methods`
+
+**未落库**：`behavior`、`events`（待 US-B01/E*）；`manifests` 快照表仍待 P-02。
+
+---
+
+## A1. 目标态补充（publish / manifests 表 — 待实现）
+
+1. 管理员 `POST /v1/contexts/{id}/approve` 触发 publish，写入 `manifests` 表（TDD §3）。
+2. 可选：`POST /api/v1/manifests/import` 别名与版本化 `draftId`。
 
 ---
 

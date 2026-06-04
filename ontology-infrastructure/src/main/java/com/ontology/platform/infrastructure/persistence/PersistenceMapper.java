@@ -19,7 +19,7 @@ public final class PersistenceMapper {
         e.setName(ctx.getName());
         e.setCode(ctx.getCode());
         e.setDescription(ctx.getDescription());
-        e.setDomainTag(ctx.getDomainTag() != null ? ctx.getDomainTag().name() : null);
+        e.setDomainTag(ctx.getDomainTag() != null ? ctx.getDomainTag().getCode() : null);
         e.setOntologyId(ctx.getOntologyId());
         e.setWorkflowState(ctx.getWorkflowState().name());
         e.setCreatedBy(ctx.getCreatedBy());

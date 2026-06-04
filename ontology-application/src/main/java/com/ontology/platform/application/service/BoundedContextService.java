@@ -18,8 +18,14 @@ public class BoundedContextService {
     private final BoundedContextRepository repository;
 
     public BoundedContext create(String name, String code, String description, DomainTag domainTag, String createdBy) {
-        if (repository.existsByCode(code)) throw new BusinessException(ErrorCode.VALIDATION_ERROR, "Code '" + code + "' already exists");
-        BoundedContext ctx = BoundedContext.create(name, code, description, domainTag, createdBy);
+        return create(name, code, description, domainTag, createdBy, null);
+    }
+
+    public BoundedContext create(String name, String code, String description, DomainTag domainTag,
+                                 String createdBy, String ontologyId) {
+        if (repository.existsByCode(code))
+            throw new BusinessException(ErrorCode.VALIDATION_ERROR, "Code '" + code + "' already exists");
+        BoundedContext ctx = BoundedContext.create(name, code, description, domainTag, createdBy, ontologyId);
         repository.save(ctx);
         return ctx;
     }

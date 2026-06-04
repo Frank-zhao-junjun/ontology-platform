@@ -32,7 +32,13 @@ public class BoundedContext {
     }
 
     public static BoundedContext create(String name, String code, String description, DomainTag domainTag, String createdBy) {
-        return BoundedContext.builder().name(name).code(code).description(description).domainTag(domainTag).createdBy(createdBy).build();
+        return create(name, code, description, domainTag, createdBy, null);
+    }
+
+    public static BoundedContext create(String name, String code, String description, DomainTag domainTag,
+                                        String createdBy, String ontologyId) {
+        return BoundedContext.builder().name(name).code(code).description(description).domainTag(domainTag)
+                .createdBy(createdBy).ontologyId(ontologyId).build();
     }
 
     /** 从持久化层重建（JPA 读库） */

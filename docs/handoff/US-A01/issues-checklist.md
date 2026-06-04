@@ -46,7 +46,7 @@
 
 | ID | 问题 | 影响 | 建议 | 责任 | 状态 |
 |----|------|------|------|------|------|
-| P-01 | 平台无 **Manifest 一键 import** API（持久化草稿） | AC-2b 端到端仍不可 | 在 dry-run 之上实现 `POST …/import` 写库 | 项目2 | **Blocked**（Round 1 仅 dry-run **Resolved** 子项） |
+| P-01 | 正式 `manifests` 表 + 版本化 import | AC-2b 缺快照/版本 | `POST /api/ontology/import/import` 已写语义/治理/数据源；`draftId`=contextId | 项目2 | **Open**（Round 2 持久化 **部分 Resolved**） |
 | P-02 | 无 `manifests` 表持久化 / publish 流水线 | AC-3 round-trip 无法验收 | 按 TDD §3 编译器 + Flyway | 项目2 | **Blocked** |
 | P-03 | `fieldPermissions` 键名：YAML 用 `propertyNameEn`，平台 G02 API 用 `fieldName` | 字段权限导入可能对不齐 | 统一为 `properties[].nameEn`（snake_case） | 双方 | **Open** |
 | P-04 | `governance.roles[].permissions` 与平台 `POST /roles/{id}/object-permissions` 结构不一致 | 需映射层 | import 适配器或调整 YAML 扁平化 | 双方 | **Open** |
@@ -87,12 +87,13 @@
 | 轮次 | 日期 | 输入 | 平台结果 | 差异类型 | 处理 |
 |------|------|------|----------|----------|------|
 | 1 | 2026-06-04 | `manufacturing-manifest.yaml` | **dry-run valid=true**；见 §0 | 无阻塞性校验错误 | Round 2：持久化 import + 手工 REST 对照 |
-| 1b | 2026-06-04 | 同上 | 未写库 / 无真实 `draftId` | 范围 | P-01/P-02 仍 Blocked |
+| 2 | 2026-06-04 | 同上 | **import 201**；4 AR / 5 OT / 2 roles（H2 集成测试） | 无 | `POST /api/ontology/import/import` |
+| 1b | 2026-06-04 | 同上 | 曾未写库 | 已闭合 | Round 2 import |
 
 ## 6. Done 标准（US-A01 联调关闭）
 
 - [x] 平台完成至少一轮 manufacturing Manifest **dry-run** smoke（Round 1）
-- [ ] 平台完成至少一轮 **持久化 import** smoke
+- [x] 平台完成至少一轮 **持久化 import** smoke（Round 2，`import/us-a01-smoke`）
 - [ ] P-01 / P-02 有里程碑或明确排期
 - [x] F-01、F-02、F-04、F-05 有平台书面反馈（dry-run 范围）
 - [ ] F-03 平台书面反馈
