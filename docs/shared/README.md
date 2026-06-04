@@ -50,6 +50,7 @@
 | Sprint | 记录 |
 |--------|------|
 | Sprint 1 | [sprint-records/Sprint1-交付总结-2026-06-04.md](./sprint-records/Sprint1-交付总结-2026-06-04.md) |
+| Sprint 2 | [sprint-records/Sprint2-进行中-2026-06-04.md](./sprint-records/Sprint2-进行中-2026-06-04.md)（进行中） |
 
 ## 修改约定
 

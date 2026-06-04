@@ -219,18 +219,19 @@
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
+                <version>2.2.224</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-database-postgresql</artifactId>
+                <version>10.11.0</version>
+                <scope>runtime</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!-- 项目内部通用依赖 -->
-        <dependency>
-            <groupId>com.ontology.platform</groupId>
-            <artifactId>ontology-common</artifactId>
-        </dependency>
-
         <!-- Spring Boot Starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -289,6 +290,7 @@
                             </path>
                         </annotationProcessorPaths>
                         <compilerArgs>
+                            <arg>-parameters</arg>
                             <arg>-Amapstruct.defaultComponentModel=spring</arg>
                             <arg>-Amapstruct.unmappedTargetPolicy=IGNORE</arg>
                         </compilerArgs>
