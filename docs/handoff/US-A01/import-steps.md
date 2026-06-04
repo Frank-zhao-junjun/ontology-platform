@@ -8,7 +8,40 @@
 
 1. PostgreSQL 或 H2 测试 profile 已启动（本地验证可用 `@ActiveProfiles("h2")`）。
 2. 已阅读 [ontology-manifest-spec.md §8](../shared/ontology-manifest-spec.md)（V01–V11）。
-3. **已知缺口**：平台尚无「一键 Manifest import」REST；以下分 **自动（规划）** 与 **手工 smoke（当前）** 两档。
+3. **Round 1 已可用**：只读 dry-run（不写库）；正式 import 仍待实现。
+
+---
+
+## A0. Round 1 — Manifest dry-run（已实现）
+
+主输入：[manufacturing-manifest.yaml](./manufacturing-manifest.yaml)（本目录或 `docs/shared/examples/` 同源）。
+
+| 方法 | URL | 说明 |
+|------|-----|------|
+| POST | `/api/ontology/import/dry-run` | Body：YAML 或 JSON Manifest；返回 `valid`、`draftId`、`importedCounts`、`warnings`、`errors[]` |
+| POST | `/api/ontology/import/dry-run/us-a01-smoke` | 无 Body；使用内置 US-A01 制造域样例 |
+
+示例（PowerShell，服务已启动且 `context-path=/api`）：
+
+```powershell
+$yaml = Get-Content -Raw "docs/handoff/US-A01/manufacturing-manifest.yaml"
+Invoke-RestMethod -Method Post -Uri "http://localhost:8080/api/ontology/import/dry-run" `
+  -ContentType "application/yaml" -Body $yaml
+```
+
+或一键 smoke：
+
+```powershell
+Invoke-RestMethod -Method Post -Uri "http://localhost:8080/api/ontology/import/dry-run/us-a01-smoke"
+```
+
+自动化验收（无需起服务）：
+
+```powershell
+mvn -pl ontology-application,ontology-api -am test `
+  "-Dtest=ManifestImportDryRunServiceTest,OntologyImportControllerTest" `
+  "-Dsurefire.failIfNoSpecifiedTests=false"
+```
 
 ---
 
