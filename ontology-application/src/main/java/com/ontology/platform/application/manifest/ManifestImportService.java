@@ -3,11 +3,13 @@ package com.ontology.platform.application.manifest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.ontology.platform.application.service.BehaviorService;
 import com.ontology.platform.application.service.BoundedContextService;
 import com.ontology.platform.application.service.DataSourceService;
 import com.ontology.platform.application.service.GovernanceService;
 import com.ontology.platform.application.service.ModelingService;
 import com.ontology.platform.common.enums.DomainTag;
+import com.ontology.platform.common.enums.InvocationMode;
 import com.ontology.platform.domain.entity.AggregateRoot;
 import com.ontology.platform.domain.entity.BoundedContext;
 import com.ontology.platform.domain.entity.ObjectTypeV2;
@@ -42,6 +44,7 @@ public class ManifestImportService {
     private final ModelingService modelingService;
     private final GovernanceService governanceService;
     private final DataSourceService dataSourceService;
+    private final BehaviorService behaviorService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Transactional
@@ -70,6 +73,8 @@ public class ManifestImportService {
         Map<String, String> aggregateRootIdByManifest = new HashMap<>();
         Map<String, String> roleIdByManifest = new HashMap<>();
         Map<String, String> dataSourceIdByManifest = new HashMap<>();
+        Map<String, String> ruleIdByManifest = new HashMap<>();
+        Map<String, String> actionIdByManifest = new HashMap<>();
 
         BoundedContext ctx = createContext(metadata, semantic);
         result.setContextId(ctx.getId());
@@ -77,11 +82,16 @@ public class ManifestImportService {
 
         importAggregateRootsAndObjectTypes(semantic, ctx.getId(), objectTypeIdByManifest, aggregateRootIdByManifest);
         importRelationships(semantic, ctx.getId(), objectTypeIdByManifest);
+        JsonNode behavior = spec.get("behavior");
+        JsonNode events = spec.get("events");
+        importRules(behavior, ctx.getId(), ruleIdByManifest);
+        importActions(behavior, ctx.getId(), aggregateRootIdByManifest, ruleIdByManifest, actionIdByManifest);
+        importDomainEvents(events, ctx.getId(), aggregateRootIdByManifest, actionIdByManifest);
         importGovernance(governance, ctx.getId(), objectTypeIdByManifest, aggregateRootIdByManifest, roleIdByManifest, result);
         importDataSources(spec, ctx.getId(), objectTypeIdByManifest, dataSourceIdByManifest, result);
 
-        result.getWarnings().add("IMPORT_PERSISTED: semantic + governance + dataSources written; behavior/events not persisted (US-B01/E*)");
-        result.getWarnings().add("DRAFT_ID: draftId equals bounded context id until manifests table (P-02) ships");
+        result.getWarnings().add("IMPORT_PERSISTED: semantic + behavior + events + governance + dataSources written");
+        result.getWarnings().add("DRAFT_ID: draft context id; call POST /v1/contexts/{id}/approve to publish manifest snapshot");
         return result;
     }
 
@@ -125,6 +135,92 @@ public class ManifestImportService {
                 modelingService.updateAttributes(created.getId(), serializeProperties(ot));
             }
         }
+    }
+
+    private void importRules(JsonNode behavior, String contextId, Map<String, String> ruleIdByManifest) throws IOException {
+        if (behavior == null) {
+            return;
+        }
+        for (JsonNode ruleNode : array(behavior, "rules")) {
+            String manifestCode = text(ruleNode, "id");
+            String expressionJson = ruleNode.has("expression")
+                    ? objectMapper.writeValueAsString(ruleNode.get("expression")) : "{}";
+            String failureSchema = ruleNode.has("failurePayloadSchema")
+                    ? objectMapper.writeValueAsString(ruleNode.get("failurePayloadSchema")) : null;
+            var rule = behaviorService.createRule(contextId, manifestCode, text(ruleNode, "name"),
+                    text(ruleNode, "type"), expressionJson, text(ruleNode, "errorMessage"), failureSchema);
+            ruleIdByManifest.put(manifestCode, rule.getId());
+        }
+    }
+
+    private void importActions(JsonNode behavior, String contextId, Map<String, String> aggregateRootIdByManifest,
+                               Map<String, String> ruleIdByManifest,
+                               Map<String, String> actionIdByManifest) throws IOException {
+        if (behavior == null) {
+            return;
+        }
+        for (JsonNode actionNode : array(behavior, "actions")) {
+            String manifestCode = text(actionNode, "id");
+            String arManifest = text(actionNode, "aggregateRootId");
+            String platformArId = aggregateRootIdByManifest.get(arManifest);
+            if (platformArId == null) {
+                continue;
+            }
+            var action = behaviorService.createAction(contextId, manifestCode,
+                    text(actionNode, "name"), text(actionNode, "nameEn"), text(actionNode, "description"),
+                    platformArId, InvocationMode.BOTH,
+                    writeJsonArray(actionNode.get("parameters")),
+                    writeJsonStringList(actionNode.get("publishesEventIds")),
+                    writeJsonStringList(actionNode.get("allowedStateFrom")),
+                    writeJsonStringList(actionNode.get("businessScenarioIds")),
+                    text(actionNode, "mcpToolName"));
+            actionIdByManifest.put(manifestCode, action.getId());
+
+            List<String> platformRuleIds = new ArrayList<>();
+            for (JsonNode ruleRef : array(actionNode, "preRuleIds")) {
+                String rid = ruleIdByManifest.get(ruleRef.asText());
+                if (rid != null) {
+                    platformRuleIds.add(rid);
+                }
+            }
+            behaviorService.linkRulesToAction(action.getId(), platformRuleIds);
+        }
+    }
+
+    private void importDomainEvents(JsonNode events, String contextId,
+                                    Map<String, String> aggregateRootIdByManifest,
+                                    Map<String, String> actionIdByManifest) throws IOException {
+        if (events == null) {
+            return;
+        }
+        for (JsonNode evt : array(events, "domainEvents")) {
+            String manifestCode = text(evt, "id");
+            String arManifest = text(evt, "aggregateRootId");
+            String platformArId = aggregateRootIdByManifest.get(arManifest);
+            if (platformArId == null) {
+                continue;
+            }
+            String triggerManifest = text(evt, "triggerActionId");
+            String triggerPlatformId = triggerManifest != null ? actionIdByManifest.get(triggerManifest) : null;
+            String payload = evt.has("payloadSchema")
+                    ? objectMapper.writeValueAsString(evt.get("payloadSchema")) : "{}";
+            behaviorService.createDomainEvent(contextId, manifestCode,
+                    text(evt, "name"), text(evt, "nameEn"), platformArId, triggerPlatformId, payload);
+        }
+    }
+
+    private String writeJsonArray(JsonNode node) throws IOException {
+        if (node == null || !node.isArray()) {
+            return "[]";
+        }
+        return objectMapper.writeValueAsString(node);
+    }
+
+    private String writeJsonStringList(JsonNode node) throws IOException {
+        if (node == null || !node.isArray()) {
+            return "[]";
+        }
+        return objectMapper.writeValueAsString(node);
     }
 
     private void importRelationships(JsonNode semantic, String contextId, Map<String, String> objectTypeIdByManifest) {

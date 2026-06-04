@@ -65,7 +65,9 @@ mvn -pl ontology-application,ontology-api -am test `
 - `governance` → `/roles`、`/object-permissions`、`/field-permissions`（`propertyNameEn` → `fieldName`）、`/sandboxes`
 - `dataSources` → `/data-sources` + `/data-access-methods`
 
-**未落库**：`behavior`、`events`（待 US-B01/E*）；`manifests` 快照表仍待 P-02。
+**已落库（Round 3）**：`behavior.actions` / `behavior.rules` / `action_rule_links` / `events.domainEvents`。
+
+**发布快照**：`POST /v1/contexts/{id}/submit-review` → `POST /v1/contexts/{id}/approve` 写入 `published_manifests`；查询 `GET /v1/contexts/{id}/manifests/latest`。
 
 ---
 

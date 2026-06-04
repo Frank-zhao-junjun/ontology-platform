@@ -2,6 +2,7 @@ package com.ontology.platform.infrastructure.persistence;
 
 import cn.hutool.json.JSONUtil;
 import com.ontology.platform.common.enums.DomainTag;
+import com.ontology.platform.common.enums.InvocationMode;
 import com.ontology.platform.common.enums.WorkflowState;
 import com.ontology.platform.domain.entity.*;
 import com.ontology.platform.infrastructure.persistence.entity.*;
@@ -208,6 +209,103 @@ public final class PersistenceMapper {
         return AgentSandbox.rehydrate(e.getId(), e.getName(), e.getManifestVersionId(), e.getAgentRoleId(),
                 fromJsonList(e.getAllowedTools()), fromJsonList(e.getAllowedAggregateRoots()),
                 fromJsonList(e.getAllowedBehaviors()), e.getMaxOpsPerSecond(), e.isActive(), e.getCreatedAt());
+    }
+
+    // ── ValidationRule ──
+    public static ValidationRuleEntity toEntity(ValidationRule r) {
+        ValidationRuleEntity e = new ValidationRuleEntity();
+        e.setId(r.getId());
+        e.setContextId(r.getContextId());
+        e.setManifestCode(r.getManifestCode());
+        e.setName(r.getName());
+        e.setRuleType(r.getRuleType());
+        e.setExpressionJson(r.getExpressionJson());
+        e.setErrorMessage(r.getErrorMessage());
+        e.setFailurePayloadSchema(r.getFailurePayloadSchema());
+        e.setEnabled(r.isEnabled());
+        e.setCreatedAt(r.getCreatedAt());
+        return e;
+    }
+
+    public static ValidationRule toDomain(ValidationRuleEntity e) {
+        return ValidationRule.builder().id(e.getId()).contextId(e.getContextId())
+                .manifestCode(e.getManifestCode()).name(e.getName()).ruleType(e.getRuleType())
+                .expressionJson(e.getExpressionJson()).errorMessage(e.getErrorMessage())
+                .failurePayloadSchema(e.getFailurePayloadSchema()).enabled(e.isEnabled())
+                .createdAt(e.getCreatedAt()).build();
+    }
+
+    // ── OntologyAction ──
+    public static OntologyActionEntity toEntity(OntologyAction a) {
+        OntologyActionEntity e = new OntologyActionEntity();
+        e.setId(a.getId());
+        e.setContextId(a.getContextId());
+        e.setManifestCode(a.getManifestCode());
+        e.setName(a.getName());
+        e.setNameEn(a.getNameEn());
+        e.setDescription(a.getDescription());
+        e.setAggregateRootId(a.getAggregateRootId());
+        e.setInvocationMode(a.getInvocationMode().name());
+        e.setParametersJson(a.getParametersJson());
+        e.setPublishesEventIdsJson(a.getPublishesEventIdsJson());
+        e.setAllowedStateFromJson(a.getAllowedStateFromJson());
+        e.setBusinessScenarioIdsJson(a.getBusinessScenarioIdsJson());
+        e.setMcpToolName(a.getMcpToolName());
+        e.setCreatedAt(a.getCreatedAt());
+        return e;
+    }
+
+    public static OntologyAction toDomain(OntologyActionEntity e) {
+        return OntologyAction.builder().id(e.getId()).contextId(e.getContextId())
+                .manifestCode(e.getManifestCode()).name(e.getName()).nameEn(e.getNameEn())
+                .description(e.getDescription()).aggregateRootId(e.getAggregateRootId())
+                .invocationMode(InvocationMode.fromCode(e.getInvocationMode()))
+                .parametersJson(e.getParametersJson()).publishesEventIdsJson(e.getPublishesEventIdsJson())
+                .allowedStateFromJson(e.getAllowedStateFromJson())
+                .businessScenarioIdsJson(e.getBusinessScenarioIdsJson())
+                .mcpToolName(e.getMcpToolName()).createdAt(e.getCreatedAt()).build();
+    }
+
+    // ── DomainEvent ──
+    public static DomainEventEntity toEntity(DomainEventDefinition ev) {
+        DomainEventEntity e = new DomainEventEntity();
+        e.setId(ev.getId());
+        e.setContextId(ev.getContextId());
+        e.setManifestCode(ev.getManifestCode());
+        e.setName(ev.getName());
+        e.setNameEn(ev.getNameEn());
+        e.setAggregateRootId(ev.getAggregateRootId());
+        e.setTriggerActionId(ev.getTriggerActionId());
+        e.setPayloadSchemaJson(ev.getPayloadSchemaJson());
+        e.setCreatedAt(ev.getCreatedAt());
+        return e;
+    }
+
+    public static DomainEventDefinition toDomain(DomainEventEntity e) {
+        return DomainEventDefinition.builder().id(e.getId()).contextId(e.getContextId())
+                .manifestCode(e.getManifestCode()).name(e.getName()).nameEn(e.getNameEn())
+                .aggregateRootId(e.getAggregateRootId()).triggerActionId(e.getTriggerActionId())
+                .payloadSchemaJson(e.getPayloadSchemaJson()).createdAt(e.getCreatedAt()).build();
+    }
+
+    // ── PublishedManifest ──
+    public static PublishedManifestEntity toEntity(PublishedManifest m) {
+        PublishedManifestEntity e = new PublishedManifestEntity();
+        e.setId(m.getId());
+        e.setContextId(m.getContextId());
+        e.setOntologyId(m.getOntologyId());
+        e.setVersion(m.getVersion());
+        e.setApiVersion(m.getApiVersion());
+        e.setStatus(m.getStatus());
+        e.setSnapshotJson(m.getSnapshotJson());
+        e.setCreatedAt(m.getCreatedAt());
+        return e;
+    }
+
+    public static PublishedManifest toDomain(PublishedManifestEntity e) {
+        return PublishedManifest.builder().id(e.getId()).contextId(e.getContextId())
+                .ontologyId(e.getOntologyId()).version(e.getVersion()).apiVersion(e.getApiVersion())
+                .status(e.getStatus()).snapshotJson(e.getSnapshotJson()).createdAt(e.getCreatedAt()).build();
     }
 
     private static String toJson(List<String> list) {

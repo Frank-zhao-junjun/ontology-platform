@@ -4,7 +4,9 @@ import com.ontology.platform.common.enums.DomainTag;
 import com.ontology.platform.common.enums.ErrorCode;
 import com.ontology.platform.common.exception.BusinessException;
 import com.ontology.platform.common.exception.ResourceNotFoundException;
+import com.ontology.platform.application.manifest.ManifestSnapshotService;
 import com.ontology.platform.domain.entity.BoundedContext;
+import com.ontology.platform.domain.entity.PublishedManifest;
 import com.ontology.platform.domain.repository.BoundedContextRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.List;
 @Transactional
 public class BoundedContextService {
     private final BoundedContextRepository repository;
+    private final ManifestSnapshotService manifestSnapshotService;
 
     public BoundedContext create(String name, String code, String description, DomainTag domainTag, String createdBy) {
         return create(name, code, description, domainTag, createdBy, null);
@@ -34,7 +37,17 @@ public class BoundedContextService {
 
     public BoundedContext submitForReview(String id) { BoundedContext c = findById(id); c.submitForReview(); repository.update(c); return c; }
 
-    public BoundedContext approveAndPublish(String id) { BoundedContext c = findById(id); c.approveAndPublish(); repository.update(c); return c; }
+    public BoundedContext approveAndPublish(String id) {
+        BoundedContext c = findById(id);
+        c.approveAndPublish();
+        repository.update(c);
+        return c;
+    }
+
+    public PublishedManifest approvePublishAndSnapshot(String id) throws Exception {
+        approveAndPublish(id);
+        return manifestSnapshotService.publishContext(id);
+    }
 
     public BoundedContext rejectToDraft(String id) { BoundedContext c = findById(id); c.rejectToDraft(); repository.update(c); return c; }
 

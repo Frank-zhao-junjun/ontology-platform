@@ -47,7 +47,7 @@
 | ID | 问题 | 影响 | 建议 | 责任 | 状态 |
 |----|------|------|------|------|------|
 | P-01 | 正式 `manifests` 表 + 版本化 import | AC-2b 缺快照/版本 | `POST /api/ontology/import/import` 已写语义/治理/数据源；`draftId`=contextId | 项目2 | **Open**（Round 2 持久化 **部分 Resolved**） |
-| P-02 | 无 `manifests` 表持久化 / publish 流水线 | AC-3 round-trip 无法验收 | 按 TDD §3 编译器 + Flyway | 项目2 | **Blocked** |
+| P-02 | `manifests` 表 + approve 快照 | AC-3 round-trip 可初验 | `published_manifests` + `GET …/manifests/latest` | 项目2 | **Open**（全量 round-trip / 设计台 diff 待做） |
 | P-03 | `fieldPermissions` 键名：YAML 用 `propertyNameEn`，平台 G02 API 用 `fieldName` | 字段权限导入可能对不齐 | 统一为 `properties[].nameEn`（snake_case） | 双方 | **Open** |
 | P-04 | `governance.roles[].permissions` 与平台 `POST /roles/{id}/object-permissions` 结构不一致 | 需映射层 | import 适配器或调整 YAML 扁平化 | 双方 | **Open** |
 | P-05 | `agentPolicies` vs `POST /sandboxes` 字段名（`allowedMcpTools` / `allowedTools`） | 沙箱白名单可能漏导 | import 映射 + 文档 | 双方 | **Open** |
@@ -76,8 +76,8 @@
 | Manifest 段 | 平台现状（web-ui @ 2026-06-04） | 状态 |
 |-------------|----------------------------------|------|
 | `spec.semantic` 全量 | dry-run 解析 + 部分 REST 落库能力 | Round 1 **dry-run OK**；写库进行中 |
-| `spec.behavior` | dry-run 校验引用；无 US-B01/B03 API | Blocked（写库） |
-| `spec.events` | dry-run 计数；无 US-E* API | Blocked（写库） |
+| `spec.behavior` | **US-B01/B03** CRUD + import 写库 | Round 3 OK |
+| `spec.events` | **US-E01** CRUD + import 写库（domainEvents） | Round 3 OK（routes/handlers 未落库） |
 | `spec.governance` | dry-run 计数；REST 部分落地 | 进行中 |
 | `spec.dataSources` | dry-run 计数；REST 部分落地 | 进行中 |
 | MCP `resolve_intent` / `query_ontology` | 未实现（US-A03） | Blocked |

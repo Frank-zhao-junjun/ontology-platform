@@ -72,5 +72,28 @@ class OntologyImportControllerTest {
         mockMvc.perform(get("/v1/roles").param("contextId", contextId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(2));
+
+        mockMvc.perform(get("/v1/contexts/{cid}/actions", contextId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(3));
+
+        mockMvc.perform(get("/v1/contexts/{cid}/validation-rules", contextId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(2));
+
+        mockMvc.perform(get("/v1/contexts/{cid}/domain-events", contextId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(3));
+
+        mockMvc.perform(post("/v1/contexts/{id}/submit-review", contextId))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/v1/contexts/{id}/approve", contextId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.publishedManifest.version").value("0.1.1"));
+
+        mockMvc.perform(get("/v1/contexts/{id}/manifests/latest", contextId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.version").value("0.1.1"));
     }
 }
