@@ -45,6 +45,12 @@
 | 交付 | 导出 YAML 草稿 | 导入 → 发布 → MCP |
 | 工作区说明 | `本体建模/项目1：生成本体模型/` | `本体建模/项目2：本体平台Ontology-platform/`（指向本仓库） |
 
+## Sprint 交付记录
+
+| Sprint | 记录 |
+|--------|------|
+| Sprint 1 | [sprint-records/Sprint1-交付总结-2026-06-04.md](./sprint-records/Sprint1-交付总结-2026-06-04.md) |
+
 ## 修改约定
 
 - 故事地图：只改 **UserStoryMap-v1.2.md**；`UserStoryMap-v1.1.md` 仅为跳转 stub。
