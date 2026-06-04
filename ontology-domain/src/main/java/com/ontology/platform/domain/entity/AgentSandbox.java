@@ -20,7 +20,7 @@ public class AgentSandbox {
 
     private AgentSandbox(String id, String name, String manifestVersionId, String agentRoleId,
                          List<String> allowedTools, List<String> allowedAggregateRoots,
-                         List<String> allowedBehaviors, int maxOpsPerSecond) {
+                         List<String> allowedBehaviors, int maxOpsPerSecond, boolean active, Instant createdAt) {
         this.id = id != null ? id : UUID.randomUUID().toString();
         this.name = name;
         this.manifestVersionId = manifestVersionId;
@@ -29,14 +29,21 @@ public class AgentSandbox {
         this.allowedAggregateRoots = allowedAggregateRoots != null ? List.copyOf(allowedAggregateRoots) : List.of();
         this.allowedBehaviors = allowedBehaviors != null ? List.copyOf(allowedBehaviors) : List.of();
         this.maxOpsPerSecond = maxOpsPerSecond > 0 ? maxOpsPerSecond : 10;
-        this.active = true;
-        this.createdAt = Instant.now();
+        this.active = active;
+        this.createdAt = createdAt != null ? createdAt : Instant.now();
     }
 
     public static AgentSandbox create(String name, String manifestVersionId, String agentRoleId,
                                       List<String> allowedTools, List<String> allowedAggregateRoots,
                                       List<String> allowedBehaviors, int maxOpsPerSecond) {
         return new AgentSandbox(null, name, manifestVersionId, agentRoleId,
-                allowedTools, allowedAggregateRoots, allowedBehaviors, maxOpsPerSecond);
+                allowedTools, allowedAggregateRoots, allowedBehaviors, maxOpsPerSecond, true, null);
+    }
+
+    public static AgentSandbox rehydrate(String id, String name, String manifestVersionId, String agentRoleId,
+                                       List<String> allowedTools, List<String> allowedAggregateRoots,
+                                       List<String> allowedBehaviors, int maxOpsPerSecond, boolean active, Instant createdAt) {
+        return new AgentSandbox(id, name, manifestVersionId, agentRoleId,
+                allowedTools, allowedAggregateRoots, allowedBehaviors, maxOpsPerSecond, active, createdAt);
     }
 }

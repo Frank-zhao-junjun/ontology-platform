@@ -14,17 +14,23 @@ public class Role {
     private final boolean global;
     private final Instant createdAt;
 
-    private Role(String id, String contextId, String name, String code, String description) {
+    private Role(String id, String contextId, String name, String code, String description,
+                 Boolean global, Instant createdAt) {
         this.id = id != null ? id : UUID.randomUUID().toString();
         this.contextId = contextId;
         this.name = name;
         this.code = code;
         this.description = description;
-        this.global = contextId == null || contextId.isBlank();
-        this.createdAt = Instant.now();
+        this.global = global != null ? global : (contextId == null || contextId.isBlank());
+        this.createdAt = createdAt != null ? createdAt : Instant.now();
     }
 
     public static Role create(String contextId, String name, String code, String description) {
-        return new Role(null, contextId, name, code, description);
+        return new Role(null, contextId, name, code, description, null, null);
+    }
+
+    public static Role rehydrate(String id, String contextId, String name, String code, String description,
+                                 boolean global, Instant createdAt) {
+        return new Role(id, contextId, name, code, description, global, createdAt);
     }
 }

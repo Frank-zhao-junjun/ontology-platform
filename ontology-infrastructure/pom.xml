@@ -26,6 +26,10 @@
             <groupId>com.ontology.platform</groupId>
             <artifactId>ontology-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
 
         <!-- Spring Boot Starter Data JPA -->
         <dependency>

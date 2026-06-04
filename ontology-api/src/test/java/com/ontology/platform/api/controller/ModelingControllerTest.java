@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest @AutoConfigureMockMvc @ActiveProfiles("h2")
+@SpringBootTest @AutoConfigureMockMvc @ActiveProfiles(value = "h2", inheritProfiles = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ModelingControllerTest {
     @Autowired private MockMvc mockMvc;

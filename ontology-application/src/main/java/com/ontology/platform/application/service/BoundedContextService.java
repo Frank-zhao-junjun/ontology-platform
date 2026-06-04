@@ -8,10 +8,12 @@ import com.ontology.platform.domain.entity.BoundedContext;
 import com.ontology.platform.domain.repository.BoundedContextRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoundedContextService {
     private final BoundedContextRepository repository;
 

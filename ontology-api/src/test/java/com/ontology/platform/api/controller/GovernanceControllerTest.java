@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("h2")
+@ActiveProfiles(value = "h2", inheritProfiles = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class GovernanceControllerTest {
     @Autowired private MockMvc mockMvc;
@@ -57,6 +57,10 @@ class GovernanceControllerTest {
         mockMvc.perform(post("/v1/roles/{rid}/object-permissions", roleId).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"objectTypeId\":\"" + objectTypeId + "\",\"permRead\":true,\"permExecute\":true}"))
                 .andExpect(status().isCreated());
+        mockMvc.perform(post("/v1/roles/{rid}/field-permissions", roleId).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"objectTypeId\":\"" + objectTypeId + "\",\"fieldName\":\"order_id\",\"isVisible\":true,\"isEditable\":false}"))
+                .andExpect(status().isCreated());
+        mockMvc.perform(get("/v1/roles/{rid}/field-permissions", roleId)).andExpect(status().isOk());
         mockMvc.perform(post("/v1/sandboxes").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Agent-1\",\"agentRoleId\":\"" + roleId + "\","
                                 + "\"allowedTools\":[\"resolve_intent\",\"query_ontology\",\"execute_action\"]}"))

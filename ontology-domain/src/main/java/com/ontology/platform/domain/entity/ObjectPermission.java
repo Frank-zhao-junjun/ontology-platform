@@ -16,7 +16,8 @@ public class ObjectPermission {
     private final Instant createdAt;
 
     private ObjectPermission(String id, String roleId, String objectTypeId,
-                             boolean permRead, boolean permWrite, boolean permDelete, boolean permExecute) {
+                             boolean permRead, boolean permWrite, boolean permDelete, boolean permExecute,
+                             Instant createdAt) {
         this.id = id != null ? id : UUID.randomUUID().toString();
         this.roleId = roleId;
         this.objectTypeId = objectTypeId;
@@ -24,11 +25,17 @@ public class ObjectPermission {
         this.permWrite = permWrite;
         this.permDelete = permDelete;
         this.permExecute = permExecute;
-        this.createdAt = Instant.now();
+        this.createdAt = createdAt != null ? createdAt : Instant.now();
     }
 
     public static ObjectPermission create(String roleId, String objectTypeId,
                                           boolean read, boolean write, boolean delete, boolean execute) {
-        return new ObjectPermission(null, roleId, objectTypeId, read, write, delete, execute);
+        return new ObjectPermission(null, roleId, objectTypeId, read, write, delete, execute, null);
+    }
+
+    public static ObjectPermission rehydrate(String id, String roleId, String objectTypeId,
+                                             boolean read, boolean write, boolean delete, boolean execute,
+                                             Instant createdAt) {
+        return new ObjectPermission(id, roleId, objectTypeId, read, write, delete, execute, createdAt);
     }
 }

@@ -2,6 +2,7 @@ package com.ontology.platform.api.controller;
 
 import com.ontology.platform.application.service.GovernanceService;
 import com.ontology.platform.domain.entity.AgentSandbox;
+import com.ontology.platform.domain.entity.FieldPermission;
 import com.ontology.platform.domain.entity.ObjectPermission;
 import com.ontology.platform.domain.entity.Role;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
-@Tag(name = "Governance", description = "角色权限与沙箱 (US-G01, G04)")
+@Tag(name = "Governance", description = "角色权限与沙箱 (US-G01, G02, G04)")
 public class GovernanceController {
     private final GovernanceService svc;
 
@@ -43,6 +44,23 @@ public class GovernanceController {
                 bool(body, "permRead"), bool(body, "permWrite"),
                 bool(body, "permDelete"), bool(body, "permExecute"));
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("code", 0, "message", "success", "data", toPermMap(p)));
+    }
+
+    @PostMapping("/roles/{roleId}/field-permissions")
+    @Operation(summary = "配置字段级权限 (US-G02)")
+    public ResponseEntity<Map<String, Object>> createFieldPermission(@PathVariable String roleId,
+                                                                     @RequestBody Map<String, Object> body) {
+        FieldPermission p = svc.addFieldPermission(roleId, str(body, "objectTypeId"), str(body, "fieldName"),
+                body.get("isVisible") instanceof Boolean v ? v : true,
+                body.get("isEditable") instanceof Boolean e && e);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("code", 0, "message", "success", "data", toFieldPermMap(p)));
+    }
+
+    @GetMapping("/roles/{roleId}/field-permissions")
+    @Operation(summary = "查询字段级权限列表 (US-G02)")
+    public ResponseEntity<Map<String, Object>> listFieldPermissions(@PathVariable String roleId) {
+        var data = svc.listFieldPermissions(roleId).stream().map(this::toFieldPermMap).collect(Collectors.toList());
+        return ResponseEntity.ok(Map.of("code", 0, "message", "success", "data", data));
     }
 
     @PostMapping("/sandboxes")
@@ -76,6 +94,11 @@ public class GovernanceController {
         return Map.of("id", p.getId(), "roleId", p.getRoleId(), "objectTypeId", p.getObjectTypeId(),
                 "permRead", p.isPermRead(), "permWrite", p.isPermWrite(),
                 "permDelete", p.isPermDelete(), "permExecute", p.isPermExecute());
+    }
+
+    private Map<String, Object> toFieldPermMap(FieldPermission p) {
+        return Map.of("id", p.getId(), "roleId", p.getRoleId(), "objectTypeId", p.getObjectTypeId(),
+                "fieldName", p.getFieldName(), "isVisible", p.isVisible(), "isEditable", p.isEditable());
     }
 
     private Map<String, Object> toSandboxMap(AgentSandbox sb) {
