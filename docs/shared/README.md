@@ -27,6 +27,13 @@
 | [ontology-manifest-spec.md](./ontology-manifest-spec.md) | 设计台↔平台交接（`ontology.platform/v1`） |
 | [examples/manufacturing-manifest.yaml](./examples/manufacturing-manifest.yaml) | 制造域样例 |
 
+## 设计台交接（US-A01）
+
+| 路径 | 说明 |
+|------|------|
+| [../handoff/US-A01/README.md](../handoff/US-A01/README.md) | **项目1 → 项目2** 制造域 Manifest 四件套（校验证据、导入步骤、问题清单） |
+| [../handoff/US-A01/manufacturing-manifest.yaml](../handoff/US-A01/manufacturing-manifest.yaml) | 联调主输入（与 `examples/` 同源） |
+
 ## MCP 静态工具三件套（MVP）
 
 沙箱 `allowedMcpTools` / `allowedTools` 须包含：
