@@ -318,6 +318,30 @@ public final class PersistenceMapper {
         return JSONUtil.toList(json, String.class);
     }
 
+    // ── Metric ──
+    public static MetricEntity toEntity(Metric m) {
+        MetricEntity e = new MetricEntity();
+        e.setId(m.getId());
+        e.setContextId(m.getContextId());
+        e.setManifestCode(m.getManifestCode());
+        e.setName(m.getName());
+        e.setNameEn(m.getNameEn());
+        e.setFormula(m.getFormula());
+        e.setDataSourceRefJson(m.getDataSourceRefJson());
+        e.setAggregationDimensionsJson(m.getAggregationDimensionsJson());
+        e.setPeriod(m.getPeriod());
+        e.setCreatedAt(m.getCreatedAt());
+        return e;
+    }
+
+    public static Metric toDomain(MetricEntity e) {
+        return Metric.builder().id(e.getId()).contextId(e.getContextId())
+                .manifestCode(e.getManifestCode()).name(e.getName()).nameEn(e.getNameEn())
+                .formula(e.getFormula()).dataSourceRefJson(e.getDataSourceRefJson())
+                .aggregationDimensionsJson(e.getAggregationDimensionsJson())
+                .period(e.getPeriod()).createdAt(e.getCreatedAt()).build();
+    }
+
     // ── AuditLog ──
     public static AuditLogEntity toEntity(AuditLog log) {
         AuditLogEntity e = new AuditLogEntity();

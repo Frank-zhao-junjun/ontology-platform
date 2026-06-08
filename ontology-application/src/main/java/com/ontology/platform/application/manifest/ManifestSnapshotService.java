@@ -5,17 +5,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ontology.platform.application.service.BehaviorService;
 import com.ontology.platform.application.service.GovernanceService;
+import com.ontology.platform.application.service.MetricService;
 import com.ontology.platform.application.service.ModelingService;
 import com.ontology.platform.common.exception.ResourceNotFoundException;
-import com.ontology.platform.domain.entity.AgentSandbox;
-import com.ontology.platform.domain.entity.BoundedContext;
-import com.ontology.platform.domain.entity.DomainEventDefinition;
-import com.ontology.platform.domain.entity.FieldPermission;
-import com.ontology.platform.domain.entity.ObjectPermission;
-import com.ontology.platform.domain.entity.OntologyAction;
-import com.ontology.platform.domain.entity.PublishedManifest;
-import com.ontology.platform.domain.entity.Role;
-import com.ontology.platform.domain.entity.ValidationRule;
+import com.ontology.platform.domain.entity.*;
 import com.ontology.platform.domain.repository.BoundedContextRepository;
 import com.ontology.platform.domain.repository.PublishedManifestRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +28,7 @@ public class ManifestSnapshotService {
     private final PublishedManifestRepository manifestRepo;
     private final ModelingService modelingService;
     private final BehaviorService behaviorService;
+    private final MetricService metricService;
     private final GovernanceService governanceService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -117,6 +111,20 @@ public class ManifestSnapshotService {
             node.put("type", r.getRuleType());
             node.set("expression", objectMapper.readTree(r.getExpressionJson()));
             node.put("errorMessage", r.getErrorMessage());
+        }
+
+        ArrayNode metrics = behavior.putArray("metrics");
+        for (Metric m : metricService.listMetrics(contextId)) {
+            ObjectNode node = metrics.addObject();
+            node.put("id", m.getManifestCode());
+            node.put("name", m.getName());
+            node.put("nameEn", m.getNameEn());
+            node.put("formula", m.getFormula());
+            node.set("dataSourceRefs", objectMapper.readTree(m.getDataSourceRefJson()));
+            node.set("aggregationDimensions", objectMapper.readTree(m.getAggregationDimensionsJson()));
+            if (m.getPeriod() != null && !m.getPeriod().isBlank()) {
+                node.put("period", m.getPeriod());
+            }
         }
 
         ObjectNode events = spec.putObject("events");

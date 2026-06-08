@@ -1,8 +1,10 @@
 package com.ontology.platform.api.controller;
 
 import com.ontology.platform.application.service.BehaviorService;
+import com.ontology.platform.application.service.MetricService;
 import com.ontology.platform.common.enums.InvocationMode;
 import com.ontology.platform.domain.entity.DomainEventDefinition;
+import com.ontology.platform.domain.entity.Metric;
 import com.ontology.platform.domain.entity.OntologyAction;
 import com.ontology.platform.domain.entity.ValidationRule;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 @Tag(name = "Behavior", description = "行为 / 规则 / 领域事件 (US-B01, B03, E01)")
 public class BehaviorController {
     private final BehaviorService behaviorService;
+    private final MetricService metricService;
 
     @PostMapping("/validation-rules")
     @Operation(summary = "创建校验规则 (US-B03)")
@@ -89,6 +92,34 @@ public class BehaviorController {
     public ResponseEntity<Map<String, Object>> listEvents(@PathVariable String contextId) {
         var data = behaviorService.listDomainEvents(contextId).stream().map(this::toEventMap).collect(Collectors.toList());
         return ResponseEntity.ok(Map.of("code", 0, "message", "success", "data", data));
+    }
+
+    @PostMapping("/metrics")
+    @Operation(summary = "创建业务指标 (US-B05)")
+    public ResponseEntity<Map<String, Object>> createMetric(@PathVariable String contextId,
+                                                            @RequestBody Map<String, Object> body) {
+        Metric m = metricService.createMetric(contextId,
+                str(body, "manifestCode"), str(body, "name"), str(body, "nameEn"),
+                str(body, "formula"), str(body, "dataSourceRefJson", "[]"),
+                str(body, "aggregationDimensionsJson", "[]"), str(body, "period"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("code", 0, "message", "success", "data", toMetricMap(m)));
+    }
+
+    @GetMapping("/metrics")
+    public ResponseEntity<Map<String, Object>> listMetrics(@PathVariable String contextId) {
+        var data = metricService.listMetrics(contextId).stream().map(this::toMetricMap).collect(Collectors.toList());
+        return ResponseEntity.ok(Map.of("code", 0, "message", "success", "data", data));
+    }
+
+    private Map<String, Object> toMetricMap(Metric m) {
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("id", m.getId());
+        map.put("manifestCode", m.getManifestCode());
+        map.put("name", m.getName());
+        map.put("nameEn", m.getNameEn());
+        map.put("formula", m.getFormula());
+        map.put("period", m.getPeriod());
+        return map;
     }
 
     private Map<String, Object> toRuleMap(ValidationRule r) {

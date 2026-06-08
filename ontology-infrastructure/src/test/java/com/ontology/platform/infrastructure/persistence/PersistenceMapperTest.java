@@ -2,8 +2,10 @@ package com.ontology.platform.infrastructure.persistence;
 
 import com.ontology.platform.domain.entity.AuditLog;
 import com.ontology.platform.domain.entity.DataAccessMethod;
+import com.ontology.platform.domain.entity.Metric;
 import com.ontology.platform.infrastructure.persistence.entity.AuditLogEntity;
 import com.ontology.platform.infrastructure.persistence.entity.DataAccessMethodEntity;
+import com.ontology.platform.infrastructure.persistence.entity.MetricEntity;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -103,5 +105,49 @@ class PersistenceMapperTest {
 
         assertThat(entity.getContextId()).isEqualTo("ctx-s2");
         assertThat(entity.getObjectTypeId()).isEqualTo("ot-1");
+    }
+
+    // ── Metric mapping ──
+
+    @Test
+    void metricToEntityShouldMapAllFields() {
+        Metric m = Metric.create("ctx-1", "ontime_completion_rate", "准时完工率",
+                "OnTime Completion Rate", "按时完工工单数 / 总完工工单数 * 100%",
+                "[{\"eventId\":\"work_order_tech_close\"}]",
+                "[\"workshop\"]", "monthly");
+
+        MetricEntity e = PersistenceMapper.toEntity(m);
+
+        assertThat(e.getId()).isEqualTo(m.getId());
+        assertThat(e.getContextId()).isEqualTo("ctx-1");
+        assertThat(e.getManifestCode()).isEqualTo("ontime_completion_rate");
+        assertThat(e.getName()).isEqualTo("准时完工率");
+        assertThat(e.getNameEn()).isEqualTo("OnTime Completion Rate");
+        assertThat(e.getFormula()).contains("按时完工");
+        assertThat(e.getDataSourceRefJson()).contains("work_order_tech_close");
+        assertThat(e.getAggregationDimensionsJson()).contains("workshop");
+        assertThat(e.getPeriod()).isEqualTo("monthly");
+    }
+
+    @Test
+    void metricFromEntityShouldRehydrate() {
+        MetricEntity e = new MetricEntity();
+        e.setId("metric-1");
+        e.setContextId("ctx-1");
+        e.setManifestCode("ontime_completion_rate");
+        e.setName("准时完工率");
+        e.setNameEn("OnTime Completion Rate");
+        e.setFormula("按时完工工单数 / 总完工工单数 * 100%");
+        e.setDataSourceRefJson("[{\"eventId\":\"work_order_tech_close\"}]");
+        e.setAggregationDimensionsJson("[\"workshop\"]");
+        e.setPeriod("monthly");
+
+        Metric m = PersistenceMapper.toDomain(e);
+
+        assertThat(m.getId()).isEqualTo("metric-1");
+        assertThat(m.getManifestCode()).isEqualTo("ontime_completion_rate");
+        assertThat(m.getName()).isEqualTo("准时完工率");
+        assertThat(m.getFormula()).contains("按时完工");
+        assertThat(m.getPeriod()).isEqualTo("monthly");
     }
 }
