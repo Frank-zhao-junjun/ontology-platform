@@ -1,0 +1,1469 @@
+openapi: "3.0.3"
+info:
+  title: 本体建模平台 API
+  description: |
+    本体建模平台 REST API — 覆盖语义层、行为层、事件层、治理层、制品层的完整接口。
+    关联文档：PRD v2.0 | TDD v2.0 | USM v1.2.1 (32 Stories, MCP 三步链路)
+  version: "1.0.0"
+  contact:
+    name: 产品团队
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: 本地开发环境
+
+tags:
+  - name: Contexts
+    description: 限界上下文管理 (US-S01, S02)
+  - name: AggregateRoots
+    description: 聚合根定义 (US-S03)
+  - name: ObjectTypes
+    description: 对象类型与属性 (US-S04)
+  - name: Relationships
+    description: 关系类型定义 (US-S07)
+  - name: ValueObjects
+    description: 值对象 (US-S05)
+  - name: StateMachines
+    description: 状态机 (US-S06)
+  - name: DataSources
+    description: 数据源与获取方式 (US-S08)
+  - name: CrossContext
+    description: 跨上下文关系 (US-S09)
+  - name: Lineage
+    description: 数据血缘 (US-S10)
+  - name: Behaviors
+    description: 行为定义 (US-B01, B02, B06, B07)
+  - name: ValidationRules
+    description: 校验规则 (US-B03, B04)
+  - name: Metrics
+    description: 指标定义 (US-B05)
+  - name: Events
+    description: 领域事件与集成事件 (US-E01, E05)
+  - name: EventRoutes
+    description: 事件路由 (US-E03)
+  - name: EventHandlers
+    description: 事件处理器矩阵 (US-E04)
+  - name: EventStore
+    description: 事件存储配置 (US-E02)
+  - name: Roles
+    description: 角色与权限 (US-G01, G02, G03)
+  - name: Sandboxes
+    description: AI Agent 沙箱 (US-G04)
+  - name: Workflow
+    description: 建模工作流与审批 (US-G05)
+  - name: Manifests
+    description: Manifest 编译与版本管理 (US-A01, A02)
+  - name: McpInternal
+    description: MCP Server 内部接口 — resolve_intent + query_ontology (US-A03), execute_action (US-A05)
+
+# ═══════════════════════════════════════════════════════════════════
+# 通用组件
+# ═══════════════════════════════════════════════════════════════════
+components:
+  schemas:
+
+    # ── 通用响应 ──
+    ApiResponse:
+      type: object
+      properties:
+        code:        { type: integer, description: "0=成功, 非0=错误码" }
+        message:     { type: string }
+        data:        { type: object }
+        timestamp:   { type: string, format: date-time }
+
+    PaginatedResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                content:          { type: array, items: { type: object } }
+                page:             { type: integer }
+                size:             { type: integer }
+                totalElements:    { type: integer }
+                totalPages:       { type: integer }
+
+    ErrorDetail:
+      type: object
+      properties:
+        elementType:  { type: string, description: "AGGREGATE_ROOT | BEHAVIOR | EVENT | RULE 等" }
+        elementName:  { type: string }
+        field:        { type: string }
+        message:      { type: string }
+
+    RuleViolation:
+      type: object
+      properties:
+        rule:         { type: string }
+        failedItems:
+          type: array
+          items: { type: object }
+        userMessage:  { type: string, description: "面向最终用户的可读错误信息" }
+
+    # ── 语义层模型 ──
+    BoundedContextCreate:
+      type: object
+      required: [name, code, domainTag]
+      properties:
+        name:         { type: string, example: "生产制造" }
+        code:         { type: string, example: "manufacturing" }
+        description:  { type: string }
+        domainTag:    { type: string, enum: [manufacturing, quality, equipment, supply_chain] }
+
+    BoundedContextResponse:
+      type: object
+      properties:
+        id:               { type: string, format: uuid }
+        name:             { type: string }
+        code:             { type: string }
+        description:      { type: string }
+        domainTag:        { type: string }
+        ontologyId:       { type: string, format: uuid }
+        workflowState:    { type: string, enum: [DRAFT, IN_REVIEW, PUBLISHED] }
+        aggregateRootCount: { type: integer }
+        createdAt:        { type: string, format: date-time }
+
+    BusinessScenarioCreate:
+      type: object
+      required: [name, code]
+      properties:
+        name:         { type: string, example: "面向库存生产(MTS)" }
+        code:         { type: string, example: "MTS" }
+        description:  { type: string }
+
+    AggregateRootCreate:
+      type: object
+      required: [name, code]
+      properties:
+        name:         { type: string, example: "生产订单" }
+        code:         { type: string, example: "ProductionOrder" }
+        description:  { type: string }
+
+    ObjectTypeCreate:
+      type: object
+      required: [name, code, objectKind]
+      properties:
+        name:         { type: string, example: "生产订单头" }
+        code:         { type: string, example: "ProductionOrderHeader" }
+        objectKind:   { type: string, enum: [ENTITY, VALUE_OBJECT, INTERFACE_ABSTRACT] }
+        description:  { type: string }
+        aggregateRootId: { type: string, format: uuid, description: "挂载到聚合根（可选）" }
+        parentObjectId:  { type: string, format: uuid, description: "继承父对象（可选）" }
+        attributes:
+          type: array
+          items:
+            type: object
+            properties:
+              name:         { type: string }
+              label:        { type: string }
+              type:         { type: string, enum: [STRING, INT, DECIMAL, DATE, ENUM, BOOLEAN, JSON, MONEY, QUANTITY] }
+              required:     { type: boolean }
+              primaryKey:   { type: boolean }
+              enumValues:   { type: array, items: { type: string } }
+              defaultValue: { type: string }
+              sensitive:    { type: boolean }
+              sortOrder:    { type: integer }
+
+    RelationshipCreate:
+      type: object
+      required: [name, code, sourceObjectId, targetObjectId, cardinality, relationKind]
+      properties:
+        name:             { type: string, example: "包含" }
+        code:             { type: string, example: "contains_op" }
+        sourceObjectId:   { type: string, format: uuid }
+        targetObjectId:   { type: string, format: uuid }
+        cardinality:      { type: string, enum: ["1:1", "1:N", "N:1", "N:M"] }
+        relationKind:     { type: string, enum: [COMPOSITION, AGGREGATION, REFERENCE, DEPENDENCY] }
+        isCrossContext:   { type: boolean }
+        targetContextId:  { type: string, format: uuid }
+
+    DataSourceCreate:
+      type: object
+      required: [name, code, sourceType]
+      properties:
+        name:             { type: string, example: "SAP S/4HANA Cloud" }
+        code:             { type: string, example: "sap_s4hana_prod" }
+        sourceType:       { type: string, enum: [SQL, API, MCP] }
+        connectionConfig: { type: object, description: "连接配置（不含明文凭证）" }
+        credentialRef:    { type: string, description: "凭证引用 vault:sap-db" }
+
+    DataAccessMethodCreate:
+      type: object
+      required: [objectTypeId, dataSourceId, methodType]
+      properties:
+        objectTypeId:   { type: string, format: uuid }
+        dataSourceId:   { type: string, format: uuid }
+        methodType:     { type: string, enum: [SQL_QUERY, API_CALL, MCP_TOOL] }
+        accessConfig:   { type: object }
+        cacheTtlSec:    { type: integer, default: 300 }
+
+    # ── 行为层模型 ──
+    BehaviorCreate:
+      type: object
+      required: [name, code, aggregateRootId]
+      properties:
+        name:             { type: string, example: "生产订单下达" }
+        code:             { type: string, example: "release_production_order" }
+        description:      { type: string }
+        aggregateRootId:  { type: string, format: uuid }
+        invocationMode:   { type: string, enum: [DIRECT, EVENT_DRIVEN, BOTH], default: BOTH }
+        inputParams:
+          type: array
+          items:
+            type: object
+            properties:
+              name:         { type: string }
+              type:         { type: string }
+              required:     { type: boolean }
+              description:  { type: string }
+        publishedEvents:
+          type: array
+          items:
+            type: object
+            properties:
+              eventCode:  { type: string }
+              eventName:  { type: string }
+
+    ValidationRuleCreate:
+      type: object
+      required: [name, code, ruleType]
+      properties:
+        name:               { type: string, example: "物料齐套校验" }
+        code:               { type: string, example: "material_availability_check" }
+        ruleType:           { type: string, enum: [PRE_CHECK, POST_CHECK, INVARIANT] }
+        description:        { type: string }
+        ruleExpression:     { type: object }
+        violationMessageTemplate: { type: string, example: "物料 {{materialCode}} 库存不足，缺口 {{gap}} 件" }
+
+    BehaviorRuleBinding:
+      type: object
+      required: [ruleId, executionOrder]
+      properties:
+        ruleId:         { type: string, format: uuid }
+        executionOrder: { type: integer }
+
+    MetricCreate:
+      type: object
+      required: [name, code, formula]
+      properties:
+        name:               { type: string, example: "准时完工率" }
+        code:               { type: string, example: "on_time_completion_rate" }
+        description:        { type: string }
+        formula:            { type: string }
+        eventSource:        { type: object }
+        aggregationPeriod:  { type: string, enum: [DAILY, WEEKLY, MONTHLY, QUARTERLY] }
+        dimensions:         { type: array, items: { type: object } }
+
+    TransactionBoundaryCreate:
+      type: object
+      required: [operations]
+      properties:
+        operations:
+          type: array
+          items:
+            type: object
+            properties:
+              objectCode: { type: string }
+              field:      { type: string }
+              newValue:   { type: string }
+              delta:      { type: string }
+
+    SideEffectCreate:
+      type: object
+      required: [effectType, target]
+      properties:
+        effectType:     { type: string, enum: [NOTIFICATION, SYNC, LOG, WEBHOOK] }
+        target:         { type: string }
+        contentTemplate: { type: string }
+        isAsync:        { type: boolean, default: true }
+
+    # ── 事件层模型 ──
+    DomainEventCreate:
+      type: object
+      required: [name, code, eventKind]
+      properties:
+        name:             { type: string, example: "生产订单已下达" }
+        code:             { type: string, example: "production_order.released" }
+        eventKind:        { type: string, enum: [DOMAIN, INTEGRATION] }
+        triggeringBehaviorId: { type: string, format: uuid }
+        payloadSchema:
+          type: array
+          items:
+            type: object
+            properties:
+              name:     { type: string }
+              type:     { type: string }
+              required: { type: boolean }
+
+    IntegrationEventCreate:
+      type: object
+      required: [name, code, sourceEventId, targetContextId]
+      properties:
+        name:             { type: string }
+        code:             { type: string }
+        sourceEventId:    { type: string, format: uuid }
+        targetContextId:  { type: string, format: uuid }
+        payloadMapping:   { type: object, description: "Payload 字段映射规则" }
+
+    EventRouteCreate:
+      type: object
+      required: [targetType]
+      properties:
+        targetType:       { type: string, enum: [CONTEXT, EXTERNAL_SYSTEM] }
+        targetContextId:  { type: string, format: uuid }
+        targetSystem:     { type: string }
+        routeCondition:   { type: object }
+
+    EventHandlerCreate:
+      type: object
+      required: [handlerBehaviorId]
+      properties:
+        scenarioId:         { type: string, format: uuid, description: "业务场景（可选=任意）" }
+        requiredStateId:    { type: string, format: uuid, description: "前置状态（可选=任意）" }
+        handlerBehaviorId:  { type: string, format: uuid, description: "处理行为（必须来自行为库）" }
+        description:        { type: string }
+        priority:           { type: integer, default: 0 }
+
+    EventStoreConfigUpdate:
+      type: object
+      required: [storeType]
+      properties:
+        storeType:        { type: string, enum: [IN_PROCESS, KAFKA, POSTGRES, REDIS_STREAM] }
+        connectionConfig: { type: object }
+        isActive:         { type: boolean }
+
+    # ── 治理层模型 ──
+    RoleCreate:
+      type: object
+      required: [name, code]
+      properties:
+        name:         { type: string, example: "生产计划员" }
+        code:         { type: string, example: "production_planner" }
+        description:  { type: string }
+        contextId:    { type: string, format: uuid, description: "所属上下文（NULL=全局角色）" }
+
+    ObjectPermissionCreate:
+      type: object
+      required: [objectTypeId]
+      properties:
+        objectTypeId: { type: string, format: uuid }
+        permRead:     { type: boolean }
+        permWrite:    { type: boolean }
+        permDelete:   { type: boolean }
+        permExecute:  { type: boolean }
+
+    FieldPermissionCreate:
+      type: object
+      required: [objectTypeId, fieldName]
+      properties:
+        objectTypeId: { type: string, format: uuid }
+        fieldName:    { type: string }
+        isVisible:    { type: boolean }
+        isEditable:   { type: boolean }
+
+    SandboxCreate:
+      type: object
+      required: [name]
+      properties:
+        name:                   { type: string }
+        manifestVersionId:      { type: string, format: uuid }
+        agentRoleId:            { type: string, format: uuid }
+        allowedTools:           { type: array, items: { type: string } }
+        allowedAggregateRoots:  { type: array, items: { type: string } }
+        allowedBehaviors:       { type: array, items: { type: string } }
+        maxOpsPerSecond:        { type: integer, default: 10 }
+
+    ReviewCommentCreate:
+      type: object
+      required: [targetType, targetId, content]
+      properties:
+        targetType: { type: string, enum: [AGGREGATE_ROOT, OBJECT_TYPE, BEHAVIOR, EVENT, RULE] }
+        targetId:   { type: string, format: uuid }
+        resolution: { type: string, enum: [APPROVED, NEEDS_CHANGE, REJECTED] }
+        content:    { type: string }
+
+    # ── 制品层模型 ──
+    ManifestCompileRequest:
+      type: object
+      properties:
+        includedLayers:
+          type: array
+          items:
+            type: string
+            enum: [SEMANTIC, BEHAVIOR, EVENT, GOVERNANCE, DATA_SOURCE]
+          description: "要包含的层（默认全部）"
+        outputFormat: { type: string, enum: [JSON, YAML], default: JSON }
+
+    ManifestResponse:
+      type: object
+      properties:
+        id:             { type: string, format: uuid }
+        contextId:      { type: string, format: uuid }
+        version:        { type: string, example: "1.0.0" }
+        compiledBy:     { type: string }
+        compiledAt:     { type: string, format: date-time }
+        changeLog:      { type: string }
+        summary:
+          type: object
+          properties:
+            aggregateRoots: { type: integer }
+            behaviors:      { type: integer }
+            events:         { type: integer }
+            roles:          { type: integer }
+            validated:      { type: boolean }
+
+    ManifestDiffResponse:
+      type: object
+      properties:
+        baseVersion:    { type: string }
+        targetVersion:  { type: string }
+        changes:
+          type: object
+          properties:
+            added:      { type: array, items: { type: object } }
+            modified:   { type: array, items: { type: object } }
+            removed:    { type: array, items: { type: object } }
+        breakingChanges:
+          type: array
+          items:
+            type: object
+            properties:
+              element:    { type: string }
+              severity:   { type: string, enum: [BREAKING, WARNING] }
+              message:    { type: string }
+
+    # ── MCP 内部模型 ──
+    IntentAlternative:
+      type: object
+      properties:
+        boundedContext:  { type: string }
+        aggregate:       { type: string }
+        behavior:        { type: string }
+        targetState:     { type: string }
+        confidence:      { type: number, format: float }
+
+    IntentResolution:
+      type: object
+      required: [boundedContext, aggregate, behavior, confidence]
+      properties:
+        boundedContext:  { type: string, example: "manufacturing" }
+        aggregate:       { type: string, example: "ProductionOrder" }
+        behavior:        { type: string, example: "release_production_order" }
+        targetState:     { type: string, example: "RELEASED" }
+        confidence:      { type: number, format: float, example: 0.92 }
+        alternatives:
+          type: array
+          items: { $ref: '#/components/schemas/IntentAlternative' }
+          description: 置信度较低的备选映射，供 LLM 纠错（US-A05 AC-2）
+
+    ResolveIntentRequest:
+      type: object
+      required: [query]
+      properties:
+        query:    { type: string, description: "用户自然语言" }
+        context:  { type: string, description: "可选：限定限界上下文 code" }
+        topK:     { type: integer, default: 3, minimum: 1, maximum: 10 }
+
+    QueryOntologyRequest:
+      type: object
+      required: [concept]
+      properties:
+        context:  { type: string, example: "manufacturing" }
+        concept:  { type: string, example: "ProductionOrder" }
+
+    ExecuteActionRequest:
+      type: object
+      required: [action, parameters]
+      properties:
+        action:     { type: string, example: "release_production_order" }
+        parameters: { type: object }
+        dryRun:     { type: boolean, default: false, description: "仅校验不执行" }
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: []
+
+# ═══════════════════════════════════════════════════════════════════
+# API 路径
+# ═══════════════════════════════════════════════════════════════════
+paths:
+
+  # ──────────────────── 语义层 ────────────────────
+
+  # US-S01: 限界上下文
+  /contexts:
+    post:
+      tags: [Contexts]
+      summary: 创建限界上下文并绑定本体 (US-S01)
+      operationId: createContext
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BoundedContextCreate'
+      responses:
+        '201': { description: 创建成功, content: { application/json: { schema: { $ref: '#/components/schemas/ApiResponse' } } } }
+        '409': { description: 同名上下文已存在 }
+
+    get:
+      tags: [Contexts]
+      summary: 查询限界上下文列表
+      operationId: listContexts
+      parameters:
+        - { name: domainTag, in: query, schema: { type: string } }
+        - { name: workflowState, in: query, schema: { type: string, enum: [DRAFT, IN_REVIEW, PUBLISHED] } }
+        - { name: page, in: query, schema: { type: integer, default: 0 } }
+        - { name: size, in: query, schema: { type: integer, default: 20 } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/PaginatedResponse' } } } }
+
+  /contexts/{contextId}:
+    get:
+      tags: [Contexts]
+      summary: 查询限界上下文详情 (US-S01 AC-4)
+      operationId: getContext
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/ApiResponse' } } } }
+        '404': { description: 上下文不存在 }
+
+  # US-S02: 业务场景
+  /contexts/{contextId}/scenarios:
+    post:
+      tags: [Contexts]
+      summary: 创建业务场景 (US-S02)
+      operationId: createScenario
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BusinessScenarioCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+    get:
+      tags: [Contexts]
+      summary: 查询业务场景列表
+      operationId: listScenarios
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: OK }
+
+  # US-S03: 聚合根
+  /contexts/{contextId}/aggregate-roots:
+    post:
+      tags: [AggregateRoots]
+      summary: 定义聚合根 (US-S03)
+      operationId: createAggregateRoot
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AggregateRootCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+    get:
+      tags: [AggregateRoots]
+      summary: 查询聚合根列表
+      operationId: listAggregateRoots
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: OK }
+
+  # US-S04: 对象类型
+  /contexts/{contextId}/object-types:
+    post:
+      tags: [ObjectTypes]
+      summary: 定义对象类型与属性 (US-S04)
+      operationId: createObjectType
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ObjectTypeCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+    get:
+      tags: [ObjectTypes]
+      summary: 查询对象类型列表
+      operationId: listObjectTypes
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: aggregateRootId, in: query, schema: { type: string, format: uuid } }
+        - { name: objectKind, in: query, schema: { type: string, enum: [ENTITY, VALUE_OBJECT, INTERFACE_ABSTRACT] } }
+      responses:
+        '200': { description: OK }
+
+  /object-types/{objectTypeId}/attributes:
+    put:
+      tags: [ObjectTypes]
+      summary: 更新对象属性列表（拖拽排序 US-S04 AC-4）
+      operationId: updateAttributes
+      parameters:
+        - { name: objectTypeId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+      responses:
+        '200': { description: 更新成功 }
+
+  # US-S05: 值对象
+  /value-objects:
+    post:
+      tags: [ValueObjects]
+      summary: 定义值对象 (US-S05)
+      operationId: createValueObject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, code]
+              properties:
+                name:             { type: string, example: "金额" }
+                code:             { type: string, example: "Money" }
+                description:      { type: string }
+                innerAttributes:
+                  type: array
+                  items: { type: object }
+      responses:
+        '201': { description: 创建成功 }
+
+    get:
+      tags: [ValueObjects]
+      summary: 查询全部值对象（全局复用）
+      operationId: listValueObjects
+      responses:
+        '200': { description: OK }
+
+  # US-S06: 状态机
+  /contexts/{contextId}/state-machines:
+    post:
+      tags: [StateMachines]
+      summary: 定义对象状态与状态机 (US-S06)
+      operationId: createStateMachine
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [objectTypeId, name]
+              properties:
+                objectTypeId: { type: string, format: uuid }
+                name:         { type: string }
+                states:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:       { type: string }
+                      code:       { type: string }
+                      isInitial:  { type: boolean }
+                      isTerminal: { type: boolean }
+                      sortOrder:  { type: integer }
+                transitions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      fromStateCode:      { type: string }
+                      toStateCode:        { type: string }
+                      drivingBehaviorId:  { type: string, format: uuid }
+                      eventId:            { type: string, format: uuid }
+      responses:
+        '201': { description: 创建成功 }
+
+  # US-S07: 关系类型
+  /contexts/{contextId}/relationships:
+    post:
+      tags: [Relationships]
+      summary: 定义关系类型 (US-S07)
+      operationId: createRelationship
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelationshipCreate'
+      responses:
+        '201': { description: 创建成功 }
+        '400': { description: "组合关系不能跨聚合根" }
+
+    get:
+      tags: [Relationships]
+      summary: 查询关系列表
+      operationId: listRelationships
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: sourceObjectId, in: query, schema: { type: string, format: uuid } }
+        - { name: targetObjectId, in: query, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: OK }
+
+  # US-S08: 数据源
+  /data-sources:
+    post:
+      tags: [DataSources]
+      summary: 配置数据源 (US-S08)
+      operationId: createDataSource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataSourceCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+    get:
+      tags: [DataSources]
+      summary: 查询数据源列表
+      operationId: listDataSources
+      parameters:
+        - { name: sourceType, in: query, schema: { type: string, enum: [SQL, API, MCP] } }
+      responses:
+        '200': { description: OK }
+
+  /contexts/{contextId}/data-access-methods:
+    post:
+      tags: [DataSources]
+      summary: 配置数据获取方式 (US-S08)
+      operationId: createDataAccessMethod
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataAccessMethodCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+  # US-S09: 跨上下文关系
+  /cross-context-relationships:
+    post:
+      tags: [CrossContext]
+      summary: 定义跨上下文关系 (US-S09)
+      operationId: createCrossContextRelationship
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelationshipCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+    get:
+      tags: [CrossContext]
+      summary: 查询全局跨上下文依赖图
+      operationId: listCrossContextRelationships
+      responses:
+        '200': { description: OK }
+
+  # US-S10: 数据血缘
+  /contexts/{contextId}/lineage:
+    get:
+      tags: [Lineage]
+      summary: 查询数据血缘 (US-S10)
+      operationId: getLineage
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: nodeType, in: query, schema: { type: string, enum: [AGGREGATE_ROOT, DATA_SOURCE, METRIC] } }
+      responses:
+        '200': { description: "DAG 图数据" }
+
+  /contexts/{contextId}/lineage/impact-analysis:
+    get:
+      tags: [Lineage]
+      summary: 影响分析——数据源变更影响范围 (US-S10 AC-2)
+      operationId: impactAnalysis
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: dataSourceId, in: query, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: "受影响的聚合根/行为/指标列表" }
+
+  # ──────────────────── 行为层 ────────────────────
+
+  # US-B01: 行为定义
+  /contexts/{contextId}/behaviors:
+    post:
+      tags: [Behaviors]
+      summary: 定义行为 (US-B01)
+      operationId: createBehavior
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BehaviorCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+    get:
+      tags: [Behaviors]
+      summary: 查询行为列表
+      operationId: listBehaviors
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: aggregateRootId, in: query, schema: { type: string, format: uuid } }
+        - { name: invocationMode, in: query, schema: { type: string, enum: [DIRECT, EVENT_DRIVEN, BOTH] } }
+      responses:
+        '200': { description: OK }
+
+  # US-B02: 参数模板
+  /param-templates:
+    post:
+      tags: [Behaviors]
+      summary: 保存参数模板 (US-B02)
+      operationId: createParamTemplate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, params]
+              properties:
+                name:   { type: string }
+                params: { type: array, items: { type: object } }
+      responses:
+        '201': { description: 创建成功 }
+
+    get:
+      tags: [Behaviors]
+      summary: 查询参数模板列表
+      operationId: listParamTemplates
+      responses:
+        '200': { description: OK }
+
+  # US-B03: 校验规则
+  /contexts/{contextId}/validation-rules:
+    post:
+      tags: [ValidationRules]
+      summary: 定义校验规则 (US-B03)
+      operationId: createValidationRule
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationRuleCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+    get:
+      tags: [ValidationRules]
+      summary: 查询校验规则列表
+      operationId: listValidationRules
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: OK }
+
+  /behaviors/{behaviorId}/rules:
+    post:
+      tags: [Behaviors]
+      summary: 关联校验规则到行为 (US-B03 AC-3)
+      operationId: bindRuleToBehavior
+      parameters:
+        - { name: behaviorId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BehaviorRuleBinding'
+      responses:
+        '201': { description: 关联成功 }
+
+  # US-B04: 规则灰度
+  /validation-rules/{ruleId}/versions:
+    get:
+      tags: [ValidationRules]
+      summary: 查询规则历史版本 (US-B04)
+      operationId: listRuleVersions
+      parameters:
+        - { name: ruleId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: OK }
+
+    post:
+      tags: [ValidationRules]
+      summary: 保存新版本规则（自动生成版本号） (US-B04 AC-1)
+      operationId: createRuleVersion
+      parameters:
+        - { name: ruleId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationRuleCreate'
+      responses:
+        '201': { description: 新版本创建成功 }
+
+  /validation-rules/{ruleId}/canary:
+    put:
+      tags: [ValidationRules]
+      summary: 配置规则灰度策略 (US-B04 AC-2)
+      operationId: updateCanaryConfig
+      parameters:
+        - { name: ruleId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                scenarioCode: { type: string }
+                percentage:   { type: integer, minimum: 0, maximum: 100 }
+                timeRange:    { type: object }
+      responses:
+        '200': { description: 配置成功 }
+
+  # US-B05: 指标定义
+  /contexts/{contextId}/metrics:
+    post:
+      tags: [Metrics]
+      summary: 定义业务指标 (US-B05)
+      operationId: createMetric
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetricCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+    get:
+      tags: [Metrics]
+      summary: 查询指标列表
+      operationId: listMetrics
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: OK }
+
+  # US-B06: 事务边界
+  /behaviors/{behaviorId}/transaction-boundary:
+    put:
+      tags: [Behaviors]
+      summary: 配置事务边界 (US-B06)
+      operationId: updateTransactionBoundary
+      parameters:
+        - { name: behaviorId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionBoundaryCreate'
+      responses:
+        '200': { description: 配置成功 }
+
+  # US-B07: 副作用
+  /behaviors/{behaviorId}/side-effects:
+    post:
+      tags: [Behaviors]
+      summary: 配置行为副作用 (US-B07)
+      operationId: createSideEffect
+      parameters:
+        - { name: behaviorId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SideEffectCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+  # ──────────────────── 事件层 ────────────────────
+
+  # US-E01: 领域事件
+  /contexts/{contextId}/events:
+    post:
+      tags: [Events]
+      summary: 定义领域事件 (US-E01)
+      operationId: createDomainEvent
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DomainEventCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+    get:
+      tags: [Events]
+      summary: 查询领域事件列表
+      operationId: listDomainEvents
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: eventKind, in: query, schema: { type: string, enum: [DOMAIN, INTEGRATION] } }
+      responses:
+        '200': { description: OK }
+
+  /contexts/{contextId}/events/timeline:
+    get:
+      tags: [Events]
+      summary: 查询事件时间线 (US-E01 AC-4)
+      operationId: getEventTimeline
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: aggregateRootId, in: query, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: "按生命周期顺序排列的事件节点" }
+
+  # US-E05: 集成事件
+  /events/{eventId}/integration:
+    post:
+      tags: [Events]
+      summary: 创建集成事件 (US-E05)
+      operationId: createIntegrationEvent
+      parameters:
+        - { name: eventId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntegrationEventCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+  # US-E03: 事件路由
+  /events/{eventId}/routes:
+    post:
+      tags: [EventRoutes]
+      summary: 定义事件路由 (US-E03)
+      operationId: createEventRoute
+      parameters:
+        - { name: eventId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventRouteCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+  /events/{eventId}/topology:
+    get:
+      tags: [EventRoutes]
+      summary: 查询事件拓扑图 (US-E03 AC-3)
+      operationId: getEventTopology
+      parameters:
+        - { name: eventId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: "事件→路由→目标的可视化连线数据" }
+
+  # US-E04: 事件处理器矩阵
+  /events/{eventId}/handlers:
+    post:
+      tags: [EventHandlers]
+      summary: 定义事件处理器 (US-E04)
+      operationId: createEventHandler
+      parameters:
+        - { name: eventId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventHandlerCreate'
+      responses:
+        '201': { description: 创建成功 }
+        '409': { description: "该(事件,场景,状态)组合已存在处理器" }
+
+    get:
+      tags: [EventHandlers]
+      summary: 查询事件处理器矩阵 (US-E04 AC-2)
+      operationId: listEventHandlers
+      parameters:
+        - { name: eventId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: scenarioId, in: query, schema: { type: string, format: uuid } }
+        - { name: requiredStateId, in: query, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: "处理器矩阵数据" }
+
+  # US-E02: 事件存储
+  /contexts/{contextId}/event-store:
+    put:
+      tags: [EventStore]
+      summary: 配置事件存储 (US-E02)
+      operationId: updateEventStoreConfig
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventStoreConfigUpdate'
+      responses:
+        '200': { description: 配置成功 }
+
+    get:
+      tags: [EventStore]
+      summary: 查询事件存储配置
+      operationId: getEventStoreConfig
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: OK }
+
+  /contexts/{contextId}/event-history/{aggregateRootId}:
+    get:
+      tags: [EventStore]
+      summary: 查询聚合根事件历史（事件溯源） (US-E02 AC-3)
+      operationId: getEventHistory
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: aggregateRootId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: "时间顺序的事件序列" }
+
+  # ──────────────────── 治理层 ────────────────────
+
+  # US-G01: 角色与权限
+  /roles:
+    post:
+      tags: [Roles]
+      summary: 创建角色 (US-G01)
+      operationId: createRole
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+    get:
+      tags: [Roles]
+      summary: 查询角色列表
+      operationId: listRoles
+      parameters:
+        - { name: contextId, in: query, schema: { type: string, format: uuid } }
+        - { name: isGlobal, in: query, schema: { type: boolean } }
+      responses:
+        '200': { description: OK }
+
+  /roles/{roleId}/object-permissions:
+    post:
+      tags: [Roles]
+      summary: 配置对象级权限 (US-G01 AC-2)
+      operationId: createObjectPermission
+      parameters:
+        - { name: roleId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ObjectPermissionCreate'
+      responses:
+        '201': { description: 配置成功 }
+
+  # US-G02: 字段级权限
+  /roles/{roleId}/field-permissions:
+    post:
+      tags: [Roles]
+      summary: 配置字段级权限 (US-G02)
+      operationId: createFieldPermission
+      parameters:
+        - { name: roleId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FieldPermissionCreate'
+      responses:
+        '201': { description: 配置成功 }
+
+  # US-G03: 条件权限
+  /roles/{roleId}/conditional-rules:
+    post:
+      tags: [Roles]
+      summary: 配置条件权限规则 (US-G03)
+      operationId: createConditionalRule
+      parameters:
+        - { name: roleId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conditionType: { type: string, enum: [TIME_WINDOW, ORG_SCOPE, DATA_SCOPE] }
+                expression:    { type: object }
+      responses:
+        '201': { description: 配置成功 }
+
+  # US-G04: AI Agent 沙箱
+  /sandboxes:
+    post:
+      tags: [Sandboxes]
+      summary: 配置 AI Agent 沙箱 (US-G04)
+      operationId: createSandbox
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SandboxCreate'
+      responses:
+        '201': { description: 创建成功 }
+
+    get:
+      tags: [Sandboxes]
+      summary: 查询沙箱列表
+      operationId: listSandboxes
+      responses:
+        '200': { description: OK }
+
+  # US-G05: 建模工作流
+  /contexts/{contextId}/submit-review:
+    post:
+      tags: [Workflow]
+      summary: 提交审核——草稿→审核中 (US-G05 AC-1)
+      operationId: submitForReview
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: "状态已变更为 IN_REVIEW" }
+        '400': { description: "当前状态不允许提交审核" }
+
+  /contexts/{contextId}/approve:
+    post:
+      tags: [Workflow]
+      summary: 批准发布——审核中→已发布，自动编译 Manifest (US-G05 AC-4)
+      operationId: approveAndPublish
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: "状态已变更为 PUBLISHED，Manifest 已编译", content: { application/json: { schema: { $ref: '#/components/schemas/ManifestResponse' } } } }
+        '400': { description: "存在未解决的审核批注" }
+
+  /contexts/{contextId}/reject-review:
+    post:
+      tags: [Workflow]
+      summary: 打回修改——审核中→草稿 (US-G05 AC-3)
+      operationId: rejectReview
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: "状态已变更为 DRAFT" }
+
+  /contexts/{contextId}/review-comments:
+    post:
+      tags: [Workflow]
+      summary: 提交审核批注 (US-G05 AC-2)
+      operationId: createReviewComment
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewCommentCreate'
+      responses:
+        '201': { description: 批注已保存 }
+
+    get:
+      tags: [Workflow]
+      summary: 查询审核批注列表
+      operationId: listReviewComments
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: targetType, in: query, schema: { type: string } }
+        - { name: targetId, in: query, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: OK }
+
+  /contexts/{contextId}/workflow-history:
+    get:
+      tags: [Workflow]
+      summary: 查询审批历史 (US-G05 AC-5)
+      operationId: getWorkflowHistory
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: "提交人/审核人/批准人/时间链" }
+
+  # ──────────────────── 制品层 ────────────────────
+
+  # US-A01: 编译 Manifest
+  /contexts/{contextId}/compile:
+    post:
+      tags: [Manifests]
+      summary: 编译本体为 Agent Manifest (US-A01)
+      operationId: compileManifest
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManifestCompileRequest'
+      responses:
+        '201': { description: 编译成功, content: { application/json: { schema: { $ref: '#/components/schemas/ManifestResponse' } } } }
+        '422': { description: 编译失败——元素缺失必填字段, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/ErrorDetail' } } } } }
+
+  /contexts/{contextId}/manifests:
+    get:
+      tags: [Manifests]
+      summary: 查询 Manifest 版本列表
+      operationId: listManifests
+      parameters:
+        - { name: contextId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: OK }
+
+  /manifests/{manifestId}/download:
+    get:
+      tags: [Manifests]
+      summary: 下载 Manifest JSON 文件
+      operationId: downloadManifest
+      parameters:
+        - { name: manifestId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: format, in: query, schema: { type: string, enum: [JSON, YAML], default: JSON } }
+      responses:
+        '200': { description: Manifest 文件内容 }
+
+  # US-A02: 版本对比
+  /manifests/diff:
+    get:
+      tags: [Manifests]
+      summary: Manifest 版本对比 (US-A02)
+      operationId: diffManifests
+      parameters:
+        - { name: contextId, in: query, required: true, schema: { type: string, format: uuid } }
+        - { name: baseVersion, in: query, required: true, schema: { type: string } }
+        - { name: targetVersion, in: query, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 版本差异, content: { application/json: { schema: { $ref: '#/components/schemas/ManifestDiffResponse' } } } }
+
+  # ──────────────────── MCP 内部接口 ────────────────────
+
+  /internal/mcp/query-ontology:
+    post:
+      tags: [McpInternal]
+      summary: 精确概念引用 → 完整语义定义 (US-A03 Step 2)
+      operationId: queryOntology
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryOntologyRequest'
+      responses:
+        '200': { description: 概念片段 }
+
+  /internal/mcp/execute-action:
+    post:
+      tags: [McpInternal]
+      summary: Agent 执行行为——三通道防御完整链路 (US-A05)
+      operationId: executeAction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecuteActionRequest'
+      responses:
+        '200': { description: 执行成功 }
+        '400': { description: 校验失败——返回结构化违规信息, content: { application/json: { schema: { $ref: '#/components/schemas/RuleViolation' } } } }
+        '403': { description: "权限不足 / 白名单拦截" }
+        '429': { description: "频率超限" }
+
+  /internal/mcp/resolve-intent:
+    post:
+      tags: [McpInternal]
+      summary: 自然语言 → 精确概念引用 (US-A03 Step 1)
+      operationId: resolveIntent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResolveIntentRequest'
+      responses:
+        '200':
+          description: IntentResolution（含 alternatives）
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/IntentResolution'
+
+  /internal/mcp/validate-instruction:
+    post:
+      tags: [McpInternal]
+      summary: 校验 Agent 指令是否符合业务规则（仅校验不执行）
+      operationId: validateInstruction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecuteActionRequest'
+      responses:
+        '200': { description: "校验通过 / 校验失败（含详细违规信息）" }

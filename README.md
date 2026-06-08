@@ -25,9 +25,15 @@ ontology-platform/
 ├── ontology-common/           # 公共模块（工具类、异常、常量、枚举）
 ├── db/
 │   └── migrations/            # Flyway数据库迁移脚本
+├── docs/
+│   └── shared/                # 共用规格（USM v1.2.1、PRD/TDD/API、Manifest）
 ├── docker/                   # Docker配置文件
 └── README.md
 ```
+
+## 共用文档（项目1 设计台 + 项目2 平台）
+
+权威文档在 [`docs/shared/`](docs/shared/README.md)：User Story Map v1.2.1、产品 PRD v2.0、TDD、OpenAPI、Manifest Schema/Sprint 计划。
 
 ## 快速开始
 
