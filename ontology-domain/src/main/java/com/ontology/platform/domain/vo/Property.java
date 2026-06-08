@@ -4,6 +4,8 @@ import com.ontology.platform.common.enums.PropertyDataType;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -30,6 +32,13 @@ public class Property {
     private boolean isSortable;
     private Object defaultValue;
     private int sortOrder;
+
+    @Builder.Default
+    private List<PropertyConstraint> constraints = new ArrayList<>();
+
+    @Builder.Default
+    private List<Object> nestedProperties = new ArrayList<>();
+
     private Instant createdAt;
     private Instant updatedAt;
 

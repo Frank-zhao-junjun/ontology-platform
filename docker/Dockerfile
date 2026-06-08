@@ -4,7 +4,7 @@
 # =============================================
 
 # 第一阶段：构建
-FROM eclipse-temurin:17-jdk-alpine AS builder
+FROM eclipse-temurin:21-jdk-alpine AS builder
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ RUN apk add --no-cache maven && \
     mv ontology-api/target/*.jar app.jar
 
 # 第二阶段：运行
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 
 # 安装必要工具
 RUN apk add --no-cache \
