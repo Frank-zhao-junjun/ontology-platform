@@ -19,3 +19,80 @@ unpacked/
 slides/
 slides_optimized/
 .cloudstudio/
+
+# =============================================
+# Maven
+# =============================================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# =============================================
+# IDE
+# =============================================
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.factorypath
+*.swp
+*.swo
+*~
+
+# =============================================
+# VS Code
+# =============================================
+.vscode/
+
+# =============================================
+# Eclipse
+# =============================================
+.metadata/
+bin/
+tmp/
+*.tmp
+*.bak
+*.local
+
+# =============================================
+# Logs
+# =============================================
+*.log
+logs/
+
+# =============================================
+# OS
+# =============================================
+.DS_Store
+Thumbs.db
+
+# =============================================
+# Docker
+# =============================================
+docker/data/
+docker/logs/
+
+# =============================================
+# Environment
+# =============================================
+.env
+.env.local
+*.local.yaml
+
+# =============================================
+# Coverage
+# =============================================
+jacoco/
+*.exec
+*.html

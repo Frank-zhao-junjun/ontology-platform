@@ -1,0 +1,179 @@
+# =============================================
+# 本体建模平台 - 开发环境配置
+# =============================================
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+
+spring:
+  application:
+    name: ontology-platform
+
+  # 开发环境配置
+  profiles:
+    active: dev
+
+  # Jackson配置
+  jackson:
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+    time-zone: UTC
+    serialization:
+      write-dates-as-timestamps: false
+      fail-on-empty-beans: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+  # 数据源配置
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:ontology}?currentSchema=public&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: ${DB_USERNAME:ontology}
+    password: ${DB_PASSWORD:ontology123}
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      pool-name: OntologyHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+  # JPA配置
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+
+  # Flyway数据库迁移
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    sql-migration-prefix: V
+    sql-migration-separator: __
+    sql-migration-suffixes: .sql
+    encoding: UTF-8
+    validate-on-migrate: true
+
+  # Redis配置
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: 0
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 2
+          max-wait: 3000ms
+        shutdown-timeout: 100ms
+
+# MyBatis-Plus配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.ontology.platform.infrastructure.persistence.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    db-config:
+      id-type: assign_uuid
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# SpringDoc OpenAPI配置
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  group-configs:
+    - group: 'ontology'
+      paths-to-match: '/v1/ontologies/**'
+      packages-to-scan: com.ontology.platform.api.controller
+    - group: 'object-types'
+      paths-to-match: '/v1/object-types/**'
+      packages-to-scan: com.ontology.platform.api.controller
+    - group: 'objects'
+      paths-to-match: '/v1/objects/**'
+      packages-to-scan: com.ontology.platform.api.controller
+
+# Actuator配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when_authorized
+  health:
+    db:
+      enabled: true
+    redis:
+      enabled: true
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.ontology.platform: DEBUG
+    org.springframework.web: INFO
+    org.springframework.transaction: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/ontology-platform.log
+    max-size: 100MB
+    max-history: 30
+
+# 自定义配置
+ontology:
+  # 图遍历安全配置
+  graph:
+    max-depth: 5
+    max-nodes: 1000
+    max-path-segments: 10
+    timeout-ms: 5000
+  # 缓存配置
+  cache:
+    ontology-ttl: 3600
+    object-type-ttl: 1800
+  # 文件上传配置
+  upload:
+    max-file-size: 100MB
+    chunk-size: 5MB
+    temp-dir: /tmp/ontology-upload
+
+# API文档信息
+info:
+  app:
+    name: Ontology Platform
+    version: 1.0.0
+    description: 本体建模平台REST API

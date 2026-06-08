@@ -1,0 +1,51 @@
+# =============================================
+# 本体建模平台 - 测试环境配置
+# =============================================
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ontology-platform-test
+
+  # 测试环境配置
+  profiles:
+    active: test
+
+  # H2内存数据库（测试用）
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password:
+
+  # JPA配置
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # 禁用Flyway（测试用H2）
+  flyway:
+    enabled: false
+
+  # Redis配置（Mock）
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+# MyBatis-Plus配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.ontology.platform: DEBUG
