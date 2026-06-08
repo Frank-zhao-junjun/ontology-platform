@@ -432,6 +432,73 @@ public final class PersistenceMapper {
                 .resolvedAt(e.getResolvedAt()).build();
     }
 
+    // ── StateMachine ──
+    public static StateMachineEntity toEntity(StateMachine sm) {
+        StateMachineEntity e = new StateMachineEntity();
+        e.setId(sm.getId());
+        e.setContextId(sm.getContextId());
+        e.setName(sm.getName());
+        e.setNameEn(sm.getNameEn());
+        e.setObjectTypeId(sm.getObjectTypeId());
+        e.setStatusField(sm.getStatusField());
+        e.setStatesJson(sm.getStatesJson());
+        e.setTransitionsJson(sm.getTransitionsJson());
+        e.setCreatedAt(sm.getCreatedAt());
+        e.setUpdatedAt(sm.getUpdatedAt());
+        return e;
+    }
+
+    public static StateMachine toDomain(StateMachineEntity e) {
+        return StateMachine.builder().id(e.getId()).contextId(e.getContextId())
+                .name(e.getName()).nameEn(e.getNameEn()).objectTypeId(e.getObjectTypeId())
+                .statusField(e.getStatusField()).statesJson(e.getStatesJson())
+                .transitionsJson(e.getTransitionsJson())
+                .createdAt(e.getCreatedAt()).updatedAt(e.getUpdatedAt()).build();
+    }
+
+    // ── ValueObject ──
+    public static ValueObjectEntity toEntity(ValueObject vo) {
+        ValueObjectEntity e = new ValueObjectEntity();
+        e.setId(vo.getId());
+        e.setName(vo.getName());
+        e.setCode(vo.getCode());
+        e.setNameEn(vo.getNameEn());
+        e.setDescription(vo.getDescription());
+        e.setPropertiesJson(vo.getPropertiesJson());
+        e.setCreatedAt(vo.getCreatedAt());
+        e.setUpdatedAt(vo.getUpdatedAt());
+        return e;
+    }
+
+    public static ValueObject toDomain(ValueObjectEntity e) {
+        return ValueObject.builder().id(e.getId()).name(e.getName()).code(e.getCode())
+                .nameEn(e.getNameEn()).description(e.getDescription())
+                .propertiesJson(e.getPropertiesJson()).createdAt(e.getCreatedAt())
+                .updatedAt(e.getUpdatedAt()).build();
+    }
+
+    // ── BusinessScenario ──
+    public static BusinessScenarioEntity toEntity(BusinessScenario s) {
+        BusinessScenarioEntity e = new BusinessScenarioEntity();
+        e.setId(s.getId());
+        e.setContextId(s.getContextId());
+        e.setName(s.getName());
+        e.setCode(s.getCode());
+        e.setNameEn(s.getNameEn());
+        e.setDescription(s.getDescription());
+        e.setApplicableObjectTypeIdsJson(s.getApplicableObjectTypeIdsJson());
+        e.setCreatedAt(s.getCreatedAt());
+        return e;
+    }
+
+    public static BusinessScenario toDomain(BusinessScenarioEntity e) {
+        return BusinessScenario.builder().id(e.getId()).contextId(e.getContextId())
+                .name(e.getName()).code(e.getCode()).nameEn(e.getNameEn())
+                .description(e.getDescription())
+                .applicableObjectTypeIdsJson(e.getApplicableObjectTypeIdsJson())
+                .createdAt(e.getCreatedAt()).build();
+    }
+
     // ── AuditLog ──
     public static AuditLogEntity toEntity(AuditLog log) {
         AuditLogEntity e = new AuditLogEntity();
