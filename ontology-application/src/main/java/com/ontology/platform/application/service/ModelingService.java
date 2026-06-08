@@ -59,14 +59,24 @@ public class ModelingService {
         return ot;
     }
 
-    public Relationship createRelationship(String contextId, String sourceId, String targetId, String name, String code, String cardinality, String kind) {
-        if ("COMPOSITION".equals(kind)) {
+    public Relationship createRelationship(String contextId, String sourceId, String targetId,
+                                           String name, String code, String cardinality, String kind) {
+        return createRelationship(contextId, sourceId, targetId, name, code, cardinality, kind, false, null);
+    }
+
+    public Relationship createRelationship(String contextId, String sourceId, String targetId,
+                                           String name, String code, String cardinality, String kind,
+                                           boolean crossContext, String targetContextId) {
+        if ("COMPOSITION".equals(kind) && !crossContext) {
             ObjectTypeV2 src = getObjectType(sourceId);
             ObjectTypeV2 tgt = getObjectType(targetId);
             if (src.getAggregateRootId() == null || !src.getAggregateRootId().equals(tgt.getAggregateRootId()))
                 throw new BusinessException(ErrorCode.VALIDATION_ERROR, "组合关系只能在同一聚合根内的对象之间建立");
         }
-        Relationship r = Relationship.create(contextId, sourceId, targetId, name, code, cardinality, kind);
+        Relationship r = Relationship.builder()
+                .contextId(contextId).sourceObjectId(sourceId).targetObjectId(targetId)
+                .name(name).code(code).cardinality(cardinality).relationKind(kind)
+                .crossContext(crossContext).targetContextId(targetContextId).build();
         relationshipRepo.save(r);
         return r;
     }
