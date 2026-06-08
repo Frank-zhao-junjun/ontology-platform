@@ -1,6 +1,7 @@
 package com.ontology.platform.application.service;
 
 import com.ontology.platform.common.enums.ErrorCode;
+import com.ontology.platform.common.enums.EventType;
 import com.ontology.platform.common.enums.InvocationMode;
 import com.ontology.platform.common.exception.BusinessException;
 import com.ontology.platform.common.exception.ResourceNotFoundException;
@@ -91,7 +92,8 @@ public class BehaviorService {
     }
 
     public DomainEventDefinition createDomainEvent(String contextId, String manifestCode, String name,
-                                                   String nameEn, String aggregateRootId, String triggerActionId,
+                                                   String nameEn, EventType eventType,
+                                                   String aggregateRootId, String triggerActionId,
                                                    String payloadSchemaJson) {
         if (eventRepo.existsByContextIdAndManifestCode(contextId, manifestCode)) {
             throw new BusinessException(ErrorCode.VALIDATION_ERROR, "事件 manifestCode 已存在: " + manifestCode);
@@ -101,12 +103,17 @@ public class BehaviorService {
             getAction(triggerActionId);
         }
         DomainEventDefinition event = DomainEventDefinition.create(contextId, manifestCode, name, nameEn,
-                aggregateRootId, triggerActionId, payloadSchemaJson);
+                eventType, aggregateRootId, triggerActionId, payloadSchemaJson);
         eventRepo.save(event);
         return event;
     }
 
     public List<DomainEventDefinition> listDomainEvents(String contextId) {
         return eventRepo.findByContextId(contextId);
+    }
+
+    public DomainEventDefinition getDomainEvent(String eventId) {
+        return eventRepo.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found: " + eventId));
     }
 }

@@ -22,6 +22,8 @@ public class DomainEventEntity {
     private String name;
     @Column(name = "name_en", length = 200)
     private String nameEn;
+    @Column(name = "event_type", length = 30)
+    private String eventType = "DOMAIN_EVENT";
     @Column(name = "aggregate_root_id", nullable = false, length = 36)
     private String aggregateRootId;
     @Column(name = "trigger_action_id", length = 36)

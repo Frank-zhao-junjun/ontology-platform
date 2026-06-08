@@ -9,6 +9,7 @@ import com.ontology.platform.application.service.DataSourceService;
 import com.ontology.platform.application.service.GovernanceService;
 import com.ontology.platform.application.service.ModelingService;
 import com.ontology.platform.common.enums.DomainTag;
+import com.ontology.platform.common.enums.EventType;
 import com.ontology.platform.common.enums.InvocationMode;
 import com.ontology.platform.domain.entity.AggregateRoot;
 import com.ontology.platform.domain.entity.BoundedContext;
@@ -205,7 +206,8 @@ public class ManifestImportService {
             String payload = evt.has("payloadSchema")
                     ? objectMapper.writeValueAsString(evt.get("payloadSchema")) : "{}";
             behaviorService.createDomainEvent(contextId, manifestCode,
-                    text(evt, "name"), text(evt, "nameEn"), platformArId, triggerPlatformId, payload);
+                    text(evt, "name"), text(evt, "nameEn"), EventType.DOMAIN_EVENT,
+                    platformArId, triggerPlatformId, payload);
         }
     }
 

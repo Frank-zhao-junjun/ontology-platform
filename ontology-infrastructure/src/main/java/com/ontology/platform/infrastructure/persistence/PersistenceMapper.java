@@ -2,6 +2,7 @@ package com.ontology.platform.infrastructure.persistence;
 
 import cn.hutool.json.JSONUtil;
 import com.ontology.platform.common.enums.DomainTag;
+import com.ontology.platform.common.enums.EventType;
 import com.ontology.platform.common.enums.InvocationMode;
 import com.ontology.platform.common.enums.WorkflowState;
 import com.ontology.platform.domain.entity.*;
@@ -275,6 +276,7 @@ public final class PersistenceMapper {
         e.setManifestCode(ev.getManifestCode());
         e.setName(ev.getName());
         e.setNameEn(ev.getNameEn());
+        e.setEventType(ev.getEventType().getCode());
         e.setAggregateRootId(ev.getAggregateRootId());
         e.setTriggerActionId(ev.getTriggerActionId());
         e.setPayloadSchemaJson(ev.getPayloadSchemaJson());
@@ -285,8 +287,53 @@ public final class PersistenceMapper {
     public static DomainEventDefinition toDomain(DomainEventEntity e) {
         return DomainEventDefinition.builder().id(e.getId()).contextId(e.getContextId())
                 .manifestCode(e.getManifestCode()).name(e.getName()).nameEn(e.getNameEn())
+                .eventType(EventType.fromCode(e.getEventType()))
                 .aggregateRootId(e.getAggregateRootId()).triggerActionId(e.getTriggerActionId())
                 .payloadSchemaJson(e.getPayloadSchemaJson()).createdAt(e.getCreatedAt()).build();
+    }
+
+    // ── EventRoute ──
+    public static EventRouteEntity toEntity(EventRoute r) {
+        EventRouteEntity e = new EventRouteEntity();
+        e.setId(r.getId());
+        e.setContextId(r.getContextId());
+        e.setManifestCode(r.getManifestCode());
+        e.setSourceEventId(r.getSourceEventId());
+        e.setRouteTargetsJson(r.getRouteTargetsJson());
+        e.setFilterConditionsJson(r.getFilterConditionsJson());
+        e.setCreatedAt(r.getCreatedAt());
+        return e;
+    }
+
+    public static EventRoute toDomain(EventRouteEntity e) {
+        return EventRoute.builder().id(e.getId()).contextId(e.getContextId())
+                .manifestCode(e.getManifestCode()).sourceEventId(e.getSourceEventId())
+                .routeTargetsJson(e.getRouteTargetsJson()).filterConditionsJson(e.getFilterConditionsJson())
+                .createdAt(e.getCreatedAt()).build();
+    }
+
+    // ── EventHandler ──
+    public static EventHandlerEntity toEntity(EventHandler h) {
+        EventHandlerEntity e = new EventHandlerEntity();
+        e.setId(h.getId());
+        e.setContextId(h.getContextId());
+        e.setManifestCode(h.getManifestCode());
+        e.setEventId(h.getEventId());
+        e.setHandlerBehaviorId(h.getHandlerBehaviorId());
+        e.setScenarioId(h.getScenarioId());
+        e.setPreconditionState(h.getPreconditionState());
+        e.setPriority(h.getPriority());
+        e.setExecutionMode(h.getExecutionMode());
+        e.setCreatedAt(h.getCreatedAt());
+        return e;
+    }
+
+    public static EventHandler toDomain(EventHandlerEntity e) {
+        return EventHandler.builder().id(e.getId()).contextId(e.getContextId())
+                .manifestCode(e.getManifestCode()).eventId(e.getEventId())
+                .handlerBehaviorId(e.getHandlerBehaviorId()).scenarioId(e.getScenarioId())
+                .preconditionState(e.getPreconditionState()).priority(e.getPriority())
+                .executionMode(e.getExecutionMode()).createdAt(e.getCreatedAt()).build();
     }
 
     // ── PublishedManifest ──

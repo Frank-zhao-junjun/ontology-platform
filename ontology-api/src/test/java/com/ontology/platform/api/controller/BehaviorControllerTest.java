@@ -165,15 +165,94 @@ class BehaviorControllerTest {
         event.put("manifestCode", "prod_order_dispatched");
         event.put("name", "生产订单已下达");
         event.put("nameEn", "ProductionOrderDispatched");
+        event.put("eventType", "DOMAIN_EVENT");
         event.put("aggregateRootId", "some-ar-id");
         event.put("triggerActionId", "");
         event.put("payloadSchemaJson", "{\"orderId\":\"string\",\"dispatchedAt\":\"datetime\"}");
 
-        // aggregateRootId validation may fail without fixtures
         mockMvc.perform(post("/v1/contexts/" + contextId + "/domain-events")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(event)))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    @Order(10)
+    void shouldListDomainEvents() throws Exception {
+        mockMvc.perform(get("/v1/contexts/" + contextId + "/domain-events"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.data").isArray());
+    }
+
+    // ── Event Routes (E03) ──
+
+    @Test
+    @Order(11)
+    void shouldCreateEventRoute() throws Exception {
+        Map<String, Object> route = new LinkedHashMap<>();
+        route.put("manifestCode", "route_prod_order_dispatched");
+        route.put("sourceEventId", "some-event-id");
+        route.put("routeTargetsJson", "[{\"type\":\"BOUNDED_CONTEXT\",\"targetId\":\"ctx-mat\",\"targetName\":\"物料管理\"}]");
+        route.put("filterConditionsJson", "[{\"field\":\"scenario\",\"op\":\"EQ\",\"value\":\"MTO\"}]");
+
+        mockMvc.perform(post("/v1/contexts/" + contextId + "/event-routes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(route)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.data.manifestCode").value("route_prod_order_dispatched"));
+    }
+
+    @Test
+    @Order(12)
+    void shouldListEventRoutes() throws Exception {
+        mockMvc.perform(get("/v1/contexts/" + contextId + "/event-routes"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.data").isArray());
+    }
+
+    // ── Event Handlers (E04) ──
+
+    @Test
+    @Order(13)
+    void shouldCreateEventHandler() throws Exception {
+        Map<String, Object> handler = new LinkedHashMap<>();
+        handler.put("manifestCode", "handler_prod_order_dispatched");
+        handler.put("eventId", "some-event-id");
+        handler.put("handlerBehaviorId", "some-action-id");
+        handler.put("scenarioId", "SCI-MTO");
+        handler.put("preconditionState", "ISSUED");
+        handler.put("priority", 50);
+        handler.put("executionMode", "ASYNC");
+
+        mockMvc.perform(post("/v1/contexts/" + contextId + "/event-handlers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(handler)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.data.manifestCode").value("handler_prod_order_dispatched"))
+                .andExpect(jsonPath("$.data.priority").value(50))
+                .andExpect(jsonPath("$.data.executionMode").value("ASYNC"));
+    }
+
+    @Test
+    @Order(14)
+    void shouldListEventHandlers() throws Exception {
+        mockMvc.perform(get("/v1/contexts/" + contextId + "/event-handlers"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.data").isArray());
+    }
+
+    @Test
+    @Order(15)
+    void shouldGetHandlerMatrix() throws Exception {
+        mockMvc.perform(get("/v1/contexts/" + contextId + "/event-handlers/matrix"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.data.eventCount").isNumber())
+                .andExpect(jsonPath("$.data.handlerCount").isNumber())
+                .andExpect(jsonPath("$.data.matrix").isArray());
     }
 
     // helper

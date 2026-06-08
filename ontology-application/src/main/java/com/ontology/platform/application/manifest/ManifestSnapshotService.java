@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ontology.platform.application.service.BehaviorService;
+import com.ontology.platform.application.service.EventService;
 import com.ontology.platform.application.service.GovernanceService;
 import com.ontology.platform.application.service.MetricService;
 import com.ontology.platform.application.service.ModelingService;
@@ -29,6 +30,7 @@ public class ManifestSnapshotService {
     private final ModelingService modelingService;
     private final BehaviorService behaviorService;
     private final MetricService metricService;
+    private final EventService eventService;
     private final GovernanceService governanceService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -141,6 +143,31 @@ public class ManifestSnapshotService {
             node.set("payloadSchema", objectMapper.readTree(ev.getPayloadSchemaJson()));
         }
 
+        // event routes (US-E03)
+        ArrayNode eventRoutes = events.putArray("eventRoutes");
+        for (EventRoute r : eventService.listEventRoutes(contextId)) {
+            ObjectNode node = eventRoutes.addObject();
+            node.put("id", r.getManifestCode());
+            node.put("sourceEventId", resolveEventManifestCode(r.getSourceEventId()));
+            node.set("routeTargets", objectMapper.readTree(r.getRouteTargetsJson()));
+            if (r.getFilterConditionsJson() != null && !r.getFilterConditionsJson().equals("[]")) {
+                node.set("filterConditions", objectMapper.readTree(r.getFilterConditionsJson()));
+            }
+        }
+
+        // event handlers matrix (US-E04)
+        ArrayNode eventHandlers = events.putArray("eventHandlers");
+        for (EventHandler h : eventService.listEventHandlers(contextId)) {
+            ObjectNode node = eventHandlers.addObject();
+            node.put("id", h.getManifestCode());
+            node.put("eventId", resolveEventManifestCode(h.getEventId()));
+            node.put("handlerBehaviorId", behaviorService.getAction(h.getHandlerBehaviorId()).getManifestCode());
+            if (h.getScenarioId() != null) node.put("scenarioId", h.getScenarioId());
+            if (h.getPreconditionState() != null) node.put("preconditionState", h.getPreconditionState());
+            node.put("priority", h.getPriority());
+            node.put("executionMode", h.getExecutionMode());
+        }
+
         // ── governance (US-G01/G02/G04) ──
         ObjectNode governance = spec.putObject("governance");
 
@@ -222,6 +249,14 @@ public class ManifestSnapshotService {
             return modelingService.getObjectType(objectTypeId).getCode();
         } catch (Exception e) {
             return objectTypeId;
+        }
+    }
+
+    private String resolveEventManifestCode(String eventId) {
+        try {
+            return behaviorService.getDomainEvent(eventId).getManifestCode();
+        } catch (Exception e) {
+            return eventId;
         }
     }
 }

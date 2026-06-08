@@ -1,9 +1,13 @@
 package com.ontology.platform.api.controller;
 
 import com.ontology.platform.application.service.BehaviorService;
+import com.ontology.platform.application.service.EventService;
 import com.ontology.platform.application.service.MetricService;
+import com.ontology.platform.common.enums.EventType;
 import com.ontology.platform.common.enums.InvocationMode;
 import com.ontology.platform.domain.entity.DomainEventDefinition;
+import com.ontology.platform.domain.entity.EventHandler;
+import com.ontology.platform.domain.entity.EventRoute;
 import com.ontology.platform.domain.entity.Metric;
 import com.ontology.platform.domain.entity.OntologyAction;
 import com.ontology.platform.domain.entity.ValidationRule;
@@ -22,10 +26,11 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/v1/contexts/{contextId}")
 @RequiredArgsConstructor
-@Tag(name = "Behavior", description = "行为 / 规则 / 领域事件 (US-B01, B03, E01)")
+@Tag(name = "Behavior", description = "行为 / 规则 / 事件 / 指标 (US-B01/B03/B05/E01/E03/E04)")
 public class BehaviorController {
     private final BehaviorService behaviorService;
     private final MetricService metricService;
+    private final EventService eventService;
 
     @PostMapping("/validation-rules")
     @Operation(summary = "创建校验规则 (US-B03)")
@@ -83,6 +88,7 @@ public class BehaviorController {
                                                            @RequestBody Map<String, Object> body) {
         DomainEventDefinition e = behaviorService.createDomainEvent(contextId,
                 str(body, "manifestCode"), str(body, "name"), str(body, "nameEn"),
+                EventType.fromCode(str(body, "eventType", "DOMAIN_EVENT")),
                 str(body, "aggregateRootId"), str(body, "triggerActionId"),
                 str(body, "payloadSchemaJson", "{}"));
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("code", 0, "message", "success", "data", toEventMap(e)));
@@ -94,7 +100,45 @@ public class BehaviorController {
         return ResponseEntity.ok(Map.of("code", 0, "message", "success", "data", data));
     }
 
-    @PostMapping("/metrics")
+    @PostMapping("/event-routes")
+    @Operation(summary = "创建事件路由 (US-E03)")
+    public ResponseEntity<Map<String, Object>> createEventRoute(@PathVariable String contextId,
+                                                                 @RequestBody Map<String, Object> body) {
+        EventRoute r = eventService.createEventRoute(contextId,
+                str(body, "manifestCode"), str(body, "sourceEventId"),
+                str(body, "routeTargetsJson", "[]"), str(body, "filterConditionsJson", "[]"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("code", 0, "message", "success", "data", toRouteMap(r)));
+    }
+
+    @GetMapping("/event-routes")
+    public ResponseEntity<Map<String, Object>> listEventRoutes(@PathVariable String contextId) {
+        var data = eventService.listEventRoutes(contextId).stream().map(this::toRouteMap).collect(Collectors.toList());
+        return ResponseEntity.ok(Map.of("code", 0, "message", "success", "data", data));
+    }
+
+    @PostMapping("/event-handlers")
+    @Operation(summary = "创建事件处理器 (US-E04)")
+    public ResponseEntity<Map<String, Object>> createEventHandler(@PathVariable String contextId,
+                                                                   @RequestBody Map<String, Object> body) {
+        EventHandler h = eventService.createEventHandler(contextId,
+                str(body, "manifestCode"), str(body, "eventId"),
+                str(body, "handlerBehaviorId"), str(body, "scenarioId"),
+                str(body, "preconditionState"),
+                intVal(body, "priority", 100), str(body, "executionMode", "SYNC"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("code", 0, "message", "success", "data", toHandlerMap(h)));
+    }
+
+    @GetMapping("/event-handlers")
+    public ResponseEntity<Map<String, Object>> listEventHandlers(@PathVariable String contextId) {
+        var data = eventService.listEventHandlers(contextId).stream().map(this::toHandlerMap).collect(Collectors.toList());
+        return ResponseEntity.ok(Map.of("code", 0, "message", "success", "data", data));
+    }
+
+    @GetMapping("/event-handlers/matrix")
+    @Operation(summary = "事件处理器矩阵 (US-E04 AC-2)")
+    public ResponseEntity<Map<String, Object>> getHandlerMatrix(@PathVariable String contextId) {
+        return ResponseEntity.ok(Map.of("code", 0, "message", "success", "data", eventService.getHandlerMatrix(contextId)));
+    }
     @Operation(summary = "创建业务指标 (US-B05)")
     public ResponseEntity<Map<String, Object>> createMetric(@PathVariable String contextId,
                                                             @RequestBody Map<String, Object> body) {
@@ -149,8 +193,39 @@ public class BehaviorController {
         m.put("manifestCode", e.getManifestCode());
         m.put("name", e.getName());
         m.put("nameEn", e.getNameEn());
+        m.put("eventType", e.getEventType().getCode());
         m.put("triggerActionId", e.getTriggerActionId() != null ? e.getTriggerActionId() : "");
         return m;
+    }
+
+    private Map<String, Object> toRouteMap(EventRoute r) {
+        Map<String, Object> m = new LinkedHashMap<>();
+        m.put("id", r.getId());
+        m.put("manifestCode", r.getManifestCode());
+        m.put("sourceEventId", r.getSourceEventId());
+        return m;
+    }
+
+    private Map<String, Object> toHandlerMap(EventHandler h) {
+        Map<String, Object> m = new LinkedHashMap<>();
+        m.put("id", h.getId());
+        m.put("manifestCode", h.getManifestCode());
+        m.put("eventId", h.getEventId());
+        m.put("handlerBehaviorId", h.getHandlerBehaviorId());
+        m.put("scenarioId", h.getScenarioId());
+        m.put("preconditionState", h.getPreconditionState());
+        m.put("priority", h.getPriority());
+        m.put("executionMode", h.getExecutionMode());
+        return m;
+    }
+
+    private static int intVal(Map<String, Object> body, String key, int def) {
+        Object v = body.get(key);
+        if (v instanceof Number n) return n.intValue();
+        if (v instanceof String s) {
+            try { return Integer.parseInt(s); } catch (NumberFormatException ignored) {}
+        }
+        return def;
     }
 
     private static String str(Map<String, Object> body, String key) {

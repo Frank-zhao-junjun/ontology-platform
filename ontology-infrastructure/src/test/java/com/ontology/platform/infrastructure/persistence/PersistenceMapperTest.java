@@ -2,9 +2,13 @@ package com.ontology.platform.infrastructure.persistence;
 
 import com.ontology.platform.domain.entity.AuditLog;
 import com.ontology.platform.domain.entity.DataAccessMethod;
+import com.ontology.platform.domain.entity.EventHandler;
+import com.ontology.platform.domain.entity.EventRoute;
 import com.ontology.platform.domain.entity.Metric;
 import com.ontology.platform.infrastructure.persistence.entity.AuditLogEntity;
 import com.ontology.platform.infrastructure.persistence.entity.DataAccessMethodEntity;
+import com.ontology.platform.infrastructure.persistence.entity.EventHandlerEntity;
+import com.ontology.platform.infrastructure.persistence.entity.EventRouteEntity;
 import com.ontology.platform.infrastructure.persistence.entity.MetricEntity;
 import org.junit.jupiter.api.Test;
 
@@ -149,5 +153,86 @@ class PersistenceMapperTest {
         assertThat(m.getName()).isEqualTo("准时完工率");
         assertThat(m.getFormula()).contains("按时完工");
         assertThat(m.getPeriod()).isEqualTo("monthly");
+    }
+
+    // ── EventRoute mapping ──
+
+    @Test
+    void eventRouteToEntityShouldMapAllFields() {
+        EventRoute r = EventRoute.create("ctx-1", "route_prod_order_created",
+                "evt-1", "[{\"type\":\"BOUNDED_CONTEXT\",\"targetId\":\"ctx-mat\"}]",
+                "[{\"field\":\"scenario\",\"op\":\"EQ\",\"value\":\"MTO\"}]");
+
+        EventRouteEntity e = PersistenceMapper.toEntity(r);
+
+        assertThat(e.getId()).isEqualTo(r.getId());
+        assertThat(e.getContextId()).isEqualTo("ctx-1");
+        assertThat(e.getManifestCode()).isEqualTo("route_prod_order_created");
+        assertThat(e.getSourceEventId()).isEqualTo("evt-1");
+        assertThat(e.getRouteTargetsJson()).contains("BOUNDED_CONTEXT");
+        assertThat(e.getFilterConditionsJson()).contains("MTO");
+    }
+
+    @Test
+    void eventRouteFromEntityShouldRehydrate() {
+        EventRouteEntity e = new EventRouteEntity();
+        e.setId("r1");
+        e.setContextId("ctx-1");
+        e.setManifestCode("route_prod_order_created");
+        e.setSourceEventId("evt-1");
+        e.setRouteTargetsJson("[{\"type\":\"BOUNDED_CONTEXT\",\"targetId\":\"ctx-mat\"}]");
+        e.setFilterConditionsJson("[{\"field\":\"scenario\",\"op\":\"EQ\",\"value\":\"MTO\"}]");
+
+        EventRoute r = PersistenceMapper.toDomain(e);
+
+        assertThat(r.getId()).isEqualTo("r1");
+        assertThat(r.getManifestCode()).isEqualTo("route_prod_order_created");
+        assertThat(r.getSourceEventId()).isEqualTo("evt-1");
+        assertThat(r.getRouteTargetsJson()).contains("BOUNDED_CONTEXT");
+    }
+
+    // ── EventHandler mapping ──
+
+    @Test
+    void eventHandlerToEntityShouldMapAllFields() {
+        EventHandler h = EventHandler.create("ctx-1", "handler_on_create",
+                "evt-1", "action-1", "SCI-MTO", "ISSUED", 50, "ASYNC");
+
+        EventHandlerEntity e = PersistenceMapper.toEntity(h);
+
+        assertThat(e.getId()).isEqualTo(h.getId());
+        assertThat(e.getContextId()).isEqualTo("ctx-1");
+        assertThat(e.getManifestCode()).isEqualTo("handler_on_create");
+        assertThat(e.getEventId()).isEqualTo("evt-1");
+        assertThat(e.getHandlerBehaviorId()).isEqualTo("action-1");
+        assertThat(e.getScenarioId()).isEqualTo("SCI-MTO");
+        assertThat(e.getPreconditionState()).isEqualTo("ISSUED");
+        assertThat(e.getPriority()).isEqualTo(50);
+        assertThat(e.getExecutionMode()).isEqualTo("ASYNC");
+    }
+
+    @Test
+    void eventHandlerFromEntityShouldRehydrate() {
+        EventHandlerEntity e = new EventHandlerEntity();
+        e.setId("h1");
+        e.setContextId("ctx-1");
+        e.setManifestCode("handler_on_create");
+        e.setEventId("evt-1");
+        e.setHandlerBehaviorId("action-1");
+        e.setScenarioId("SCI-MTO");
+        e.setPreconditionState("ISSUED");
+        e.setPriority(50);
+        e.setExecutionMode("ASYNC");
+
+        EventHandler h = PersistenceMapper.toDomain(e);
+
+        assertThat(h.getId()).isEqualTo("h1");
+        assertThat(h.getManifestCode()).isEqualTo("handler_on_create");
+        assertThat(h.getEventId()).isEqualTo("evt-1");
+        assertThat(h.getHandlerBehaviorId()).isEqualTo("action-1");
+        assertThat(h.getScenarioId()).isEqualTo("SCI-MTO");
+        assertThat(h.getPreconditionState()).isEqualTo("ISSUED");
+        assertThat(h.getPriority()).isEqualTo(50);
+        assertThat(h.getExecutionMode()).isEqualTo("ASYNC");
     }
 }
