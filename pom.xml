@@ -32,7 +32,7 @@
         <spring.version>6.1.6</spring.version>
 
         <!-- 数据库 -->
-        <postgresql.version>42.9.0</postgresql.version>
+        <postgresql.version>42.7.3</postgresql.version>
         <hikaricp.version>5.1.0</hikaricp.version>
 
         <!-- ORM框架 -->
