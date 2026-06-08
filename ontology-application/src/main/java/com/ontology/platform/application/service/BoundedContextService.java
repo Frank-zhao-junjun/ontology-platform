@@ -19,6 +19,7 @@ import java.util.List;
 public class BoundedContextService {
     private final BoundedContextRepository repository;
     private final ManifestSnapshotService manifestSnapshotService;
+    private final WorkflowService workflowService;
 
     public BoundedContext create(String name, String code, String description, DomainTag domainTag, String createdBy) {
         return create(name, code, description, domainTag, createdBy, null);
@@ -35,21 +36,37 @@ public class BoundedContextService {
 
     public BoundedContext findById(String id) { return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Context not found: " + id)); }
 
-    public BoundedContext submitForReview(String id) { BoundedContext c = findById(id); c.submitForReview(); repository.update(c); return c; }
-
-    public BoundedContext approveAndPublish(String id) {
+    public BoundedContext submitForReview(String id, String operatedBy, String comment) {
         BoundedContext c = findById(id);
-        c.approveAndPublish();
+        String fromState = c.getWorkflowState().name();
+        c.submitForReview();
         repository.update(c);
+        workflowService.recordStateChange(id, fromState, c.getWorkflowState().name(), operatedBy, comment);
         return c;
     }
 
-    public PublishedManifest approvePublishAndSnapshot(String id) throws Exception {
-        approveAndPublish(id);
+    public BoundedContext approveAndPublish(String id, String operatedBy, String comment) {
+        BoundedContext c = findById(id);
+        String fromState = c.getWorkflowState().name();
+        c.approveAndPublish();
+        repository.update(c);
+        workflowService.recordStateChange(id, fromState, c.getWorkflowState().name(), operatedBy, comment);
+        return c;
+    }
+
+    public PublishedManifest approvePublishAndSnapshot(String id, String operatedBy, String comment) throws Exception {
+        approveAndPublish(id, operatedBy, comment);
         return manifestSnapshotService.publishContext(id);
     }
 
-    public BoundedContext rejectToDraft(String id) { BoundedContext c = findById(id); c.rejectToDraft(); repository.update(c); return c; }
+    public BoundedContext rejectToDraft(String id, String operatedBy, String comment) {
+        BoundedContext c = findById(id);
+        String fromState = c.getWorkflowState().name();
+        c.rejectToDraft();
+        repository.update(c);
+        workflowService.recordStateChange(id, fromState, c.getWorkflowState().name(), operatedBy, comment);
+        return c;
+    }
 
     public List<BoundedContext> findAll() { return repository.findAll(); }
 }

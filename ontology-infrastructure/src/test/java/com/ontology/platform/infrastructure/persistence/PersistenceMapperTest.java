@@ -5,11 +5,15 @@ import com.ontology.platform.domain.entity.DataAccessMethod;
 import com.ontology.platform.domain.entity.EventHandler;
 import com.ontology.platform.domain.entity.EventRoute;
 import com.ontology.platform.domain.entity.Metric;
+import com.ontology.platform.domain.entity.ReviewComment;
+import com.ontology.platform.domain.entity.WorkflowStateLog;
 import com.ontology.platform.infrastructure.persistence.entity.AuditLogEntity;
 import com.ontology.platform.infrastructure.persistence.entity.DataAccessMethodEntity;
 import com.ontology.platform.infrastructure.persistence.entity.EventHandlerEntity;
 import com.ontology.platform.infrastructure.persistence.entity.EventRouteEntity;
 import com.ontology.platform.infrastructure.persistence.entity.MetricEntity;
+import com.ontology.platform.infrastructure.persistence.entity.ReviewCommentEntity;
+import com.ontology.platform.infrastructure.persistence.entity.WorkflowStateLogEntity;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -102,8 +106,7 @@ class PersistenceMapperTest {
     @Test
     void dataAccessMethodToEntityShouldIncludeContextId() {
         DataAccessMethod method = DataAccessMethod.create(
-                "ctx-s2", "ot-1", "ds-1", "SQL_QUERY", null, null);
-        method.setId("dam-1");
+                "ctx-s2", "ot-1", "ds-1", "SQL_QUERY", null, 300);
 
         DataAccessMethodEntity entity = PersistenceMapper.toEntity(method);
 
@@ -234,5 +237,88 @@ class PersistenceMapperTest {
         assertThat(h.getPreconditionState()).isEqualTo("ISSUED");
         assertThat(h.getPriority()).isEqualTo(50);
         assertThat(h.getExecutionMode()).isEqualTo("ASYNC");
+    }
+
+    // ── WorkflowStateLog mapping ──
+
+    @Test
+    void workflowStateLogToEntityShouldMapAllFields() {
+        WorkflowStateLog log = WorkflowStateLog.record("ctx-1", "DRAFT", "IN_REVIEW",
+                "user1", "提交审核");
+
+        WorkflowStateLogEntity e = PersistenceMapper.toEntity(log);
+
+        assertThat(e.getId()).isEqualTo(log.getId());
+        assertThat(e.getContextId()).isEqualTo("ctx-1");
+        assertThat(e.getFromState()).isEqualTo("DRAFT");
+        assertThat(e.getToState()).isEqualTo("IN_REVIEW");
+        assertThat(e.getOperatedBy()).isEqualTo("user1");
+        assertThat(e.getComment()).isEqualTo("提交审核");
+        assertThat(e.getOperatedAt()).isNotNull();
+    }
+
+    @Test
+    void workflowStateLogFromEntityShouldRehydrate() {
+        WorkflowStateLogEntity e = new WorkflowStateLogEntity();
+        e.setId("wsl-1");
+        e.setContextId("ctx-1");
+        e.setFromState("IN_REVIEW");
+        e.setToState("PUBLISHED");
+        e.setOperatedBy("admin");
+        e.setOperatedAt(Instant.now());
+        e.setComment("批准发布");
+
+        WorkflowStateLog log = PersistenceMapper.toDomain(e);
+
+        assertThat(log.getId()).isEqualTo("wsl-1");
+        assertThat(log.getContextId()).isEqualTo("ctx-1");
+        assertThat(log.getFromState()).isEqualTo("IN_REVIEW");
+        assertThat(log.getToState()).isEqualTo("PUBLISHED");
+        assertThat(log.getOperatedBy()).isEqualTo("admin");
+        assertThat(log.getComment()).isEqualTo("批准发布");
+    }
+
+    // ── ReviewComment mapping ──
+
+    @Test
+    void reviewCommentToEntityShouldMapAllFields() {
+        ReviewComment c = ReviewComment.create("ctx-1", "BEHAVIOR", "bhv-1",
+                "reviewer1", "APPROVED", "行为定义正确");
+
+        ReviewCommentEntity e = PersistenceMapper.toEntity(c);
+
+        assertThat(e.getId()).isEqualTo(c.getId());
+        assertThat(e.getContextId()).isEqualTo("ctx-1");
+        assertThat(e.getTargetType()).isEqualTo("BEHAVIOR");
+        assertThat(e.getTargetId()).isEqualTo("bhv-1");
+        assertThat(e.getReviewer()).isEqualTo("reviewer1");
+        assertThat(e.getResolution()).isEqualTo("APPROVED");
+        assertThat(e.getContent()).isEqualTo("行为定义正确");
+        assertThat(e.getCreatedAt()).isNotNull();
+    }
+
+    @Test
+    void reviewCommentFromEntityShouldRehydrate() {
+        ReviewCommentEntity e = new ReviewCommentEntity();
+        e.setId("rc-1");
+        e.setContextId("ctx-1");
+        e.setTargetType("RULE");
+        e.setTargetId("rule-1");
+        e.setReviewer("reviewer1");
+        e.setResolution("PENDING");
+        e.setContent("需调整校验逻辑");
+        e.setCreatedAt(Instant.now());
+        e.setResolvedAt(null);
+
+        ReviewComment c = PersistenceMapper.toDomain(e);
+
+        assertThat(c.getId()).isEqualTo("rc-1");
+        assertThat(c.getContextId()).isEqualTo("ctx-1");
+        assertThat(c.getTargetType()).isEqualTo("RULE");
+        assertThat(c.getTargetId()).isEqualTo("rule-1");
+        assertThat(c.getReviewer()).isEqualTo("reviewer1");
+        assertThat(c.getResolution()).isEqualTo("PENDING");
+        assertThat(c.getContent()).isEqualTo("需调整校验逻辑");
+        assertThat(c.getResolvedAt()).isNull();
     }
 }

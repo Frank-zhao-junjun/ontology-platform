@@ -389,6 +389,49 @@ public final class PersistenceMapper {
                 .period(e.getPeriod()).createdAt(e.getCreatedAt()).build();
     }
 
+    // ── WorkflowStateLog ──
+    public static WorkflowStateLogEntity toEntity(WorkflowStateLog log) {
+        WorkflowStateLogEntity e = new WorkflowStateLogEntity();
+        e.setId(log.getId());
+        e.setContextId(log.getContextId());
+        e.setFromState(log.getFromState());
+        e.setToState(log.getToState());
+        e.setOperatedBy(log.getOperatedBy());
+        e.setOperatedAt(log.getOperatedAt());
+        e.setComment(log.getComment());
+        return e;
+    }
+
+    public static WorkflowStateLog toDomain(WorkflowStateLogEntity e) {
+        return WorkflowStateLog.builder().id(e.getId()).contextId(e.getContextId())
+                .fromState(e.getFromState()).toState(e.getToState())
+                .operatedBy(e.getOperatedBy()).comment(e.getComment())
+                .operatedAt(e.getOperatedAt()).build();
+    }
+
+    // ── ReviewComment ──
+    public static ReviewCommentEntity toEntity(ReviewComment c) {
+        ReviewCommentEntity e = new ReviewCommentEntity();
+        e.setId(c.getId());
+        e.setContextId(c.getContextId());
+        e.setTargetType(c.getTargetType());
+        e.setTargetId(c.getTargetId());
+        e.setReviewer(c.getReviewer());
+        e.setResolution(c.getResolution());
+        e.setContent(c.getContent());
+        e.setCreatedAt(c.getCreatedAt());
+        e.setResolvedAt(c.getResolvedAt());
+        return e;
+    }
+
+    public static ReviewComment toDomain(ReviewCommentEntity e) {
+        return ReviewComment.builder().id(e.getId()).contextId(e.getContextId())
+                .targetType(e.getTargetType()).targetId(e.getTargetId())
+                .reviewer(e.getReviewer()).resolution(e.getResolution())
+                .content(e.getContent()).createdAt(e.getCreatedAt())
+                .resolvedAt(e.getResolvedAt()).build();
+    }
+
     // ── AuditLog ──
     public static AuditLogEntity toEntity(AuditLog log) {
         AuditLogEntity e = new AuditLogEntity();
