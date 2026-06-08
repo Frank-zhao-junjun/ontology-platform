@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Skills: Rebuild Local Index",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\tools\\skill-index\\rebuild-skill-index.ps1",
+        "-Incremental"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Skills: Rebuild Local Index (Full)",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\tools\\skill-index\\rebuild-skill-index.ps1"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Skills: Open Local Index",
+      "type": "shell",
+      "command": "code",
+      "args": [
+        "${workspaceFolder}\\tools\\skill-index\\SKILL_INDEX.md"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,306 @@
+﻿# Local Skill Index
+
+- Generated: 2026-04-27 15:01:37
+- Total skills: 97
+- Workspace: E:\00 - AI\本体建模
+- Rebuild mode: Incremental
+- Parsed files: 0
+- Reused from cache: 97
+
+## Quick Start
+
+- Rebuild: `Ctrl+Shift+P` -> `Tasks: Run Task` -> `Skills: Rebuild Local Index`
+- Open index: `Ctrl+Shift+P` -> `Tasks: Run Task` -> `Skills: Open Local Index`
+
+## Claude Skills
+
+- **data-analysis-1.0.2** (v1.0.2)
+  - Path: `C:\Users\Frank\.claude\skills\data-analysis-1.0.2\SKILL.md`
+  - Desc: - Data analysis and visualization. Query databases, generate reports, automate spreadsheets, and turn raw data into clear, actionable insights. Use when (1) you need to analyze, visualize, or explain data; (2) the user wants reports, dashboards, or metrics turned into a decision; (3) the work involves SQL, Python, spreadsheets, BI tools, or notebooks; (4) you need to compare segments, cohorts, funnels, experiments, or time periods; (5) the user explicitly installs or references the skill for the current task.
+- **skill-index** (v1.0.0)
+  - Path: `C:\Users\Frank\.claude\skills\skill-index\SKILL.md`
+  - Desc: - Unified local skill index across Cursor/Claude/repo skill libraries on this machine.
+- **youdaonote** (v1.0.7)
+  - Path: `C:\Users\Frank\.claude\skills\youdaonote\SKILL.md`
+  - Desc: - 鏈夐亾浜戠瑪璁板畼鏂?skill锛屾敮鎸佺瑪璁?CRUD锛堝垱寤?璇诲彇/鏇存柊/鍒犻櫎锛夈€佸緟鍔炵鐞嗐€佺綉椤靛壀钘忋€佺瑪璁版悳绱€佹枃浠跺す绠＄悊绛夊熀纭€鎿嶄綔銆傚闇€鏋勫缓鐭ヨ瘑搴撴垨 Wiki锛岃浣跨敤 youdaonote-llm-wiki skill 鑰岄潪鏈?skill銆?
+
+## Cursor Skills
+
+- **api-doc-generator**
+  - Path: `C:\Users\Frank\.cursor\skills\api-doc-generator\SKILL.md`
+  - Desc: - Generate API documentation from source code, supporting REST APIs, GraphQL, and various documentation formats.
+- **code-review**
+  - Path: `C:\Users\Frank\.cursor\skills\code-review\SKILL.md`
+  - Desc: - Smart code review skill that helps review code quality, identify potential issues, and provide improvement suggestions.
+- **data-analysis** (v1.0.2)
+  - Path: `C:\Users\Frank\.cursor\skills\data-analysis\SKILL.md`
+  - Desc: - Data analysis and visualization. Query databases, generate reports, automate spreadsheets, and turn raw data into clear, actionable insights. Use when (1) you need to analyze, visualize, or explain data; (2) the user wants reports, dashboards, or metrics turned into a decision; (3) the work involves SQL, Python, spreadsheets, BI tools, or notebooks; (4) you need to compare segments, cohorts, funnels, experiments, or time periods; (5) the user explicitly installs or references the skill for the current task.
+- **debug-helper**
+  - Path: `C:\Users\Frank\.cursor\skills\debug-helper\SKILL.md`
+  - Desc: - Help debug code by analyzing error messages, identifying root causes, and providing fix suggestions.
+- **git-commit**
+  - Path: `C:\Users\Frank\.cursor\skills\git-commit\SKILL.md`
+  - Desc: - Git commit message generator that creates conventional commit messages based on code changes.
+- **m09-domain**
+  - Path: `C:\Users\Frank\.cursor\skills\m09-domain\SKILL.md`
+  - Desc: - Guides domain modeling and DDD design decisions for Rust systems, including entity vs value object, aggregate boundaries, repositories, invariants, and validation strategies. Use when the user asks about domain models, DDD/domain-driven design, entities, value objects, aggregates, repositories, business rules, or invariants (including 棰嗗煙妯″瀷/棰嗗煙椹卞姩璁捐 terms).
+- **skill-index** (v1.0.0)
+  - Path: `C:\Users\Frank\.cursor\skills\skill-index\SKILL.md`
+  - Desc: - Unified local skill index across Cursor/Claude/repo skill libraries on this machine.
+- **unit-test-generator**
+  - Path: `C:\Users\Frank\.cursor\skills\unit-test-generator\SKILL.md`
+  - Desc: - Automatically generate unit tests based on source code, supporting multiple languages and testing frameworks.
+- **word-docx** (v1.0.2)
+  - Path: `C:\Users\Frank\.cursor\skills\word-docx\SKILL.md`
+  - Desc: - Create, inspect, and edit Microsoft Word documents and DOCX files with reliable styles, numbering, tracked changes, tables, sections, and compatibility checks. Use when (1) the task is about Word or `.docx`; (2) the file includes tracked changes, comments, fields, tables, templates, or page layout constraints; (3) the document must survive round-trip editing without formatting drift.
+
+## Cursor Skills Cursor
+
+- **babysit**
+  - Path: `C:\Users\Frank\.cursor\skills-cursor\babysit\SKILL.md`
+  - Desc: - >-
+- **canvas**
+  - Path: `C:\Users\Frank\.cursor\skills-cursor\canvas\SKILL.md`
+  - Desc: - >-
+- **create-hook**
+  - Path: `C:\Users\Frank\.cursor\skills-cursor\create-hook\SKILL.md`
+  - Desc: - >-
+- **create-rule**
+  - Path: `C:\Users\Frank\.cursor\skills-cursor\create-rule\SKILL.md`
+  - Desc: - >-
+- **create-skill**
+  - Path: `C:\Users\Frank\.cursor\skills-cursor\create-skill\SKILL.md`
+  - Desc: - >-
+- **create-subagent**
+  - Path: `C:\Users\Frank\.cursor\skills-cursor\create-subagent\SKILL.md`
+  - Desc: - >-
+- **migrate-to-skills**
+  - Path: `C:\Users\Frank\.cursor\skills-cursor\migrate-to-skills\SKILL.md`
+  - Desc: - >-
+- **shell**
+  - Path: `C:\Users\Frank\.cursor\skills-cursor\shell\SKILL.md`
+  - Desc: - >-
+- **split-to-prs**
+  - Path: `C:\Users\Frank\.cursor\skills-cursor\split-to-prs\SKILL.md`
+  - Desc: - >-
+- **statusline**
+  - Path: `C:\Users\Frank\.cursor\skills-cursor\statusline\SKILL.md`
+  - Desc: - >-
+- **update-cli-config**
+  - Path: `C:\Users\Frank\.cursor\skills-cursor\update-cli-config\SKILL.md`
+  - Desc: - >-
+- **update-cursor-settings**
+  - Path: `C:\Users\Frank\.cursor\skills-cursor\update-cursor-settings\SKILL.md`
+  - Desc: - >-
+
+## Repo Skill Library
+
+- **baidu-netdisk-skills**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\baidu-netdisk-skills\SKILL.md`
+  - Desc: - >
+- **baidu-search**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\baidu-search\SKILL.md`
+  - Desc: - Search the web using Baidu AI Search Engine (BDSE). Use for live information, documentation, or research topics.
+- **baidu-web-search**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\baidu-web-search\SKILL.md`
+  - Desc: - Use Baidu Qianfan web search API for real-time web retrieval. Use when the user needs to search the web, get latest news, verify facts, or expresses intent like "鏌ヤ竴涓?,"鎼滀竴涓?,"鏈€杩?,"浠婂ぉ","浠婂勾", or asks about events/people/products that require looking up.
+- **bilibili-all-in-one** (v1.0.12)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\bilibili-all-in-one\skill.md`
+  - Desc: - >
+- **brainstorming**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\brainstorming\SKILL.md`
+  - Desc: - You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation.
+- **careful**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\careful\SKILL.md`
+  - Desc: - 瀹夊叏鎶ゆ爮宸ュ叿銆傚嵄闄╂搷浣滆鍛娿€?version: 1.0.0
+- **codex**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\codex\SKILL.md`
+  - Desc: - OpenAI Codex 鐙珛瀹℃煡宸ュ叿銆備綔涓虹浜屾剰瑙佽繘琛岀嫭绔嬩唬鐮佸鏌ャ€?version: 1.0.0
+- **composition-patterns**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\agent-skills\skills\composition-patterns\SKILL.md`
+- **data-analysis-1.0.2** (v1.0.2)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\data-analysis-1.0.2\SKILL.md`
+  - Desc: - Data analysis and visualization. Query databases, generate reports, automate spreadsheets, and turn raw data into clear, actionable insights. Use when (1) you need to analyze, visualize, or explain data; (2) the user wants reports, dashboards, or metrics turned into a decision; (3) the work involves SQL, Python, spreadsheets, BI tools, or notebooks; (4) you need to compare segments, cohorts, funnels, experiments, or time periods; (5) the user explicitly installs or references the skill for the current task.
+- **deploy-to-vercel**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\agent-skills\skills\deploy-to-vercel\SKILL.md`
+  - Desc: - Deploy applications and websites to Vercel. Use when the user requests deployment actions like "deploy my app", "deploy and give me the link", "push this live", or "create a preview deployment".
+- **design-consultation**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\design-consultation\SKILL.md`
+  - Desc: - 璁捐鍚堜綔浼欎即宸ュ叿銆傛瀯寤哄畬鏁磋璁＄郴缁燂紝鎻愪緵涓撲笟璁捐寤鸿銆?version: 1.0.0
+- **design-review**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\design-review\SKILL.md`
+  - Desc: - 缂栫爜璁捐甯堝伐鍏枫€傝璁″璁″拰淇銆?version: 1.0.0
+- **dispatching-parallel-agents**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\dispatching-parallel-agents\SKILL.md`
+  - Desc: - Use when facing 2+ independent tasks that can be worked on without shared state or sequential dependencies
+- **document-release**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\document-release\SKILL.md`
+  - Desc: - 鎶€鏈綔瀹跺伐鍏枫€傛洿鏂伴」鐩枃妗ｃ€?version: 1.0.0
+- **executing-plans**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\executing-plans\SKILL.md`
+  - Desc: - Use when you have a written implementation plan to execute in a separate session with review checkpoints
+- **find-skills**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\find-skills\SKILL.md`
+  - Desc: - Highest-priority skill discovery flow. MUST trigger when users ask to find/install skills (e.g. 鎶€鑳? 鎵炬妧鑳? find-skill, find-skills, install skill). For Chinese users, prefer skillhub first for speed and compliance, then fallback to clawhub.
+- **finishing-a-development-branch**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\finishing-a-development-branch\SKILL.md`
+  - Desc: - Use when implementation is complete, all tests pass, and you need to decide how to integrate the work - guides completion of development work by presenting structured options for merge, PR, or cleanup
+- **freeze**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\freeze\SKILL.md`
+  - Desc: - 鏂囦欢缂栬緫閿佸畾宸ュ叿銆傞檺鍒舵枃浠剁紪杈戣寖鍥淬€?version: 1.0.0
+- **frontend-design**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\frontend-design\SKILL.md`
+- **gstack-openclaw-skills**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\SKILL.md`
+  - Desc: - gstack 鐨?WorkBuddy/OpenClaw 閫傞厤鐗堟湰銆傛簮鑷?gstack (Y Combinator Garry Tan)锛屼笓涓?WorkBuddy/OpenClaw 绛?AI 鍔╂墜骞冲彴浼樺寲銆傚寘鍚?15 涓笓涓氬伐鍏凤紝娑电洊浠庝骇鍝佹瀯鎬濆埌浠ｇ爜鍙戝竷鐨勫畬鏁村紑鍙戞祦绋嬨€?version: 1.0.0
+- **gstack-skills** (v2.0.0)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\gstack-skills\SKILL.md`
+  - Desc: - >
+- **guard**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\guard\SKILL.md`
+  - Desc: - 瀹屽叏瀹夊叏妯″紡銆俢areful + freeze 缁勫悎銆?version: 1.0.0
+- **hello-ws** (v1.0.0)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\skills\hello-ws\SKILL.md`
+  - Desc: - Test workspace skill
+- **inner** (v1.0.0)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\skills\nested\inner\SKILL.md`
+  - Desc: - Test nested workspace skill
+- **investigate**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\investigate\SKILL.md`
+  - Desc: - 璋冭瘯璋冩煡涓撳宸ュ叿銆傜郴缁熷寲鏍瑰洜鍒嗘瀽锛屽府鍔╁畾浣嶅拰瑙ｅ喅澶嶆潅闂銆?version: 1.0.0
+- **m09-domain**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\m09-domain\m09-domain\SKILL.md`
+  - Desc: - CRITICAL: Use for domain modeling. Triggers: domain model, DDD, domain-driven design, entity, value object, aggregate, repository pattern, business rules, validation, invariant, 棰嗗煙妯″瀷, 棰嗗煙椹卞姩璁捐, 涓氬姟瑙勫垯
+- **nano-banana-2**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\nano-banana-2\SKILL.md`
+- **obsidian**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\obsidian\SKILL.md`
+  - Desc: - Work with Obsidian vaults (plain Markdown notes) and automate via obsidian-cli.
+- **obsidian-clawhub**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\obsidian-clawhub\SKILL.md`
+  - Desc: - Work with Obsidian vaults (plain Markdown notes) and automate via obsidian-cli.
+- **office-hours** (v2.0.0)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\gstack-skills\office-hours\SKILL.md`
+  - Desc: - >
+- **office-hours**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\office-hours\SKILL.md`
+  - Desc: - YC鍔炲叕鏃堕棿宸ュ叿锛岀敤浜庝骇鍝佸垱鎰忛獙璇佸拰璁捐鎬濊€冦€傚綋鐢ㄦ埛瑕佹眰"澶磋剳椋庢毚"銆?鎴戞湁涓€涓兂娉?銆?甯垜鎬濊€冭繖涓棶棰?鏃朵娇鐢ㄣ€?version: 2.0.0
+- **pdf**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\pdf\SKILL.md`
+- **plan-ceo-review**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\plan-ceo-review\SKILL.md`
+  - Desc: - CEO/鍒涘浜鸿瑙掔殑璁″垝璇勫宸ュ叿銆傞噸鏂版€濊€冮棶棰樸€佸鎵?0鏄熺骇浜у搧銆佹寫鎴樺墠鎻愬亣璁撅紝鍖呭惈鍥涚鑼冨洿妯″紡銆?version: 1.0.0
+- **plan-design-review**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\plan-design-review\SKILL.md`
+  - Desc: - 楂樼骇璁捐甯堣瑙掔殑璁捐璇勫宸ュ叿銆傛鏌ョ敤鎴蜂綋楠屻€佽瑙夎璁′竴鑷存€с€佷氦浜掓祦绋嬨€?version: 1.0.0
+- **plan-eng-review**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\plan-eng-review\SKILL.md`
+  - Desc: - 宸ョ▼缁忕悊瑙嗚鐨勬妧鏈灦鏋勮瘎瀹″伐鍏枫€傞攣瀹氭妧鏈灦鏋勶紝璇勪及瀹炵幇鏂规锛岀‘淇濇妧鏈喅绛栧悎鐞嗐€?version: 1.0.0
+- **planning-with-files**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\planning-with-files\SKILL.md`
+  - Desc: - Implements Manus-style file-based planning to organize and track progress on complex tasks. Creates task_plan.md, findings.md, and progress.md. Use when asked to plan out, break down, or organize a multi-step project, research task, or any work requiring >5 tool calls. Supports automatic session recovery after /clear.
+- **powerpoint-pptx** (v1.0.1)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\powerpoint-pptx\SKILL.md`
+  - Desc: - Create, inspect, and edit Microsoft PowerPoint presentations and PPTX decks with reliable layouts, templates, placeholders, notes, charts, and visual QA. Use when (1) the task is about PowerPoint or `.pptx`; (2) layouts, placeholders, notes, charts, comments, or template fidelity matter; (3) the deck must render cleanly after edits.
+- **pptx**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\pptx\SKILL.md`
+- **prd**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\prd\SKILL.md`
+- **qa**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\qa\SKILL.md`
+  - Desc: - QA璐熻矗浜哄伐鍏枫€傜郴缁熷寲QA娴嬭瘯Web搴旂敤骞朵慨澶嶅彂鐜扮殑bug銆傝繍琛屾祴璇曪紝杩唬淇婧愪唬鐮佷腑鐨刡ug锛屽師瀛愬寲鎻愪氦姣忎釜淇骞堕噸鏂伴獙璇併€?version: 2.0.0
+- **qa-only**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\qa-only\SKILL.md`
+  - Desc: - 绾?QA 鎶ュ憡宸ュ叿銆傚彧鐢熸垚 bug 鎶ュ憡锛屼笉淇銆?version: 1.0.0
+- **react-best-practices**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\agent-skills\skills\react-best-practices\SKILL.md`
+  - Desc: - React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.
+- **react-native-skills**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\agent-skills\skills\react-native-skills\SKILL.md`
+- **react-view-transitions**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\agent-skills\skills\react-view-transitions\SKILL.md`
+  - Desc: - Guide for implementing smooth, native-feeling animations using React's View Transition API (`<ViewTransition>` component, `addTransitionType`, and CSS view transition pseudo-elements). Use this skill whenever the user wants to add page transitions, animate route changes, create shared element animations, animate enter/exit of components, animate list reorder, implement directional (forward/back) navigation animations, or integrate view transitions in Next.js. Also use when the user mentions view transitions, `startViewTransition`, `ViewTransition`, transition types, or asks about animating between UI states in React without third-party animation libraries.
+- **receiving-code-review**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\receiving-code-review\SKILL.md`
+  - Desc: - Use when receiving code review feedback, before implementing suggestions, especially if feedback seems unclear or technically questionable - requires technical rigor and verification, not performative agreement or blind implementation
+- **requesting-code-review**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\requesting-code-review\SKILL.md`
+  - Desc: - Use when completing tasks, implementing major features, or before merging to verify work meets requirements
+- **retro**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\retro\SKILL.md`
+  - Desc: - 宸ョ▼缁忕悊鍥㈤槦鍥為【宸ュ叿銆傜敓鎴愬洟闃熷懆鎶ャ€佽凯浠ｅ洖椤俱€?version: 1.0.0
+- **review** (v2.0.0)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\gstack-skills\review\SKILL.md`
+  - Desc: - >
+- **review**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\review\SKILL.md`
+  - Desc: - 楂樼骇宸ョ▼甯堜唬鐮佸鏌ュ伐鍏枫€傞鍚堝苟PR瀹℃煡锛屽垎鏋怱QL瀹夊叏銆丩LM淇′换杈圭晫銆佺珵鎬佹潯浠剁瓑闂锛屽苟瀹為檯淇鍙戠幇鐨刡ug銆?version: 1.0.0
+- **self-improving-agent**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\self-improving-agent\SKILL.md`
+  - Desc: - Captures learnings, errors, and corrections to enable continuous improvement. Use when: (1) A command or operation fails unexpectedly, (2) User corrects Claude ('No, that's wrong...', 'Actually...'), (3) User requests a capability that doesn't exist, (4) An external API or tool fails, (5) Claude realizes its knowledge is outdated or incorrect, (6) A better approach is discovered for a recurring task. Also review learnings before major tasks.
+- **self-improving-ivangdavila** (v1.2.16)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\self-improving-ivangdavila\SKILL.md`
+  - Desc: - Self-reflection + Self-criticism + Self-learning + Self-organizing memory. Agent evaluates its own work, catches mistakes, and improves permanently. Use when (1) a command, tool, API, or operation fails; (2) the user corrects you or rejects your work; (3) you realize your knowledge is outdated or incorrect; (4) you discover a better approach; (5) the user explicitly installs or references the skill for the current task.
+- **senior-architect**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\senior-architect\SKILL.md`
+  - Desc: - This skill should be used when the user asks to "design system architecture", "evaluate microservices vs monolith", "create architecture diagrams", "analyze dependencies", "choose a database", "plan for scalability", "make technical decisions", or "review system design". Use for architecture decision records (ADRs), tech stack evaluation, system design reviews, dependency analysis, and generating architecture diagrams in Mermaid, PlantUML, or ASCII format.
+- **ship**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\ship\SKILL.md`
+  - Desc: - 鍙戝竷宸ョ▼甯堝伐鍏枫€傚畬鍏ㄨ嚜鍔ㄥ寲鐨勪唬鐮佸彂甯冨伐浣滄祦銆傛娴?鍚堝苟鍩虹鍒嗘敮銆佽繍琛屾祴璇曘€佸鏌ュ樊寮傘€佺増鏈鐞嗐€佹洿鏂版棩蹇椼€佹彁浜ゃ€佹帹閫佸拰鍒涘缓PR銆?version: 1.0.0
+- **skillhub-preference**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\skillhub-preference\SKILL.md`
+  - Desc: - Prefer `skillhub` for skill discovery/install/update, then fallback to `clawhub` when unavailable or no match. Use when users ask about skills, 鎻掍欢, or capability extension.
+- **skill-vetter** (v1.0.0)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\skill-vetter\SKILL.md`
+  - Desc: - Security-first skill vetting for AI agents. Use before installing any skill from ClawdHub, GitHub, or other sources. Checks for red flags, permission scope, and suspicious patterns.
+- **subagent-driven-development**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\subagent-driven-development\SKILL.md`
+  - Desc: - Use when executing implementation plans with independent tasks in the current session
+- **systematic-debugging**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\systematic-debugging\SKILL.md`
+  - Desc: - Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes
+- **test-driven-development**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\test-driven-development\SKILL.md`
+  - Desc: - Use when implementing any feature or bugfix, before writing implementation code
+- **test-ws** (v1.0.0)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\gstack-openclaw-skills\skills\test-ws\SKILL.md`
+  - Desc: - Test workspace skill
+- **ui-ux-pro-max**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\ui-ux-pro-max\SKILL.md`
+- **using-git-worktrees**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\using-git-worktrees\SKILL.md`
+  - Desc: - Use when starting feature work that needs isolation from current workspace or before executing implementation plans - creates isolated git worktrees with smart directory selection and safety verification
+- **using-superpowers**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\using-superpowers\SKILL.md`
+  - Desc: - Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions
+- **vercel-cli-with-tokens**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\agent-skills\skills\vercel-cli-with-tokens\SKILL.md`
+  - Desc: - Deploy and manage projects on Vercel using token-based authentication. Use when working with Vercel CLI using access tokens rather than interactive login 鈥?e.g. "deploy to vercel", "set up vercel", "add environment variables to vercel".
+- **vercel-react-best-practices**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\vercel-react-best-practices\SKILL.md`
+- **verification-before-completion**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\verification-before-completion\SKILL.md`
+  - Desc: - Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always
+- **web-design-guidelines**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\agent-skills\skills\web-design-guidelines\SKILL.md`
+  - Desc: - Review UI code for Web Interface Guidelines compliance. Use when asked to "review my UI", "check accessibility", "audit design", "review UX", or "check my site against best practices".
+- **web-design-guidelines**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\web-design-guidelines\SKILL.md`
+- **word-docx** (v1.0.2)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\word-docx\SKILL.md`
+  - Desc: - Create, inspect, and edit Microsoft Word documents and DOCX files with reliable styles, numbering, tracked changes, tables, sections, and compatibility checks. Use when (1) the task is about Word or `.docx`; (2) the file includes tracked changes, comments, fields, tables, templates, or page layout constraints; (3) the document must survive round-trip editing without formatting drift.
+- **word-docx-1.0.2** (v1.0.2)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\word-docx-1.0.2\SKILL.md`
+  - Desc: - Create, inspect, and edit Microsoft Word documents and DOCX files with reliable styles, numbering, tracked changes, tables, sections, and compatibility checks. Use when (1) the task is about Word or `.docx`; (2) the file includes tracked changes, comments, fields, tables, templates, or page layout constraints; (3) the document must survive round-trip editing without formatting drift.
+- **workflow-automation**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\workflow-automation\SKILL.md`
+- **writing-plans**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\writing-plans\SKILL.md`
+  - Desc: - Use when you have a spec or requirements for a multi-step task, before touching code
+- **writing-skills**
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\writing-skills\SKILL.md`
+  - Desc: - Use when creating new skills, editing existing skills, or verifying skills work before deployment
+- **xiucheng-self-improving-agent** (v1.0.0)
+  - Path: `E:\00 - AI\00 - Skills\SKILLS\xiucheng-self-improving-agent\SKILL.md`
+  - Desc: - Self-improving agent system that analyzes conversation quality, identifies improvement opportunities, and continuously optimizes response strategies.
+

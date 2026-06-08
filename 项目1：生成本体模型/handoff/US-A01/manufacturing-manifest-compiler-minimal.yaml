@@ -1,0 +1,114 @@
+apiVersion: ontology.platform/v1
+kind: OntologyManifest
+metadata:
+  id: manufacturing-ontology
+  version: 1.0.0
+  name: Manifest 编译验收项目
+  displayName: Manifest 编译验收项目
+  description: 最小 OntologyProject fixture，用于 manifest-compiler 单元测试
+  boundedContext: 生产制造
+  domainTags:
+    - 生产制造
+  compiledAt: 2026-06-04T12:00:00.000Z
+  source: ontology-designer
+  status: draft
+spec:
+  semantic:
+    boundedContext:
+      id: bc-domain-manufacturing
+      name: 生产制造
+      nameEn: Manufacturing
+      description: 生产执行限界上下文
+      ontologyId: manufacturing-ontology
+    businessScenarios:
+      - id: scenario-mts
+        name: 面向库存生产
+        nameEn: MTS
+        applicableObjectTypeIds:
+          - production-order
+          - operation
+    valueObjects: []
+    objectTypes:
+      - id: production-order
+        name: 生产订单
+        nameEn: ProductionOrder
+        kind: aggregate_root
+        properties:
+          - id: production-order--attr-order-id
+            name: 生产订单号
+            nameEn: order_id
+            dataType: string
+            required: true
+        relations: []
+        businessScenarioIds:
+          - scenario-mts
+      - id: operation
+        name: 工序
+        nameEn: Operation
+        kind: entity
+        properties:
+          - id: operation--attr-op-number
+            name: 工序号
+            nameEn: op_number
+            dataType: integer
+            required: true
+        relations: []
+        aggregateRootId: production-order
+        businessScenarioIds:
+          - scenario-mts
+    stateMachines:
+      - id: sm-production-order
+        name: 生产订单生命周期
+        objectTypeId: production-order
+        statusField: status
+        states:
+          - name: CREATED
+            code: CREATED
+            isInitial: true
+            isFinal: false
+          - name: RELEASED
+            code: RELEASED
+            isInitial: false
+            isFinal: false
+        transitions:
+          - id: tr-release
+            name: 下达
+            from: CREATED
+            to: RELEASED
+            trigger: manual
+  behavior:
+    actions:
+      - id: action-release-order
+        name: 生产订单下达
+        nameEn: ReleaseProductionOrder
+        aggregateRootId: production-order
+        preRuleIds:
+          - rule-kitting
+        publishesEventIds:
+          - evt-order-released
+    rules:
+      - id: rule-kitting
+        name: 物料齐套校验
+        type: cross_entity
+        expression:
+          type: expression
+          expression: "true"
+        errorMessage: 物料未齐套
+        enabled: true
+    metrics: []
+    transactionBoundaries: []
+    sideEffects: []
+  events:
+    domainEvents:
+      - id: evt-order-released
+        name: 生产订单已下达
+        nameEn: ProductionOrderReleased
+        aggregateRootId: production-order
+    integrationEvents: []
+    routes: []
+    handlers: []
+  governance:
+    roles: []
+    fieldPermissions: []
+    agentPolicies: []
+  dataSources: []

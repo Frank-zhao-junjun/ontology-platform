@@ -1,0 +1,880 @@
+﻿{
+    "generatedAt":  "2026-04-27T15:01:37.7588445+08:00",
+    "incremental":  true,
+    "workspace":  "E:\\00 - AI\\本体建模",
+    "items":  [
+                  {
+                      "Source":  "Claude Skills",
+                      "Name":  "data-analysis-1.0.2",
+                      "Version":  "1.0.2",
+                      "Description":  "Data analysis and visualization. Query databases, generate reports, automate spreadsheets, and turn raw data into clear, actionable insights. Use when (1) you need to analyze, visualize, or explain data; (2) the user wants reports, dashboards, or metrics turned into a decision; (3) the work involves SQL, Python, spreadsheets, BI tools, or notebooks; (4) you need to compare segments, cohorts, funnels, experiments, or time periods; (5) the user explicitly installs or references the skill for the current task.",
+                      "Path":  "C:\\Users\\Frank\\.claude\\skills\\data-analysis-1.0.2\\SKILL.md",
+                      "Length":  7910,
+                      "LastWriteTimeUtc":  "1979-12-31T16:00:00.0000000Z"
+                  },
+                  {
+                      "Source":  "Claude Skills",
+                      "Name":  "skill-index",
+                      "Version":  "1.0.0",
+                      "Description":  "Unified local skill index across Cursor/Claude/repo skill libraries on this machine.",
+                      "Path":  "C:\\Users\\Frank\\.claude\\skills\\skill-index\\SKILL.md",
+                      "Length":  657,
+                      "LastWriteTimeUtc":  "2026-04-27T06:30:14.2043249Z"
+                  },
+                  {
+                      "Source":  "Claude Skills",
+                      "Name":  "youdaonote",
+                      "Version":  "1.0.7",
+                      "Description":  "鏈夐亾浜戠瑪璁板畼鏂?skill锛屾敮鎸佺瑪璁?CRUD锛堝垱寤?璇诲彇/鏇存柊/鍒犻櫎锛夈€佸緟鍔炵鐞嗐€佺綉椤靛壀钘忋€佺瑪璁版悳绱€佹枃浠跺す绠＄悊绛夊熀纭€鎿嶄綔銆傚闇€鏋勫缓鐭ヨ瘑搴撴垨 Wiki锛岃浣跨敤 youdaonote-llm-wiki skill 鑰岄潪鏈?skill銆?",
+                      "Path":  "C:\\Users\\Frank\\.claude\\skills\\youdaonote\\SKILL.md",
+                      "Length":  9472,
+                      "LastWriteTimeUtc":  "2026-04-26T02:21:44.0000000Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills",
+                      "Name":  "api-doc-generator",
+                      "Version":  "",
+                      "Description":  "Generate API documentation from source code, supporting REST APIs, GraphQL, and various documentation formats.",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills\\api-doc-generator\\SKILL.md",
+                      "Length":  3517,
+                      "LastWriteTimeUtc":  "2026-04-20T03:36:41.1946304Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills",
+                      "Name":  "code-review",
+                      "Version":  "",
+                      "Description":  "Smart code review skill that helps review code quality, identify potential issues, and provide improvement suggestions.",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills\\code-review\\SKILL.md",
+                      "Length":  2122,
+                      "LastWriteTimeUtc":  "2026-04-20T03:36:39.8458348Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills",
+                      "Name":  "data-analysis",
+                      "Version":  "1.0.2",
+                      "Description":  "Data analysis and visualization. Query databases, generate reports, automate spreadsheets, and turn raw data into clear, actionable insights. Use when (1) you need to analyze, visualize, or explain data; (2) the user wants reports, dashboards, or metrics turned into a decision; (3) the work involves SQL, Python, spreadsheets, BI tools, or notebooks; (4) you need to compare segments, cohorts, funnels, experiments, or time periods; (5) the user explicitly installs or references the skill for the current task.",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills\\data-analysis\\SKILL.md",
+                      "Length":  7910,
+                      "LastWriteTimeUtc":  "1979-12-31T16:00:00.0000000Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills",
+                      "Name":  "debug-helper",
+                      "Version":  "",
+                      "Description":  "Help debug code by analyzing error messages, identifying root causes, and providing fix suggestions.",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills\\debug-helper\\SKILL.md",
+                      "Length":  3881,
+                      "LastWriteTimeUtc":  "2026-04-20T03:36:41.9745013Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills",
+                      "Name":  "git-commit",
+                      "Version":  "",
+                      "Description":  "Git commit message generator that creates conventional commit messages based on code changes.",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills\\git-commit\\SKILL.md",
+                      "Length":  2431,
+                      "LastWriteTimeUtc":  "2026-04-20T03:36:40.1398635Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills",
+                      "Name":  "m09-domain",
+                      "Version":  "",
+                      "Description":  "Guides domain modeling and DDD design decisions for Rust systems, including entity vs value object, aggregate boundaries, repositories, invariants, and validation strategies. Use when the user asks about domain models, DDD/domain-driven design, entities, value objects, aggregates, repositories, business rules, or invariants (including 棰嗗煙妯″瀷/棰嗗煙椹卞姩璁捐 terms).",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills\\m09-domain\\SKILL.md",
+                      "Length":  4384,
+                      "LastWriteTimeUtc":  "2026-04-01T08:10:36.8541032Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills",
+                      "Name":  "skill-index",
+                      "Version":  "1.0.0",
+                      "Description":  "Unified local skill index across Cursor/Claude/repo skill libraries on this machine.",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills\\skill-index\\SKILL.md",
+                      "Length":  3473,
+                      "LastWriteTimeUtc":  "2026-04-27T06:28:47.8389901Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills",
+                      "Name":  "unit-test-generator",
+                      "Version":  "",
+                      "Description":  "Automatically generate unit tests based on source code, supporting multiple languages and testing frameworks.",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills\\unit-test-generator\\SKILL.md",
+                      "Length":  3411,
+                      "LastWriteTimeUtc":  "2026-04-20T03:36:40.4949322Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills",
+                      "Name":  "word-docx",
+                      "Version":  "1.0.2",
+                      "Description":  "Create, inspect, and edit Microsoft Word documents and DOCX files with reliable styles, numbering, tracked changes, tables, sections, and compatibility checks. Use when (1) the task is about Word or `.docx`; (2) the file includes tracked changes, comments, fields, tables, templates, or page layout constraints; (3) the document must survive round-trip editing without formatting drift.",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills\\word-docx\\SKILL.md",
+                      "Length":  7887,
+                      "LastWriteTimeUtc":  "1979-12-31T16:00:00.0000000Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills Cursor",
+                      "Name":  "babysit",
+                      "Version":  "",
+                      "Description":  "\u003e-",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills-cursor\\babysit\\SKILL.md",
+                      "Length":  745,
+                      "LastWriteTimeUtc":  "2026-04-03T08:12:52.7162730Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills Cursor",
+                      "Name":  "canvas",
+                      "Version":  "",
+                      "Description":  "\u003e-",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills-cursor\\canvas\\SKILL.md",
+                      "Length":  9186,
+                      "LastWriteTimeUtc":  "2026-04-27T06:13:52.6251294Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills Cursor",
+                      "Name":  "create-hook",
+                      "Version":  "",
+                      "Description":  "\u003e-",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills-cursor\\create-hook\\SKILL.md",
+                      "Length":  9192,
+                      "LastWriteTimeUtc":  "2026-04-10T02:08:05.0657111Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills Cursor",
+                      "Name":  "create-rule",
+                      "Version":  "",
+                      "Description":  "\u003e-",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills-cursor\\create-rule\\SKILL.md",
+                      "Length":  3636,
+                      "LastWriteTimeUtc":  "2026-03-23T00:44:53.1147790Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills Cursor",
+                      "Name":  "create-skill",
+                      "Version":  "",
+                      "Description":  "\u003e-",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills-cursor\\create-skill\\SKILL.md",
+                      "Length":  14046,
+                      "LastWriteTimeUtc":  "2026-03-23T00:44:50.2944251Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills Cursor",
+                      "Name":  "create-subagent",
+                      "Version":  "",
+                      "Description":  "\u003e-",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills-cursor\\create-subagent\\SKILL.md",
+                      "Length":  6454,
+                      "LastWriteTimeUtc":  "2026-03-23T00:44:53.0994678Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills Cursor",
+                      "Name":  "migrate-to-skills",
+                      "Version":  "",
+                      "Description":  "\u003e-",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills-cursor\\migrate-to-skills\\SKILL.md",
+                      "Length":  6439,
+                      "LastWriteTimeUtc":  "2026-03-23T00:44:53.1177995Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills Cursor",
+                      "Name":  "shell",
+                      "Version":  "",
+                      "Description":  "\u003e-",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills-cursor\\shell\\SKILL.md",
+                      "Length":  867,
+                      "LastWriteTimeUtc":  "2026-03-23T00:44:49.1123671Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills Cursor",
+                      "Name":  "split-to-prs",
+                      "Version":  "",
+                      "Description":  "\u003e-",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills-cursor\\split-to-prs\\SKILL.md",
+                      "Length":  1834,
+                      "LastWriteTimeUtc":  "2026-04-23T01:37:21.7721927Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills Cursor",
+                      "Name":  "statusline",
+                      "Version":  "",
+                      "Description":  "\u003e-",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills-cursor\\statusline\\SKILL.md",
+                      "Length":  7108,
+                      "LastWriteTimeUtc":  "2026-04-08T09:45:11.8911780Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills Cursor",
+                      "Name":  "update-cli-config",
+                      "Version":  "",
+                      "Description":  "\u003e-",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills-cursor\\update-cli-config\\SKILL.md",
+                      "Length":  3827,
+                      "LastWriteTimeUtc":  "2026-04-20T03:12:09.7228381Z"
+                  },
+                  {
+                      "Source":  "Cursor Skills Cursor",
+                      "Name":  "update-cursor-settings",
+                      "Version":  "",
+                      "Description":  "\u003e-",
+                      "Path":  "C:\\Users\\Frank\\.cursor\\skills-cursor\\update-cursor-settings\\SKILL.md",
+                      "Length":  4296,
+                      "LastWriteTimeUtc":  "2026-04-08T01:19:09.8410027Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "baidu-netdisk-skills",
+                      "Version":  "",
+                      "Description":  "\u003e",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\baidu-netdisk-skills\\SKILL.md",
+                      "Length":  3771,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:10.7185112Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "baidu-search",
+                      "Version":  "",
+                      "Description":  "Search the web using Baidu AI Search Engine (BDSE). Use for live information, documentation, or research topics.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\baidu-search\\SKILL.md",
+                      "Length":  1794,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:10.7834042Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "baidu-web-search",
+                      "Version":  "",
+                      "Description":  "Use Baidu Qianfan web search API for real-time web retrieval. Use when the user needs to search the web, get latest news, verify facts, or expresses intent like \"鏌ヤ竴涓?,\"鎼滀竴涓?,\"鏈€杩?,\"浠婂ぉ\",\"浠婂勾\", or asks about events/people/products that require looking up.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\baidu-web-search\\SKILL.md",
+                      "Length":  6983,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:10.8390624Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "bilibili-all-in-one",
+                      "Version":  "1.0.12",
+                      "Description":  "\u003e",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\bilibili-all-in-one\\skill.md",
+                      "Length":  20094,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:10.9192342Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "brainstorming",
+                      "Version":  "",
+                      "Description":  "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\brainstorming\\SKILL.md",
+                      "Length":  10634,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.0551364Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "careful",
+                      "Version":  "",
+                      "Description":  "瀹夊叏鎶ゆ爮宸ュ叿銆傚嵄闄╂搷浣滆鍛娿€?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\careful\\SKILL.md",
+                      "Length":  259,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.5713515Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "codex",
+                      "Version":  "",
+                      "Description":  "OpenAI Codex 鐙珛瀹℃煡宸ュ叿銆備綔涓虹浜屾剰瑙佽繘琛岀嫭绔嬩唬鐮佸鏌ャ€?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\codex\\SKILL.md",
+                      "Length":  325,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.5027326Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "composition-patterns",
+                      "Version":  "",
+                      "Description":  "",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\agent-skills\\skills\\composition-patterns\\SKILL.md",
+                      "Length":  2886,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:09.8247015Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "data-analysis-1.0.2",
+                      "Version":  "1.0.2",
+                      "Description":  "Data analysis and visualization. Query databases, generate reports, automate spreadsheets, and turn raw data into clear, actionable insights. Use when (1) you need to analyze, visualize, or explain data; (2) the user wants reports, dashboards, or metrics turned into a decision; (3) the work involves SQL, Python, spreadsheets, BI tools, or notebooks; (4) you need to compare segments, cohorts, funnels, experiments, or time periods; (5) the user explicitly installs or references the skill for the current task.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\data-analysis-1.0.2\\SKILL.md",
+                      "Length":  7910,
+                      "LastWriteTimeUtc":  "1979-12-31T16:00:00.0000000Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "deploy-to-vercel",
+                      "Version":  "",
+                      "Description":  "Deploy applications and websites to Vercel. Use when the user requests deployment actions like \"deploy my app\", \"deploy and give me the link\", \"push this live\", or \"create a preview deployment\".",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\agent-skills\\skills\\deploy-to-vercel\\SKILL.md",
+                      "Length":  11786,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:09.9904329Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "design-consultation",
+                      "Version":  "",
+                      "Description":  "璁捐鍚堜綔浼欎即宸ュ叿銆傛瀯寤哄畬鏁磋璁＄郴缁燂紝鎻愪緵涓撲笟璁捐寤鸿銆?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\design-consultation\\SKILL.md",
+                      "Length":  347,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.4850297Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "design-review",
+                      "Version":  "",
+                      "Description":  "缂栫爜璁捐甯堝伐鍏枫€傝璁″璁″拰淇銆?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\design-review\\SKILL.md",
+                      "Length":  282,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.4242100Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "dispatching-parallel-agents",
+                      "Version":  "",
+                      "Description":  "Use when facing 2+ independent tasks that can be worked on without shared state or sequential dependencies",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\dispatching-parallel-agents\\SKILL.md",
+                      "Length":  6441,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.1385451Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "document-release",
+                      "Version":  "",
+                      "Description":  "鎶€鏈綔瀹跺伐鍏枫€傛洿鏂伴」鐩枃妗ｃ€?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\document-release\\SKILL.md",
+                      "Length":  270,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.7657025Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "executing-plans",
+                      "Version":  "",
+                      "Description":  "Use when you have a written implementation plan to execute in a separate session with review checkpoints",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\executing-plans\\SKILL.md",
+                      "Length":  2459,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.1509566Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "find-skills",
+                      "Version":  "",
+                      "Description":  "Highest-priority skill discovery flow. MUST trigger when users ask to find/install skills (e.g. 鎶€鑳? 鎵炬妧鑳? find-skill, find-skills, install skill). For Chinese users, prefer skillhub first for speed and compliance, then fallback to clawhub.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\find-skills\\SKILL.md",
+                      "Length":  2337,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.1660573Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "finishing-a-development-branch",
+                      "Version":  "",
+                      "Description":  "Use when implementation is complete, all tests pass, and you need to decide how to integrate the work - guides completion of development work by presenting structured options for merge, PR, or cleanup",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\finishing-a-development-branch\\SKILL.md",
+                      "Length":  4250,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.1807184Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "freeze",
+                      "Version":  "",
+                      "Description":  "鏂囦欢缂栬緫閿佸畾宸ュ叿銆傞檺鍒舵枃浠剁紪杈戣寖鍥淬€?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\freeze\\SKILL.md",
+                      "Length":  274,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.4705414Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "frontend-design",
+                      "Version":  "",
+                      "Description":  "",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\frontend-design\\SKILL.md",
+                      "Length":  3846,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.1931567Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "gstack-openclaw-skills",
+                      "Version":  "",
+                      "Description":  "gstack 鐨?WorkBuddy/OpenClaw 閫傞厤鐗堟湰銆傛簮鑷?gstack (Y Combinator Garry Tan)锛屼笓涓?WorkBuddy/OpenClaw 绛?AI 鍔╂墜骞冲彴浼樺寲銆傚寘鍚?15 涓笓涓氬伐鍏凤紝娑电洊浠庝骇鍝佹瀯鎬濆埌浠ｇ爜鍙戝竷鐨勫畬鏁村紑鍙戞祦绋嬨€?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\SKILL.md",
+                      "Length":  3999,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.2877822Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "gstack-skills",
+                      "Version":  "2.0.0",
+                      "Description":  "\u003e",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\gstack-skills\\SKILL.md",
+                      "Length":  9660,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.6422475Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "guard",
+                      "Version":  "",
+                      "Description":  "瀹屽叏瀹夊叏妯″紡銆俢areful + freeze 缁勫悎銆?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\guard\\SKILL.md",
+                      "Length":  296,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.6234665Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "hello-ws",
+                      "Version":  "1.0.0",
+                      "Description":  "Test workspace skill",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\skills\\hello-ws\\SKILL.md",
+                      "Length":  97,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.3953368Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "inner",
+                      "Version":  "1.0.0",
+                      "Description":  "Test nested workspace skill",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\skills\\nested\\inner\\SKILL.md",
+                      "Length":  105,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.3770335Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "investigate",
+                      "Version":  "",
+                      "Description":  "璋冭瘯璋冩煡涓撳宸ュ叿銆傜郴缁熷寲鏍瑰洜鍒嗘瀽锛屽府鍔╁畾浣嶅拰瑙ｅ喅澶嶆潅闂銆?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\investigate\\SKILL.md",
+                      "Length":  1142,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.5362741Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "m09-domain",
+                      "Version":  "",
+                      "Description":  "CRITICAL: Use for domain modeling. Triggers: domain model, DDD, domain-driven design, entity, value object, aggregate, repository pattern, business rules, validation, invariant, 棰嗗煙妯″瀷, 棰嗗煙椹卞姩璁捐, 涓氬姟瑙勫垯",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\m09-domain\\m09-domain\\SKILL.md",
+                      "Length":  4234,
+                      "LastWriteTimeUtc":  "2026-01-26T02:38:00.0000000Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "nano-banana-2",
+                      "Version":  "",
+                      "Description":  "",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\nano-banana-2\\SKILL.md",
+                      "Length":  4366,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.7790767Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "obsidian",
+                      "Version":  "",
+                      "Description":  "Work with Obsidian vaults (plain Markdown notes) and automate via obsidian-cli.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\obsidian\\SKILL.md",
+                      "Length":  2334,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.7931684Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "obsidian-clawhub",
+                      "Version":  "",
+                      "Description":  "Work with Obsidian vaults (plain Markdown notes) and automate via obsidian-cli.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\obsidian-clawhub\\SKILL.md",
+                      "Length":  2334,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.8167102Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "office-hours",
+                      "Version":  "2.0.0",
+                      "Description":  "\u003e",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\gstack-skills\\office-hours\\SKILL.md",
+                      "Length":  8549,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.7049481Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "office-hours",
+                      "Version":  "",
+                      "Description":  "YC鍔炲叕鏃堕棿宸ュ叿锛岀敤浜庝骇鍝佸垱鎰忛獙璇佸拰璁捐鎬濊€冦€傚綋鐢ㄦ埛瑕佹眰\"澶磋剳椋庢毚\"銆?鎴戞湁涓€涓兂娉?銆?甯垜鎬濊€冭繖涓棶棰?鏃朵娇鐢ㄣ€?version: 2.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\office-hours\\SKILL.md",
+                      "Length":  3337,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.7371569Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "pdf",
+                      "Version":  "",
+                      "Description":  "",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\pdf\\SKILL.md",
+                      "Length":  7379,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.8367060Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "plan-ceo-review",
+                      "Version":  "",
+                      "Description":  "CEO/鍒涘浜鸿瑙掔殑璁″垝璇勫宸ュ叿銆傞噸鏂版€濊€冮棶棰樸€佸鎵?0鏄熺骇浜у搧銆佹寫鎴樺墠鎻愬亣璁撅紝鍖呭惈鍥涚鑼冨洿妯″紡銆?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\plan-ceo-review\\SKILL.md",
+                      "Length":  3170,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.6055577Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "plan-design-review",
+                      "Version":  "",
+                      "Description":  "楂樼骇璁捐甯堣瑙掔殑璁捐璇勫宸ュ叿銆傛鏌ョ敤鎴蜂綋楠屻€佽瑙夎璁′竴鑷存€с€佷氦浜掓祦绋嬨€?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\plan-design-review\\SKILL.md",
+                      "Length":  1099,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.7215714Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "plan-eng-review",
+                      "Version":  "",
+                      "Description":  "宸ョ▼缁忕悊瑙嗚鐨勬妧鏈灦鏋勮瘎瀹″伐鍏枫€傞攣瀹氭妧鏈灦鏋勶紝璇勪及瀹炵幇鏂规锛岀‘淇濇妧鏈喅绛栧悎鐞嗐€?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\plan-eng-review\\SKILL.md",
+                      "Length":  1567,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.5531063Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "planning-with-files",
+                      "Version":  "",
+                      "Description":  "Implements Manus-style file-based planning to organize and track progress on complex tasks. Creates task_plan.md, findings.md, and progress.md. Use when asked to plan out, break down, or organize a multi-step project, research task, or any work requiring \u003e5 tool calls. Supports automatic session recovery after /clear.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\planning-with-files\\SKILL.md",
+                      "Length":  8877,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.8492726Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "powerpoint-pptx",
+                      "Version":  "1.0.1",
+                      "Description":  "Create, inspect, and edit Microsoft PowerPoint presentations and PPTX decks with reliable layouts, templates, placeholders, notes, charts, and visual QA. Use when (1) the task is about PowerPoint or `.pptx`; (2) layouts, placeholders, notes, charts, comments, or template fidelity matter; (3) the deck must render cleanly after edits.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\powerpoint-pptx\\SKILL.md",
+                      "Length":  7058,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.9588802Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "pptx",
+                      "Version":  "",
+                      "Description":  "",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\pptx\\SKILL.md",
+                      "Length":  7947,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.9796422Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "prd",
+                      "Version":  "",
+                      "Description":  "",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\prd\\SKILL.md",
+                      "Length":  4004,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.9904062Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "qa",
+                      "Version":  "",
+                      "Description":  "QA璐熻矗浜哄伐鍏枫€傜郴缁熷寲QA娴嬭瘯Web搴旂敤骞朵慨澶嶅彂鐜扮殑bug銆傝繍琛屾祴璇曪紝杩唬淇婧愪唬鐮佷腑鐨刡ug锛屽師瀛愬寲鎻愪氦姣忎釜淇骞堕噸鏂伴獙璇併€?version: 2.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\qa\\SKILL.md",
+                      "Length":  3197,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.5184051Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "qa-only",
+                      "Version":  "",
+                      "Description":  "绾?QA 鎶ュ憡宸ュ叿銆傚彧鐢熸垚 bug 鎶ュ憡锛屼笉淇銆?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\qa-only\\SKILL.md",
+                      "Length":  287,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.4480340Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "react-best-practices",
+                      "Version":  "",
+                      "Description":  "React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\agent-skills\\skills\\react-best-practices\\SKILL.md",
+                      "Length":  7046,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:09.1004644Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "react-native-skills",
+                      "Version":  "",
+                      "Description":  "",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\agent-skills\\skills\\react-native-skills\\SKILL.md",
+                      "Length":  4439,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:10.0744222Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "react-view-transitions",
+                      "Version":  "",
+                      "Description":  "Guide for implementing smooth, native-feeling animations using React\u0027s View Transition API (`\u003cViewTransition\u003e` component, `addTransitionType`, and CSS view transition pseudo-elements). Use this skill whenever the user wants to add page transitions, animate route changes, create shared element animations, animate enter/exit of components, animate list reorder, implement directional (forward/back) navigation animations, or integrate view transitions in Next.js. Also use when the user mentions view transitions, `startViewTransition`, `ViewTransition`, transition types, or asks about animating between UI states in React without third-party animation libraries.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\agent-skills\\skills\\react-view-transitions\\SKILL.md",
+                      "Length":  9758,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:09.7532186Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "receiving-code-review",
+                      "Version":  "",
+                      "Description":  "Use when receiving code review feedback, before implementing suggestions, especially if feedback seems unclear or technically questionable - requires technical rigor and verification, not performative agreement or blind implementation",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\receiving-code-review\\SKILL.md",
+                      "Length":  6314,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:12.0032878Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "requesting-code-review",
+                      "Version":  "",
+                      "Description":  "Use when completing tasks, implementing major features, or before merging to verify work meets requirements",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\requesting-code-review\\SKILL.md",
+                      "Length":  2935,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:12.0225239Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "retro",
+                      "Version":  "",
+                      "Description":  "宸ョ▼缁忕悊鍥㈤槦鍥為【宸ュ叿銆傜敓鎴愬洟闃熷懆鎶ャ€佽凯浠ｅ洖椤俱€?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\retro\\SKILL.md",
+                      "Length":  273,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.5887576Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "review",
+                      "Version":  "2.0.0",
+                      "Description":  "\u003e",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\gstack-skills\\review\\SKILL.md",
+                      "Length":  9972,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.6585877Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "review",
+                      "Version":  "",
+                      "Description":  "楂樼骇宸ョ▼甯堜唬鐮佸鏌ュ伐鍏枫€傞鍚堝苟PR瀹℃煡锛屽垎鏋怱QL瀹夊叏銆丩LM淇′换杈圭晫銆佺珵鎬佹潯浠剁瓑闂锛屽苟瀹為檯淇鍙戠幇鐨刡ug銆?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\review\\SKILL.md",
+                      "Length":  2808,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.4576996Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "self-improving-agent",
+                      "Version":  "",
+                      "Description":  "Captures learnings, errors, and corrections to enable continuous improvement. Use when: (1) A command or operation fails unexpectedly, (2) User corrects Claude (\u0027No, that\u0027s wrong...\u0027, \u0027Actually...\u0027), (3) User requests a capability that doesn\u0027t exist, (4) An external API or tool fails, (5) Claude realizes its knowledge is outdated or incorrect, (6) A better approach is discovered for a recurring task. Also review learnings before major tasks.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\self-improving-agent\\SKILL.md",
+                      "Length":  20939,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:12.0550682Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "self-improving-ivangdavila",
+                      "Version":  "1.2.16",
+                      "Description":  "Self-reflection + Self-criticism + Self-learning + Self-organizing memory. Agent evaluates its own work, catches mistakes, and improves permanently. Use when (1) a command, tool, API, or operation fails; (2) the user corrects you or rejects your work; (3) you realize your knowledge is outdated or incorrect; (4) you discover a better approach; (5) the user explicitly installs or references the skill for the current task.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\self-improving-ivangdavila\\SKILL.md",
+                      "Length":  8582,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:12.5914231Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "senior-architect",
+                      "Version":  "",
+                      "Description":  "This skill should be used when the user asks to \"design system architecture\", \"evaluate microservices vs monolith\", \"create architecture diagrams\", \"analyze dependencies\", \"choose a database\", \"plan for scalability\", \"make technical decisions\", or \"review system design\". Use for architecture decision records (ADRs), tech stack evaluation, system design reviews, dependency analysis, and generating architecture diagrams in Mermaid, PlantUML, or ASCII format.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\senior-architect\\SKILL.md",
+                      "Length":  10972,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:12.6381241Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "ship",
+                      "Version":  "",
+                      "Description":  "鍙戝竷宸ョ▼甯堝伐鍏枫€傚畬鍏ㄨ嚜鍔ㄥ寲鐨勪唬鐮佸彂甯冨伐浣滄祦銆傛娴?鍚堝苟鍩虹鍒嗘敮銆佽繍琛屾祴璇曘€佸鏌ュ樊寮傘€佺増鏈鐞嗐€佹洿鏂版棩蹇椼€佹彁浜ゃ€佹帹閫佸拰鍒涘缓PR銆?version: 1.0.0",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\ship\\SKILL.md",
+                      "Length":  3043,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.7523056Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "skillhub-preference",
+                      "Version":  "",
+                      "Description":  "Prefer `skillhub` for skill discovery/install/update, then fallback to `clawhub` when unavailable or no match. Use when users ask about skills, 鎻掍欢, or capability extension.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\skillhub-preference\\SKILL.md",
+                      "Length":  724,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:12.7251165Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "skill-vetter",
+                      "Version":  "1.0.0",
+                      "Description":  "Security-first skill vetting for AI agents. Use before installing any skill from ClawdHub, GitHub, or other sources. Checks for red flags, permission scope, and suspicious patterns.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\skill-vetter\\SKILL.md",
+                      "Length":  4561,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:12.7412732Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "subagent-driven-development",
+                      "Version":  "",
+                      "Description":  "Use when executing implementation plans with independent tasks in the current session",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\subagent-driven-development\\SKILL.md",
+                      "Length":  12139,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:12.7822217Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "systematic-debugging",
+                      "Version":  "",
+                      "Description":  "Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\systematic-debugging\\SKILL.md",
+                      "Length":  9884,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:12.8782319Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "test-driven-development",
+                      "Version":  "",
+                      "Description":  "Use when implementing any feature or bugfix, before writing implementation code",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\test-driven-development\\SKILL.md",
+                      "Length":  9867,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:12.9354706Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "test-ws",
+                      "Version":  "1.0.0",
+                      "Description":  "Test workspace skill",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\gstack-openclaw-skills\\skills\\test-ws\\SKILL.md",
+                      "Length":  96,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:11.4104293Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "ui-ux-pro-max",
+                      "Version":  "",
+                      "Description":  "",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\ui-ux-pro-max\\SKILL.md",
+                      "Length":  35956,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:12.9466436Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "using-git-worktrees",
+                      "Version":  "",
+                      "Description":  "Use when starting feature work that needs isolation from current workspace or before executing implementation plans - creates isolated git worktrees with smart directory selection and safety verification",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\using-git-worktrees\\SKILL.md",
+                      "Length":  5635,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:12.9576726Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "using-superpowers",
+                      "Version":  "",
+                      "Description":  "Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\using-superpowers\\SKILL.md",
+                      "Length":  5421,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:12.9717892Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "vercel-cli-with-tokens",
+                      "Version":  "",
+                      "Description":  "Deploy and manage projects on Vercel using token-based authentication. Use when working with Vercel CLI using access tokens rather than interactive login 鈥?e.g. \"deploy to vercel\", \"set up vercel\", \"add environment variables to vercel\".",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\agent-skills\\skills\\vercel-cli-with-tokens\\SKILL.md",
+                      "Length":  8838,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:10.0413222Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "vercel-react-best-practices",
+                      "Version":  "",
+                      "Description":  "",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\vercel-react-best-practices\\SKILL.md",
+                      "Length":  6721,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:13.0157680Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "verification-before-completion",
+                      "Version":  "",
+                      "Description":  "Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\verification-before-completion\\SKILL.md",
+                      "Length":  4201,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:13.0256406Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "web-design-guidelines",
+                      "Version":  "",
+                      "Description":  "Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\agent-skills\\skills\\web-design-guidelines\\SKILL.md",
+                      "Length":  1231,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:09.9689263Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "web-design-guidelines",
+                      "Version":  "",
+                      "Description":  "",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\web-design-guidelines\\SKILL.md",
+                      "Length":  903,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:13.0377687Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "word-docx",
+                      "Version":  "1.0.2",
+                      "Description":  "Create, inspect, and edit Microsoft Word documents and DOCX files with reliable styles, numbering, tracked changes, tables, sections, and compatibility checks. Use when (1) the task is about Word or `.docx`; (2) the file includes tracked changes, comments, fields, tables, templates, or page layout constraints; (3) the document must survive round-trip editing without formatting drift.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\word-docx\\SKILL.md",
+                      "Length":  7887,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:13.0510620Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "word-docx-1.0.2",
+                      "Version":  "1.0.2",
+                      "Description":  "Create, inspect, and edit Microsoft Word documents and DOCX files with reliable styles, numbering, tracked changes, tables, sections, and compatibility checks. Use when (1) the task is about Word or `.docx`; (2) the file includes tracked changes, comments, fields, tables, templates, or page layout constraints; (3) the document must survive round-trip editing without formatting drift.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\word-docx-1.0.2\\SKILL.md",
+                      "Length":  7887,
+                      "LastWriteTimeUtc":  "1979-12-31T16:00:00.0000000Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "workflow-automation",
+                      "Version":  "",
+                      "Description":  "",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\workflow-automation\\SKILL.md",
+                      "Length":  6366,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:13.0696622Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "writing-plans",
+                      "Version":  "",
+                      "Description":  "Use when you have a spec or requirements for a multi-step task, before touching code",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\writing-plans\\SKILL.md",
+                      "Length":  6046,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:13.0820211Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "writing-skills",
+                      "Version":  "",
+                      "Description":  "Use when creating new skills, editing existing skills, or verifying skills work before deployment",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\writing-skills\\SKILL.md",
+                      "Length":  22624,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:13.1305854Z"
+                  },
+                  {
+                      "Source":  "Repo Skill Library",
+                      "Name":  "xiucheng-self-improving-agent",
+                      "Version":  "1.0.0",
+                      "Description":  "Self-improving agent system that analyzes conversation quality, identifies improvement opportunities, and continuously optimizes response strategies.",
+                      "Path":  "E:\\00 - AI\\00 - Skills\\SKILLS\\xiucheng-self-improving-agent\\SKILL.md",
+                      "Length":  1781,
+                      "LastWriteTimeUtc":  "2026-04-10T09:31:13.1879964Z"
+                  }
+              ]
+}

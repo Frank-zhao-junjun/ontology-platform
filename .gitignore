@@ -1,0 +1,21 @@
+.copilot-specs-cache/
+.workbuddy/
+.cursor/
+.codebuddy/
+
+# Nested app repo (separate git history)
+ontology-platform/
+
+# Heavy / generated
+frontend/node_modules/
+java-25-openjdk*/
+mvn-repo/
+.jdk/
+.maven/
+nul
+sdd-starter-template/
+sdd-demo-project/
+unpacked/
+slides/
+slides_optimized/
+.cloudstudio/
