@@ -16,6 +16,8 @@ public class DataAccessMethodEntity {
     @Id
     @Column(length = 36)
     private String id;
+    @Column(name = "context_id", length = 36)
+    private String contextId;
     @Column(name = "object_type_id", nullable = false, length = 36)
     private String objectTypeId;
     @Column(name = "data_source_id", nullable = false, length = 36)

@@ -125,6 +125,7 @@ public final class PersistenceMapper {
     public static DataAccessMethodEntity toEntity(DataAccessMethod m) {
         DataAccessMethodEntity e = new DataAccessMethodEntity();
         e.setId(m.getId());
+        e.setContextId(m.getContextId());
         e.setObjectTypeId(m.getObjectTypeId());
         e.setDataSourceId(m.getDataSourceId());
         e.setMethodType(m.getMethodType());
@@ -315,5 +316,33 @@ public final class PersistenceMapper {
     private static List<String> fromJsonList(String json) {
         if (json == null || json.isBlank()) return List.of();
         return JSONUtil.toList(json, String.class);
+    }
+
+    // ── AuditLog ──
+    public static AuditLogEntity toEntity(AuditLog log) {
+        AuditLogEntity e = new AuditLogEntity();
+        e.setId(log.getId());
+        e.setTenantId(log.getTenantId());
+        e.setApiKeyName(log.getApiKeyName());
+        e.setSandboxId(log.getSandboxId());
+        e.setAgentRoleName(log.getAgentRoleName());
+        e.setAction(log.getAction());
+        e.setActionType(log.getActionType());
+        e.setObjectType(log.getObjectType());
+        e.setObjectId(log.getObjectId());
+        e.setRequestPath(log.getRequestPath());
+        e.setResponseCode(log.getResponseCode());
+        e.setErrorMessage(log.getErrorMessage());
+        e.setExecutionTimeMs(log.getExecutionTimeMs());
+        e.setTimestamp(log.getTimestamp());
+        return e;
+    }
+
+    public static AuditLog fromEntity(AuditLogEntity e) {
+        return AuditLog.rehydrate(e.getId(), e.getTenantId(), e.getApiKeyName(),
+                e.getSandboxId(), e.getAgentRoleName(), e.getAction(), e.getActionType(),
+                e.getObjectType(), e.getObjectId(), e.getRequestPath(),
+                e.getResponseCode(), e.getErrorMessage(), e.getExecutionTimeMs(),
+                e.getTimestamp());
     }
 }

@@ -4,12 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ontology.platform.application.service.BehaviorService;
+import com.ontology.platform.application.service.GovernanceService;
 import com.ontology.platform.application.service.ModelingService;
 import com.ontology.platform.common.exception.ResourceNotFoundException;
+import com.ontology.platform.domain.entity.AgentSandbox;
 import com.ontology.platform.domain.entity.BoundedContext;
 import com.ontology.platform.domain.entity.DomainEventDefinition;
+import com.ontology.platform.domain.entity.FieldPermission;
+import com.ontology.platform.domain.entity.ObjectPermission;
 import com.ontology.platform.domain.entity.OntologyAction;
 import com.ontology.platform.domain.entity.PublishedManifest;
+import com.ontology.platform.domain.entity.Role;
 import com.ontology.platform.domain.entity.ValidationRule;
 import com.ontology.platform.domain.repository.BoundedContextRepository;
 import com.ontology.platform.domain.repository.PublishedManifestRepository;
@@ -30,6 +35,7 @@ public class ManifestSnapshotService {
     private final PublishedManifestRepository manifestRepo;
     private final ModelingService modelingService;
     private final BehaviorService behaviorService;
+    private final GovernanceService governanceService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Transactional
@@ -127,6 +133,71 @@ public class ManifestSnapshotService {
             node.set("payloadSchema", objectMapper.readTree(ev.getPayloadSchemaJson()));
         }
 
+        // ── governance (US-G01/G02/G04) ──
+        ObjectNode governance = spec.putObject("governance");
+
+        // roles + object permissions + field permissions
+        ArrayNode roles = governance.putArray("roles");
+        for (Role role : governanceService.listRoles(contextId, null)) {
+            ObjectNode roleNode = roles.addObject();
+            roleNode.put("id", role.getCode());
+            roleNode.put("name", role.getName());
+            if (role.getDescription() != null) roleNode.put("description", role.getDescription());
+            roleNode.put("isGlobal", role.isGlobal());
+
+            // object-level permissions (G01 AC-3)
+            ArrayNode perms = roleNode.putArray("permissions");
+            for (ObjectPermission op : governanceService.listObjectPermissions(role.getId())) {
+                ObjectNode permNode = perms.addObject();
+                permNode.put("objectTypeId", resolveObjectTypeCode(op.getObjectTypeId()));
+                ArrayNode ops = permNode.putArray("ops");
+                if (op.isPermRead()) ops.add("READ");
+                if (op.isPermWrite()) ops.add("WRITE");
+                if (op.isPermDelete()) ops.add("DELETE");
+                if (op.isPermExecute()) ops.add("EXECUTE");
+            }
+        }
+
+        // field-level permissions (G02 AC-2)
+        ArrayNode fieldPerms = governance.putArray("fieldPermissions");
+        for (Role role : governanceService.listRoles(contextId, null)) {
+            for (FieldPermission fp : governanceService.listFieldPermissions(role.getId())) {
+                ObjectNode fpNode = fieldPerms.addObject();
+                fpNode.put("objectTypeId", resolveObjectTypeCode(fp.getObjectTypeId()));
+                fpNode.put("propertyNameEn", fp.getFieldName());
+                fpNode.put("isVisible", fp.isVisible());
+                fpNode.put("isEditable", fp.isEditable());
+                fpNode.put("roleId", role.getCode());
+            }
+        }
+
+        // agent sandboxes (G04 AC-1)
+        ArrayNode agentPolicies = governance.putArray("agentPolicies");
+        for (AgentSandbox sb : governanceService.listSandboxes()) {
+            // only include sandboxes bound to this context's roles
+            if (sb.getAgentRoleId() != null) {
+                try {
+                    Role ar = governanceService.getRole(sb.getAgentRoleId());
+                    if (!contextId.equals(ar.getContextId()) && !ar.isGlobal()) continue;
+                } catch (Exception ignore) { continue; }
+            }
+            ObjectNode sbNode = agentPolicies.addObject();
+            sbNode.put("id", sb.getName());
+            if (sb.getManifestVersionId() != null) sbNode.put("manifestVersion", sb.getManifestVersionId());
+            if (sb.getAgentRoleId() != null) {
+                try {
+                    Role ar = governanceService.getRole(sb.getAgentRoleId());
+                    sbNode.put("roleId", ar.getCode());
+                } catch (Exception ignore) {}
+            }
+            sbNode.set("allowedMcpTools", objectMapper.valueToTree(sb.getAllowedTools()));
+            sbNode.set("allowedAggregateRootIds", objectMapper.valueToTree(sb.getAllowedAggregateRoots()));
+            sbNode.set("allowedActionIds", objectMapper.valueToTree(sb.getAllowedBehaviors()));
+            ObjectNode rateLimit = sbNode.putObject("rateLimit");
+            rateLimit.put("maxCallsPerSecond", sb.getMaxOpsPerSecond());
+            sbNode.put("defaultDeny", true);
+        }
+
         return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(root);
     }
 
@@ -136,5 +207,13 @@ public class ManifestSnapshotService {
                 .map(ar -> ar.getCode())
                 .findFirst()
                 .orElse(aggregateRootId);
+    }
+
+    private String resolveObjectTypeCode(String objectTypeId) {
+        try {
+            return modelingService.getObjectType(objectTypeId).getCode();
+        } catch (Exception e) {
+            return objectTypeId;
+        }
     }
 }
