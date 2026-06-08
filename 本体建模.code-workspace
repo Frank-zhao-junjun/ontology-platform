@@ -7,5 +7,7 @@
 			"path": "ontology-platform"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"java.compile.nullAnalysis.mode": "automatic"
+	}
 }
