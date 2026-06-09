@@ -2,6 +2,7 @@ package com.ontology.platform.application.dto;
 
 import com.ontology.platform.common.enums.OntologyStatus;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 
@@ -10,7 +11,7 @@ import java.time.Instant;
  */
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class OntologyResponse {

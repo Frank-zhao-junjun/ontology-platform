@@ -82,7 +82,7 @@ class UploadServiceTest {
         assertEquals(10485760L, response.getFileSize());
         assertEquals("pending", response.getStatus());
         assertNotNull(response.getUploadUrls());
-        assertTrue(response.getTotalChunks() > 0);
+        assertTrue(response.getChunkCount() > 0);
 
         verify(fileStorageService).initChunkDirectory(anyString());
         verify(uploadTaskRepository).save(any(UploadTask.class));
@@ -127,7 +127,7 @@ class UploadServiceTest {
         String uploadId = "upload_test123";
         UploadTask task = UploadTask.builder()
                 .id(uploadId)
-                .fileName("test.csv")
+                .originalFileName("test.csv")
                 .fileSize(10485760L)
                 .fileType(FileType.CSV)
                 .chunkSize(5242880)
@@ -140,7 +140,7 @@ class UploadServiceTest {
 
         // when
         UploadTaskResponse response = uploadService.uploadChunk(
-                uploadId, 1, new byte[1024], null);
+                uploadId, 1, new byte[1024], (String) null);
 
         // then
         assertNotNull(response);
@@ -160,7 +160,7 @@ class UploadServiceTest {
 
         // when & then
         assertThrows(UploadException.class, () ->
-                uploadService.uploadChunk(uploadId, 1, new byte[1024], null));
+                uploadService.uploadChunk(uploadId, 1, new byte[1024], (String) null));
     }
 
     @Test
@@ -170,7 +170,7 @@ class UploadServiceTest {
         String uploadId = "upload_test123";
         UploadTask task = UploadTask.builder()
                 .id(uploadId)
-                .fileName("test.csv")
+                .originalFileName("test.csv")
                 .fileSize(5242880L)
                 .fileType(FileType.CSV)
                 .chunkSize(5242880)
@@ -192,7 +192,7 @@ class UploadServiceTest {
         String uploadId = "upload_test123";
         UploadTask task = UploadTask.builder()
                 .id(uploadId)
-                .fileName("test.csv")
+                .originalFileName("test.csv")
                 .fileSize(10485760L)
                 .fileType(FileType.CSV)
                 .chunkSize(5242880)
@@ -222,7 +222,7 @@ class UploadServiceTest {
         String uploadId = "upload_test123";
         UploadTask task = UploadTask.builder()
                 .id(uploadId)
-                .fileName("test.csv")
+                .originalFileName("test.csv")
                 .uploadedChunks(new java.util.HashSet<>())
                 .build();
 

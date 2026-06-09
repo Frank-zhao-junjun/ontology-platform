@@ -80,11 +80,11 @@ class ImportServiceTest {
                 .createdAt(Instant.now())
                 .build();
         task.setErrors(List.of(
-                com.ontology.platform.domain.entity.upload.ImportTask.ImportError.builder()
-                        .row(10)
-                        .field("name")
-                        .message("Name cannot be empty")
-                        .build()
+                new com.ontology.platform.domain.entity.upload.ImportTask.ImportError(
+                        10,
+                        "name",
+                        "Name cannot be empty",
+                        null)
         ));
 
         when(importTaskRepository.findById(importId)).thenReturn(Optional.of(task));

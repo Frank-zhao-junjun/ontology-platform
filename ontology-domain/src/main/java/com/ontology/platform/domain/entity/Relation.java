@@ -1,6 +1,7 @@
 package com.ontology.platform.domain.entity;
 
 import com.ontology.platform.common.enums.RelationCardinality;
+import com.ontology.platform.domain.vo.RelationProperty;
 import lombok.*;
 
 import java.time.Instant;

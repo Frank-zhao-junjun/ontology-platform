@@ -22,9 +22,10 @@
 
     <properties>
         <!-- Java版本 -->
-        <java.version>17</java.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>25</java.version>
+        <maven.compiler.release>25</maven.compiler.release>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Spring Boot版本 -->
@@ -34,6 +35,8 @@
         <!-- 数据库 -->
         <postgresql.version>42.7.3</postgresql.version>
         <hikaricp.version>5.1.0</hikaricp.version>
+        <flyway.version>10.11.0</flyway.version>
+        <h2.version>2.2.224</h2.version>
 
         <!-- ORM框架 -->
         <mybatis-plus.version>3.5.6</mybatis-plus.version>
@@ -43,7 +46,7 @@
         <lettuce.version>6.3.2.RELEASE</lettuce.version>
 
         <!-- 工具库 -->
-        <lombok.version>1.18.32</lombok.version>
+        <lombok.version>1.18.46</lombok.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <hutool.version>5.8.26</hutool.version>
         <guava.version>33.1.0-jre</guava.version>
@@ -110,6 +113,16 @@
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>${flyway.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-database-postgresql</artifactId>
+                <version>${flyway.version}</version>
             </dependency>
 
             <!-- MyBatis-Plus -->
@@ -219,18 +232,13 @@
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!-- 项目内部通用依赖 -->
-        <dependency>
-            <groupId>com.ontology.platform</groupId>
-            <artifactId>ontology-common</artifactId>
-        </dependency>
-
         <!-- Spring Boot Starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

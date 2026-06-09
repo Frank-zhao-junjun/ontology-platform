@@ -5,6 +5,7 @@ import com.ontology.platform.common.enums.ReturnFormat;
 import com.ontology.platform.common.enums.TraversalDirection;
 import com.ontology.platform.common.exception.ValidationException;
 import com.ontology.platform.domain.service.GraphWhitelistService;
+import com.ontology.platform.domain.vo.traversal.CypherQuery;
 import com.ontology.platform.domain.vo.traversal.GraphTraversalRequest;
 import com.ontology.platform.domain.vo.traversal.TraversalFilter;
 import com.ontology.platform.domain.vo.traversal.TraversalFilterCondition;
@@ -186,7 +187,7 @@ class GraphTraversalDSLParserTest {
                     .maxDepth(10) // 超过最大值5
                     .build();
             
-            GraphTraversalDSLParser.CypherQuery result = parser.parse(request);
+            CypherQuery result = parser.parse(request);
             assertNotNull(result);
             // 验证参数中限制了深度
             assertTrue(result.params().containsKey("maxDepth"));
@@ -200,7 +201,7 @@ class GraphTraversalDSLParserTest {
                     .startObjectId("550e8400-e29b-41d4-a716-446655440000")
                     .build();
             
-            GraphTraversalDSLParser.CypherQuery result = parser.parse(request);
+            CypherQuery result = parser.parse(request);
             assertNotNull(result);
         }
     }
@@ -232,7 +233,7 @@ class GraphTraversalDSLParserTest {
                     .limit(5000) // 超过最大值1000
                     .build();
             
-            GraphTraversalDSLParser.CypherQuery result = parser.parse(request);
+            CypherQuery result = parser.parse(request);
             assertNotNull(result);
             // 验证参数中限制了结果数
             assertTrue(result.params().containsKey("limit"));
@@ -255,7 +256,7 @@ class GraphTraversalDSLParserTest {
                     .limit(100)
                     .build();
             
-            GraphTraversalDSLParser.CypherQuery result = parser.parse(request);
+            CypherQuery result = parser.parse(request);
             
             assertNotNull(result);
             assertNotNull(result.cypher());
@@ -275,7 +276,7 @@ class GraphTraversalDSLParserTest {
                     .startObjectId("550e8400-e29b-41d4-a716-446655440000")
                     .build();
             
-            GraphTraversalDSLParser.CypherQuery result = parser.parse(request);
+            CypherQuery result = parser.parse(request);
             
             assertTrue(result.params().containsKey("startObjectId"));
             assertTrue(result.params().containsKey("startObjectType"));
@@ -291,7 +292,7 @@ class GraphTraversalDSLParserTest {
                     .startObjectId("550e8400-e29b-41d4-a716-446655440000")
                     .build();
             
-            GraphTraversalDSLParser.CypherQuery result = parser.parse(request);
+            CypherQuery result = parser.parse(request);
             
             assertTrue(result.cypher().contains("ORDER BY"));
         }
@@ -342,7 +343,7 @@ class GraphTraversalDSLParserTest {
                     ))
                     .build();
             
-            GraphTraversalDSLParser.CypherQuery result = parser.parse(request);
+            CypherQuery result = parser.parse(request);
             assertNotNull(result);
         }
         
@@ -379,7 +380,7 @@ class GraphTraversalDSLParserTest {
                     .returnFormat(ReturnFormat.GRAPH)
                     .build();
             
-            GraphTraversalDSLParser.CypherQuery result = parser.parse(request);
+            CypherQuery result = parser.parse(request);
             assertNotNull(result);
             assertTrue(result.cypher().contains("path"));
         }
@@ -393,7 +394,7 @@ class GraphTraversalDSLParserTest {
                     .returnFormat(ReturnFormat.TREE)
                     .build();
             
-            GraphTraversalDSLParser.CypherQuery result = parser.parse(request);
+            CypherQuery result = parser.parse(request);
             assertNotNull(result);
         }
         

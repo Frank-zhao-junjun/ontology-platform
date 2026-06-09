@@ -48,7 +48,7 @@ public class GraphQueryServiceImpl implements GraphQueryService {
             validateObjectExists(ontologyId, request.getStartObjectId());
             
             // 3. 解析请求为Cypher查询
-            GraphTraversalDSLParser.CypherQuery cypherQuery = dslParser.parse(request);
+            CypherQuery cypherQuery = dslParser.parse(request);
             
             // 4. 执行查询
             TraversalResult result = ageQueryExecutor.executeTraversal(ontologyId, cypherQuery);

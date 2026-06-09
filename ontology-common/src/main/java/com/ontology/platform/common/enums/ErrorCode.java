@@ -11,6 +11,9 @@ public enum ErrorCode {
     INTERNAL_ERROR(1001, "Internal server error"),
     SERVICE_UNAVAILABLE(1002, "Service unavailable"),
     DATABASE_ERROR(1003, "Database error"),
+    QUERY_TIMEOUT(1004, "Query timeout"),
+    GRAPH_TRAVERSAL_ERROR(1005, "Graph traversal error"),
+    NOT_IMPLEMENTED(1006, "Not implemented"),
 
     // 认证授权错误 (2000-2999)
     UNAUTHORIZED(2001, "Unauthorized"),
@@ -22,6 +25,12 @@ public enum ErrorCode {
     VALIDATION_ERROR(3001, "Validation error"),
     MISSING_PARAMETER(3002, "Missing required parameter"),
     INVALID_PARAMETER(3003, "Invalid parameter format"),
+    INVALID_FILTER(3004, "Invalid filter"),
+    INVALID_FIELD_NAME(3005, "Invalid field name"),
+    INVALID_OPERATOR(3006, "Invalid operator"),
+    INVALID_TRAVERSAL_REQUEST(3007, "Invalid traversal request"),
+    INVALID_OBJECT_TYPE(3008, "Invalid object type"),
+    INVALID_RELATION_TYPE(3009, "Invalid relation type"),
 
     // 业务逻辑错误 (4000-4999)
     ONTOLOGY_NOT_FOUND(4001, "Ontology not found"),

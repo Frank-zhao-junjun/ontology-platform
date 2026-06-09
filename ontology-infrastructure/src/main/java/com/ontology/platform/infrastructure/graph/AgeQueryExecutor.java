@@ -1,6 +1,6 @@
 package com.ontology.platform.infrastructure.graph;
 
-import com.ontology.platform.application.security.GraphTraversalDSLParser;
+import com.ontology.platform.domain.vo.traversal.CypherQuery;
 import com.ontology.platform.domain.vo.traversal.TraversalResult;
 
 import java.util.Map;
@@ -17,7 +17,7 @@ public interface AgeQueryExecutor {
      * @param cypherQuery Cypher查询
      * @return 遍历结果
      */
-    TraversalResult executeTraversal(String ontologyId, GraphTraversalDSLParser.CypherQuery cypherQuery);
+    TraversalResult executeTraversal(String ontologyId, CypherQuery cypherQuery);
     
     /**
      * 执行Cypher查询
