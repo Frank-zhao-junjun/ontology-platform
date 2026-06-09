@@ -7,7 +7,7 @@
 | 层级 | 技术 | 版本 |
 |------|------|------|
 | **后端框架** | Spring Boot | 3.2.x |
-| **Java版本** | Java | 17 |
+| **Java版本** | Java | 25 |
 | **数据库** | PostgreSQL + Apache AGE | 15+ / 1.5.x |
 | **缓存** | Redis | 7.x |
 | **API文档** | SpringDoc OpenAPI | 2.5.x |
@@ -33,7 +33,7 @@ ontology-platform/
 
 ### 前置条件
 
-- JDK 17+
+- JDK 25+
 - Maven 3.8+
 - Docker & Docker Compose（用于本地开发环境）
 

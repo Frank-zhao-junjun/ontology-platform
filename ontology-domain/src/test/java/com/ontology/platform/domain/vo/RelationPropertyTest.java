@@ -93,14 +93,12 @@ class RelationPropertyTest {
         private Object getValidValueForType(PropertyDataType type) {
             return switch (type) {
                 case STRING, TEXT -> "test string";
-                case INTEGER -> 42;
-                case LONG -> 42L;
+                case INTEGER -> 42L;
                 case DECIMAL -> 3.14;
                 case BOOLEAN -> true;
-                case DATE, DATETIME, TIME -> "2024-01-01";
-                case JSON -> "{}";
+                case DATE, DATETIME, UUID, ENUM -> "2024-01-01";
                 case ARRAY -> new Object[]{};
-                case OBJECT -> new Object();
+                case OBJECT, JSON -> new Object();
             };
         }
     }

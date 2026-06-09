@@ -542,7 +542,7 @@ class FilterSecurityValidatorTest {
                 assertDoesNotThrow(() -> {
                     TraversalFilterCondition condition = TraversalFilterCondition.builder()
                             .field("field")
-                            .operator(FilterOperator.like)
+                            .operator(FilterOperator.contains)
                             .value(pattern)
                             .build();
                     

@@ -1,5 +1,6 @@
 package com.ontology.platform.api.controller;
 
+import com.ontology.platform.api.dto.ApiResponse;
 import com.ontology.platform.application.dto.*;
 import com.ontology.platform.application.service.ObjectTypeService;
 import io.swagger.v3.oas.annotations.Operation;

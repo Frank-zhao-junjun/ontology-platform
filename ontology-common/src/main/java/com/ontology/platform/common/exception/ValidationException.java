@@ -11,6 +11,10 @@ public class ValidationException extends BusinessException {
         super(ErrorCode.VALIDATION_ERROR, message);
     }
 
+    public ValidationException(ErrorCode errorCode, String message) {
+        super(errorCode, message);
+    }
+
     public ValidationException(String message, String details) {
         super(ErrorCode.VALIDATION_ERROR, message, details);
     }

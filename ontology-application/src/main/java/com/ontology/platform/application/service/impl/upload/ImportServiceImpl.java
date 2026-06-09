@@ -74,7 +74,7 @@ public class ImportServiceImpl implements ImportService {
             log.error("Import failed: importId={}", importTask.getId(), e);
             importTask.markFailed(e.getMessage());
             importTaskRepository.update(importTask);
-            throw e;
+            throw ImportException.parsingError(request.getUploadId(), e.getMessage());
         }
     }
 

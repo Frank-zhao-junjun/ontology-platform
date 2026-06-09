@@ -10,9 +10,6 @@ spring:
     name: ontology-platform-test
 
   # 测试环境配置
-  profiles:
-    active: test
-
   # H2内存数据库（测试用）
   datasource:
     driver-class-name: org.h2.Driver

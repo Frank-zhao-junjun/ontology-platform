@@ -1,6 +1,7 @@
 package com.ontology.platform.application.dto;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ObjectTypeResponse {

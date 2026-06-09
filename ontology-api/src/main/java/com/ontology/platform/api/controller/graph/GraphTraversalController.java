@@ -168,7 +168,7 @@ public class GraphTraversalController {
         return GraphTraversalResponseDTO.builder()
                 .success(result.isSuccess())
                 .totalCount(result.getTotalCount())
-                .paths(convertPaths(result.getPaths()))
+                .paths(convertResultPaths(result.getPaths()))
                 .nodes(convertNodes(result.getNodes()))
                 .edges(convertEdges(result.getEdges()))
                 .executionTimeMs(result.getExecutionTimeMs())
@@ -176,7 +176,7 @@ public class GraphTraversalController {
                 .build();
     }
     
-    private List<GraphTraversalResponseDTO.PathDTO> convertPaths(List<TraversalResult.PathInfo> paths) {
+    private List<GraphTraversalResponseDTO.PathDTO> convertResultPaths(List<TraversalResult.PathInfo> paths) {
         if (paths == null) return List.of();
         return paths.stream()
                 .map(p -> GraphTraversalResponseDTO.PathDTO.builder()

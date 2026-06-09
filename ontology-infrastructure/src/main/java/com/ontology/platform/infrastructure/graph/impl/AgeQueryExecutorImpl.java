@@ -1,9 +1,9 @@
 package com.ontology.platform.infrastructure.graph.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ontology.platform.application.security.GraphTraversalDSLParser;
 import com.ontology.platform.common.enums.ErrorCode;
 import com.ontology.platform.common.exception.BusinessException;
+import com.ontology.platform.domain.vo.traversal.CypherQuery;
 import com.ontology.platform.domain.vo.traversal.TraversalResult;
 import com.ontology.platform.infrastructure.graph.AgeQueryExecutor;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class AgeQueryExecutorImpl implements AgeQueryExecutor {
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
     
     @Override
-    public TraversalResult executeTraversal(String ontologyId, GraphTraversalDSLParser.CypherQuery cypherQuery) {
+    public TraversalResult executeTraversal(String ontologyId, CypherQuery cypherQuery) {
         log.debug("Executing AGE traversal: ontology={}, cypher={}", ontologyId, cypherQuery.cypher());
         
         Instant startTime = Instant.now();
@@ -73,7 +73,7 @@ public class AgeQueryExecutorImpl implements AgeQueryExecutor {
         }
     }
     
-    private TraversalResult executeWithTimeout(String graphName, GraphTraversalDSLParser.CypherQuery cypherQuery) {
+    private TraversalResult executeWithTimeout(String graphName, CypherQuery cypherQuery) {
         try {
             setCurrentGraph(graphName);
             

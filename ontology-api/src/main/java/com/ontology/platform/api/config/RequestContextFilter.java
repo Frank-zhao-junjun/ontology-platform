@@ -16,7 +16,7 @@ import java.io.IOException;
  * Request Context Filter
  */
 @Slf4j
-@Component
+@Component("apiRequestContextFilter")
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RequestContextFilter implements Filter {
 

@@ -1,5 +1,6 @@
 package com.ontology.platform.domain.entity;
 
+import com.ontology.platform.domain.vo.Property;
 import lombok.*;
 
 import java.time.Instant;

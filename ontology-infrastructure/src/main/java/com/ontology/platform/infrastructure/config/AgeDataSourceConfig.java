@@ -26,6 +26,9 @@ public class AgeDataSourceConfig {
     
     @Value("${spring.datasource.password:postgres}")
     private String password;
+
+    @Value("${spring.datasource.driver-class-name:org.postgresql.Driver}")
+    private String driverClassName;
     
     @Value("${spring.datasource.hikari.maximum-pool-size:20}")
     private int maximumPoolSize;
@@ -54,7 +57,7 @@ public class AgeDataSourceConfig {
         config.setJdbcUrl(jdbcUrl);
         config.setUsername(username);
         config.setPassword(password);
-        config.setDriverClassName("org.postgresql.Driver");
+        config.setDriverClassName(driverClassName);
         
         // 连接池配置
         config.setMaximumPoolSize(maximumPoolSize);

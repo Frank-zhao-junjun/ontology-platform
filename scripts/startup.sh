@@ -37,10 +37,10 @@ check_java() {
     fi
     
     JAVA_VERSION=$(java -version 2>&1 | head -n 1 | cut -d'"' -f2 | cut -d'.' -f1-2)
-    REQUIRED_VERSION="17"
+    REQUIRED_VERSION="25"
     
-    if [ "$(echo -e "17\n$JAVA_VERSION" | sort -V | head -n1)" != "17" ]; then
-        log_error "Java 17 or higher is required. Current version: $JAVA_VERSION"
+    if [ "$(echo -e "$REQUIRED_VERSION\n$JAVA_VERSION" | sort -V | head -n1)" != "$REQUIRED_VERSION" ]; then
+        log_error "Java 25 or higher is required. Current version: $JAVA_VERSION"
         exit 1
     fi
     
