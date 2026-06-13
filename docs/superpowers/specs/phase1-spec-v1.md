@@ -231,8 +231,8 @@ POST /mcp  { jsonrpc:"2.0", method:"tools/call", params:{name,arguments} }
 
 ### 5.3 工具分类
 
-**固定 (3):** resolve_intent, validate_instruction, traverse_graph
-**动态:** {domain}.{actionName}, query_ontology (由 Manifest 编译)
+**固定 (4):** resolve_intent, validate_instruction, traverse_graph, query_ontology
+**动态:** {domain}.{actionName} (由 Manifest 编译)
 
 ### 5.3b IntentCategory 枚举
 
