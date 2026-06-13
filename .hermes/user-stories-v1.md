@@ -1,7 +1,8 @@
-# ontology-platform User Stories v1
+# ontology-platform User Stories v1.1
 
 > 基于 PRD / US-A01 交接包 / Agent对MCP Server的要求 文档综合评估
 > 日期: 2026-06-13
+> 修订: v1.1 — 修正 P08 治理模块前提假设，补充依赖声明，新增 Manifest 导出方向
 
 ---
 
@@ -9,6 +10,7 @@
 
 ### US-P01：一键导入 Manifest
 
+> **前置依赖：** 无（入口故事）
 > As a **平台管理员**,
 > I want **通过 REST API 上传设计台导出的 OntologyManifest YAML/JSON**
 > so that **五层模型的全部内容（语义/行为/事件/治理/EPC）一键落库，无需手动逐条创建**
@@ -26,6 +28,7 @@
 
 ### US-P02：导入校验
 
+> **前置依赖：** US-P01（Manifest 结构已定义）
 > As a **平台管理员**,
 > I want **导入时自动执行 V01~V11 校验，不合法的 Manifest 拒绝导入**
 > so that **损坏的 Manifest 不会污染运行时数据**
@@ -41,6 +44,7 @@
 
 ### US-P03：导入预览与发布
 
+> **前置依赖：** US-P01（draft 已落库）
 > As a **平台管理员**,
 > I want **导入后可预览变更 diff，确认后再 publish**
 > so that **对生产环境变更保留最终控制权**
@@ -51,12 +55,26 @@
 - [ ] 提供发布接口：POST /api/v1/manifests/{draftId}/publish → 正式生效
 - [ ] 已发布的 Manifest 可追溯历史版本
 
+### US-P03b：Manifest 导出（platform → 运行时）
+
+> **前置依赖：** US-P03（已有已发布的 Manifest 版本）
+> As a **平台管理员**,
+> I want **将已发布的 Manifest 导出为 YAML/JSON，用于部署到运行时环境**
+> so that **完成 platform → runtime 的全链路闭环**
+
+**验收标准：**
+- [ ] `GET /api/v1/manifests/{id}/export` 返回完整 Manifest
+- [ ] 支持 YAML 和 JSON 格式（`?format=yaml|json`）
+- [ ] 导出内容与导入内容结构一致，可互相校验
+- [ ] 导出文件名遵循命名规范：`{ontologyName}_{version}.{format}`
+
 ---
 
 ## 二、动力层+事件层 — 补齐四层架构
 
 ### US-P04：行为与状态机
 
+> **前置依赖：** US-P01（行为数据通过 Manifest 导入）
 > As an **AI Agent** (via MCP),
 > I want **查询某个实体有哪些行为、状态机、前置条件**
 > so that **按正确的业务流程操作，不触发无效状态**
@@ -68,6 +86,7 @@
 
 ### US-P05：事件与因果链
 
+> **前置依赖：** US-P01（事件数据通过 Manifest 导入）
 > As an **AI Agent** (via MCP),
 > I want **查询某个领域事件的定义、触发条件和后续动作**
 > so that **理解事件驱动的业务逻辑**
@@ -79,6 +98,7 @@
 
 ### US-P06：EPC 流程
 
+> **前置依赖：** US-P01（EPC 数据通过 Manifest 导入）
 > As an **AI Agent** (via MCP),
 > I want **查询 EPC 流程的完整步骤和条件分支**
 > so that **按预定义编排执行多步骤业务**
@@ -93,6 +113,7 @@
 
 ### US-P07：工具注册与发现（P0）
 
+> **前置依赖：** US-P01（Manifest 导入后才有动态工具签名）
 > As an **AI Agent**,
 > I want **通过 MCP 协议发现所有可用的工具，包含名称、描述、参数 schema、所属业务域**
 > so that **知道当前上下文下我能调用哪些能力**
@@ -107,19 +128,21 @@
 
 ### US-P08：认证与权限隔离（P0）
 
+> **前置依赖：** 新建 governance 模块（token 签发、角色绑定、租户隔离）— 此为基础设施故事，应在 P01 前或并行完成
 > As an **AI Agent**,
 > I want **使用独立 access token 连接 MCP Server，只能看到自己被授权的工具和数据**
 > so that **财务 Agent 不能操作供应链数据，这是企业合规底线**
 
 **验收标准（对齐 Agent 要求文档）：**
-- [ ] 连接层：每个 Agent 使用独立 token（从 platform 治理模块获取）
+- [ ] 连接层：每个 Agent 使用独立 token（从 platform governance 模块签发）
 - [ ] 工具层：同 MCP Server，Agent A 只能看到 domain=a 的工具
 - [ ] 数据层：返回数据按租户/部门隔离
 - [ ] 操作层：写操作需审批流，高风险操作需二次确认
-- [ ] 权限 RBAC 复用 ontology-platform 已有的 governance 模块
+- [ ] governance 模块需新建：包含 token 管理、角色定义、权限绑定、租户隔离四个子模块
 
 ### US-P09：结果结构化（P0）
 
+> **前置依赖：** US-P07（MCP 协议已通）
 > As an **AI Agent** (via MCP),
 > I want **所有工具返回结构化 JSON（含 status/data/metadata），而非自由文本**
 > so that **Agent 门户能可靠解析并渲染为卡片/图表/表格**
@@ -132,6 +155,7 @@
 
 ### US-P10：语义查询（Agent 视角）
 
+> **前置依赖：** US-P07（MCP 协议） + US-P04/P05/P06（行为/事件/EPC 表已建）
 > As an **AI Agent** (via MCP),
 > I want **通过 MCP 查询实体的完整语义定义（属性/关系/类型）**
 > so that **理解业务对象结构，不硬编码字段名**
@@ -144,6 +168,7 @@
 
 ### US-P11：行为与约束查询（Agent 视角）
 
+> **前置依赖：** US-P10（语义查询通道已通） + US-P04（行为/状态机已实现）
 > As an **AI Agent** (via MCP),
 > I want **通过 MCP 查询某实体的行为、状态机、约束、权限、护栏规则**
 > so that **不越权操作，不违反业务规则**
@@ -155,7 +180,7 @@
 
 ---
 
-## 四、Agent 要求文档中的 P1/P2（本次不做，列入路线图）
+## 四、路线图 — P1/P2（本次不做）
 
 | ID | 要求 | 优先级 | 说明 |
 |----|------|--------|------|
