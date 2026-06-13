@@ -2,22 +2,26 @@ package com.ontology.platform.application.service.impl;
 
 import com.ontology.platform.application.dto.*;
 import com.ontology.platform.application.service.OntologyService;
-import com.ontology.platform.common.exception.BusinessException;
+import com.ontology.platform.application.service.graph.GraphQueryService;
 import com.ontology.platform.common.exception.ResourceNotFoundException;
 import com.ontology.platform.common.exception.ValidationException;
-import com.ontology.platform.common.enums.ErrorCode;
 import com.ontology.platform.domain.entity.ObjectType;
 import com.ontology.platform.domain.entity.Ontology;
 import com.ontology.platform.domain.entity.Relation;
 import com.ontology.platform.domain.repository.ObjectTypeRepository;
 import com.ontology.platform.domain.repository.OntologyRepository;
+import com.ontology.platform.domain.repository.PropertyRepository;
+import com.ontology.platform.domain.repository.RelationRepository;
 import com.ontology.platform.domain.vo.Property;
 import com.ontology.platform.domain.vo.RelationProperty;
+import com.ontology.platform.domain.vo.traversal.GraphTraversalRequest;
+import com.ontology.platform.domain.vo.traversal.TraversalResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +37,9 @@ public class OntologyServiceImpl implements OntologyService {
 
     private final OntologyRepository ontologyRepository;
     private final ObjectTypeRepository objectTypeRepository;
+    private final RelationRepository relationRepository;
+    private final PropertyRepository propertyRepository;
+    private final GraphQueryService graphQueryService;
 
     // ==================== 本体管理 ====================
 
@@ -142,17 +149,111 @@ public class OntologyServiceImpl implements OntologyService {
         Ontology ontology = ontologyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Ontology", id));
 
-        // TODO: 实现完整的本体验证逻辑
+        List<ValidationResultResponse.ValidationIssue> issues = new ArrayList<>();
+        int errors = 0;
+        int warnings = 0;
+        int passed = 0;
+
+        // 1. 验证本体名称非空
+        if (ontology.getName() == null || ontology.getName().isBlank()) {
+            issues.add(ValidationResultResponse.ValidationIssue.builder()
+                    .severity("ERROR")
+                    .type("ONTOLOGY_NAME_EMPTY")
+                    .entityType("Ontology")
+                    .entityId(ontology.getId())
+                    .message("本体名称不能为空")
+                    .build());
+            errors++;
+        } else {
+            passed++;
+        }
+
+        // 2. 验证对象类型
+        List<ObjectType> objectTypes = objectTypeRepository.findByOntologyId(id);
+        if (objectTypes.isEmpty()) {
+            issues.add(ValidationResultResponse.ValidationIssue.builder()
+                    .severity("WARNING")
+                    .type("NO_OBJECT_TYPES")
+                    .entityType("Ontology")
+                    .entityId(ontology.getId())
+                    .message("本体未定义任何对象类型")
+                    .suggestion("请至少创建一个对象类型")
+                    .build());
+            warnings++;
+        } else {
+            passed++;
+        }
+
+        // 3. 验证每个对象类型是否有属性和主键
+        for (ObjectType ot : objectTypes) {
+            if (ot.getProperties().isEmpty()) {
+                issues.add(ValidationResultResponse.ValidationIssue.builder()
+                        .severity("WARNING")
+                        .type("OBJECT_TYPE_NO_PROPERTIES")
+                        .entityType("ObjectType")
+                        .entityId(ot.getId())
+                        .entityName(ot.getName())
+                        .message(String.format("对象类型 '%s' 未定义任何属性", ot.getName()))
+                        .suggestion("请为该对象类型添加属性定义")
+                        .build());
+                warnings++;
+            } else {
+                passed++;
+            }
+
+            // 验证主键属性是否存在
+            if (ot.getPrimaryKey() != null && !ot.getPrimaryKey().isBlank()) {
+                boolean pkExists = ot.getProperties().stream()
+                        .anyMatch(p -> p.getName().equals(ot.getPrimaryKey()));
+                if (!pkExists) {
+                    issues.add(ValidationResultResponse.ValidationIssue.builder()
+                            .severity("ERROR")
+                            .type("PRIMARY_KEY_NOT_FOUND")
+                            .entityType("ObjectType")
+                            .entityId(ot.getId())
+                            .entityName(ot.getName())
+                            .message(String.format("对象类型 '%s' 的主键属性 '%s' 不存在",
+                                    ot.getName(), ot.getPrimaryKey()))
+                            .suggestion("请添加名为 '" + ot.getPrimaryKey() + "' 的属性，或修改主键设置")
+                            .build());
+                    errors++;
+                } else {
+                    passed++;
+                }
+            }
+        }
+
+        // 4. 验证关系引用的对象类型是否存在
+        List<Relation> relations = relationRepository.findByOntologyId(id);
+        for (Relation rel : relations) {
+            boolean sourceExists = objectTypes.stream().anyMatch(ot -> ot.getId().equals(rel.getSourceTypeId()));
+            boolean targetExists = objectTypes.stream().anyMatch(ot -> ot.getId().equals(rel.getTargetTypeId()));
+            if (!sourceExists || !targetExists) {
+                issues.add(ValidationResultResponse.ValidationIssue.builder()
+                        .severity("ERROR")
+                        .type("RELATION_INVALID_REFERENCE")
+                        .entityType("Relation")
+                        .entityId(rel.getId())
+                        .entityName(rel.getName())
+                        .message(String.format("关系 '%s' 引用了不存在的对象类型", rel.getName()))
+                        .suggestion("请检查关系的源对象类型和目标对象类型是否正确")
+                        .build());
+                errors++;
+            } else {
+                passed++;
+            }
+        }
+
         ValidationResultResponse.ValidationSummary summary = ValidationResultResponse.ValidationSummary.builder()
-                .errors(0)
-                .warnings(0)
-                .passed(1)
+                .errors(errors)
+                .warnings(warnings)
+                .passed(passed)
                 .build();
 
         return ValidationResultResponse.builder()
-                .valid(true)
+                .valid(errors == 0)
                 .summary(summary)
-                .issues(List.of())
+                .issues(issues)
                 .build();
     }
 
@@ -277,16 +378,62 @@ public class OntologyServiceImpl implements OntologyService {
     public PropertyResponse updateProperty(String id, UpdatePropertyRequest request) {
         log.info("Updating property: id={}", id);
 
-        // TODO: 实现属性更新逻辑
-        throw new BusinessException(ErrorCode.NOT_IMPLEMENTED, "Property update not implemented");
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Property", id));
+
+        // 应用更新字段
+        if (request.getDisplayName() != null) {
+            property.setDisplayName(request.getDisplayName());
+        }
+        if (request.getDescription() != null) {
+            property.setDescription(request.getDescription());
+        }
+        if (request.getDataType() != null) {
+            property.setDataType(request.getDataType());
+        }
+        if (request.getIsRequired() != null) {
+            property.setRequired(request.getIsRequired());
+        }
+        if (request.getIsUnique() != null) {
+            property.setUnique(request.getIsUnique());
+        }
+        if (request.getIsSearchable() != null) {
+            property.setSearchable(request.getIsSearchable());
+        }
+        if (request.getIsSortable() != null) {
+            property.setSortable(request.getIsSortable());
+        }
+        if (request.getDefaultValue() != null) {
+            property.setDefaultValue(request.getDefaultValue());
+        }
+        if (request.getSortOrder() != null) {
+            property.setSortOrder(request.getSortOrder());
+        }
+
+        property = propertyRepository.update(property);
+        log.info("Property updated: id={}", id);
+
+        return toPropertyResponse(property);
     }
 
     @Override
     @Transactional
     public void deleteProperty(String id) {
         log.info("Deleting property: id={}", id);
-        // TODO: 实现属性删除逻辑
-        throw new BusinessException(ErrorCode.NOT_IMPLEMENTED, "Property delete not implemented");
+
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Property", id));
+
+        // 从所属对象类型中移除该属性
+        ObjectType objectType = objectTypeRepository.findById(property.getObjectTypeId())
+                .orElse(null);
+        if (objectType != null) {
+            objectType.removeProperty(id);
+            objectTypeRepository.update(objectType);
+        }
+
+        propertyRepository.deleteById(id);
+        log.info("Property deleted: id={}", id);
     }
 
     // ==================== 关系管理 ====================
@@ -329,7 +476,8 @@ public class OntologyServiceImpl implements OntologyService {
             }
         }
 
-        // TODO: 保存关系
+        // 保存关系
+        relation = relationRepository.save(relation);
         log.info("Relation created: id={}", relation.getId());
 
         return toRelationResponse(relation);
@@ -339,14 +487,66 @@ public class OntologyServiceImpl implements OntologyService {
     @Transactional
     public RelationResponse updateRelation(String id, UpdateRelationRequest request) {
         log.info("Updating relation: id={}", id);
-        throw new BusinessException(ErrorCode.NOT_IMPLEMENTED, "Relation update not implemented");
+
+        Relation relation = relationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Relation", id));
+
+        // 更新基本字段
+        if (request.getDisplayName() != null) {
+            relation.setDisplayName(request.getDisplayName());
+        }
+        if (request.getDescription() != null) {
+            relation.setDescription(request.getDescription());
+        }
+
+        // 更新反向关系信息
+        if (request.getReverseName() != null) {
+            relation.setReverse(request.getReverseName(), request.getReverseDisplayName());
+        }
+
+        // 更新关系属性
+        if (request.getProperties() != null) {
+            relation.getProperties().clear();
+            for (var propDto : request.getProperties()) {
+                RelationProperty prop = RelationProperty.create(
+                        propDto.getName(),
+                        propDto.getDisplayName(),
+                        propDto.getDataType(),
+                        propDto.isRequired()
+                );
+                relation.addProperty(prop);
+            }
+        }
+
+        relation = relationRepository.update(relation);
+        log.info("Relation updated: id={}", id);
+
+        return toRelationResponse(relation);
     }
 
     @Override
     @Transactional
     public void deleteRelation(String id) {
         log.info("Deleting relation: id={}", id);
-        throw new BusinessException(ErrorCode.NOT_IMPLEMENTED, "Relation delete not implemented");
+
+        Relation relation = relationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Relation", id));
+
+        // 从源对象类型和目标对象类型中移除关系引用
+        ObjectType sourceType = objectTypeRepository.findById(relation.getSourceTypeId()).orElse(null);
+        if (sourceType != null) {
+            sourceType.removeRelation(id);
+            objectTypeRepository.update(sourceType);
+        }
+
+        ObjectType targetType = objectTypeRepository.findById(relation.getTargetTypeId()).orElse(null);
+        if (targetType != null) {
+            targetType.removeRelation(id);
+            objectTypeRepository.update(targetType);
+        }
+
+        relationRepository.deleteById(id);
+        log.info("Relation deleted: id={}", id);
     }
 
     // ==================== 查询 ====================
@@ -356,8 +556,53 @@ public class OntologyServiceImpl implements OntologyService {
         log.info("Executing graph traversal: ontologyId={}, startType={}, startId={}",
                 request.getOntologyId(), request.getStartObjectType(), request.getStartObjectId());
 
-        // TODO: 实现图遍历查询
-        throw new BusinessException(ErrorCode.NOT_IMPLEMENTED, "Graph traversal not implemented");
+        // 构建领域层图遍历请求
+        GraphTraversalRequest traversalRequest = GraphTraversalRequest.builder()
+                .startObjectType(request.getStartObjectType())
+                .startObjectId(request.getStartObjectId())
+                .maxDepth(request.getMaxDepth() != null ? request.getMaxDepth() : 3)
+                .limit(request.getLimit() != null ? request.getLimit() : 100)
+                .build();
+
+        // 委托给图查询服务执行
+        TraversalResult result = graphQueryService.traverse(request.getOntologyId(), traversalRequest);
+
+        // 将遍历结果转换为API响应DTO
+        List<GraphQueryResponse.Node> nodes = new ArrayList<>();
+        List<GraphQueryResponse.Edge> edges = new ArrayList<>();
+
+        if (result.getNodes() != null) {
+            for (var node : result.getNodes()) {
+                nodes.add(GraphQueryResponse.Node.builder()
+                        .id(node.getObjectId())
+                        .type(node.getObjectType())
+                        .data(node.getProperties())
+                        .build());
+            }
+        }
+
+        if (result.getEdges() != null) {
+            for (var edge : result.getEdges()) {
+                edges.add(GraphQueryResponse.Edge.builder()
+                        .source(edge.getSourceId())
+                        .target(edge.getTargetId())
+                        .relation(edge.getRelationType())
+                        .properties(edge.getProperties())
+                        .build());
+            }
+        }
+
+        GraphQueryResponse.GraphMetadata metadata = GraphQueryResponse.GraphMetadata.builder()
+                .totalNodes(nodes.size())
+                .totalEdges(edges.size())
+                .queryTimeMs(result.getExecutionTimeMs())
+                .build();
+
+        return GraphQueryResponse.builder()
+                .nodes(nodes)
+                .edges(edges)
+                .metadata(metadata)
+                .build();
     }
 
     @Override
@@ -365,8 +610,33 @@ public class OntologyServiceImpl implements OntologyService {
         log.info("Querying objects: ontologyId={}, objectType={}",
                 request.getOntologyId(), request.getObjectType());
 
-        // TODO: 实现对象列表查询
-        throw new BusinessException(ErrorCode.NOT_IMPLEMENTED, "Object query not implemented");
+        // 验证本体存在
+        ontologyRepository.findById(request.getOntologyId())
+                .orElseThrow(() -> new ResourceNotFoundException("Ontology", request.getOntologyId()));
+
+        // 验证对象类型存在
+        List<ObjectType> objectTypes = objectTypeRepository.findByOntologyId(request.getOntologyId());
+        boolean typeExists = objectTypes.stream()
+                .anyMatch(ot -> ot.getName().equals(request.getObjectType()));
+        if (!typeExists) {
+            throw new ResourceNotFoundException("ObjectType", request.getObjectType());
+        }
+
+        // 当前返回空结果集，待对象实例存储层（PostgreSQL + AGE）就绪后接入实际数据
+        int offset = request.getOffset() != null ? request.getOffset() : 0;
+        int limit = request.getLimit() != null ? request.getLimit() : 20;
+
+        ObjectListResponse.PaginationMeta meta = ObjectListResponse.PaginationMeta.builder()
+                .total(0)
+                .offset(offset)
+                .limit(limit)
+                .hasMore(false)
+                .build();
+
+        return ObjectListResponse.builder()
+                .items(new ArrayList<>())
+                .meta(meta)
+                .build();
     }
 
     // ==================== 转换方法 ====================

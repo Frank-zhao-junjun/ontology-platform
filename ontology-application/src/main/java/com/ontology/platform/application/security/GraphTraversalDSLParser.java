@@ -3,6 +3,7 @@ package com.ontology.platform.application.security;
 import com.ontology.platform.common.enums.ErrorCode;
 import com.ontology.platform.common.exception.ValidationException;
 import com.ontology.platform.domain.service.GraphWhitelistService;
+import com.ontology.platform.domain.vo.traversal.CypherQuery;
 import com.ontology.platform.domain.vo.traversal.GraphTraversalRequest;
 import com.ontology.platform.domain.vo.traversal.TraversalFilter;
 import com.ontology.platform.domain.vo.traversal.TraversalFilterCondition;
@@ -61,7 +62,7 @@ public class GraphTraversalDSLParser {
      * @param request 图遍历请求
      * @return Cypher查询和参数
      */
-    public CypherQuery parse(GraphTraversalRequest request) {
+    public com.ontology.platform.domain.vo.traversal.CypherQuery parse(GraphTraversalRequest request) {
         log.debug("Parsing graph traversal request: startObjectType={}, startObjectId={}", 
             request.getStartObjectType(), request.getStartObjectId());
         
@@ -167,7 +168,7 @@ public class GraphTraversalDSLParser {
     /**
      * 构建参数化Cypher查询
      */
-    private CypherQuery buildCypher(
+    private com.ontology.platform.domain.vo.traversal.CypherQuery buildCypher(
             GraphTraversalRequest request,
             List<TraversalPath> validatedPath,
             int depth,
@@ -208,7 +209,7 @@ public class GraphTraversalDSLParser {
         log.debug("Generated Cypher: {}", cypher);
         log.debug("Parameters: {}", params);
         
-        return new CypherQuery(cypher.toString(), params);
+        return new com.ontology.platform.domain.vo.traversal.CypherQuery(cypher.toString(), params);
     }
     
     /**

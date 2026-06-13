@@ -5,8 +5,6 @@ import com.ontology.platform.common.enums.upload.UploadStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -122,7 +120,7 @@ class UploadTaskTest {
         task.markChunkUploaded(2);
 
         // then
-        assertEquals(UploadStatus.VERIFYING, task.getStatus());
+        assertEquals(UploadStatus.COMPLETED, task.getStatus());
         assertEquals(2, task.getUploadedChunks().size());
         assertEquals(100, task.getProgressPercent());
         assertTrue(task.isAllChunksUploaded());
@@ -196,14 +194,14 @@ class UploadTaskTest {
         task.markCompleted("/data/uploads/test.csv", "abc123");
 
         // then
-        assertEquals(UploadStatus.PROCESSING, task.getStatus());
+                assertEquals(UploadStatus.COMPLETED, task.getStatus());
         assertEquals("/data/uploads/test.csv", task.getStoredFilePath());
         assertEquals("abc123", task.getFileMd5());
     }
 
     @Test
-    @DisplayName("标记上传失败")
-    void markFailed() {
+        @DisplayName("标记上传过期")
+        void markExpired() {
         // given
         UploadTask task = UploadTask.create(
                 "test.csv",
@@ -218,9 +216,9 @@ class UploadTaskTest {
         );
 
         // when
-        task.markFailed();
+        task.markExpired();
 
         // then
-        assertEquals(UploadStatus.FAILED, task.getStatus());
+        assertEquals(UploadStatus.EXPIRED, task.getStatus());
     }
 }

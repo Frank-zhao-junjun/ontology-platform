@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 创建属性请求DTO
@@ -44,4 +46,6 @@ public class CreatePropertyRequest {
     private boolean isComputed;
     private Object defaultValue;
     private int sortOrder;
+    @Builder.Default
+    private List<ConstraintDefinition> constraints = new ArrayList<>();
 }

@@ -2,11 +2,16 @@ package com.ontology.platform.infrastructure.repository;
 
 import com.ontology.platform.common.enums.OntologyStatus;
 import com.ontology.platform.domain.entity.Ontology;
+import com.ontology.platform.infrastructure.converter.OntologyConverter;
+import com.ontology.platform.infrastructure.persistence.OntologyPO;
+import com.ontology.platform.infrastructure.persistence.OntologyPOMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,6 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class OntologyRepositoryImplTest {
 
     private OntologyRepositoryImpl repository;
+    private OntologyPOMapper ontologyPOMapper;
+    private OntologyConverter ontologyConverter;
 
     private static final String TEST_TENANT_ID = "default";
     private static final String TEST_ONTOLOGY_ID = UUID.randomUUID().toString();
@@ -30,7 +37,21 @@ class OntologyRepositoryImplTest {
 
     @BeforeEach
     void setUp() {
-        repository = new OntologyRepositoryImpl();
+        ontologyPOMapper = Mockito.mock(OntologyPOMapper.class);
+        ontologyConverter = Mockito.mock(OntologyConverter.class);
+        repository = new OntologyRepositoryImpl(ontologyPOMapper, ontologyConverter);
+
+        Mockito.when(ontologyConverter.toEntity(Mockito.any())).thenReturn(null);
+        Mockito.when(ontologyConverter.toEntityList(Mockito.any())).thenReturn(Collections.emptyList());
+        Mockito.when(ontologyConverter.toPO(Mockito.any())).thenReturn(new OntologyPO());
+        Mockito.when(ontologyPOMapper.selectByTenantIdWithPage(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt()))
+            .thenReturn(Collections.emptyList());
+        Mockito.when(ontologyPOMapper.selectByTenantIdAndStatus(Mockito.anyString(), Mockito.anyString()))
+            .thenReturn(Collections.emptyList());
+        Mockito.when(ontologyPOMapper.countByTenantIdAndName(Mockito.anyString(), Mockito.anyString())).thenReturn(0);
+        Mockito.when(ontologyPOMapper.countByTenantIdAndNameExcludingId(Mockito.anyString(), Mockito.anyString(), Mockito.anyString()))
+            .thenReturn(0);
+        Mockito.when(ontologyPOMapper.countByTenantId(Mockito.anyString())).thenReturn(0L);
     }
 
     @Nested

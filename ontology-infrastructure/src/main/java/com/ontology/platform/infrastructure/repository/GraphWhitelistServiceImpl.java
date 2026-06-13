@@ -1,7 +1,9 @@
 package com.ontology.platform.infrastructure.repository;
 
 import com.ontology.platform.domain.entity.ObjectType;
+import com.ontology.platform.domain.entity.Relation;
 import com.ontology.platform.domain.repository.ObjectTypeRepository;
+import com.ontology.platform.domain.repository.RelationRepository;
 import com.ontology.platform.domain.service.GraphWhitelistService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class GraphWhitelistServiceImpl implements GraphWhitelistService {
     
     private final ObjectTypeRepository objectTypeRepository;
+    private final RelationRepository relationRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     
     private static final String RELATION_TYPES_KEY = "ontology:whitelist:relations:%s";
@@ -99,7 +102,10 @@ public class GraphWhitelistServiceImpl implements GraphWhitelistService {
         
         Set<String> relationTypes = new HashSet<>();
         try {
-            // TODO: 从数据库获取关系类型
+            List<Relation> relations = relationRepository.findByOntologyId(ontologyId);
+            relationTypes = new HashSet<>(relations.stream()
+                    .map(Relation::getName)
+                    .toList());
         } catch (Exception e) {
             log.error("Failed to load relation types from DB: {}", e.getMessage());
         }

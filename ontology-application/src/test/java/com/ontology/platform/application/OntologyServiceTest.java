@@ -437,10 +437,10 @@ class OntologyServiceTest {
                     .name("email")
                     .displayName("邮箱")
                     .dataType(PropertyDataType.STRING)
-                    .required(false)
-                    .unique(false)
-                    .searchable(true)
-                    .sortable(true)
+                    .isRequired(false)
+                    .isUnique(false)
+                    .isSearchable(true)
+                    .isSortable(true)
                     .build();
 
             when(objectTypeRepository.findById(TEST_OBJECT_TYPE_ID))

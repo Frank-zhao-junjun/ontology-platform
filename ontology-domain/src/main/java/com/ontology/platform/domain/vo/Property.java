@@ -31,6 +31,10 @@ public class Property {
     private boolean isSearchable;
     private boolean isSortable;
     private Object defaultValue;
+    @Builder.Default
+    private List<PropertyConstraint> constraints = new ArrayList<>();
+    @Builder.Default
+    private List<Property> nestedProperties = new ArrayList<>();
     private int sortOrder;
 
     @Builder.Default
@@ -92,18 +96,26 @@ public class Property {
     /**
      * 更新属性信息
      */
-    public void update(String displayName, String description, boolean isRequired) {
+    public Property update(String displayName, String description, boolean isRequired) {
         this.displayName = displayName;
         this.description = description;
         this.isRequired = isRequired;
         this.updatedAt = Instant.now();
+        return this;
     }
 
     /**
      * 更新排序顺序
      */
-    public void updateSortOrder(int sortOrder) {
+    public Property updateSortOrder(int sortOrder) {
         this.sortOrder = sortOrder;
         this.updatedAt = Instant.now();
+        return this;
+    }
+
+    public Property addConstraint(PropertyConstraint constraint) {
+        this.constraints.add(constraint);
+        this.updatedAt = Instant.now();
+        return this;
     }
 }
