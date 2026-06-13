@@ -290,10 +290,13 @@ Bearer token -> JWT verify -> agent_role -> role_permission
 
 | Phase | 内容 |
 |-------|------|
-| 1a | Flyway V2-V6 + Governance + Manifest import/export |
+| 0 | 基础就绪 — Flyway V2-V6 DDL + Governance 仓库持久化 (bcrypt hash) |
+| 1a | Governance Token API + Manifest Validator V01-V11 + Import/Export |
 | 1b | Domain extensions (action, event, epc API) |
 | 1c | MCP Server (Express + MCP SDK + tools + auth) |
-| 1d | End-to-end integration |
+| 1d | End-to-end integration (含 Agent Token → MCP tools/call 全链路) |
+
+> **路线图**: Phase 0 完成 → v1.1 Review → v1.1 Final（含 Phase 0 修复）→ 实施 Phase 1a-1d → **v2.0（Phase 1 全部实施完毕）** |
 
 ---
 
@@ -301,13 +304,50 @@ Bearer token -> JWT verify -> agent_role -> role_permission
 
 | 层 | 框架 | 目标 |
 |----|------|------|
-| Domain | JUnit 5 | Business rules |
-| Controller | MockMvc | Contract testing |
-| Repository | Testcontainers | Real PG |
-| MCP tools | Vitest | Tool logic + RBAC |
-| MCP<->Platform | Supertest + nock | Integration |
+| Domain (Unit Test) | JUnit 5 | Business rules — mock 所有外部依赖 |
+| Controller (Unit Test) | MockMvc | Contract testing — mock Service 层 |
+| Repository (Unit Test) | JUnit 5 + Mock | Mock at Mapper boundary, 不启动 DB |
+| Repository (Integration Test) | Testcontainers | Real PG + AGE — 验证 SQL/图查询 |
+| MCP tools (Unit Test) | Vitest | Tool logic + RBAC — mock platform-client |
+| MCP<->Platform (Integration Test) | Supertest + nock | End-to-end HTTP 集成 |
 
 每 US 最低: 2 unit + 1 integration
+
+---
+
+## 9. 验证清单
+
+### 9.1 Phase 0 冒烟（无 MCP 依赖）
+
+- [ ] Flyway V2~V6 全部 applied
+- [ ] Governance Token 签发 → bcrypt hash 持久化 → 吊销
+- [ ] Manifest Validator V01~V11 单元测试全部通过
+- [ ] Manifest Import → draft 创建 → 校验失败拒绝
+
+### 9.2 Phase 1 冒烟（含 MCP 全链路）
+
+- [ ] 签发 Agent Token → MCP tools/list 返回裁剪后工具列表
+- [ ] MCP tools/call resolve_intent → 返回 IntentCategory
+- [ ] RBAC 过滤：不同 token 只能看到 domain 内工具
+- [ ] 高风险操作触发 approval_request
+- [ ] 导入 manufacturing-manifest.yaml → preview → publish → export round-trip 一致
+
+### 9.3 CI 门禁（Phase 0 全部完成 → CI 通过 → 合并升版 v1.1）
+
+- [ ] `mvn test` 全部通过（含 Repository 集成测试 Testcontainers）
+- [ ] `npm test` (vitest) 全部通过
+- [ ] TypeScript 编译零错误
+
+---
+
+## 10. 兼容性说明
+
+| 项 | 说明 |
+|----|------|
+| V1 基础表 (ontology, object_type, 等) | 不变，已有 MyBatis-Plus Mapper |
+| V6 agent_token.token_hash | `VARCHAR(500)` — bcrypt 60 字符输出，500 绰绰有余，无需扩列 |
+| object_type / ontology Repository | 已是 MyBatis-Plus 实现，非待迁移项 |
+| 图查询降级 | AGE 不可用时抛 `BusinessException("GRAPH_UNAVAILABLE", 503)`，不阻塞其他 API |
 
 ---
 
