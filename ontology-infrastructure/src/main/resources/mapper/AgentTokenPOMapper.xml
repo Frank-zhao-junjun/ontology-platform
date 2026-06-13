@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ontology.platform.infrastructure.persistence.AgentTokenPOMapper">
+
+    <resultMap id="BaseResultMap" type="com.ontology.platform.infrastructure.persistence.AgentTokenPO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="agent_id" property="agentId" jdbcType="VARCHAR"/>
+        <result column="token_hash" property="tokenHash" jdbcType="VARCHAR"/>
+        <result column="tenant_id" property="tenantId" jdbcType="VARCHAR"/>
+        <result column="display_name" property="displayName" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="issued_at" property="issuedAt" jdbcType="TIMESTAMP"/>
+        <result column="expires_at" property="expiresAt" jdbcType="TIMESTAMP"/>
+        <result column="last_used_at" property="lastUsedAt" jdbcType="TIMESTAMP"/>
+        <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, agent_id, token_hash, tenant_id, display_name, status,
+        issued_at, expires_at, last_used_at, created_by, created_at
+    </sql>
+
+    <select id="selectByAgentId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM agent_token
+        WHERE agent_id = #{agentId}
+    </select>
+
+    <select id="selectByTenantId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM agent_token
+        WHERE tenant_id = #{tenantId}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="countByAgentId" resultType="long">
+        SELECT COUNT(*) FROM agent_token WHERE agent_id = #{agentId}
+    </select>
+
+</mapper>

@@ -161,6 +161,7 @@ ontology:
     max-nodes: 1000
     max-path-segments: 10
     timeout-ms: 5000
+    degraded: false
   # 缓存配置
   cache:
     ontology-ttl: 3600

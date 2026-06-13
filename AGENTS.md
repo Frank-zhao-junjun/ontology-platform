@@ -71,6 +71,7 @@ API 文档地址：启动后访问 `/swagger-ui.html`
 ## 用户偏好与长期约束
 
 - 遵循 DDD 分层架构：domain 层不依赖 infrastructure 层
+- **Codex 工具约束：** 同一文件/命令只读一次；`Get-Content` 用 `-Raw -Encoding UTF8`；拿到 tool 输出后立即总结或继续，禁止重复执行相同命令
 - Repository 接口定义在 domain 层，实现在 infrastructure 层
 - 关系仓储（RelationRepository）当前使用内存存储（ConcurrentHashMap），待 PostgreSQL + AGE 就绪后替换
 - 属性仓储（PropertyRepository）已接入 MyBatis-Plus

@@ -8,6 +8,7 @@ import com.ontology.platform.domain.entity.governance.*;
 import com.ontology.platform.domain.repository.governance.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,11 @@ public class GovernanceServiceImpl implements GovernanceService {
     private final RolePermissionRepository permissionRepository;
     private final ApprovalRepository approvalRepository;
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
+    /**
+     * BCrypt 密码编码器，用于 Agent Token 哈希（不可逆，单向）
+     */
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     @Transactional
@@ -167,14 +173,21 @@ public class GovernanceServiceImpl implements GovernanceService {
 
     // ==================== Internal ====================
 
+    /**
+     * 使用 BCrypt 对原始 Token 进行单向哈希。
+     * BCrypt 自带 salt，相同输入的多次调用结果不同，验证须使用 {@link #matchesToken}。
+     */
     private String hashToken(String rawToken) {
-        // TODO: Phase 2 use bcrypt
-        try {
-            return Base64.getEncoder().encodeToString(
-                java.security.MessageDigest.getInstance("SHA-256").digest(rawToken.getBytes())
-            );
-        } catch (java.security.NoSuchAlgorithmException e) {
-            throw new RuntimeException("SHA-256 not available", e);
+        return passwordEncoder.encode(rawToken);
+    }
+
+    /**
+     * 校验原始 Token 与已存储的 BCrypt 哈希是否匹配。
+     */
+    public boolean matchesToken(String rawToken, String storedHash) {
+        if (rawToken == null || storedHash == null) {
+            return false;
         }
+        return passwordEncoder.matches(rawToken, storedHash);
     }
 }

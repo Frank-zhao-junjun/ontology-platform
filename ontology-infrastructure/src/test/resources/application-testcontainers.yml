@@ -1,0 +1,60 @@
+# Testcontainers 集成测试配置
+# 通过 @DynamicPropertySource 注入 postgres.host / postgres.port / postgres.db /
+# postgres.username / postgres.password 后，本配置即可指向真实启动的 PG 容器。
+# 默认值仅在 IDE 误跑该 profile 时给出占位，避免启动失败。
+
+spring:
+  application:
+    name: ontology-platform-it
+
+  # DataSource：占位由 PostgresTestContainer 在运行期注入
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${postgres.host:localhost}:${postgres.port:5432}/${postgres.db:ontology_it}?currentSchema=public&useUnicode=true&characterEncoding=UTF-8
+    username: ${postgres.username:postgres}
+    password: ${postgres.password:postgres}
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      pool-name: OntologyIT-HikariCP
+
+  # JPA：MyBatis-Plus 为主，禁用 Hibernate DDL
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    open-in-view: false
+
+  # Flyway：集成测试自管 schema（由 PostgresTestContainer 加载 schema.sql），关闭 Flyway
+  flyway:
+    enabled: false
+
+  # Redis：集成测试只关注 PG/AGE，禁用 Redis 自动配置
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+
+# MyBatis-Plus：复用主模块的 mapper xml 位置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    db-config:
+      id-type: assign_uuid
+
+# 关闭 Apache AGE 降级开关，让缺图扩展时也能继续跑非图相关用例
+ontology:
+  graph:
+    degraded: true
+
+logging:
+  level:
+    root: WARN
+    com.ontology.platform: INFO
+    org.springframework.jdbc.core: INFO
+    org.testcontainers: INFO
+    com.github.dockerjava: WARN

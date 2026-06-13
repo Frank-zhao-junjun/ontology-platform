@@ -67,4 +67,10 @@ public class GraphProperties {
      * 查询缓存TTL（分钟）
      */
     private int queryCacheTtlMinutes = 30;
+
+    /**
+     * 是否启用降级模式
+     * <p>开启后图相关调用将记录警告但不会抛错，便于在无 Apache AGE 环境下继续运行业务功能。</p>
+     */
+    private boolean degraded = false;
 }

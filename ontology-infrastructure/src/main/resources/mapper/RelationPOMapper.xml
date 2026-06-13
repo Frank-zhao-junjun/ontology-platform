@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ontology.platform.infrastructure.persistence.RelationPOMapper">
+
+    <resultMap id="BaseResultMap" type="com.ontology.platform.infrastructure.persistence.RelationPO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="ontology_id" property="ontologyId" jdbcType="VARCHAR"/>
+        <result column="source_type_id" property="sourceTypeId" jdbcType="VARCHAR"/>
+        <result column="target_type_id" property="targetTypeId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="display_name" property="displayName" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="cardinality" property="cardinality" jdbcType="VARCHAR"/>
+        <result column="reverse_name" property="reverseName" jdbcType="VARCHAR"/>
+        <result column="reverse_display_name" property="reverseDisplayName" jdbcType="VARCHAR"/>
+        <result column="extended_data" property="extendedData" jdbcType="VARCHAR"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, ontology_id, source_type_id, target_type_id, name, display_name, description,
+        cardinality, reverse_name, reverse_display_name, extended_data, created_at, updated_at
+    </sql>
+
+    <select id="selectByOntologyId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM relation_definition
+        WHERE ontology_id = #{ontologyId}
+        ORDER BY created_at ASC
+    </select>
+
+    <select id="selectByOntologyIdAndName" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM relation_definition
+        WHERE ontology_id = #{ontologyId} AND name = #{name}
+    </select>
+
+    <select id="selectBySourceTypeId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM relation_definition
+        WHERE source_type_id = #{sourceTypeId}
+    </select>
+
+    <select id="selectByTargetTypeId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM relation_definition
+        WHERE target_type_id = #{targetTypeId}
+    </select>
+
+    <select id="selectBySourceTypeIdOrTargetTypeId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM relation_definition
+        WHERE source_type_id = #{sourceTypeId} OR target_type_id = #{targetTypeId}
+    </select>
+
+    <select id="countByOntologyIdAndName" resultType="int">
+        SELECT COUNT(*) FROM relation_definition
+        WHERE ontology_id = #{ontologyId} AND name = #{name}
+    </select>
+
+    <select id="countByOntologyIdAndNameExcludingId" resultType="int">
+        SELECT COUNT(*) FROM relation_definition
+        WHERE ontology_id = #{ontologyId} AND name = #{name} AND id != #{excludeId}
+    </select>
+
+    <select id="countByOntologyId" resultType="long">
+        SELECT COUNT(*) FROM relation_definition
+        WHERE ontology_id = #{ontologyId}
+    </select>
+
+</mapper>
