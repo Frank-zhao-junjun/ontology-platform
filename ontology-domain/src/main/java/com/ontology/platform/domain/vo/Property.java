@@ -34,14 +34,8 @@ public class Property {
     @Builder.Default
     private List<PropertyConstraint> constraints = new ArrayList<>();
     @Builder.Default
-    private List<Property> nestedProperties = new ArrayList<>();
-    private int sortOrder;
-
-    @Builder.Default
-    private List<PropertyConstraint> constraints = new ArrayList<>();
-
-    @Builder.Default
     private List<Object> nestedProperties = new ArrayList<>();
+    private int sortOrder;
 
     private Instant createdAt;
     private Instant updatedAt;

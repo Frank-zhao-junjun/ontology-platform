@@ -11,8 +11,6 @@ public enum ErrorCode {
     INTERNAL_ERROR(1001, "Internal server error"),
     SERVICE_UNAVAILABLE(1002, "Service unavailable"),
     DATABASE_ERROR(1003, "Database error"),
-    QUERY_TIMEOUT(1004, "Query timeout"),
-    GRAPH_TRAVERSAL_ERROR(1005, "Graph traversal error"),
     NOT_IMPLEMENTED(1006, "Not implemented"),
 
     // 认证授权错误 (2000-2999)
