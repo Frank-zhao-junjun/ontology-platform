@@ -17,7 +17,7 @@
 
 ### 拓扑
 
-Agent (LLM) -> MCP (Streamable HTTP) -> MCP Server (:3001) -> REST (mTLS) -> Spring Boot (:8080) -> PG + AGE + Redis
+Agent (LLM) -> MCP (Streamable HTTP) -> MCP Server (:3001) -> REST (API Key + 内网) -> Spring Boot (:8080) -> PG + AGE + Redis
 
 ---
 
@@ -55,12 +55,14 @@ Agent (LLM) -> MCP (Streamable HTTP) -> MCP Server (:3001) -> REST (mTLS) -> Spr
 -- V2__create_manifest_tables.sql
 CREATE TABLE manifest_import (
     id UUID PRIMARY KEY, ontology_id UUID NOT NULL,
+    external_id VARCHAR(255) NOT NULL,                     -- 设计台原始 ID (如 manufacturing-ontology)
     tenant_id VARCHAR(100) DEFAULT 'default', status VARCHAR(20) DEFAULT 'DRAFT',
     api_version VARCHAR(50) NOT NULL, manifest_version VARCHAR(50) NOT NULL,
     source_format VARCHAR(10) NOT NULL, raw_content JSONB NOT NULL,
     imported_counts JSONB DEFAULT '{}', validation_errors JSONB DEFAULT '[]',
     created_by VARCHAR(100), created_at TIMESTAMPTZ DEFAULT now(),
-    updated_at TIMESTAMPTZ DEFAULT now(), published_at TIMESTAMPTZ
+    updated_at TIMESTAMPTZ DEFAULT now(), published_at TIMESTAMPTZ,
+    CONSTRAINT uq_external_version UNIQUE (external_id, manifest_version)
 );
 CREATE TABLE manifest_version (
     id UUID PRIMARY KEY, ontology_id UUID NOT NULL,
@@ -166,7 +168,7 @@ CREATE TABLE approval_request (
 
 | 方法 | 端点 | 说明 |
 |------|------|------|
-| POST | /api/v1/manifests/import | 导入 YAML/JSON -> { draftId, importedCounts, warnings } |
+| POST | /api/v1/manifests/import | 导入 YAML/JSON -> { draftId, externalId, importedCounts, warnings } |
 | POST | /api/v1/manifests/{id}/preview | 变更预览 -> { changes, diff } |
 | POST | /api/v1/manifests/{id}/publish | 发布 -> { version, publishedAt } |
 | GET | /api/v1/manifests/{id}/export | 导出 -> file download |
@@ -232,6 +234,23 @@ POST /mcp  { jsonrpc:"2.0", method:"tools/call", params:{name,arguments} }
 **固定 (3):** resolve_intent, validate_instruction, traverse_graph
 **动态:** {domain}.{actionName}, query_ontology (由 Manifest 编译)
 
+### 5.3b IntentCategory 枚举
+
+```typescript
+enum IntentCategory {
+  QUERY    = "QUERY",     // 查询类：查订单、查库存
+  CREATE   = "CREATE",    // 创建类：新建订单
+  UPDATE   = "UPDATE",    // 更新类：修改状态
+  DELETE   = "DELETE",    // 删除类：取消订单
+  ANALYZE  = "ANALYZE",   // 分析类：趋势、聚合
+  NAVIGATE = "NAVIGATE",  // 导航类：跳转到实体
+  EXECUTE  = "EXECUTE",   // 执行类：触发流程
+  UNKNOWN  = "UNKNOWN"    // 兜底
+}
+```
+
+resolve_intent 输入 `{ query: string }`，输出 `{ category: IntentCategory, confidence: number, entities: string[], suggestedTool?: string }`
+
 ### 5.4 统一返回 (P09)
 
 ```typescript
@@ -259,7 +278,7 @@ Bearer token -> JWT verify -> agent_role -> role_permission
 | 层 | 措施 |
 |----|------|
 | Agent->MCP | JWT RS256, 90d expiry, bcrypt hash |
-| MCP->Platform | mTLS + API Key |
+| MCP->Platform | API Key (Header) + 内网绑定 (Phase 2: mTLS) |
 | 数据 | tenant_id 注入, PII masking |
 | 操作 | approval flow, idempotency keys |
 | 日志 | trace_id 全链路 |
