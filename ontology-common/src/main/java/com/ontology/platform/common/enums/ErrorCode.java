@@ -54,7 +54,8 @@ public enum ErrorCode {
     DATA_SOURCE_ERROR(8001, "Data source connection error"),
     SYNC_FAILED(8002, "Synchronization failed"),
     QUERY_TIMEOUT(8003, "Query execution timeout"),
-    GRAPH_TRAVERSAL_ERROR(8004, "Graph traversal error");
+    GRAPH_TRAVERSAL_ERROR(8004, "Graph traversal error"),
+    GRAPH_UNAVAILABLE(8005, "Graph service unavailable");
 
     private final int code;
     private final String message;

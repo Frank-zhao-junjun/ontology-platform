@@ -5,9 +5,11 @@ import com.ontology.platform.application.service.OntologyService;
 import com.ontology.platform.application.service.graph.GraphQueryService;
 import com.ontology.platform.common.exception.ResourceNotFoundException;
 import com.ontology.platform.common.exception.ValidationException;
+import com.ontology.platform.domain.entity.ObjectInstance;
 import com.ontology.platform.domain.entity.ObjectType;
 import com.ontology.platform.domain.entity.Ontology;
 import com.ontology.platform.domain.entity.Relation;
+import com.ontology.platform.domain.repository.ObjectInstanceRepository;
 import com.ontology.platform.domain.repository.ObjectTypeRepository;
 import com.ontology.platform.domain.repository.OntologyRepository;
 import com.ontology.platform.domain.repository.PropertyRepository;
@@ -22,7 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +43,7 @@ public class OntologyServiceImpl implements OntologyService {
     private final ObjectTypeRepository objectTypeRepository;
     private final RelationRepository relationRepository;
     private final PropertyRepository propertyRepository;
+    private final ObjectInstanceRepository objectInstanceRepository;
     private final GraphQueryService graphQueryService;
 
     // ==================== 本体管理 ====================
@@ -614,27 +619,46 @@ public class OntologyServiceImpl implements OntologyService {
         ontologyRepository.findById(request.getOntologyId())
                 .orElseThrow(() -> new ResourceNotFoundException("Ontology", request.getOntologyId()));
 
-        // 验证对象类型存在
-        List<ObjectType> objectTypes = objectTypeRepository.findByOntologyId(request.getOntologyId());
-        boolean typeExists = objectTypes.stream()
-                .anyMatch(ot -> ot.getName().equals(request.getObjectType()));
-        if (!typeExists) {
-            throw new ResourceNotFoundException("ObjectType", request.getObjectType());
-        }
+        // 验证对象类型存在，并获取 objectTypeId
+        ObjectType objectType = objectTypeRepository
+                .findByOntologyIdAndName(request.getOntologyId(), request.getObjectType())
+                .orElseThrow(() -> new ResourceNotFoundException("ObjectType", request.getObjectType()));
+        String objectTypeId = objectType.getId();
 
-        // 当前返回空结果集，待对象实例存储层（PostgreSQL + AGE）就绪后接入实际数据
+        // 拉取分页数据与总数
         int offset = request.getOffset() != null ? request.getOffset() : 0;
         int limit = request.getLimit() != null ? request.getLimit() : 20;
 
+        List<ObjectInstance> instances = objectInstanceRepository.findByObjectTypeId(objectTypeId, offset, limit);
+        long total = objectInstanceRepository.countByObjectTypeId(objectTypeId);
+
+        // 转换为 ObjectListResponse.ObjectData（coreData 合并 extendedData，extendedData 优先）
+        List<ObjectListResponse.ObjectData> items = instances.stream()
+                .map(instance -> {
+                    Map<String, Object> merged = new HashMap<>();
+                    if (instance.getCoreData() != null) {
+                        merged.putAll(instance.getCoreData());
+                    }
+                    if (instance.getExtendedData() != null) {
+                        merged.putAll(instance.getExtendedData());
+                    }
+                    return ObjectListResponse.ObjectData.builder()
+                            .id(instance.getId())
+                            .objectType(request.getObjectType())
+                            .properties(merged)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
         ObjectListResponse.PaginationMeta meta = ObjectListResponse.PaginationMeta.builder()
-                .total(0)
+                .total((int) Math.min(total, Integer.MAX_VALUE))
                 .offset(offset)
                 .limit(limit)
-                .hasMore(false)
+                .hasMore(offset + items.size() < total)
                 .build();
 
         return ObjectListResponse.builder()
-                .items(new ArrayList<>())
+                .items(items)
                 .meta(meta)
                 .build();
     }
