@@ -1,9 +1,9 @@
 package com.ontology.platform.api.controller.governance;
 
 import com.ontology.platform.api.dto.ApiResponse;
-import com.ontology.platform.application.dto.governance.CreateTokenRequest;
-import com.ontology.platform.application.dto.governance.TokenResponse;
+import com.ontology.platform.application.dto.governance.*;
 import com.ontology.platform.application.service.governance.GovernanceService;
+import com.ontology.platform.domain.entity.governance.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -49,5 +49,64 @@ public class GovernanceController {
         log.info("REST: Revoke token id={}", id);
         governanceService.revokeToken(id);
         return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    // ==================== Roles ====================
+
+    @PostMapping("/roles")
+    @Operation(summary = "Create agent role")
+    public ResponseEntity<ApiResponse<AgentRole>> createRole(@Valid @RequestBody CreateRoleRequest request) {
+        AgentRole role = governanceService.createRole(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(role));
+    }
+
+    @GetMapping("/roles")
+    @Operation(summary = "List roles by token")
+    public ResponseEntity<ApiResponse<List<AgentRole>>> listRoles(@RequestParam String tokenId) {
+        return ResponseEntity.ok(ApiResponse.success(governanceService.listRolesByToken(tokenId)));
+    }
+
+    // ==================== Permissions ====================
+
+    @PostMapping("/permissions")
+    @Operation(summary = "Create role permission")
+    public ResponseEntity<ApiResponse<RolePermission>> createPermission(@Valid @RequestBody CreatePermissionRequest request) {
+        RolePermission perm = governanceService.createPermission(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(perm));
+    }
+
+    @GetMapping("/permissions")
+    @Operation(summary = "List permissions by domain")
+    public ResponseEntity<ApiResponse<List<RolePermission>>> listPermissions(@RequestParam String domain) {
+        return ResponseEntity.ok(ApiResponse.success(governanceService.listPermissionsByDomain(domain)));
+    }
+
+    // ==================== Approvals ====================
+
+    @PostMapping("/approvals")
+    @Operation(summary = "Submit approval request")
+    public ResponseEntity<ApiResponse<ApprovalRequest>> submitApproval(
+            @RequestParam String agentId, @RequestParam String actionId, @RequestParam String requestedOp) {
+        ApprovalRequest approval = governanceService.submitApproval(agentId, actionId, requestedOp);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(approval));
+    }
+
+    @GetMapping("/approvals/{id}")
+    @Operation(summary = "Get approval status")
+    public ResponseEntity<ApiResponse<ApprovalRequest>> getApproval(@PathVariable String id) {
+        return ResponseEntity.ok(ApiResponse.success(governanceService.getApproval(id)));
+    }
+
+    @GetMapping("/approvals")
+    @Operation(summary = "List pending approvals")
+    public ResponseEntity<ApiResponse<List<ApprovalRequest>>> listPendingApprovals() {
+        return ResponseEntity.ok(ApiResponse.success(governanceService.listPendingApprovals()));
+    }
+
+    @PutMapping("/approvals/{id}")
+    @Operation(summary = "Resolve approval (approve/reject)")
+    public ResponseEntity<ApiResponse<ApprovalRequest>> resolveApproval(
+            @PathVariable String id, @Valid @RequestBody ResolveApprovalRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(governanceService.resolveApproval(id, request)));
     }
 }
