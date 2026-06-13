@@ -168,20 +168,25 @@ public class ManifestDocument {
         private String actionId; private List<String> conditions; private List<String> guards;
     }
 
-    // Convenience accessors
+    // Convenience accessors (null-safe at all levels)
     public List<ObjectType> getObjectTypes() {
-        return spec != null && spec.semantic != null ? spec.semantic.objectTypes : List.of();
+        if (spec == null || spec.semantic == null || spec.semantic.objectTypes == null) return List.of();
+        return spec.semantic.objectTypes;
     }
     public List<ActionDef> getActions() {
-        return spec != null && spec.behavior != null ? spec.behavior.actions : List.of();
+        if (spec == null || spec.behavior == null || spec.behavior.actions == null) return List.of();
+        return spec.behavior.actions;
     }
     public List<EventDef> getEvents() {
-        return spec != null && spec.events != null ? spec.events.domainEvents : List.of();
+        if (spec == null || spec.events == null || spec.events.domainEvents == null) return List.of();
+        return spec.events.domainEvents;
     }
     public List<RuleDef> getRules() {
-        return spec != null && spec.behavior != null ? spec.behavior.rules : List.of();
+        if (spec == null || spec.behavior == null || spec.behavior.rules == null) return List.of();
+        return spec.behavior.rules;
     }
     public List<StateMachineDef> getStateMachines() {
-        return spec != null && spec.behavior != null ? spec.behavior.stateMachines : List.of();
+        if (spec == null || spec.behavior == null || spec.behavior.stateMachines == null) return List.of();
+        return spec.behavior.stateMachines;
     }
 }
