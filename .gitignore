@@ -96,3 +96,4 @@ docker/logs/
 jacoco/
 *.exec
 *.html
+mcp-server/node_modules/
