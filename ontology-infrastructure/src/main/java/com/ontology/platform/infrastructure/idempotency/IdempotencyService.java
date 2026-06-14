@@ -1,6 +1,7 @@
 package com.ontology.platform.infrastructure.idempotency;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ontology.platform.infrastructure.metrics.PlatformMetrics;
 import com.ontology.platform.infrastructure.persistence.IdempotencyRecordPO;
 import com.ontology.platform.infrastructure.persistence.IdempotencyRecordPOMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.time.temporal.ChronoUnit;
 public class IdempotencyService {
 
     private final IdempotencyRecordPOMapper mapper;
+    private final PlatformMetrics metrics;
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final int TTL_HOURS = 24;
 
@@ -29,6 +31,7 @@ public class IdempotencyService {
             if (existing.getResponseStatus() == null) {
                 return IdempotencyResult.inProgress();
             }
+            metrics.recordIdempotencyHit();
             return IdempotencyResult.completed(existing.getResponseStatus(), existing.getResponseBody());
         }
         var po = IdempotencyRecordPO.builder()

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ontology.platform.infrastructure.persistence.JobRecordPOMapper">
+
+    <select id="selectByStatus" resultType="com.ontology.platform.infrastructure.persistence.JobRecordPO">
+        SELECT * FROM job_record
+        WHERE status = #{status}
+          AND tenant_id = #{tenantId}
+        ORDER BY created_at ASC
+        LIMIT #{limit}
+    </select>
+
+    <update id="updateStatus">
+        UPDATE job_record
+        SET status = #{status},
+            error_message = #{errorMessage},
+            completed_at = CASE WHEN #{status} IN ('COMPLETED','FAILED','CANCELLED') THEN now() ELSE completed_at END
+        WHERE id = #{id}
+    </update>
+
+</mapper>

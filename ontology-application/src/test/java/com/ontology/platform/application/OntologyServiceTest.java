@@ -13,6 +13,7 @@ import com.ontology.platform.domain.entity.Ontology;
 import com.ontology.platform.domain.entity.Relation;
 import com.ontology.platform.domain.repository.ObjectTypeRepository;
 import com.ontology.platform.domain.repository.OntologyRepository;
+import com.ontology.platform.domain.repository.RelationRepository;
 import com.ontology.platform.domain.vo.Property;
 import com.ontology.platform.domain.vo.RelationProperty;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,6 +53,9 @@ class OntologyServiceTest {
 
     @Mock
     private ObjectTypeRepository objectTypeRepository;
+
+    @Mock
+    private RelationRepository relationRepository;
 
     @InjectMocks
     private com.ontology.platform.application.service.impl.OntologyServiceImpl ontologyService;

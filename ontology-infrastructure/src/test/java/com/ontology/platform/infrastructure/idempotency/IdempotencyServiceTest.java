@@ -1,5 +1,6 @@
 package com.ontology.platform.infrastructure.idempotency;
 
+import com.ontology.platform.infrastructure.metrics.PlatformMetrics;
 import com.ontology.platform.infrastructure.persistence.IdempotencyRecordPO;
 import com.ontology.platform.infrastructure.persistence.IdempotencyRecordPOMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,9 @@ class IdempotencyServiceTest {
     @Mock
     private IdempotencyRecordPOMapper mapper;
 
+    @Mock
+    private PlatformMetrics metrics;
+
     private IdempotencyService service;
 
     private static final String KEY = "idem-key-001";
@@ -41,7 +45,7 @@ class IdempotencyServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new IdempotencyService(mapper);
+        service = new IdempotencyService(mapper, metrics);
     }
 
     @Nested

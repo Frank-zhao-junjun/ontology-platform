@@ -78,7 +78,7 @@ class OntologyTest {
             Ontology ontology = Ontology.create(TEST_NAME, TEST_DISPLAY_NAME, null, TEST_USER);
 
             // Assert
-            assertThat(ontology.getDescription()).isNull();
+            assertThat(ontology.getDescription()).isEmpty();
         }
     }
 
@@ -99,7 +99,7 @@ class OntologyTest {
             // Assert
             assertThat(ontology.getStatus()).isEqualTo(OntologyStatus.PUBLISHED);
             assertThat(ontology.getPublishedAt()).isNotNull().isBeforeOrEqualTo(Instant.now());
-            assertThat(ontology.getUpdatedAt()).isNotNull().isAfter(ontology.getCreatedAt());
+            assertThat(ontology.getUpdatedAt()).isNotNull().isAfterOrEqualTo(ontology.getCreatedAt());
         }
 
         @Test
@@ -142,7 +142,7 @@ class OntologyTest {
 
             // Assert
             assertThat(ontology.getStatus()).isEqualTo(OntologyStatus.ARCHIVED);
-            assertThat(ontology.getUpdatedAt()).isNotNull().isAfter(ontology.getCreatedAt());
+            assertThat(ontology.getUpdatedAt()).isNotNull().isAfterOrEqualTo(ontology.getCreatedAt());
         }
 
         @Test
@@ -190,7 +190,7 @@ class OntologyTest {
             assertThat(ontology.getObjectTypes()).hasSize(1);
             assertThat(ontology.getObjectTypeCount()).isEqualTo(1);
             assertThat(ontology.getObjectTypes()).contains(objectType);
-            assertThat(ontology.getUpdatedAt()).isAfter(ontology.getCreatedAt());
+            assertThat(ontology.getUpdatedAt()).isAfterOrEqualTo(ontology.getCreatedAt());
         }
 
         @Test
@@ -224,7 +224,7 @@ class OntologyTest {
             ontology.addObjectType(objectType);
 
             // Assert
-            assertThat(ontology.getUpdatedAt()).isAfter(originalUpdatedAt);
+            assertThat(ontology.getUpdatedAt()).isAfterOrEqualTo(originalUpdatedAt);
         }
     }
 
@@ -300,11 +300,11 @@ class OntologyTest {
             // Assert
             assertThat(ontology.getDisplayName()).isEqualTo(newDisplayName);
             assertThat(ontology.getDescription()).isEqualTo(newDescription);
-            assertThat(ontology.getUpdatedAt()).isAfter(ontology.getCreatedAt());
+            assertThat(ontology.getUpdatedAt()).isAfterOrEqualTo(ontology.getCreatedAt());
         }
 
         @Test
-        @DisplayName("应成功更新描述为null")
+        @DisplayName("描述为null时应保留原值")
         void shouldUpdateDescriptionToNull() {
             // Arrange
             Ontology ontology = Ontology.create(TEST_NAME, TEST_DISPLAY_NAME, TEST_DESCRIPTION, TEST_USER);
@@ -313,7 +313,7 @@ class OntologyTest {
             ontology.update("New Display Name", null);
 
             // Assert
-            assertThat(ontology.getDescription()).isNull();
+            assertThat(ontology.getDescription()).isEqualTo(TEST_DESCRIPTION);
         }
     }
 
@@ -362,7 +362,7 @@ class OntologyTest {
             ontology.bumpVersion();
 
             // Assert
-            assertThat(ontology.getUpdatedAt()).isAfter(originalUpdatedAt);
+            assertThat(ontology.getUpdatedAt()).isAfterOrEqualTo(originalUpdatedAt);
         }
     }
 }

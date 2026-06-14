@@ -167,13 +167,23 @@ class FilterSecurityValidatorTest {
         void shouldAcceptAllAllowedOperators() {
             for (FilterOperator op : FilterOperator.values()) {
                 assertDoesNotThrow(() -> {
+                    Object value;
+                    if (op == FilterOperator.isNull || op == FilterOperator.isNotNull) {
+                        value = null;
+                    } else if (op == FilterOperator.in || op == FilterOperator.notIn) {
+                        value = List.of("test");
+                    } else if (op == FilterOperator.between) {
+                        value = List.of("1", "10");
+                    } else {
+                        value = "test";
+                    }
+
                     TraversalFilterCondition condition = TraversalFilterCondition.builder()
                             .field("status")
                             .operator(op)
-                            .value(op == FilterOperator.isNull || op == FilterOperator.isNotNull 
-                                   ? null : "test")
+                            .value(value)
                             .build();
-                    
+
                     validator.validateFilter(TraversalFilter.builder()
                             .conditions(List.of(condition))
                             .logic("AND")

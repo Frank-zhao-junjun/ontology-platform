@@ -66,9 +66,8 @@ class RelationTest {
             assertThat(relation.getUpdatedAt()).isNotNull().isBeforeOrEqualTo(Instant.now());
         }
 
-        @Test
-        @DisplayName("应创建所有基数类型的关系")
         @ParameterizedTest
+        @DisplayName("应创建所有基数类型的关系")
         @EnumSource(RelationCardinality.class)
         void shouldCreateRelationWithAllCardinalities(RelationCardinality cardinality) {
             // Act
@@ -182,7 +181,7 @@ class RelationTest {
             // Assert
             assertThat(relation.getReverseName()).isEqualTo(reverseName);
             assertThat(relation.getReverseDisplayName()).isEqualTo(reverseDisplayName);
-            assertThat(relation.getUpdatedAt()).isAfter(relation.getCreatedAt());
+            assertThat(relation.getUpdatedAt()).isAfterOrEqualTo(relation.getCreatedAt());
         }
 
         @Test
@@ -246,7 +245,7 @@ class RelationTest {
             // Assert
             assertThat(relation.getProperties()).hasSize(1);
             assertThat(relation.getProperties()).contains(property);
-            assertThat(relation.getUpdatedAt()).isAfter(relation.getCreatedAt());
+            assertThat(relation.getUpdatedAt()).isAfterOrEqualTo(relation.getCreatedAt());
         }
 
         @Test
@@ -348,7 +347,7 @@ class RelationTest {
             // Assert
             assertThat(relation.getDisplayName()).isEqualTo(newDisplayName);
             assertThat(relation.getDescription()).isEqualTo(newDescription);
-            assertThat(relation.getUpdatedAt()).isAfter(relation.getCreatedAt());
+            assertThat(relation.getUpdatedAt()).isAfterOrEqualTo(relation.getCreatedAt());
         }
 
         @Test

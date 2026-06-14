@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ontology.platform.infrastructure.persistence.WebhookSubscriptionPOMapper">
+
+    <select id="selectActiveByTenant" resultType="com.ontology.platform.infrastructure.persistence.WebhookSubscriptionPO">
+        SELECT * FROM webhook_subscription
+        WHERE tenant_id = #{tenantId}
+          AND is_active = true
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="selectByEventType" resultType="com.ontology.platform.infrastructure.persistence.WebhookSubscriptionPO">
+        SELECT * FROM webhook_subscription
+        WHERE is_active = true
+          AND event_types::jsonb @> to_jsonb(#{eventType}::text)
+    </select>
+
+</mapper>

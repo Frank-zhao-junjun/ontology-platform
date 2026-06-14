@@ -1,0 +1,527 @@
+openapi: "3.0.3"
+info:
+  title: "本体建模平台 API"
+  description: "Ontology Platform REST API — 本体 CRUD、Manifest 导入/导出、行为/事件/EPC 查询、治理"
+  version: "2.0.0"
+  contact:
+    name: "Frank"
+
+servers:
+  - url: http://localhost:8080
+    description: 本地开发
+  - url: https://api.ontology.local
+    description: 生产
+
+x-tag-groups:
+  - name: 本体管理
+    tags: [ontology, object-type, relation, graph]
+  - name: Manifest
+    tags: [manifest]
+  - name: 行为与事件
+    tags: [behavior, event, epc]
+  - name: 治理
+    tags: [governance]
+
+paths:
+  # ==================== 本体管理 ====================
+  /api/v1/ontologies:
+    get:
+      tags: [ontology]
+      summary: 列本体
+      parameters:
+        - $ref: "#/components/parameters/TenantId"
+      responses:
+        "200":
+          description: 本体列表
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse_List_Ontology"
+    post:
+      tags: [ontology]
+      summary: 创建本体
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOntologyRequest"
+      responses:
+        "201":
+          description: 创建成功
+
+  /api/v1/ontologies/{ontologyId}:
+    get:
+      tags: [ontology]
+      summary: 本体详情
+      parameters:
+        - $ref: "#/components/parameters/OntologyId"
+        - $ref: "#/components/parameters/TenantId"
+      responses:
+        "200":
+          $ref: "#/components/responses/OntologyDetail"
+        "404":
+          description: 本体不存在
+    put:
+      tags: [ontology]
+      summary: 更新本体
+      parameters:
+        - $ref: "#/components/parameters/OntologyId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOntologyRequest"
+    delete:
+      tags: [ontology]
+      summary: 删除本体
+      parameters:
+        - $ref: "#/components/parameters/OntologyId"
+
+  # ==================== 对象类型 ====================
+  /api/v1/ontologies/{ontologyId}/object-types:
+    get:
+      tags: [object-type]
+      summary: 列出对象类型
+      parameters:
+        - $ref: "#/components/parameters/OntologyId"
+      responses:
+        "200":
+          description: 对象类型列表
+    post:
+      tags: [object-type]
+      summary: 创建对象类型
+
+  /api/v1/ontologies/{ontologyId}/object-types/{objectTypeId}:
+    get:
+      tags: [object-type]
+      summary: 对象类型详情
+    put:
+      tags: [object-type]
+      summary: 更新对象类型
+    delete:
+      tags: [object-type]
+      summary: 删除对象类型
+
+  # ==================== 关系 ====================
+  /api/v1/ontologies/{ontologyId}/relations:
+    get:
+      tags: [relation]
+      summary: 列出关系
+      parameters:
+        - $ref: "#/components/parameters/OntologyId"
+    post:
+      tags: [relation]
+      summary: 创建关系
+
+  /api/v1/ontologies/{ontologyId}/relations/{relationId}:
+    get:
+      tags: [relation]
+      summary: 关系详情
+    put:
+      tags: [relation]
+      summary: 更新关系
+    delete:
+      tags: [relation]
+      summary: 删除关系
+
+  # ==================== 图遍历 ====================
+  /api/v1/ontologies/{ontologyId}/graph/traverse:
+    post:
+      tags: [graph]
+      summary: 图遍历查询
+      parameters:
+        - $ref: "#/components/parameters/OntologyId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                startNodeId:
+                  type: string
+                  description: 起始节点 ID
+                depth:
+                  type: integer
+                  default: 3
+                  description: 遍历深度
+                relationTypes:
+                  type: array
+                  items:
+                    type: string
+                  description: 关系类型过滤
+
+  # ==================== Manifest ====================
+  /api/v1/manifests/import:
+    post:
+      tags: [manifest]
+      summary: 导入 Manifest（YAML/JSON）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImportManifestRequest"
+          application/x-yaml:
+            schema:
+              type: string
+              description: Raw YAML content
+      responses:
+        "200":
+          description: 导入成功（含 draftId + importedCounts）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImportManifestResponse"
+        "422":
+          description: 校验失败
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  /api/v1/manifests/{draftId}/preview:
+    post:
+      tags: [manifest]
+      summary: 预览变更
+      parameters:
+        - name: draftId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /api/v1/manifests/{draftId}/publish:
+    post:
+      tags: [manifest]
+      summary: 发布 Manifest
+      parameters:
+        - name: draftId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /api/v1/manifests/{id}/export:
+    get:
+      tags: [manifest]
+      summary: 导出 Manifest
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [yaml, json]
+            default: yaml
+
+  # ==================== 行为 ====================
+  /api/v1/ontologies/{ontologyId}/actions:
+    get:
+      tags: [behavior]
+      summary: 查询行为定义
+      parameters:
+        - $ref: "#/components/parameters/OntologyId"
+        - name: entityId
+          in: query
+          schema:
+            type: string
+
+  # ==================== 事件 ====================
+  /api/v1/ontologies/{ontologyId}/events:
+    get:
+      tags: [event]
+      summary: 查询事件定义
+      parameters:
+        - $ref: "#/components/parameters/OntologyId"
+        - name: entityId
+          in: query
+          schema:
+            type: string
+
+  # ==================== EPC ====================
+  /api/v1/ontologies/{ontologyId}/epc:
+    get:
+      tags: [epc]
+      summary: 查询 EPC 流程
+      parameters:
+        - $ref: "#/components/parameters/OntologyId"
+        - name: flowName
+          in: query
+          schema:
+            type: string
+
+  # ==================== 治理 ====================
+  /api/v1/governance/tokens:
+    post:
+      tags: [governance]
+      summary: 签发 Agent Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                agentId:
+                  type: string
+                domains:
+                  type: array
+                  items:
+                    type: string
+                tenantId:
+                  type: string
+                  default: default
+    get:
+      tags: [governance]
+      summary: Token 列表
+
+  /api/v1/governance/tokens/{id}:
+    delete:
+      tags: [governance]
+      summary: 吊销 Token
+
+  /api/v1/governance/roles:
+    post:
+      tags: [governance]
+      summary: 创建角色
+
+  /api/v1/governance/permissions:
+    post:
+      tags: [governance]
+      summary: 绑定权限
+
+  /api/v1/governance/approvals:
+    post:
+      tags: [governance]
+      summary: 提交审批
+
+  /api/v1/governance/approvals/{id}:
+    get:
+      tags: [governance]
+      summary: 查询审批状态
+    put:
+      tags: [governance]
+      summary: 审批操作（通过/拒绝）
+
+components:
+  parameters:
+    TenantId:
+      name: X-Tenant-Id
+      in: header
+      schema:
+        type: string
+        default: default
+      description: 租户 ID
+    OntologyId:
+      name: ontologyId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        data:
+          type: object
+        success:
+          type: boolean
+
+    ApiResponse_List_Ontology:
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/OntologySummary"
+
+    OntologySummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [DRAFT, PUBLISHED, ARCHIVED]
+
+    CreateOntologyRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        tenantId:
+          type: string
+          default: default
+
+    UpdateOntologyRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [DRAFT, PUBLISHED, ARCHIVED]
+
+    ImportManifestRequest:
+      type: object
+      required: [manifest]
+      properties:
+        manifest:
+          type: object
+          description: 完整 OntologyManifest JSON
+        externalId:
+          type: string
+          description: 外部 ID（用于幂等）
+
+    ImportManifestResponse:
+      type: object
+      properties:
+        draftId:
+          type: string
+          format: uuid
+        externalId:
+          type: string
+        importedCounts:
+          type: object
+          additionalProperties:
+            type: integer
+        warnings:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationWarning"
+
+    ValidationErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 4001
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            errors:
+              type: array
+              items:
+                $ref: "#/components/schemas/ValidationError"
+            warnings:
+              type: array
+              items:
+                $ref: "#/components/schemas/ValidationWarning"
+
+    ValidationError:
+      type: object
+      properties:
+        code:
+          type: string
+        elementType:
+          type: string
+        id:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ValidationWarning:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+
+    OntologyDetail:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        objectTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ObjectTypeSummary"
+        relations:
+          type: array
+          items:
+            $ref: "#/components/schemas/RelationSummary"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ObjectTypeSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        parentId:
+          type: string
+          format: uuid
+          nullable: true
+
+    RelationSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        sourceTypeId:
+          type: string
+          format: uuid
+        targetTypeId:
+          type: string
+          format: uuid
+        relationType:
+          type: string
+          enum: [ASSOCIATION, COMPOSITION, AGGREGATION, INHERITANCE]
+
+  responses:
+    OntologyDetail:
+      description: 本体详情
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/OntologyDetail"

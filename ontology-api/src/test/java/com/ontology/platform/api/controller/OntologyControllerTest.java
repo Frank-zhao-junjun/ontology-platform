@@ -23,7 +23,10 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -99,7 +102,7 @@ class OntologyControllerTest {
                             .header("X-User-Id", TEST_USER_ID)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isCreated())
-                    .andExpect(jsonPath("$.success").value(true))
+                    .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.data.id").value(TEST_ONTOLOGY_ID))
                     .andExpect(jsonPath("$.data.name").value("test_ontology"))
                     .andExpect(jsonPath("$.data.status").value("DRAFT"));
@@ -124,7 +127,7 @@ class OntologyControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.success").value(false))
+                    .andExpect(jsonPath("$.code").value(is(not(0))))
                     .andExpect(jsonPath("$.message").value(containsString("本体名称已存在")));
         }
 
@@ -142,7 +145,7 @@ class OntologyControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.success").value(false));
+                    .andExpect(jsonPath("$.code").value(is(not(0))));
         }
 
         @Test
@@ -159,7 +162,7 @@ class OntologyControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.success").value(false));
+                    .andExpect(jsonPath("$.code").value(is(not(0))));
         }
     }
 
@@ -191,7 +194,7 @@ class OntologyControllerTest {
             // Act & Assert
             mockMvc.perform(get(BASE_URL + "/" + TEST_ONTOLOGY_ID))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.success").value(true))
+                    .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.data.id").value(TEST_ONTOLOGY_ID))
                     .andExpect(jsonPath("$.data.name").value("test_ontology"))
                     .andExpect(jsonPath("$.data.status").value("PUBLISHED"));
@@ -207,7 +210,7 @@ class OntologyControllerTest {
             // Act & Assert
             mockMvc.perform(get(BASE_URL + "/non-existing-id"))
                     .andExpect(status().isNotFound())
-                    .andExpect(jsonPath("$.success").value(false))
+                    .andExpect(jsonPath("$.code").value(is(not(0))))
                     .andExpect(jsonPath("$.message").value(containsString("not found")));
         }
     }
@@ -244,7 +247,7 @@ class OntologyControllerTest {
                             .param("page", "1")
                             .param("pageSize", "20"))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.success").value(true))
+                    .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.data", hasSize(2)))
                     .andExpect(jsonPath("$.data[0].name").value("ontology_1"))
                     .andExpect(jsonPath("$.data[1].name").value("ontology_2"));
@@ -260,7 +263,7 @@ class OntologyControllerTest {
             // Act & Assert
             mockMvc.perform(get(BASE_URL))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.success").value(true))
+                    .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.data", hasSize(0)));
         }
 
@@ -308,7 +311,7 @@ class OntologyControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.success").value(true))
+                    .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.data.displayName").value("更新后的名称"));
         }
 
@@ -328,7 +331,7 @@ class OntologyControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isNotFound())
-                    .andExpect(jsonPath("$.success").value(false));
+                    .andExpect(jsonPath("$.code").value(is(not(0))));
         }
     }
 
@@ -345,7 +348,7 @@ class OntologyControllerTest {
             // Act & Assert
             mockMvc.perform(delete(BASE_URL + "/" + TEST_ONTOLOGY_ID))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.success").value(true));
+                    .andExpect(jsonPath("$.code").value(0));
 
             verify(ontologyService).deleteOntology(TEST_ONTOLOGY_ID);
         }
@@ -360,7 +363,7 @@ class OntologyControllerTest {
             // Act & Assert
             mockMvc.perform(delete(BASE_URL + "/non-existing-id"))
                     .andExpect(status().isNotFound())
-                    .andExpect(jsonPath("$.success").value(false));
+                    .andExpect(jsonPath("$.code").value(is(not(0))));
         }
     }
 
@@ -385,7 +388,7 @@ class OntologyControllerTest {
             // Act & Assert
             mockMvc.perform(post(BASE_URL + "/" + TEST_ONTOLOGY_ID + "/publish"))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.success").value(true))
+                    .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.data.status").value("PUBLISHED"));
         }
     }
@@ -410,7 +413,7 @@ class OntologyControllerTest {
             // Act & Assert
             mockMvc.perform(post(BASE_URL + "/" + TEST_ONTOLOGY_ID + "/archive"))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.success").value(true))
+                    .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.data.status").value("ARCHIVED"));
         }
     }
@@ -439,7 +442,7 @@ class OntologyControllerTest {
             // Act & Assert
             mockMvc.perform(post(BASE_URL + "/" + TEST_ONTOLOGY_ID + "/validate"))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.success").value(true))
+                    .andExpect(jsonPath("$.code").value(0))
                     .andExpect(jsonPath("$.data.valid").value(true))
                     .andExpect(jsonPath("$.data.summary.passed").value(5));
         }

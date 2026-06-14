@@ -1,7 +1,12 @@
-# 文档已迁入 ontology-platform
+# Shared Documents — 本体建模平台
 
-共用规格与故事地图已迁入代码仓库：
+版本：v2.0 | 2026-06-14
 
-**[../../ontology-platform/docs/shared/README.md](../../ontology-platform/docs/shared/README.md)**
+## 文档索引
 
-请只在 `ontology-platform/docs/shared/` 维护文档；本目录不再作为权威来源。
+| 文档 | 说明 | 状态 |
+|------|------|:----:|
+| [PRD-本体建模平台-UserStoryMap-v1.2.md](./PRD-本体建模平台-UserStoryMap-v1.2.md) | 故事地图 — 设计台(US-D) + 治理平台(US-P) MCP 三步 | ✅ |
+| [PRD-本体建模平台-v2.0.md](./PRD-本体建模平台-v2.0.md) | 产品 PRD v2.0 — 基于 Phase 1 实施反馈 | ✅ |
+| [TDD-本体建模平台-v2.0.md](./TDD-本体建模平台-v2.0.md) | 测试驱动开发规范 — 185 用例覆盖 | ✅ |
+| [API契约-本体建模平台-v2.0.yaml](./API契约-本体建模平台-v2.0.yaml) | OpenAPI 3.0 契约 — 8 个模块完整定义 | ✅ |

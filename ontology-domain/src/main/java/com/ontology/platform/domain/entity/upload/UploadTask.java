@@ -43,7 +43,7 @@ public class UploadTask {
                                     String userId, String tenantId) {
         int totalChunks = (int) Math.ceil((double) fileSize / chunkSize);
         return UploadTask.builder()
-                .id(UUID.randomUUID().toString())
+                .id("upload_" + UUID.randomUUID().toString())
                 .originalFileName(fileName)
                 .fileSize(fileSize)
                 .fileType(fileType)
@@ -75,6 +75,10 @@ public class UploadTask {
     }
 
     public void markChunkUploaded(int chunkNumber) {
+        if (chunkNumber < 1 || chunkNumber > totalChunks) {
+            throw new IllegalArgumentException(
+                    "Invalid chunk number: " + chunkNumber + ". Must be between 1 and " + totalChunks);
+        }
         uploadedChunks.add(chunkNumber);
         status = isAllChunksUploaded() ? UploadStatus.COMPLETED : UploadStatus.UPLOADING;
         updatedAt = Instant.now();

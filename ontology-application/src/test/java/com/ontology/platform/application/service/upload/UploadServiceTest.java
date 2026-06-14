@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +55,7 @@ class UploadServiceTest {
                 dataExportService,
                 objectTypeRepository
         );
+        ReflectionTestUtils.setField(uploadService, "maxFileSize", 104857600L); // 100MB default
     }
 
     @Test

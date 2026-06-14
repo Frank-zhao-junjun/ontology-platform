@@ -23,6 +23,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 /**
@@ -52,12 +53,12 @@ class GraphTraversalDSLParserTest {
     void setUp() {
         parser = new GraphTraversalDSLParser(filterValidator, whitelistService);
         
-        // 默认白名单服务行为
-        when(whitelistService.isObjectTypeAllowed(anyString())).thenReturn(true);
-        when(whitelistService.isRelationTypeAllowed(anyString())).thenReturn(true);
-        when(whitelistService.normalizeObjectType(anyString())).thenAnswer(i -> 
+        // 默认白名单服务行为 (lenient: not all tests use every stub)
+        lenient().when(whitelistService.isObjectTypeAllowed(anyString())).thenReturn(true);
+        lenient().when(whitelistService.isRelationTypeAllowed(anyString())).thenReturn(true);
+        lenient().when(whitelistService.normalizeObjectType(anyString())).thenAnswer(i ->
             i.getArgument(0).toString().toLowerCase());
-        when(whitelistService.normalizeRelationType(anyString())).thenAnswer(i -> 
+        lenient().when(whitelistService.normalizeRelationType(anyString())).thenAnswer(i ->
             i.getArgument(0).toString().toUpperCase());
     }
     
@@ -353,7 +354,7 @@ class GraphTraversalDSLParserTest {
             GraphTraversalRequest request = GraphTraversalRequest.builder()
                     .startObjectType("customer")
                     .startObjectId("550e8400-e29b-41d4-a716-446655440000")
-                    .path(List.of(
+                    .path(java.util.Arrays.asList(
                         null,
                         TraversalPath.builder()
                                 .relationType("owns")

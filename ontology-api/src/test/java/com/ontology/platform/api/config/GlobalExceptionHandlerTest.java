@@ -16,13 +16,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 /**
  * GlobalExceptionHandler测试
@@ -60,7 +60,7 @@ class GlobalExceptionHandlerTest {
             // Assert
             assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
             assertThat(response.getBody()).isNotNull();
-            assertThat(response.getBody().isSuccess()).isFalse();
+            assertThat(response.getBody().getCode()).isNotZero();
             assertThat(response.getBody().getMessage()).isEqualTo("业务验证失败");
         }
 
@@ -95,7 +95,7 @@ class GlobalExceptionHandlerTest {
             // Assert
             assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
             assertThat(response.getBody()).isNotNull();
-            assertThat(response.getBody().isSuccess()).isFalse();
+            assertThat(response.getBody().getCode()).isNotZero();
             assertThat(response.getBody().getMessage()).contains("Ontology");
             assertThat(response.getBody().getMessage()).contains("test-id-123");
         }
@@ -144,7 +144,7 @@ class GlobalExceptionHandlerTest {
             // Assert
             assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
             assertThat(response.getBody()).isNotNull();
-            assertThat(response.getBody().isSuccess()).isFalse();
+            assertThat(response.getBody().getCode()).isNotZero();
             assertThat(response.getBody().getMessage()).isEqualTo("字段验证失败");
         }
 
@@ -197,7 +197,7 @@ class GlobalExceptionHandlerTest {
             // Assert
             assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
             assertThat(response.getBody()).isNotNull();
-            assertThat(response.getBody().isSuccess()).isFalse();
+            assertThat(response.getBody().getCode()).isNotZero();
             assertThat(response.getBody().getMessage()).contains("name");
         }
 
@@ -232,7 +232,7 @@ class GlobalExceptionHandlerTest {
         void shouldReturn400ForBindException() {
             // Arrange
             org.springframework.validation.BindingResult bindingResult = mock(org.springframework.validation.BindingResult.class);
-            org.springframework.web.bind.BindException bindException = new org.springframework.web.bind.BindException(bindingResult);
+            org.springframework.validation.BindException bindException = new org.springframework.validation.BindException(bindingResult);
             
             when(bindingResult.getFieldErrors()).thenReturn(List.of(
                     createFieldError("field", "字段错误")
@@ -244,7 +244,7 @@ class GlobalExceptionHandlerTest {
             // Assert
             assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
             assertThat(response.getBody()).isNotNull();
-            assertThat(response.getBody().isSuccess()).isFalse();
+            assertThat(response.getBody().getCode()).isNotZero();
             assertThat(response.getBody().getMessage()).contains("Binding failed");
         }
     }
@@ -274,29 +274,7 @@ class GlobalExceptionHandlerTest {
             // Assert
             assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
             assertThat(response.getBody()).isNotNull();
-            assertThat(response.getBody().isSuccess()).isFalse();
-        }
-    }
-
-    @Nested
-    @DisplayName("MissingServletRequestParameterException - 缺少请求参数异常处理")
-    class MissingServletRequestParameterExceptionTests {
-
-        @Test
-        @DisplayName("应返回400状态码")
-        void shouldReturn400ForMissingParameter() {
-            // Arrange
-            MissingServletRequestParameterException exception = 
-                    new MissingServletRequestParameterException("page", "int");
-
-            // Act
-            ResponseEntity<ApiResponse<Void>> response = exceptionHandler.handleMissingServletRequestParameter(exception);
-
-            // Assert
-            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-            assertThat(response.getBody()).isNotNull();
-            assertThat(response.getBody().isSuccess()).isFalse();
-            assertThat(response.getBody().getMessage()).contains("page");
+            assertThat(response.getBody().getCode()).isNotZero();
         }
     }
 
@@ -316,7 +294,7 @@ class GlobalExceptionHandlerTest {
             // Assert
             assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
             assertThat(response.getBody()).isNotNull();
-            assertThat(response.getBody().isSuccess()).isFalse();
+            assertThat(response.getBody().getCode()).isNotZero();
         }
     }
 

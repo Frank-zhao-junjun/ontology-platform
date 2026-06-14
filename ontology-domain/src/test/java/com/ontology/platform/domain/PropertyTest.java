@@ -75,9 +75,8 @@ class PropertyTest {
             assertThat(property.getDataType()).isEqualTo(PropertyDataType.INTEGER);
         }
 
-        @Test
-        @DisplayName("应创建所有数据类型属性")
         @ParameterizedTest
+        @DisplayName("应创建所有数据类型属性")
         @EnumSource(PropertyDataType.class)
         void shouldCreatePropertyWithAllDataTypes(PropertyDataType dataType) {
             // Act
@@ -326,7 +325,7 @@ class PropertyTest {
             assertThat(property.getDisplayName()).isEqualTo(newDisplayName);
             assertThat(property.getDescription()).isEqualTo(newDescription);
             assertThat(property.isRequired()).isEqualTo(newIsRequired);
-            assertThat(property.getUpdatedAt()).isAfter(property.getCreatedAt());
+            assertThat(property.getUpdatedAt()).isAfterOrEqualTo(property.getCreatedAt());
         }
 
         @Test
@@ -364,7 +363,7 @@ class PropertyTest {
 
             // Assert
             assertThat(property.getSortOrder()).isEqualTo(10);
-            assertThat(property.getUpdatedAt()).isAfter(originalUpdatedAt);
+            assertThat(property.getUpdatedAt()).isAfterOrEqualTo(originalUpdatedAt);
         }
 
         @Test

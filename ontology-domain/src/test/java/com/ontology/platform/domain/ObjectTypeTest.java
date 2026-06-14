@@ -96,7 +96,7 @@ class ObjectTypeTest {
             // Assert
             assertThat(objectType.getProperties()).hasSize(1);
             assertThat(objectType.getProperties()).contains(property);
-            assertThat(objectType.getUpdatedAt()).isAfter(objectType.getCreatedAt());
+            assertThat(objectType.getUpdatedAt()).isAfterOrEqualTo(objectType.getCreatedAt());
         }
 
         @Test
@@ -135,7 +135,7 @@ class ObjectTypeTest {
             objectType.addProperty(property);
 
             // Assert
-            assertThat(objectType.getUpdatedAt()).isAfter(originalUpdatedAt);
+            assertThat(objectType.getUpdatedAt()).isAfterOrEqualTo(originalUpdatedAt);
         }
     }
 

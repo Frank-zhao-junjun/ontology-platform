@@ -152,6 +152,8 @@ public class GlobalExceptionHandler {
         int code = ex.getCode();
         if (code >= 2000 && code < 3000) {
             return HttpStatus.UNAUTHORIZED;
+        } else if (code >= 3000 && code < 4000) {
+            return HttpStatus.BAD_REQUEST;
         } else if (code >= 4000 && code < 5000) {
             return HttpStatus.BAD_REQUEST;
         } else if (code >= 5000 && code < 6000) {
