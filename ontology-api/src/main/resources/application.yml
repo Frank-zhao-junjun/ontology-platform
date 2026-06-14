@@ -172,6 +172,17 @@ ontology:
     chunk-size: 5MB
     temp-dir: /tmp/ontology-upload
 
+# mTLS (Phase 2c) — optional, disabled by default
+server:
+  ssl:
+    enabled: false
+    key-store: classpath:certs/server-keystore.p12
+    key-store-password: ${MTLS_KEYSTORE_PASS:changeit}
+    key-alias: 1
+    trust-store: classpath:certs/server-truststore.p12
+    trust-store-password: ${MTLS_TRUSTSTORE_PASS:changeit}
+    client-auth: need
+
 # API文档信息
 info:
   app:

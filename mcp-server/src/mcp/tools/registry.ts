@@ -7,11 +7,23 @@ import type { ToolDefinition } from '../../types/index.js';
 class ToolRegistry {
   private tools: Map<string, ToolDefinition> = new Map();
 
+  /** Resolve versioned name: {baseName}_v{version} or bare name (defaults to v1). */
+  private versionedName(tool: ToolDefinition): string {
+    const v = tool.version || 1;
+    return `${tool.name}_v${v}`;
+  }
+
   register(tool: ToolDefinition): void {
-    if (this.tools.has(tool.name)) {
-      console.warn(`Tool "${tool.name}" already registered, overwriting.`);
+    const vname = this.versionedName(tool);
+    if (this.tools.has(vname)) {
+      console.warn(`Tool "${vname}" already registered, overwriting.`);
     }
-    this.tools.set(tool.name, tool);
+    // Check for deprecated tools — log warning on register
+    if (tool.deprecated) {
+      const sunset = tool.sunsetAt ? ` — sunsets ${tool.sunsetAt}` : '';
+      console.warn(`Tool "${vname}" is DEPRECATED${sunset}`);
+    }
+    this.tools.set(vname, tool);
   }
 
   registerAll(tools: ToolDefinition[]): void {
@@ -50,7 +62,11 @@ class ToolRegistry {
   }
 
   getTool(name: string): ToolDefinition | undefined {
-    return this.tools.get(name);
+    // Direct lookup (versioned name like "resolve_intent_v1")
+    const direct = this.tools.get(name);
+    if (direct) return direct;
+    // Fallback: try "_v1" suffix for unversioned names (backward compat)
+    return this.tools.get(name + "_v1");
   }
 
   listTools(domain?: string[]): ToolDefinition[] {
@@ -63,13 +79,31 @@ class ToolRegistry {
     name: string;
     description: string;
     inputSchema: ToolDefinition['inputSchema'];
+    version?: number;
+    deprecated?: boolean;
   }> {
     const tools = this.listTools(domain);
     return tools.map((t) => ({
       name: t.name,
-      description: t.description,
+      description: t.description + (t.deprecated ? ' [DEPRECATED]' : ''),
       inputSchema: t.inputSchema,
+      version: t.version || 1,
+      deprecated: t.deprecated || false,
     }));
+  }
+
+  /** Remove tools past their sunset date. Call periodically. */
+  cleanSunsetTools(): number {
+    const now = new Date();
+    let removed = 0;
+    for (const [name, tool] of this.tools) {
+      if (tool.sunsetAt && new Date(tool.sunsetAt) <= now) {
+        this.tools.delete(name);
+        console.warn(`Removed sunset tool: ${name}`);
+        removed++;
+      }
+    }
+    return removed;
   }
 
   clear(): void {

@@ -23,6 +23,12 @@ export interface ToolDefinition {
   };
   domain: string;
   riskLevel: 'READ' | 'WRITE' | 'DELETE' | 'APPROVAL';
+  /** Tool version (1, 2, ...). Registered as {name}_v{version}. Phase 2c / F04 */
+  version?: number;
+  /** Whether this tool version is deprecated. Deprecated tools show a warning. */
+  deprecated?: boolean;
+  /** ISO timestamp when this deprecated version will be removed. */
+  sunsetAt?: string;
   handler: (args: Record<string, unknown>, ctx: AgentContext) => Promise<unknown>;
 }
 
