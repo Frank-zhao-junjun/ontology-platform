@@ -69,7 +69,7 @@ class UploadServiceTest {
                 .objectTypeName("customer")
                 .build();
 
-        when(fileStorageService.initChunkDirectory(anyString())).thenReturn("/tmp/uploads/test");
+        doNothing().when(fileStorageService).initChunkDirectory(anyString());
         when(uploadTaskRepository.save(any(UploadTask.class))).thenAnswer(i -> i.getArgument(0));
 
         // when

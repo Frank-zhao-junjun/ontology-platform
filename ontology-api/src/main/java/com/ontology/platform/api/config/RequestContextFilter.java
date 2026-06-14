@@ -5,20 +5,26 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.UUID;
 
 /**
- * 请求上下文过滤器
- * Request Context Filter
+ * Request context filter — sets request ID, trace ID, and user context.
+ * Phase 2a: extended with MDC trace_id for full-chain tracing.
  */
 @Slf4j
 @Component("apiRequestContextFilter")
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RequestContextFilter implements Filter {
+
+    private static final String TRACE_HEADER = "X-Trace-Id";
+    private static final String REQUEST_HEADER = "X-Request-ID";
+    private static final String MDC_TRACE_KEY = "trace_id";
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -27,38 +33,42 @@ public class RequestContextFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         try {
-            // 设置请求ID
-            String requestId = httpRequest.getHeader("X-Request-ID");
+            // Trace ID — propagate from incoming or generate new (UUID v7 style)
+            String traceId = httpRequest.getHeader(TRACE_HEADER);
+            if (traceId == null || traceId.isBlank()) {
+                traceId = UUID.randomUUID().toString();
+            }
+            MDC.put(MDC_TRACE_KEY, traceId);
+            httpResponse.setHeader(TRACE_HEADER, traceId);
+
+            // Request ID
+            String requestId = httpRequest.getHeader(REQUEST_HEADER);
             if (requestId == null || requestId.isBlank()) {
                 requestId = "req_" + System.currentTimeMillis() + "_" +
                         Integer.toHexString((int) (Math.random() * 0xFFFF));
             }
             RequestContext.setRequestId(requestId);
-            httpResponse.setHeader("X-Request-ID", requestId);
+            httpResponse.setHeader(REQUEST_HEADER, requestId);
 
-            // 设置用户ID
+            // User ID
             String userId = httpRequest.getHeader("X-User-Id");
             if (userId != null && !userId.isBlank()) {
                 RequestContext.setUserId(userId);
             }
 
-            // 记录请求开始
             long startTime = System.currentTimeMillis();
-            log.debug("Request started: method={}, uri={}, requestId={}",
-                    httpRequest.getMethod(), httpRequest.getRequestURI(), requestId);
+            log.debug("Request started: method={}, uri={}", httpRequest.getMethod(), httpRequest.getRequestURI());
 
-            // 处理请求
             chain.doFilter(request, response);
 
-            // 记录请求结束
             long duration = System.currentTimeMillis() - startTime;
-            log.debug("Request completed: method={}, uri={}, status={}, duration={}ms, requestId={}",
+            log.debug("Request completed: method={}, uri={}, status={}, duration={}ms",
                     httpRequest.getMethod(), httpRequest.getRequestURI(),
-                    httpResponse.getStatus(), duration, requestId);
+                    httpResponse.getStatus(), duration);
 
         } finally {
-            // 清理上下文
             RequestContext.clear();
+            MDC.remove(MDC_TRACE_KEY);
         }
     }
 }

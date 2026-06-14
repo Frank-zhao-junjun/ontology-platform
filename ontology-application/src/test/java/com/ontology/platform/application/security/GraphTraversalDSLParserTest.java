@@ -407,7 +407,7 @@ class GraphTraversalDSLParserTest {
                     .returnFormat(ReturnFormat.FLAT)
                     .build();
             
-            GraphTraversalDSLParser.CypherQuery result = parser.parse(request);
+            CypherQuery result = parser.parse(request);
             assertNotNull(result);
         }
     }

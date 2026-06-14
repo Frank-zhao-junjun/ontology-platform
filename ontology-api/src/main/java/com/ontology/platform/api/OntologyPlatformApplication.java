@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * 本体建模平台应用入口
@@ -18,6 +19,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableConfigurationProperties
 @EnableCaching
 @EnableAsync
+@EnableScheduling
 public class OntologyPlatformApplication {
 
     public static void main(String[] args) {

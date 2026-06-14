@@ -12,6 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.List;
@@ -182,12 +185,61 @@ public class GovernanceServiceImpl implements GovernanceService {
     }
 
     /**
-     * 校验原始 Token 与已存储的 BCrypt 哈希是否匹配。
+     * 校验原始 Token 与已存储的哈希是否匹配。
+     *
+     * <p>升级兼容策略（90 天窗口）：
+     * <ul>
+     *   <li>storedHash 以 {@code $2a$} 开头 → BCrypt（当前算法）</li>
+     *   <li>否则 → 历史 Base64（SHA-256 + Base64 编码），重算后比对</li>
+     * </ul>
+     *
+     * <p>升级窗口过后（所有历史 token 过期或重签），可移除此降级分支，
+     * 仅保留 BCrypt 路径。
      */
     public boolean matchesToken(String rawToken, String storedHash) {
         if (rawToken == null || storedHash == null) {
             return false;
         }
-        return passwordEncoder.matches(rawToken, storedHash);
+        // BCrypt hash — current algorithm
+        if (storedHash.startsWith("$2a$")) {
+            return passwordEncoder.matches(rawToken, storedHash);
+        }
+        // Legacy Base64 hash — SHA-256 + Base64 (downgrade window)
+        log.warn("Legacy Base64 token hash detected; performing downgrade verification. "
+                + "Consider re-issuing this token with bcrypt.");
+        return constantTimeEquals(legacyHashToken(rawToken), storedHash);
+    }
+
+    /**
+     * 历史哈希算法：SHA-256(rawToken) → Base64 编码。
+     * 仅用于升级窗口内的降级验证，不用于新 token 签发。
+     */
+    private String legacyHashToken(String rawToken) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] digest = md.digest(rawToken.getBytes(StandardCharsets.UTF_8));
+            return Base64.getEncoder().encodeToString(digest);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("SHA-256 algorithm not available", e);
+        }
+    }
+
+    /**
+     * 常数时间字符串比较，防止时序攻击。
+     */
+    private static boolean constantTimeEquals(String a, String b) {
+        if (a == null || b == null) {
+            return false;
+        }
+        byte[] ba = a.getBytes(StandardCharsets.UTF_8);
+        byte[] bb = b.getBytes(StandardCharsets.UTF_8);
+        if (ba.length != bb.length) {
+            return false;
+        }
+        int diff = 0;
+        for (int i = 0; i < ba.length; i++) {
+            diff |= ba[i] ^ bb[i];
+        }
+        return diff == 0;
     }
 }

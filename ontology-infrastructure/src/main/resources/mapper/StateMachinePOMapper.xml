@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ontology.platform.infrastructure.persistence.StateMachinePOMapper">
+    <select id="selectByOntologyId" resultType="com.ontology.platform.infrastructure.persistence.StateMachinePO">
+        SELECT * FROM state_machine WHERE ontology_id = #{ontologyId} AND (deleted IS NULL OR deleted = FALSE)
+    </select>
+    <select id="selectByOntologyIdAndEntityId" resultType="com.ontology.platform.infrastructure.persistence.StateMachinePO">
+        SELECT * FROM state_machine WHERE ontology_id = #{ontologyId} AND entity_id = #{entityId} AND (deleted IS NULL OR deleted = FALSE)
+    </select>
+</mapper>
