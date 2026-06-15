@@ -1,0 +1,114 @@
+apiVersion: ontology.platform/v1
+kind: OntologyManifest
+metadata:
+  id: manufacturing-ontology
+  version: "0.1.0"
+  name: 生产制造本体
+  displayName: Manufacturing Ontology
+  description: 制造域 MVP — 生产订单、物料、BOM、工艺路线
+  boundedContext: 生产制造
+  source: ontology-designer
+  status: draft
+spec:
+  semantic:
+    boundedContext:
+      id: ctx-manufacturing
+      name: 生产制造
+      nameEn: Manufacturing
+    businessScenarios:
+      - id: scenario-mts
+        name: 按库存生产
+        nameEn: MakeToStock
+      - id: scenario-mto
+        name: 按订单生产
+        nameEn: MakeToOrder
+    objectTypes:
+      - id: production-order
+        name: 生产订单
+        nameEn: ProductionOrder
+        kind: aggregate_root
+        description: 核心生产执行单据
+        properties:
+          - id: attr-order-id
+            nameEn: order_id
+            dataType: string
+            required: true
+          - id: attr-status
+            nameEn: status
+            dataType: enum
+            enumValues: [CREATED, RELEASED, IN_PROGRESS, PRODUCED, TECH_CLOSED]
+            required: true
+      - id: operation
+        name: 工序
+        nameEn: Operation
+        kind: entity
+        aggregateRootId: production-order
+      - id: material
+        name: 物料
+        nameEn: Material
+        kind: aggregate_root
+      - id: bom
+        name: BOM
+        nameEn: BillOfMaterial
+        kind: aggregate_root
+  behavior:
+    actions:
+      - id: action-create-order
+        name: 创建生产订单
+        nameEn: CreateProductionOrder
+        aggregateRootId: production-order
+        publishesEventIds:
+          - evt-order-created
+      - id: action-release-order
+        name: 生产订单下达
+        nameEn: ReleaseProductionOrder
+        aggregateRootId: production-order
+        preRuleIds:
+          - rule-kitting
+        publishesEventIds:
+          - evt-order-released
+        domain: manufacturing
+        riskLevel: MEDIUM
+    rules:
+      - id: rule-kitting
+        name: 物料齐套校验
+        description: BOM 物料库存满足需求量
+    stateMachines:
+      - id: sm-production-order
+        name: 生产订单生命周期
+        aggregateRootId: production-order
+        states:
+          - { name: 创建, isInitial: true, isFinal: false }
+          - { name: 已下达, isInitial: false, isFinal: false }
+          - { name: 技术关闭, isInitial: false, isFinal: true }
+        transitions:
+          - { from: 创建, to: 已下达, trigger: manual }
+  events:
+    domainEvents:
+      - id: evt-order-created
+        name: 生产订单已创建
+        nameEn: ProductionOrderCreated
+        aggregateRootId: production-order
+      - id: evt-order-released
+        name: 生产订单已下达
+        nameEn: ProductionOrderReleased
+        aggregateRootId: production-order
+  governance:
+    roles:
+      - id: role-planner
+        name: 生产计划员
+        code: production_planner
+    agentPolicies:
+      - id: sandbox-prod-planner
+        name: 计划员沙箱
+        agentRoleId: role-planner
+        allowedTools:
+          - resolve_intent
+          - query_ontology
+          - execute_action
+  dataSources:
+    - id: ds-sap-po
+      name: SAP 生产订单 OData
+      code: sap_s4hana_prod
+      sourceType: api
+      credentialRef: secret/sap-oauth-prod

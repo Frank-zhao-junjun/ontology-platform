@@ -1,20 +1,29 @@
 # ontology-platform Phase 2 Spec v1.0
 
-> 基于 US v1.1 路线图 P1/P2 | 2026-06-14 | Draft
+> 版本: v1.0 | 状态: **Final** | 2026-06-15
+> 基于 US v1.1 路线图 P1/P2 | 2026-06-14 初稿
 > 前置: Phase 1 v1.2 全部完成 (17 MyBatis-Plus Repos)
+> API 契约: [API契约-本体建模平台-v2.0.yaml](../../shared/API契约-本体建模平台-v2.0.yaml) v2.1.0
+
+## Version History
+
+| 版本 | 日期 | 变更 |
+|------|------|------|
+| **v1.0 Final** | 2026-06-15 | 代码全部落地；§7 区分「已实现 / 运行时待验」；API 契约补 Phase 2 端点 |
+| v1.0 Draft | 2026-06-14 | 初稿 |
 
 ---
 
 ## 1. 范围
 
-| 板块 | US | 新增组件 |
-|------|-----|---------|
-| 异步执行 | F01 | JobQueue, JobPoller, WebhookDispatcher |
-| 幂等重试 | F02 | IdempotencyFilter, IdempotencyRecord |
-| 可观测性 | F03 | Micrometer + Prometheus metrics, TraceId |
-| 版本兼容 | F04 | ToolVersionRegistry, DeprecationNotice |
-| 限流 | F05 | RateLimiter (Agent/Tool/Tenant) |
-| 传输安全 | -- | mTLS (MCP to Platform) |
+| 板块 | US | 新增组件 | 状态 |
+|------|-----|---------|:----:|
+| 异步执行 | F01 | JobQueue, JobPoller, WebhookDispatcher | ✅ |
+| 幂等重试 | F02 | IdempotencyFilter, IdempotencyRecord | ✅ |
+| 可观测性 | F03 | Micrometer + Prometheus metrics, TraceId | ✅ |
+| 版本兼容 | F04 | ToolVersionRegistry, DeprecationNotice | ✅ |
+| 限流 | F05 | RateLimiter (Agent/Tool/Tenant) | ✅ |
+| 传输安全 | -- | mTLS (MCP to Platform) | ✅（可选启用） |
 
 ### 拓扑 (Phase 2)
 
@@ -367,30 +376,47 @@ MCP Server (generate UUID v7)
 
 ## 7. 验证清单
 
-### 7.1 Phase 2a 冒烟
-- [ ] 同一 Idempotency-Key 两次 POST -> 第二次返回 200 + 缓存结果
-- [ ] Idempotency-Key 首次正在执行 -> 第三次返回 409 Conflict
-- [ ] MCP Server -> Platform 全链路 trace_id 一致
-- [ ] SQL 日志可追溯到 trace_id
+> **说明**：带 ✅ 的项已在单元/集成测试或 CI 中验证；带 ⏳ 的项需 Docker + Redis 运行时环境（见 Worklog §十七）。
 
-### 7.2 Phase 2b 冒烟
-- [ ] 提交异步导入任务 -> GET /jobs/{id} 最终 COMPLETED
-- [ ] Webhook 回调到达 -> HMAC 签名验证通过
-- [ ] 任务失败 -> 自动重试 3 次 -> 最终 FAILED + Webhook 通知
-- [ ] Agent 限流 100/min -> 第 101 次返回 429 + Retry-After
+### 7.1 Phase 2a — 实现 ✅ / 运行时 ⏳
 
-### 7.3 Phase 2c 冒烟
-- [ ] /actuator/prometheus 返回自定义指标
-- [ ] Grafana Dashboard 展示 MCP 调用曲线
-- [ ] tools/list 返回带版本号的工具名
-- [ ] 旧版工具 30 天后从 tools/list 移除
-- [ ] mTLS 握手成功, 无证书连接被拒绝
+| # | 项 | 状态 |
+|---|-----|:----:|
+| 1 | IdempotencyFilter 单元测试（首次/重复/冲突） | ✅ |
+| 2 | IdempotencyRecord PO + V8 DDL | ✅ |
+| 3 | TraceId Filter + MDC 传播 | ✅ |
+| 4 | 同一 Idempotency-Key 两次 POST → 200 + 缓存（实跑） | ⏳ |
+| 5 | MCP → Platform 全链路 trace_id 一致（实跑） | ⏳ |
+
+### 7.2 Phase 2b — 实现 ✅ / 运行时 ⏳
+
+| # | 项 | 状态 |
+|---|-----|:----:|
+| 1 | JobQueueService + JobPoller + JobController | ✅ |
+| 2 | WebhookDispatcher + WebhookController | ✅ |
+| 3 | RateLimiterService + RateLimiterFilter | ✅ |
+| 4 | 提交 job → COMPLETED（Redis 实跑） | ⏳ |
+| 5 | Webhook HMAC 回调（实跑） | ⏳ |
+| 6 | Agent 限流 429 + Retry-After（实跑） | ⏳ |
+
+### 7.3 Phase 2c — 实现 ✅ / 运行时 ⏳
+
+| # | 项 | 状态 |
+|---|-----|:----:|
+| 1 | PlatformMetrics 自定义指标注册 | ✅ |
+| 2 | ToolVersionRegistry + _v1 后缀 | ✅ |
+| 3 | gen-certs.sh + mTLS 配置（可选） | ✅ |
+| 4 | /actuator/prometheus 自定义指标（实跑） | ⏳ |
+| 5 | mTLS 双向握手（实跑） | ⏳ |
 
 ### 7.4 CI 门禁
-- [ ] mvn test 全部通过 (含 Phase 2 测试)
-- [ ] npm test (vitest) 全部通过
-- [ ] Redis Testcontainer 集成测试通过
-- [ ] TypeScript 编译零错误
+
+| # | 项 | 状态 |
+|---|-----|:----:|
+| 1 | `mvn test` 全部通过（含 Phase 2 单元测试） | ✅ |
+| 2 | `npm test` (vitest) 全部通过 | ✅ |
+| 3 | TypeScript 编译零错误 | ✅ |
+| 4 | Redis Testcontainer 集成测试（`mvn verify`，需 Docker） | ⏳ |
 
 ---
 

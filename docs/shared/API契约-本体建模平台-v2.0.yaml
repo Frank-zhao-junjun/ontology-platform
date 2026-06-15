@@ -1,8 +1,8 @@
 openapi: "3.0.3"
 info:
   title: "本体建模平台 API"
-  description: "Ontology Platform REST API — 本体 CRUD、Manifest 导入/导出、行为/事件/EPC 查询、治理"
-  version: "2.0.0"
+  description: "Ontology Platform REST API — 本体 CRUD、Manifest 导入/导出、行为/事件/EPC 查询、治理、异步任务与 Webhook（Phase 2）"
+  version: "2.1.0"
   contact:
     name: "Frank"
 
@@ -21,6 +21,10 @@ x-tag-groups:
     tags: [behavior, event, epc]
   - name: 治理
     tags: [governance]
+  - name: 异步与回调
+    tags: [job, webhook]
+  - name: 可观测
+    tags: [observability]
 
 paths:
   # ==================== 本体管理 ====================
@@ -313,6 +317,122 @@ paths:
       tags: [governance]
       summary: 审批操作（通过/拒绝）
 
+  # ==================== 异步任务 (Phase 2 / F01) ====================
+  /api/v1/jobs:
+    post:
+      tags: [job]
+      summary: 提交异步任务
+      parameters:
+        - $ref: "#/components/parameters/TenantId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitJobRequest"
+      responses:
+        "202":
+          description: 已入队
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse_SubmitJob"
+    get:
+      tags: [job]
+      summary: 按状态查询任务列表
+      parameters:
+        - $ref: "#/components/parameters/TenantId"
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [QUEUED, RUNNING, COMPLETED, FAILED, CANCELLED]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        "200":
+          description: 任务列表
+
+  /api/v1/jobs/{jobId}:
+    get:
+      tags: [job]
+      summary: 查询任务状态
+      parameters:
+        - $ref: "#/components/parameters/JobId"
+      responses:
+        "200":
+          description: 任务详情
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse_Job"
+        "404":
+          description: 任务不存在
+    delete:
+      tags: [job]
+      summary: 取消任务
+      parameters:
+        - $ref: "#/components/parameters/JobId"
+      responses:
+        "200":
+          description: 已取消
+
+  # ==================== Webhook (Phase 2 / F01) ====================
+  /api/v1/webhooks:
+    post:
+      tags: [webhook]
+      summary: 注册 Webhook 订阅
+      parameters:
+        - $ref: "#/components/parameters/TenantId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateWebhookRequest"
+      responses:
+        "201":
+          description: 注册成功
+    get:
+      tags: [webhook]
+      summary: 列出 Webhook 订阅
+      parameters:
+        - $ref: "#/components/parameters/TenantId"
+      responses:
+        "200":
+          description: 订阅列表
+
+  /api/v1/webhooks/{webhookId}:
+    delete:
+      tags: [webhook]
+      summary: 删除 Webhook 订阅
+      parameters:
+        - $ref: "#/components/parameters/WebhookId"
+      responses:
+        "200":
+          description: 已删除
+
+  # ==================== 可观测 (Phase 2 / F03) ====================
+  /api/actuator/prometheus:
+    get:
+      tags: [observability]
+      summary: Prometheus 指标端点
+      responses:
+        "200":
+          description: Prometheus text format
+
+  /api/actuator/health:
+    get:
+      tags: [observability]
+      summary: 健康检查
+      responses:
+        "200":
+          description: UP / DOWN
+
 components:
   parameters:
     TenantId:
@@ -329,6 +449,27 @@ components:
       schema:
         type: string
         format: uuid
+    JobId:
+      name: jobId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    WebhookId:
+      name: webhookId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      schema:
+        type: string
+        maxLength: 128
+      description: 幂等键（Phase 2，写操作可选；24h 内重复请求返回缓存响应）
 
   schemas:
     ApiResponse:
@@ -517,6 +658,114 @@ components:
         relationType:
           type: string
           enum: [ASSOCIATION, COMPOSITION, AGGREGATION, INHERITANCE]
+
+    SubmitJobRequest:
+      type: object
+      required: [jobType]
+      properties:
+        jobType:
+          type: string
+          example: import.execute
+        payload:
+          type: object
+          additionalProperties: true
+        idempotencyKey:
+          type: string
+
+    SubmitJobResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        jobType:
+          type: string
+        status:
+          type: string
+          enum: [QUEUED, RUNNING, COMPLETED, FAILED, CANCELLED]
+        createdAt:
+          type: string
+          format: date-time
+
+    JobDetail:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        jobType:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string
+        payload:
+          type: object
+        result:
+          type: object
+        errorMessage:
+          type: string
+        retryCount:
+          type: integer
+        maxRetries:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+
+    CreateWebhookRequest:
+      type: object
+      required: [callbackUrl, secret]
+      properties:
+        callbackUrl:
+          type: string
+          format: uri
+        eventTypes:
+          type: array
+          items:
+            type: string
+          default: [job.completed, job.failed]
+        secret:
+          type: string
+          description: HMAC-SHA256 签名密钥
+
+    WebhookSubscription:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        callbackUrl:
+          type: string
+        eventTypes:
+          type: array
+          items:
+            type: string
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    ApiResponse_SubmitJob:
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - properties:
+            data:
+              $ref: "#/components/schemas/SubmitJobResponse"
+
+    ApiResponse_Job:
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - properties:
+            data:
+              $ref: "#/components/schemas/JobDetail"
 
   responses:
     OntologyDetail:

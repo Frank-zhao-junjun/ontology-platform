@@ -1,253 +1,149 @@
-# Ontology Platform - 本体模型平台
+# Ontology Platform — 本体建模平台
 
-企业级本体管理系统，基于领域驱动设计（DDD）和本体论架构，提供完整的本体模型、对象管理、MCP能力。
+企业级本体管理系统，基于 DDD 分层架构，提供本体 CRUD、Manifest 导入/发布、行为/事件/EPC 查询、Agent 治理，以及 Phase 2 异步任务、Webhook、幂等与限流能力。MCP Server 将 REST API 暴露为 AI Agent 可调用的 MCP 工具。
+
+**仓库**: [Frank-zhao-junjun/ontology-platform](https://github.com/Frank-zhao-junjun/ontology-platform)
 
 ## 技术栈
 
 | 层级 | 技术 | 版本 |
 |------|------|------|
-| **后端框架** | Spring Boot | 3.2.x |
-| **Java版本** | Java | 25 |
-| **数据库** | PostgreSQL + Apache AGE | 15+ / 1.5.x |
-| **缓存** | Redis | 7.x |
-| **API文档** | SpringDoc OpenAPI | 2.5.x |
-| **ORM** | MyBatis-Plus | 3.5.x |
-| **数据库迁移** | Flyway | - |
+| 后端框架 | Spring Boot | 3.2.5 |
+| Java | JDK | 21（编译目标；运行建议 21+） |
+| 数据库 | PostgreSQL + Apache AGE | 15+ / 1.5.x |
+| 缓存 / 队列 | Redis | 7.x |
+| ORM | MyBatis-Plus | 3.5.6 |
+| 数据库迁移 | Flyway | 10.11.0 |
+| API 文档 | SpringDoc OpenAPI | 2.5.0 |
+| MCP 适配层 | Node.js + TypeScript | 22 |
+| 构建 | Maven | 3.8+ |
 
 ## 项目结构
 
 ```
 ontology-platform/
-├── ontology-api/              # API层（Controller、DTO、配置）
-├── ontology-application/      # 应用层（Service、Command/Query处理）
-├── ontology-domain/           # 领域层（Entity、Value Object、Repository接口）
-├── ontology-infrastructure/   # 基础设施层（Repository实现、数据库配置）
-├── ontology-common/           # 公共模块（工具类、异常、常量、枚举）
-├── db/
-│   └── migrations/            # Flyway数据库迁移脚本
-├── docker/                   # Docker配置文件
-└── README.md
+├── ontology-api/              # Controller、DTO、Filter、Flyway 迁移
+├── ontology-application/      # Service 实现、Manifest 校验
+├── ontology-domain/           # 实体、值对象、Repository 接口
+├── ontology-infrastructure/   # Repository 实现、JobQueue、Webhook、AGE
+├── ontology-common/           # 工具类、异常、常量
+├── mcp-server/                # MCP 协议适配（:3001）
+├── frontend/                  # Vite + Tailwind（PPT 等辅助前端）
+├── docs/
+│   ├── shared/                # PRD、TDD、API 契约、Manifest 规范
+│   └── superpowers/specs/     # Phase 1 / Phase 2 实施 Spec
+├── docker/                    # Docker Compose（PG + Redis + App + MCP）
+└── scripts/                   # 启动脚本、证书生成等
 ```
 
 ## 快速开始
 
 ### 前置条件
 
-- JDK 25+
+- JDK 21+
 - Maven 3.8+
-- Docker & Docker Compose（用于本地开发环境）
+- Node.js 22+（仅 MCP Server 开发）
+- Docker & Docker Compose（推荐）
 
-### 本地开发环境搭建
-
-#### 方式一：使用Docker Compose（推荐）
+### Docker Compose（推荐）
 
 ```bash
-# 1. 进入docker目录
 cd docker
-
-# 2. 复制环境变量配置
 cp .env.example .env
-
-# 3. 启动服务
-docker-compose up -d
-
-# 4. 查看服务状态
-docker-compose ps
-
-# 5. 查看日志
-docker-compose logs -f app
+docker compose up -d
+docker compose ps
 ```
 
-#### 方式二：本地安装
+服务就绪后：
+
+- Spring Boot: `http://localhost:8080/api`
+- Swagger UI: `http://localhost:8080/api/swagger-ui.html`
+- MCP Server: `http://localhost:3001/health`
+- 健康检查: `http://localhost:8080/api/actuator/health`
+
+### 本地 Maven 启动
 
 ```bash
-# 1. 安装PostgreSQL 15+并启用Apache AGE扩展
-# 2. 安装Redis 7+
-# 3. 创建数据库
-createdb ontology
-
-# 4. 配置环境变量或修改application.yml
-```
-
-### 构建项目
-
-```bash
-# 编译项目
 mvn clean compile
-
-# 运行测试
 mvn test
-
-# 打包
-mvn clean package -DskipTests
-
-# 构建Docker镜像
-docker build -f docker/Dockerfile -t ontology-platform:latest ..
-```
-
-### 启动应用
-
-```bash
-# 使用Maven启动（开发环境）
 mvn spring-boot:run -Pdev
-
-# 或运行jar包
-java -jar ontology-api/target/ontology-api-1.0.0-SNAPSHOT.jar
 ```
 
-## API文档
-
-启动应用后，访问以下地址：
-
-- **Swagger UI**: http://localhost:8080/api/swagger-ui.html
-- **OpenAPI JSON**: http://localhost:8080/api/v3/api-docs
-- **OpenAPI YAML**: http://localhost:8080/api/v3/api-docs.yaml
-
-## 主要API
-
-### 本体管理
-
-| 方法 | 端点 | 描述 |
-|------|------|------|
-| POST | `/v1/ontologies` | 创建本体 |
-| GET | `/v1/ontologies/{id}` | 获取本体详情 |
-| GET | `/v1/ontologies` | 获取本体列表 |
-| PUT | `/v1/ontologies/{id}` | 更新本体 |
-| DELETE | `/v1/ontologies/{id}` | 删除本体 |
-| POST | `/v1/ontologies/{id}/publish` | 发布本体 |
-| POST | `/v1/ontologies/{id}/archive` | 归档本体 |
-| POST | `/v1/ontologies/{id}/validate` | 验证本体 |
-
-### 对象类型管理
-
-| 方法 | 端点 | 描述 |
-|------|------|------|
-| POST | `/v1/object-types` | 创建对象类型 |
-| GET | `/v1/object-types/{id}` | 获取对象类型详情 |
-| GET | `/v1/object-types` | 获取对象类型列表 |
-| PUT | `/v1/object-types/{id}` | 更新对象类型 |
-| DELETE | `/v1/object-types/{id}` | 删除对象类型 |
-
-### 图遍历查询
-
-| 方法 | 端点 | 描述 |
-|------|------|------|
-| POST | `/v1/graphs/traverse` | 图遍历查询 |
-
-## 配置说明
-
-### 开发环境配置 (application.yml)
-
-主要配置项：
-
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/ontology
-    username: ontology
-    password: ontology123
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
-ontology:
-  graph:
-    max-depth: 5        # 图遍历最大深度
-    max-nodes: 1000    # 最大返回节点数
-    timeout-ms: 5000   # 查询超时（毫秒）
-```
-
-### 环境变量
-
-| 变量 | 默认值 | 描述 |
-|------|--------|------|
-| `DB_HOST` | localhost | PostgreSQL主机 |
-| `DB_PORT` | 5432 | PostgreSQL端口 |
-| `DB_NAME` | ontology | 数据库名 |
-| `DB_USERNAME` | ontology | 数据库用户名 |
-| `DB_PASSWORD` | ontology123 | 数据库密码 |
-| `REDIS_HOST` | localhost | Redis主机 |
-| `REDIS_PORT` | 6379 | Redis端口 |
-| `REDIS_PASSWORD` | - | Redis密码 |
-| `SPRING_PROFILES` | dev | Spring Profiles |
-
-## 开发指南
-
-### 代码规范
-
-- **类命名**: PascalCase (如 `OntologyController`)
-- **方法命名**: camelCase (如 `getOntologyById`)
-- **变量命名**: camelCase (如 `ontologyId`)
-- **常量命名**: UPPER_SNAKE_CASE (如 `MAX_PAGE_SIZE`)
-- **数据库表名**: snake_case单数 (如 `ontology`)
-- **数据库列名**: snake_case (如 `created_at`)
-
-### API设计规范
-
-- RESTful风格
-- 使用JSON格式
-- 分页使用cursor或offset
-- 统一响应格式: `{code, message, data, meta}`
-
-### 数据库设计规范
-
-- 使用UUID作为主键
-- 使用Flyway管理数据库迁移
-- 每个表包含 `created_at` 和 `updated_at` 字段
-- 使用JSONB存储扩展属性
-
-## 部署
-
-### Docker部署
+### MCP Server
 
 ```bash
-# 构建镜像
-docker build -f docker/Dockerfile -t ontology-platform:latest ..
-
-# 运行容器
-docker-compose -f docker/docker-compose.yml up -d
+cd mcp-server
+npm ci
+npm run dev    # 开发
+npm test       # Vitest
 ```
 
-### Kubernetes部署
+环境变量见 [`mcp-server/README.md`](mcp-server/README.md)。
 
-```bash
-# 应用Kubernetes配置
-kubectl apply -f k8s/
-```
+## API 约定
+
+- **基址**: `http://localhost:8080`（`server.servlet.context-path=/api`）
+- **公开路径**: 以 `/api/v1/...` 开头（与 [API 契约 v2.0](docs/shared/API契约-本体建模平台-v2.0.yaml) 一致）
+- **统一响应**: `{ code, message, data, meta: { trace_id, ... } }`
+- **幂等（可选）**: 写请求可带 `Idempotency-Key` Header（Phase 2）
+- **租户**: `X-Tenant-Id` Header，默认 `default`
+
+完整 OpenAPI 定义：[docs/shared/API契约-本体建模平台-v2.0.yaml](docs/shared/API契约-本体建模平台-v2.0.yaml)
+
+## 主要 API 模块
+
+| 模块 | 端点前缀 | 说明 |
+|------|----------|------|
+| 本体 | `/api/v1/ontologies` | CRUD、发布、归档、校验 |
+| 对象类型 | `/api/v1/ontologies/{id}/object-types` | 类型与属性 |
+| 关系 | `/api/v1/ontologies/{id}/relations` | 关系 CRUD |
+| 图遍历 | `/api/v1/ontologies/{id}/graph/*` | traverse / paths / subgraph |
+| Manifest | `/api/v1/manifests/*` | 导入、预览、发布、导出 |
+| 行为/事件/EPC | `/api/v1/ontologies/{id}/actions|events|epc` | 领域定义查询 |
+| 治理 | `/api/v1/governance/*` | Token、角色、权限、审批 |
+| 上传/导入 | `/api/v1/uploads/*`, `/api/v1/imports/*` | 分片上传与导入任务 |
+| 异步任务 | `/api/v1/jobs` | 提交/查询/取消 Job（Phase 2） |
+| Webhook | `/api/v1/webhooks` | 订阅 job 完成/失败回调（Phase 2） |
+| 可观测 | `/api/actuator/prometheus` | Prometheus 指标 |
+
+Manifest 格式与 V01–V11 校验规则见 [docs/shared/ontology-manifest-spec.md](docs/shared/ontology-manifest-spec.md)。
+
+## 文档索引
+
+| 文档 | 路径 |
+|------|------|
+| 故事地图 v1.2 | [docs/shared/PRD-本体建模平台-UserStoryMap-v1.2.md](docs/shared/PRD-本体建模平台-UserStoryMap-v1.2.md) |
+| PRD v2.0 | [docs/shared/PRD-本体建模平台-v2.0.md](docs/shared/PRD-本体建模平台-v2.0.md) |
+| TDD v2.0 | [docs/shared/TDD-本体建模平台-v2.0.md](docs/shared/TDD-本体建模平台-v2.0.md) |
+| API 契约 | [docs/shared/API契约-本体建模平台-v2.0.yaml](docs/shared/API契约-本体建模平台-v2.0.yaml) |
+| Manifest 规范 | [docs/shared/ontology-manifest-spec.md](docs/shared/ontology-manifest-spec.md) |
+| Phase 1 Spec | [docs/superpowers/specs/phase1-spec-v1.md](docs/superpowers/specs/phase1-spec-v1.md) |
+| Phase 2 Spec | [docs/superpowers/specs/phase2-spec-v1.md](docs/superpowers/specs/phase2-spec-v1.md) |
+| 工作日志 | [WORKLOG-2026-06-14.md](WORKLOG-2026-06-14.md) |
 
 ## 测试
 
 ```bash
-# 运行单元测试
+# 后端单元测试
 mvn test
 
-# 运行集成测试
-mvn verify -Pintegration-test
+# MCP Server
+cd mcp-server && npm test
 
-# 生成测试覆盖率报告
+# 测试覆盖率（可选）
 mvn test jacoco:report
 ```
 
+> Integration Test（Testcontainers PG/Redis）需在 Docker 可用环境下单独执行；详见 TDD v2.0 与 Worklog §十七。
+
 ## 监控
 
-- **健康检查**: `GET /api/actuator/health`
-- **指标**: `GET /api/actuator/metrics`
-- **Prometheus**: `GET /api/actuator/prometheus`
-
-## 贡献
-
-1. Fork本仓库
-2. 创建功能分支 (`git checkout -b feature/amazing-feature`)
-3. 提交更改 (`git commit -m 'feat: add amazing feature'`)
-4. 推送到分支 (`git push origin feature/amazing-feature`)
-5. 创建Pull Request
+| 端点 | 说明 |
+|------|------|
+| `GET /api/actuator/health` | 健康检查 |
+| `GET /api/actuator/metrics` | Micrometer 指标 |
+| `GET /api/actuator/prometheus` | Prometheus 抓取 |
 
 ## 许可证
 
-本项目基于 Apache License 2.0 许可证开源。
-
-## 联系方式
-
-- 邮箱: support@ontology-platform.com
-- 项目地址: https://github.com/ontology-platform/ontology-platform
+Apache License 2.0
