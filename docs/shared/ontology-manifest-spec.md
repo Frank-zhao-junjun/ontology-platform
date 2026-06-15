@@ -1,8 +1,8 @@
 # OntologyManifest 规范
 
-> 版本：v1.0 | 状态：Final | 2026-06-15  
-> 对应平台校验器：`ManifestValidator`（V01–V11）  
-> 样例：[examples/manufacturing-manifest.yaml](./examples/manufacturing-manifest.yaml)
+> 版本：v1.0 | 状态：**Legacy** | 2026-06-04  
+> ⚠️ **新对接请使用 [ontology-manifest-spec-v2.md](./ontology-manifest-spec-v2.md)**（`apiVersion: ontology.platform/v2`）。  
+> v1 仍通过 `/api/v1/manifests/import` 支持，平台 Phase 3 将自动 upcast 至 v2。
 
 ---
 

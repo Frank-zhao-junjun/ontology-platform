@@ -1,0 +1,279 @@
+{
+  "apiVersion": "ontology.platform/v2",
+  "kind": "OntologyExchange",
+  "metadata": {
+    "id": "manufacturing-ontology",
+    "version": "1.0.0",
+    "name": "生产制造本体",
+    "displayName": "Manufacturing Ontology",
+    "description": "制造域 MVP — spec.project 与 OntologyProject 字段 1:1",
+    "source": "ontology-designer",
+    "status": "draft",
+    "projectId": "proj-manufacturing-demo",
+    "exportedAt": "2026-06-15T10:00:00Z",
+    "exporterVersion": "2.0.0"
+  },
+  "spec": {
+    "project": {
+      "id": "proj-manufacturing-demo",
+      "name": "生产制造",
+      "description": "制造域演示项目",
+      "domain": {
+        "id": "discrete-manufacturing",
+        "name": "离散制造",
+        "nameEn": "DiscreteManufacturing",
+        "description": "离散制造领域"
+      },
+      "dataModel": {
+        "id": "dm-manufacturing",
+        "name": "生产制造数据模型",
+        "version": "1.0.0",
+        "domain": "discrete-manufacturing",
+        "projects": [
+          {
+            "id": "ep-prod",
+            "name": "生产管理",
+            "nameEn": "ProductionMgmt"
+          }
+        ],
+        "businessScenarios": [
+          {
+            "id": "scenario-mts",
+            "name": "按库存生产",
+            "nameEn": "MakeToStock",
+            "projectId": "ep-prod"
+          }
+        ],
+        "entities": [
+          {
+            "id": "production-order",
+            "name": "生产订单",
+            "nameEn": "ProductionOrder",
+            "projectId": "ep-prod",
+            "businessScenarioId": "scenario-mts",
+            "entityRole": "aggregate_root",
+            "attributes": [
+              {
+                "id": "attr-order-id",
+                "name": "生产订单号",
+                "nameEn": "order_id",
+                "dataType": "string",
+                "required": true
+              },
+              {
+                "id": "attr-status",
+                "name": "订单状态",
+                "nameEn": "status",
+                "dataType": "enum",
+                "required": true
+              }
+            ],
+            "relations": []
+          },
+          {
+            "id": "operation",
+            "name": "工序",
+            "nameEn": "Operation",
+            "projectId": "ep-prod",
+            "businessScenarioId": "scenario-mts",
+            "entityRole": "child_entity",
+            "parentAggregateId": "production-order",
+            "attributes": [],
+            "relations": []
+          }
+        ],
+        "createdAt": "2026-06-15T10:00:00Z",
+        "updatedAt": "2026-06-15T10:00:00Z"
+      },
+      "behaviorModel": {
+        "id": "bm-manufacturing",
+        "name": "生产制造行为模型",
+        "version": "1.0.0",
+        "domain": "discrete-manufacturing",
+        "stateMachines": [
+          {
+            "id": "sm-production-order",
+            "name": "生产订单生命周期",
+            "entity": "production-order",
+            "statusField": "status",
+            "states": [
+              {
+                "id": "st-created",
+                "name": "创建",
+                "isInitial": true,
+                "availableActions": ["action-release-order"],
+                "semanticTag": "created"
+              },
+              {
+                "id": "st-released",
+                "name": "已下达",
+                "isFinal": false
+              }
+            ],
+            "transitions": [
+              {
+                "id": "tr-release",
+                "name": "下达",
+                "from": "st-created",
+                "to": "st-released",
+                "trigger": "manual",
+                "preConditions": ["rule-kitting"],
+                "guardCondition": "kittingCheck()",
+                "publishEventId": "evt-order-released",
+                "requiresApproval": false
+              }
+            ]
+          }
+        ],
+        "actions": [
+          {
+            "id": "action-release-order",
+            "name": "生产订单下达",
+            "nameEn": "ReleaseProductionOrder",
+            "targetEntityId": "production-order",
+            "actionType": "execute",
+            "triggerPhrases": ["下达生产订单", "release order"],
+            "idempotencyKeyTemplate": "{entityId}_release_{timestamp}",
+            "requiresConfirmation": true
+          }
+        ],
+        "createdAt": "2026-06-15T10:00:00Z",
+        "updatedAt": "2026-06-15T10:00:00Z"
+      },
+      "ruleModel": {
+        "id": "rm-manufacturing",
+        "name": "生产制造规则",
+        "version": "1.0.0",
+        "domain": "discrete-manufacturing",
+        "rules": [
+          {
+            "id": "rule-kitting",
+            "name": "物料齐套校验",
+            "type": "cross_entity_validation",
+            "entity": "production-order",
+            "condition": {
+              "type": "expression",
+              "expression": "kittingCheck()"
+            },
+            "errorMessage": "物料未齐套"
+          }
+        ],
+        "createdAt": "2026-06-15T10:00:00Z",
+        "updatedAt": "2026-06-15T10:00:00Z"
+      },
+      "processModel": null,
+      "eventModel": {
+        "id": "em-manufacturing",
+        "name": "生产制造事件",
+        "version": "1.0.0",
+        "domain": "discrete-manufacturing",
+        "events": [
+          {
+            "id": "evt-order-released",
+            "name": "生产订单已下达",
+            "nameEn": "ProductionOrderReleased",
+            "entity": "production-order",
+            "trigger": "state_change",
+            "isDomainEvent": true,
+            "payload": [
+              { "field": "order_id" },
+              { "field": "status" }
+            ],
+            "payloadFields": ["order_id", "status"]
+          }
+        ],
+        "subscriptions": [],
+        "createdAt": "2026-06-15T10:00:00Z",
+        "updatedAt": "2026-06-15T10:00:00Z"
+      },
+      "epcModel": null,
+      "governanceModel": {
+        "id": "gov-manufacturing",
+        "roles": [
+          {
+            "id": "role-planner",
+            "name": "生产计划员",
+            "permissions": [
+              {
+                "objectTypeId": "production-order",
+                "ops": ["READ", "EXECUTE"]
+              }
+            ]
+          }
+        ],
+        "fieldPermissions": [],
+        "agentPolicies": [
+          {
+            "id": "sandbox-prod-planner",
+            "roleId": "role-planner",
+            "allowedMcpTools": ["resolve_intent", "query_ontology", "execute_action"],
+            "allowedAggregateRootIds": ["production-order"],
+            "defaultDeny": true
+          }
+        ],
+        "createdAt": "2026-06-15T10:00:00Z",
+        "updatedAt": "2026-06-15T10:00:00Z"
+      },
+      "dataSourcesModel": null,
+      "metricsModel": null,
+      "organizationModel": null,
+      "agentSemanticLayer": {
+        "intents": [
+          {
+            "id": "intent-release-order",
+            "name": "下达生产订单",
+            "category": "workflow",
+            "triggerPhrases": ["下达订单", "release production order"],
+            "actionId": "action-release-order",
+            "targetEntityId": "production-order",
+            "slotFilling": {
+              "slots": [
+                {
+                  "id": "slot-order-id",
+                  "paramName": "order_id",
+                  "displayName": "生产订单号",
+                  "prompt": "请提供生产订单号",
+                  "examples": ["PO-2026-001"],
+                  "inferableFromContext": true
+                }
+              ],
+              "requiredSlots": ["slot-order-id"],
+              "fillOrder": ["slot-order-id"],
+              "allowBatchFill": false
+            },
+            "priority": 10,
+            "requiresConfirmation": true,
+            "examples": []
+          }
+        ],
+        "dialogContextTemplate": {
+          "ttl": 3600,
+          "referencedEntities": [],
+          "turnCount": 0,
+          "state": "idle"
+        },
+        "semanticRelations": [],
+        "businessTerms": [],
+        "errorRecoveries": [],
+        "temporalValidities": [],
+        "fieldMappings": [],
+        "agentPolicies": [],
+        "metadata": {
+          "version": "1.0.0",
+          "lastUpdated": "2026-06-15T10:00:00Z",
+          "totalIntents": 1,
+          "totalTerms": 0,
+          "totalRelations": 0,
+          "coverage": {
+            "entitiesWithIntents": 1,
+            "totalEntities": 2,
+            "actionsWithRecovery": 0,
+            "totalActions": 1
+          }
+        }
+      },
+      "createdAt": "2026-06-15T10:00:00Z",
+      "updatedAt": "2026-06-15T10:00:00Z"
+    }
+  }
+}
