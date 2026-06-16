@@ -1,0 +1,11 @@
+[project]
+requires = ["java-21", "maven-3.8"]
+entrypoint = "ontology-api/src/main/java/com/ontology/platform/api/OntologyPlatformApplication.java"
+
+[dev]
+build = ["sh", "-c", "mvn clean compile -DskipTests -q"]
+run = ["sh", "-c", "mvn -pl ontology-api spring-boot:run -DskipTests -Dspring-boot.run.profiles=dev"]
+
+[deploy]
+build = ["sh", "-c", "mvn clean package -DskipTests -q"]
+run = ["sh", "-c", "java -Dserver.port=${DEPLOY_RUN_PORT:-8080} -Dspring.profiles.active=dev -jar ontology-api/target/ontology-api-1.0.0-SNAPSHOT.jar"]

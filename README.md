@@ -47,15 +47,18 @@ ontology-platform/
 - Node.js 22+（仅 MCP Server 开发）
 - Docker & Docker Compose（推荐完整环境）
 
-### 方式一：Coze CLI（推荐开发环境）
+### 方式一：Coze CLI
 
-项目已配置 `.coze` 文件，支持一键启动：
+项目根目录已配置 `.coze` 文件。启动前需先拉起 PostgreSQL（Phase 2 功能还需 Redis）：
 
 ```bash
-# 开发模式（H2内存数据库，无需Docker）
+cd docker && docker compose up -d postgres redis
+cd ..
 coze dev
+```
 
-# 生产模式
+```bash
+# 打包部署
 coze build
 coze start
 ```
@@ -64,10 +67,9 @@ coze start
 
 - Spring Boot: `http://localhost:8080/api`
 - Swagger UI: `http://localhost:8080/api/swagger-ui.html`
-- H2 Console: `http://localhost:8080/api/h2-console`
 - 健康检查: `http://localhost:8080/api/actuator/health`
 
-> **注意**: `coze dev` 使用 H2 内存数据库，数据不会持久化。如需 PostgreSQL，请使用 Docker Compose 方式。
+> **注意**: `dev` profile 使用 **PostgreSQL + Flyway + MyBatis-Plus**（与生产栈一致）。Flyway 脚本含 PG 专有语法，**不能用 H2 替代**。无 Redis 时本体 CRUD 可部分可用，Job / 限流 / Webhook 不可用。
 
 ### 方式二：Docker Compose（完整环境）
 
@@ -94,30 +96,22 @@ mvn clean compile
 # 运行测试
 mvn test
 
-# 开发模式启动（H2内存数据库）
-mvn spring-boot:run -Dspring.profiles.active=dev
+# 开发模式（需本地 PG + Redis，见 docker compose）
+mvn spring-boot:run -pl ontology-api -am -Dspring-boot.run.profiles=dev
 
-# 生产模式启动（需配置PostgreSQL）
+# 生产模式
 mvn spring-boot:run -Pprod
 ```
 
 ### 开发环境配置
 
-项目提供两种数据库配置：
+| 配置文件 | 说明 |
+|----------|------|
+| `application.yml` | 默认配置（PostgreSQL、Flyway、MyBatis-Plus） |
+| `application-dev.yml` | dev 覆盖：调试日志、`jpa.ddl-auto=none`、Flyway 开启 |
+| `application-prod.yml` | 生产覆盖 |
 
-| 配置文件 | 数据库 | 用途 |
-|----------|--------|------|
-| `application-dev.yml` | H2 内存数据库 | 快速开发、单元测试 |
-| `application.yml` | PostgreSQL + AGE | 生产环境、完整功能 |
-
-切换配置：
-```bash
-# 使用开发配置（默认）
--Dspring.profiles.active=dev
-
-# 使用生产配置
--Dspring.profiles.active=prod
-```
+`dev` / `prod` 均依赖 PostgreSQL；schema 由 **Flyway** 迁移，不由 Hibernate 建表。
 
 **H2 Console 访问**: `http://localhost:8080/api/h2-console`
 - JDBC URL: `jdbc:h2:mem:ontology`
@@ -207,15 +201,15 @@ mvn test jacoco:report
 ```toml
 [project]
 requires = ["java-21", "maven-3.8"]
-entrypoint = "Ontology-platform/ontology-api/src/main/java/com/ontology/platform/OntologyApiApplication.java"
+entrypoint = "ontology-api/src/main/java/com/ontology/platform/api/OntologyPlatformApplication.java"
 
 [dev]
-build = ["sh", "-c", "cd Ontology-platform && mvn clean compile -DskipTests -q"]
-run = ["sh", "-c", "cd Ontology-platform && mvn spring-boot:run -pl ontology-api -am -DskipTests -Dspring.profiles.active=dev"]
+build = ["sh", "-c", "mvn clean compile -DskipTests -q"]
+run = ["sh", "-c", "mvn -pl ontology-api spring-boot:run -DskipTests -Dspring-boot.run.profiles=dev"]
 
 [deploy]
-build = ["sh", "-c", "cd Ontology-platform && mvn clean package -DskipTests -q"]
-run = ["sh", "-c", "cd Ontology-platform && java -Dspring.profiles.active=dev -jar ontology-api/target/ontology-api-1.0.0-SNAPSHOT.jar"]
+build = ["sh", "-c", "mvn clean package -DskipTests -q"]
+run = ["sh", "-c", "java -Dspring.profiles.active=dev -jar ontology-api/target/ontology-api-1.0.0-SNAPSHOT.jar"]
 ```
 
 ## 许可证

@@ -1,59 +1,32 @@
 # =============================================
-# 本体建模平台 - 开发环境配置 (H2内存数据库)
+# 开发环境配置 (profile: dev)
 # =============================================
+# 栈：PostgreSQL + Flyway + MyBatis-Plus（与生产一致，不用 Hibernate 建表）
+# 前置：本地 PostgreSQL；Phase 2 异步任务 / 限流 / Webhook 还需 Redis
+#   cd docker && docker compose up -d postgres redis
+#
+# Flyway 脚本含 PG 专有语法（uuid-ossp、JSONB 等），H2 无法替代。
 
 server:
   port: ${DEPLOY_RUN_PORT:-8080}
-  servlet:
-    context-path: /api
 
 spring:
-  # 数据源配置 - H2内存数据库
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:ontology;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
-    username: sa
-    password:
-    hikari:
-      minimum-idle: 5
-      maximum-pool-size: 20
-
-  # H2控制台配置
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-
-  # JPA配置
   jpa:
     hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
+      ddl-auto: none
+    show-sql: false
+    open-in-view: false
 
-  # 禁用Flyway（使用H2自动建表）
   flyway:
-    enabled: false
+    enabled: true
 
-  # Redis配置 - 使用嵌入式或禁用
-  data:
+management:
+  health:
     redis:
-      host: localhost
-      port: 6379
-      password:
-      timeout: 2000ms
-      lettuce:
-        pool:
-          max-active: 8
-          max-idle: 8
-          min-idle: 0
+      enabled: ${REDIS_HEALTH_ENABLED:true}
 
-# 日志配置
 logging:
   level:
     com.ontology.platform: DEBUG
     org.springframework.web: INFO
-    org.hibernate.SQL: DEBUG
+    org.hibernate.SQL: WARN
