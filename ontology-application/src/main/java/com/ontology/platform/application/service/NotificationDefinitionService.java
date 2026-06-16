@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontology.platform.application.dto.domain.CreateNotificationDefinitionRequest;
 import com.ontology.platform.application.dto.domain.NotificationDefinitionResponse;
 import com.ontology.platform.domain.entity.NotificationDefinition;
-import com.ontology.platform.infrastructure.persistence.NotificationDefinitionPO;
-import com.ontology.platform.infrastructure.persistence.NotificationDefinitionPOMapper;
+import com.ontology.platform.domain.repository.NotificationDefinitionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,55 +21,49 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NotificationDefinitionService {
 
-    private final NotificationDefinitionPOMapper mapper;
+    private final NotificationDefinitionRepository repository;
     private final ObjectMapper objectMapper;
 
     @Transactional
     public NotificationDefinitionResponse create(String ontologyId, CreateNotificationDefinitionRequest request, String userId) {
-        log.info("Creating NotificationDefinition: ontologyId={}, name={}", ontologyId, request.getNotificationDefinitionName());
+        log.info("Creating NotificationDefinition: ontologyId={}, name={}", ontologyId, request.getNotifName());
         
-        NotificationDefinition entity = NotificationDefinition.create(ontologyId, request.getNotificationDefinitionName(), null);
+        NotificationDefinition entity = NotificationDefinition.create(ontologyId, request.getNotifName(), request.getChannel());
         // Map request fields to entity
         mapRequestToEntity(request, entity);
         
-        NotificationDefinitionPO po = toPO(entity);
-        mapper.insert(po);
+        entity = repository.save(entity);
         
         return toResponse(entity);
     }
 
     public NotificationDefinitionResponse getById(String id) {
-        NotificationDefinitionPO po = mapper.selectById(id);
-        if (po == null) return null;
-        return toResponse(fromPO(po));
+        return repository.findById(id)
+                .map(this::toResponse)
+                .orElse(null);
     }
 
     public List<NotificationDefinitionResponse> listByOntologyId(String ontologyId) {
-        List<NotificationDefinitionPO> pos = mapper.selectByOntologyId(ontologyId);
-        return pos.stream().map(po -> toResponse(fromPO(po))).collect(Collectors.toList());
+        return repository.findByOntologyId(ontologyId).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public NotificationDefinitionResponse update(String id, CreateNotificationDefinitionRequest request) {
-        NotificationDefinitionPO po = mapper.selectById(id);
-        if (po == null) throw new RuntimeException("NotificationDefinition not found: " + id);
+        NotificationDefinition entity = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("NotificationDefinition not found: " + id));
         
-        NotificationDefinition entity = fromPO(po);
         mapRequestToEntity(request, entity);
         entity.setUpdatedAt(Instant.now());
         
-        mapper.updateById(toPO(entity));
+        entity = repository.save(entity);
         return toResponse(entity);
     }
 
     @Transactional
     public void delete(String id) {
-        NotificationDefinitionPO po = mapper.selectById(id);
-        if (po != null) {
-            po.setDeleted(true);
-            po.setUpdatedAt(Instant.now());
-            mapper.updateById(po);
-        }
+        repository.deleteById(id);
     }
 
     // ── mapping helpers ──
@@ -84,42 +77,6 @@ public class NotificationDefinitionService {
         if (req.getTriggerEvent() != null) entity.setTriggerEvent(req.getTriggerEvent());
         if (req.getEnabled() != null) entity.setEnabled(req.getEnabled());
         if (req.getConfig() != null) entity.setConfig(req.getConfig());
-    }
-
-        private NotificationDefinitionPO toPO(NotificationDefinition entity) {
-        return NotificationDefinitionPO.builder()
-                .id(entity.getId())
-                .ontologyId(entity.getOntologyId())
-                .notifName(entity.getNotifName())
-                .description(entity.getDescription())
-                .channel(entity.getChannel())
-                .template(entity.getTemplate())
-                .recipients(entity.getRecipients())
-                .triggerEvent(entity.getTriggerEvent())
-                .enabled(entity.getEnabled())
-                .config(entity.getConfig())
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
-                .deleted(entity.getDeleted())
-                .build();
-    }
-
-        private NotificationDefinition fromPO(NotificationDefinitionPO po) {
-        return NotificationDefinition.builder()
-                .id(po.getId())
-                .ontologyId(po.getOntologyId())
-                .notifName(po.getNotifName())
-                .description(po.getDescription())
-                .channel(po.getChannel())
-                .template(po.getTemplate())
-                .recipients(po.getRecipients())
-                .triggerEvent(po.getTriggerEvent())
-                .enabled(po.getEnabled())
-                .config(po.getConfig())
-                .createdAt(po.getCreatedAt())
-                .updatedAt(po.getUpdatedAt())
-                .deleted(po.getDeleted())
-                .build();
     }
 
         private NotificationDefinitionResponse toResponse(NotificationDefinition entity) {

@@ -1,4 +1,4 @@
-package com.ontology.platform.application.service.job;
+package com.ontology.platform.domain.service;
 
 import java.util.Map;
 

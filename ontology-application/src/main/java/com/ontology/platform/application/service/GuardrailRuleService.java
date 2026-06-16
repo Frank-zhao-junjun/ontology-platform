@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontology.platform.application.dto.domain.CreateGuardrailRuleRequest;
 import com.ontology.platform.application.dto.domain.GuardrailRuleResponse;
 import com.ontology.platform.domain.entity.GuardrailRule;
-import com.ontology.platform.infrastructure.persistence.GuardrailRulePO;
-import com.ontology.platform.infrastructure.persistence.GuardrailRulePOMapper;
+import com.ontology.platform.domain.repository.GuardrailRuleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,55 +21,49 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GuardrailRuleService {
 
-    private final GuardrailRulePOMapper mapper;
+    private final GuardrailRuleRepository repository;
     private final ObjectMapper objectMapper;
 
     @Transactional
     public GuardrailRuleResponse create(String ontologyId, CreateGuardrailRuleRequest request, String userId) {
-        log.info("Creating GuardrailRule: ontologyId={}, name={}", ontologyId, request.getGuardrailRuleName());
+        log.info("Creating GuardrailRule: ontologyId={}, name={}", ontologyId, request.getRuleName());
         
-        GuardrailRule entity = GuardrailRule.create(ontologyId, request.getGuardrailRuleName(), null);
+        GuardrailRule entity = GuardrailRule.create(ontologyId, request.getRuleName(), request.getConditionExpr(), request.getActionType());
         // Map request fields to entity
         mapRequestToEntity(request, entity);
         
-        GuardrailRulePO po = toPO(entity);
-        mapper.insert(po);
+        entity = repository.save(entity);
         
         return toResponse(entity);
     }
 
     public GuardrailRuleResponse getById(String id) {
-        GuardrailRulePO po = mapper.selectById(id);
-        if (po == null) return null;
-        return toResponse(fromPO(po));
+        return repository.findById(id)
+                .map(this::toResponse)
+                .orElse(null);
     }
 
     public List<GuardrailRuleResponse> listByOntologyId(String ontologyId) {
-        List<GuardrailRulePO> pos = mapper.selectByOntologyId(ontologyId);
-        return pos.stream().map(po -> toResponse(fromPO(po))).collect(Collectors.toList());
+        return repository.findByOntologyId(ontologyId).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public GuardrailRuleResponse update(String id, CreateGuardrailRuleRequest request) {
-        GuardrailRulePO po = mapper.selectById(id);
-        if (po == null) throw new RuntimeException("GuardrailRule not found: " + id);
+        GuardrailRule entity = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("GuardrailRule not found: " + id));
         
-        GuardrailRule entity = fromPO(po);
         mapRequestToEntity(request, entity);
         entity.setUpdatedAt(Instant.now());
         
-        mapper.updateById(toPO(entity));
+        entity = repository.save(entity);
         return toResponse(entity);
     }
 
     @Transactional
     public void delete(String id) {
-        GuardrailRulePO po = mapper.selectById(id);
-        if (po != null) {
-            po.setDeleted(true);
-            po.setUpdatedAt(Instant.now());
-            mapper.updateById(po);
-        }
+        repository.deleteById(id);
     }
 
     // ── mapping helpers ──
@@ -83,40 +76,6 @@ public class GuardrailRuleService {
         if (req.getActionConfig() != null) entity.setActionConfig(req.getActionConfig());
         if (req.getPriority() != null) entity.setPriority(req.getPriority());
         if (req.getEnabled() != null) entity.setEnabled(req.getEnabled());
-    }
-
-        private GuardrailRulePO toPO(GuardrailRule entity) {
-        return GuardrailRulePO.builder()
-                .id(entity.getId())
-                .ontologyId(entity.getOntologyId())
-                .ruleName(entity.getRuleName())
-                .description(entity.getDescription())
-                .conditionExpr(entity.getConditionExpr())
-                .actionType(entity.getActionType())
-                .actionConfig(entity.getActionConfig())
-                .priority(entity.getPriority())
-                .enabled(entity.getEnabled())
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
-                .deleted(entity.getDeleted())
-                .build();
-    }
-
-        private GuardrailRule fromPO(GuardrailRulePO po) {
-        return GuardrailRule.builder()
-                .id(po.getId())
-                .ontologyId(po.getOntologyId())
-                .ruleName(po.getRuleName())
-                .description(po.getDescription())
-                .conditionExpr(po.getConditionExpr())
-                .actionType(po.getActionType())
-                .actionConfig(po.getActionConfig())
-                .priority(po.getPriority())
-                .enabled(po.getEnabled())
-                .createdAt(po.getCreatedAt())
-                .updatedAt(po.getUpdatedAt())
-                .deleted(po.getDeleted())
-                .build();
     }
 
         private GuardrailRuleResponse toResponse(GuardrailRule entity) {

@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontology.platform.application.dto.domain.CreateReportDefinitionRequest;
 import com.ontology.platform.application.dto.domain.ReportDefinitionResponse;
 import com.ontology.platform.domain.entity.ReportDefinition;
-import com.ontology.platform.infrastructure.persistence.ReportDefinitionPO;
-import com.ontology.platform.infrastructure.persistence.ReportDefinitionPOMapper;
+import com.ontology.platform.domain.repository.ReportDefinitionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,55 +21,49 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReportDefinitionService {
 
-    private final ReportDefinitionPOMapper mapper;
+    private final ReportDefinitionRepository repository;
     private final ObjectMapper objectMapper;
 
     @Transactional
     public ReportDefinitionResponse create(String ontologyId, CreateReportDefinitionRequest request, String userId) {
-        log.info("Creating ReportDefinition: ontologyId={}, name={}", ontologyId, request.getReportDefinitionName());
+        log.info("Creating ReportDefinition: ontologyId={}, name={}", ontologyId, request.getReportName());
         
-        ReportDefinition entity = ReportDefinition.create(ontologyId, request.getReportDefinitionName(), null);
+        ReportDefinition entity = ReportDefinition.create(ontologyId, request.getReportName(), request.getReportFormat());
         // Map request fields to entity
         mapRequestToEntity(request, entity);
         
-        ReportDefinitionPO po = toPO(entity);
-        mapper.insert(po);
+        entity = repository.save(entity);
         
         return toResponse(entity);
     }
 
     public ReportDefinitionResponse getById(String id) {
-        ReportDefinitionPO po = mapper.selectById(id);
-        if (po == null) return null;
-        return toResponse(fromPO(po));
+        return repository.findById(id)
+                .map(this::toResponse)
+                .orElse(null);
     }
 
     public List<ReportDefinitionResponse> listByOntologyId(String ontologyId) {
-        List<ReportDefinitionPO> pos = mapper.selectByOntologyId(ontologyId);
-        return pos.stream().map(po -> toResponse(fromPO(po))).collect(Collectors.toList());
+        return repository.findByOntologyId(ontologyId).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public ReportDefinitionResponse update(String id, CreateReportDefinitionRequest request) {
-        ReportDefinitionPO po = mapper.selectById(id);
-        if (po == null) throw new RuntimeException("ReportDefinition not found: " + id);
+        ReportDefinition entity = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ReportDefinition not found: " + id));
         
-        ReportDefinition entity = fromPO(po);
         mapRequestToEntity(request, entity);
         entity.setUpdatedAt(Instant.now());
         
-        mapper.updateById(toPO(entity));
+        entity = repository.save(entity);
         return toResponse(entity);
     }
 
     @Transactional
     public void delete(String id) {
-        ReportDefinitionPO po = mapper.selectById(id);
-        if (po != null) {
-            po.setDeleted(true);
-            po.setUpdatedAt(Instant.now());
-            mapper.updateById(po);
-        }
+        repository.deleteById(id);
     }
 
     // ── mapping helpers ──
@@ -85,44 +78,6 @@ public class ReportDefinitionService {
         if (req.getScheduleCron() != null) entity.setScheduleCron(req.getScheduleCron());
         if (req.getEnabled() != null) entity.setEnabled(req.getEnabled());
         if (req.getConfig() != null) entity.setConfig(req.getConfig());
-    }
-
-        private ReportDefinitionPO toPO(ReportDefinition entity) {
-        return ReportDefinitionPO.builder()
-                .id(entity.getId())
-                .ontologyId(entity.getOntologyId())
-                .reportName(entity.getReportName())
-                .description(entity.getDescription())
-                .reportFormat(entity.getReportFormat())
-                .fields(entity.getFields())
-                .dataSource(entity.getDataSource())
-                .queryId(entity.getQueryId())
-                .scheduleCron(entity.getScheduleCron())
-                .enabled(entity.getEnabled())
-                .config(entity.getConfig())
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
-                .deleted(entity.getDeleted())
-                .build();
-    }
-
-        private ReportDefinition fromPO(ReportDefinitionPO po) {
-        return ReportDefinition.builder()
-                .id(po.getId())
-                .ontologyId(po.getOntologyId())
-                .reportName(po.getReportName())
-                .description(po.getDescription())
-                .reportFormat(po.getReportFormat())
-                .fields(po.getFields())
-                .dataSource(po.getDataSource())
-                .queryId(po.getQueryId())
-                .scheduleCron(po.getScheduleCron())
-                .enabled(po.getEnabled())
-                .config(po.getConfig())
-                .createdAt(po.getCreatedAt())
-                .updatedAt(po.getUpdatedAt())
-                .deleted(po.getDeleted())
-                .build();
     }
 
         private ReportDefinitionResponse toResponse(ReportDefinition entity) {

@@ -1,13 +1,13 @@
-package com.ontology.platform.application.service.job.impl;
+package com.ontology.platform.infrastructure.job;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ontology.platform.application.service.job.JobHandler;
-import com.ontology.platform.infrastructure.job.JobQueueService;
+import com.ontology.platform.domain.service.JobHandler;
 import com.ontology.platform.infrastructure.persistence.JobRecordPO;
 import com.ontology.platform.infrastructure.persistence.JobRecordPOMapper;
 import com.ontology.platform.infrastructure.persistence.WebhookSubscriptionPOMapper;
 import com.ontology.platform.infrastructure.metrics.PlatformMetrics;
 import com.ontology.platform.infrastructure.webhook.WebhookDispatcher;
+import com.ontology.platform.infrastructure.job.JobQueueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

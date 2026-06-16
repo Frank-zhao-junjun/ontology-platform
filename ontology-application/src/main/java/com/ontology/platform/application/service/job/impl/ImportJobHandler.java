@@ -2,7 +2,7 @@ package com.ontology.platform.application.service.job.impl;
 
 import com.ontology.platform.application.dto.upload.ImportRequest;
 import com.ontology.platform.application.dto.upload.ImportTaskResponse;
-import com.ontology.platform.application.service.job.JobHandler;
+import com.ontology.platform.domain.service.JobHandler;
 import com.ontology.platform.application.service.upload.ImportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

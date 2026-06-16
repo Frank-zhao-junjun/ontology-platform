@@ -59,6 +59,12 @@
             <artifactId>mapstruct</artifactId>
         </dependency>
 
+        <!-- Swagger/OpenAPI（DTO @Schema 注解） -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

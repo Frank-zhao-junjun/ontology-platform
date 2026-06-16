@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontology.platform.application.dto.domain.CreateApiDefinitionRequest;
 import com.ontology.platform.application.dto.domain.ApiDefinitionResponse;
 import com.ontology.platform.domain.entity.ApiDefinition;
-import com.ontology.platform.infrastructure.persistence.ApiDefinitionPO;
-import com.ontology.platform.infrastructure.persistence.ApiDefinitionPOMapper;
+import com.ontology.platform.domain.repository.ApiDefinitionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,55 +21,49 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ApiDefinitionService {
 
-    private final ApiDefinitionPOMapper mapper;
+    private final ApiDefinitionRepository repository;
     private final ObjectMapper objectMapper;
 
     @Transactional
     public ApiDefinitionResponse create(String ontologyId, CreateApiDefinitionRequest request, String userId) {
-        log.info("Creating ApiDefinition: ontologyId={}, name={}", ontologyId, request.getApiDefinitionName());
+        log.info("Creating ApiDefinition: ontologyId={}, name={}", ontologyId, request.getApiName());
         
-        ApiDefinition entity = ApiDefinition.create(ontologyId, request.getApiDefinitionName(), null);
+        ApiDefinition entity = ApiDefinition.create(ontologyId, request.getApiName(), request.getUrl(), request.getHttpMethod());
         // Map request fields to entity
         mapRequestToEntity(request, entity);
         
-        ApiDefinitionPO po = toPO(entity);
-        mapper.insert(po);
+        entity = repository.save(entity);
         
         return toResponse(entity);
     }
 
     public ApiDefinitionResponse getById(String id) {
-        ApiDefinitionPO po = mapper.selectById(id);
-        if (po == null) return null;
-        return toResponse(fromPO(po));
+        return repository.findById(id)
+                .map(this::toResponse)
+                .orElse(null);
     }
 
     public List<ApiDefinitionResponse> listByOntologyId(String ontologyId) {
-        List<ApiDefinitionPO> pos = mapper.selectByOntologyId(ontologyId);
-        return pos.stream().map(po -> toResponse(fromPO(po))).collect(Collectors.toList());
+        return repository.findByOntologyId(ontologyId).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public ApiDefinitionResponse update(String id, CreateApiDefinitionRequest request) {
-        ApiDefinitionPO po = mapper.selectById(id);
-        if (po == null) throw new RuntimeException("ApiDefinition not found: " + id);
+        ApiDefinition entity = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ApiDefinition not found: " + id));
         
-        ApiDefinition entity = fromPO(po);
         mapRequestToEntity(request, entity);
         entity.setUpdatedAt(Instant.now());
         
-        mapper.updateById(toPO(entity));
+        entity = repository.save(entity);
         return toResponse(entity);
     }
 
     @Transactional
     public void delete(String id) {
-        ApiDefinitionPO po = mapper.selectById(id);
-        if (po != null) {
-            po.setDeleted(true);
-            po.setUpdatedAt(Instant.now());
-            mapper.updateById(po);
-        }
+        repository.deleteById(id);
     }
 
     // ── mapping helpers ──
@@ -86,46 +79,6 @@ public class ApiDefinitionService {
         if (req.getRateLimit() != null) entity.setRateLimit(req.getRateLimit());
         if (req.getTimeoutMs() != null) entity.setTimeoutMs(req.getTimeoutMs());
         if (req.getEnabled() != null) entity.setEnabled(req.getEnabled());
-    }
-
-        private ApiDefinitionPO toPO(ApiDefinition entity) {
-        return ApiDefinitionPO.builder()
-                .id(entity.getId())
-                .ontologyId(entity.getOntologyId())
-                .apiName(entity.getApiName())
-                .description(entity.getDescription())
-                .url(entity.getUrl())
-                .httpMethod(entity.getHttpMethod())
-                .requestSchema(entity.getRequestSchema())
-                .responseSchema(entity.getResponseSchema())
-                .authType(entity.getAuthType())
-                .rateLimit(entity.getRateLimit())
-                .timeoutMs(entity.getTimeoutMs())
-                .enabled(entity.getEnabled())
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
-                .deleted(entity.getDeleted())
-                .build();
-    }
-
-        private ApiDefinition fromPO(ApiDefinitionPO po) {
-        return ApiDefinition.builder()
-                .id(po.getId())
-                .ontologyId(po.getOntologyId())
-                .apiName(po.getApiName())
-                .description(po.getDescription())
-                .url(po.getUrl())
-                .httpMethod(po.getHttpMethod())
-                .requestSchema(po.getRequestSchema())
-                .responseSchema(po.getResponseSchema())
-                .authType(po.getAuthType())
-                .rateLimit(po.getRateLimit())
-                .timeoutMs(po.getTimeoutMs())
-                .enabled(po.getEnabled())
-                .createdAt(po.getCreatedAt())
-                .updatedAt(po.getUpdatedAt())
-                .deleted(po.getDeleted())
-                .build();
     }
 
         private ApiDefinitionResponse toResponse(ApiDefinition entity) {

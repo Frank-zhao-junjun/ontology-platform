@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontology.platform.application.dto.domain.CreatePolicyRuleRequest;
 import com.ontology.platform.application.dto.domain.PolicyRuleResponse;
 import com.ontology.platform.domain.entity.PolicyRule;
-import com.ontology.platform.infrastructure.persistence.PolicyRulePO;
-import com.ontology.platform.infrastructure.persistence.PolicyRulePOMapper;
+import com.ontology.platform.domain.repository.PolicyRuleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,55 +21,49 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PolicyRuleService {
 
-    private final PolicyRulePOMapper mapper;
+    private final PolicyRuleRepository repository;
     private final ObjectMapper objectMapper;
 
     @Transactional
     public PolicyRuleResponse create(String ontologyId, CreatePolicyRuleRequest request, String userId) {
-        log.info("Creating PolicyRule: ontologyId={}, name={}", ontologyId, request.getPolicyRuleName());
+        log.info("Creating PolicyRule: ontologyId={}, name={}", ontologyId, request.getPolicyName());
         
-        PolicyRule entity = PolicyRule.create(ontologyId, request.getPolicyRuleName(), null);
+        PolicyRule entity = PolicyRule.create(ontologyId, request.getPolicyName(), request.getPolicyType());
         // Map request fields to entity
         mapRequestToEntity(request, entity);
         
-        PolicyRulePO po = toPO(entity);
-        mapper.insert(po);
+        entity = repository.save(entity);
         
         return toResponse(entity);
     }
 
     public PolicyRuleResponse getById(String id) {
-        PolicyRulePO po = mapper.selectById(id);
-        if (po == null) return null;
-        return toResponse(fromPO(po));
+        return repository.findById(id)
+                .map(this::toResponse)
+                .orElse(null);
     }
 
     public List<PolicyRuleResponse> listByOntologyId(String ontologyId) {
-        List<PolicyRulePO> pos = mapper.selectByOntologyId(ontologyId);
-        return pos.stream().map(po -> toResponse(fromPO(po))).collect(Collectors.toList());
+        return repository.findByOntologyId(ontologyId).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public PolicyRuleResponse update(String id, CreatePolicyRuleRequest request) {
-        PolicyRulePO po = mapper.selectById(id);
-        if (po == null) throw new RuntimeException("PolicyRule not found: " + id);
+        PolicyRule entity = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("PolicyRule not found: " + id));
         
-        PolicyRule entity = fromPO(po);
         mapRequestToEntity(request, entity);
         entity.setUpdatedAt(Instant.now());
         
-        mapper.updateById(toPO(entity));
+        entity = repository.save(entity);
         return toResponse(entity);
     }
 
     @Transactional
     public void delete(String id) {
-        PolicyRulePO po = mapper.selectById(id);
-        if (po != null) {
-            po.setDeleted(true);
-            po.setUpdatedAt(Instant.now());
-            mapper.updateById(po);
-        }
+        repository.deleteById(id);
     }
 
     // ── mapping helpers ──
@@ -83,40 +76,6 @@ public class PolicyRuleService {
         if (req.getEffect() != null) entity.setEffect(req.getEffect());
         if (req.getPriority() != null) entity.setPriority(req.getPriority());
         if (req.getEnabled() != null) entity.setEnabled(req.getEnabled());
-    }
-
-        private PolicyRulePO toPO(PolicyRule entity) {
-        return PolicyRulePO.builder()
-                .id(entity.getId())
-                .ontologyId(entity.getOntologyId())
-                .policyName(entity.getPolicyName())
-                .description(entity.getDescription())
-                .policyType(entity.getPolicyType())
-                .rules(entity.getRules())
-                .effect(entity.getEffect())
-                .priority(entity.getPriority())
-                .enabled(entity.getEnabled())
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
-                .deleted(entity.getDeleted())
-                .build();
-    }
-
-        private PolicyRule fromPO(PolicyRulePO po) {
-        return PolicyRule.builder()
-                .id(po.getId())
-                .ontologyId(po.getOntologyId())
-                .policyName(po.getPolicyName())
-                .description(po.getDescription())
-                .policyType(po.getPolicyType())
-                .rules(po.getRules())
-                .effect(po.getEffect())
-                .priority(po.getPriority())
-                .enabled(po.getEnabled())
-                .createdAt(po.getCreatedAt())
-                .updatedAt(po.getUpdatedAt())
-                .deleted(po.getDeleted())
-                .build();
     }
 
         private PolicyRuleResponse toResponse(PolicyRule entity) {
