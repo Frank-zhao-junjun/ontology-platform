@@ -44,15 +44,18 @@ ontology-platform/
 
 - JDK 21+
 - Maven 3.8+
+- **Docker Desktop**（本地 dev 需 PostgreSQL + Redis）
 - Node.js 22+（仅 MCP Server 开发）
-- Docker & Docker Compose（推荐完整环境）
 
 ### 方式一：Coze CLI
 
 项目根目录已配置 `.coze` 文件。启动前需先拉起 PostgreSQL（Phase 2 功能还需 Redis）：
 
 ```bash
-cd docker && docker compose up -d postgres redis
+cd docker
+cp .env.example .env    # 首次
+docker compose up -d postgres redis
+docker compose ps
 cd ..
 coze dev
 ```
@@ -89,18 +92,23 @@ docker compose ps
 
 ### 方式三：本地 Maven 启动
 
+先启动基础设施（同上 `docker compose up -d postgres redis`），再：
+
 ```bash
 # 编译
 mvn clean compile
 
-# 运行测试
+# 单元测试（不依赖 Docker）
 mvn test
 
-# 开发模式（需本地 PG + Redis，见 docker compose）
-mvn spring-boot:run -pl ontology-api -am -Dspring-boot.run.profiles=dev
+# 开发模式（PowerShell 示例）
+$env:SPRING_PROFILES_ACTIVE = "dev"
+$env:REDIS_PASSWORD = "redis123"      # 与 docker/.env.example 一致
+$env:DB_PASSWORD = "ontology123"
+mvn -pl ontology-api spring-boot:run -DskipTests
 
-# 生产模式
-mvn spring-boot:run -Pprod
+# 验证
+curl http://localhost:8080/api/actuator/health
 ```
 
 ### 开发环境配置
@@ -111,12 +119,14 @@ mvn spring-boot:run -Pprod
 | `application-dev.yml` | dev 覆盖：调试日志、`jpa.ddl-auto=none`、Flyway 开启 |
 | `application-prod.yml` | 生产覆盖 |
 
-`dev` / `prod` 均依赖 PostgreSQL；schema 由 **Flyway** 迁移，不由 Hibernate 建表。
+`dev` / `prod` 均依赖 PostgreSQL；schema 由 **Flyway** 迁移，不由 Hibernate 建表。Flyway 脚本使用 PG 专有语法（`uuid-ossp`、JSONB 等），**不支持 H2**。
 
-**H2 Console 访问**: `http://localhost:8080/api/h2-console`
-- JDBC URL: `jdbc:h2:mem:ontology`
-- Username: `sa`
-- Password: (空)
+| 环境变量 | 默认值 | 说明 |
+|----------|--------|------|
+| `DB_HOST` / `DB_PORT` | `localhost` / `5432` | PostgreSQL |
+| `DB_USERNAME` / `DB_PASSWORD` | `ontology` / `ontology123` | 与 `docker/.env.example` 一致 |
+| `REDIS_HOST` / `REDIS_PORT` | `localhost` / `6379` | Phase 2 Job / 限流 / Webhook |
+| `REDIS_PASSWORD` | 空（本地需设 `redis123`） | Docker Redis 默认带密码 |
 
 ### MCP Server
 
@@ -155,7 +165,7 @@ npm test       # Vitest
 | Webhook | `/api/v1/webhooks` | 订阅 job 完成/失败回调（Phase 2） |
 | 可观测 | `/api/actuator/prometheus` | Prometheus 指标 |
 
-Manifest 格式与 V01–V11 校验规则见 [docs/shared/ontology-manifest-spec.md](docs/shared/ontology-manifest-spec.md)。
+Manifest v2 交换契约见 [ontology-manifest-spec-v2.md](docs/shared/ontology-manifest-spec-v2.md)；v1 Legacy（V01–V11）见 [ontology-manifest-spec.md](docs/shared/ontology-manifest-spec.md)。
 
 ## 文档索引
 
@@ -169,7 +179,7 @@ Manifest 格式与 V01–V11 校验规则见 [docs/shared/ontology-manifest-spec
 | Phase 3 Spec | [docs/superpowers/specs/phase3-spec-v1.md](docs/superpowers/specs/phase3-spec-v1.md) |
 | Phase 1 Spec | [docs/superpowers/specs/phase1-spec-v1.md](docs/superpowers/specs/phase1-spec-v1.md) |
 | Phase 2 Spec | [docs/superpowers/specs/phase2-spec-v1.md](docs/superpowers/specs/phase2-spec-v1.md) |
-| 工作日志 | [WORKLOG-2026-06-14.md](WORKLOG-2026-06-14.md) |
+| 工作日志 | [WORKLOG-2026-06-14.md](WORKLOG-2026-06-14.md) · [WORKLOG-2026-06-16.md](WORKLOG-2026-06-16.md) |
 
 ## 测试
 
