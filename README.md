@@ -33,7 +33,9 @@ ontology-platform/
 │   ├── shared/                # PRD、TDD、API 契约、Manifest 规范
 │   └── superpowers/specs/     # Phase 1 / Phase 2 实施 Spec
 ├── docker/                    # Docker Compose（PG + Redis + App + MCP）
-└── scripts/                   # 启动脚本、证书生成等
+├── scripts/                   # 启动脚本、证书生成等
+├── .coze                      # Coze CLI 配置文件
+└── README.md
 ```
 
 ## 快速开始
@@ -43,9 +45,31 @@ ontology-platform/
 - JDK 21+
 - Maven 3.8+
 - Node.js 22+（仅 MCP Server 开发）
-- Docker & Docker Compose（推荐）
+- Docker & Docker Compose（推荐完整环境）
 
-### Docker Compose（推荐）
+### 方式一：Coze CLI（推荐开发环境）
+
+项目已配置 `.coze` 文件，支持一键启动：
+
+```bash
+# 开发模式（H2内存数据库，无需Docker）
+coze dev
+
+# 生产模式
+coze build
+coze start
+```
+
+服务就绪后：
+
+- Spring Boot: `http://localhost:8080/api`
+- Swagger UI: `http://localhost:8080/api/swagger-ui.html`
+- H2 Console: `http://localhost:8080/api/h2-console`
+- 健康检查: `http://localhost:8080/api/actuator/health`
+
+> **注意**: `coze dev` 使用 H2 内存数据库，数据不会持久化。如需 PostgreSQL，请使用 Docker Compose 方式。
+
+### 方式二：Docker Compose（完整环境）
 
 ```bash
 cd docker
@@ -61,13 +85,44 @@ docker compose ps
 - MCP Server: `http://localhost:3001/health`
 - 健康检查: `http://localhost:8080/api/actuator/health`
 
-### 本地 Maven 启动
+### 方式三：本地 Maven 启动
 
 ```bash
+# 编译
 mvn clean compile
+
+# 运行测试
 mvn test
-mvn spring-boot:run -Pdev
+
+# 开发模式启动（H2内存数据库）
+mvn spring-boot:run -Dspring.profiles.active=dev
+
+# 生产模式启动（需配置PostgreSQL）
+mvn spring-boot:run -Pprod
 ```
+
+### 开发环境配置
+
+项目提供两种数据库配置：
+
+| 配置文件 | 数据库 | 用途 |
+|----------|--------|------|
+| `application-dev.yml` | H2 内存数据库 | 快速开发、单元测试 |
+| `application.yml` | PostgreSQL + AGE | 生产环境、完整功能 |
+
+切换配置：
+```bash
+# 使用开发配置（默认）
+-Dspring.profiles.active=dev
+
+# 使用生产配置
+-Dspring.profiles.active=prod
+```
+
+**H2 Console 访问**: `http://localhost:8080/api/h2-console`
+- JDBC URL: `jdbc:h2:mem:ontology`
+- Username: `sa`
+- Password: (空)
 
 ### MCP Server
 
@@ -144,6 +199,24 @@ mvn test jacoco:report
 | `GET /api/actuator/health` | 健康检查 |
 | `GET /api/actuator/metrics` | Micrometer 指标 |
 | `GET /api/actuator/prometheus` | Prometheus 抓取 |
+
+## Coze 配置
+
+项目根目录 `.coze` 文件定义了启动命令：
+
+```toml
+[project]
+requires = ["java-21", "maven-3.8"]
+entrypoint = "Ontology-platform/ontology-api/src/main/java/com/ontology/platform/OntologyApiApplication.java"
+
+[dev]
+build = ["sh", "-c", "cd Ontology-platform && mvn clean compile -DskipTests -q"]
+run = ["sh", "-c", "cd Ontology-platform && mvn spring-boot:run -pl ontology-api -am -DskipTests -Dspring.profiles.active=dev"]
+
+[deploy]
+build = ["sh", "-c", "cd Ontology-platform && mvn clean package -DskipTests -q"]
+run = ["sh", "-c", "cd Ontology-platform && java -Dspring.profiles.active=dev -jar ontology-api/target/ontology-api-1.0.0-SNAPSHOT.jar"]
+```
 
 ## 许可证
 
