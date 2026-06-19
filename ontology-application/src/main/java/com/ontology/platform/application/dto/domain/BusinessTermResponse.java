@@ -1,0 +1,23 @@
+package com.ontology.platform.application.dto.domain;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+import java.time.Instant;
+
+@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
+@Schema(description = "BusinessTerm响应")
+public class BusinessTermResponse {
+    @Schema(description = "ID") private String id;
+    @Schema(description = "name")
+    private String name;
+    @Schema(description = "name_en")
+    private String nameEn;
+    @Schema(description = "definition")
+    private String definition;
+    @Schema(description = "synonyms")
+    private String synonyms;
+    @Schema(description = "ontology_id")
+    private String ontologyId;
+    @Schema(description = "创建时间") private Instant createdAt;
+    @Schema(description = "更新时间") private Instant updatedAt;
+}
