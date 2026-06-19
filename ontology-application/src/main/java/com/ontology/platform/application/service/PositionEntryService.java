@@ -54,10 +54,9 @@ public class PositionEntryService {
         if (req.getResponsibilities() != null) entity.setResponsibilities(req.getResponsibilities());
     }
 
-    private PositionEntryPO toPO(PositionEntry entity) {
+        private PositionEntryPO toPO(PositionEntry entity) {
         return PositionEntryPO.builder()
                 .id(entity.getId())
-                .ontologyId(entity.getOntologyId())
                 .name(entity.getName())
                 .nameEn(entity.getNameEn())
                 .description(entity.getDescription())
@@ -68,10 +67,9 @@ public class PositionEntryService {
                 .build();
     }
 
-    private PositionEntry fromPO(PositionEntryPO po) {
+        private PositionEntry fromPO(PositionEntryPO po) {
         return PositionEntry.builder()
                 .id(po.getId())
-                .ontologyId(po.getOntologyId())
                 .name(po.getName())
                 .nameEn(po.getNameEn())
                 .description(po.getDescription())
@@ -82,7 +80,7 @@ public class PositionEntryService {
                 .build();
     }
 
-    private PositionEntryResponse toResponse(PositionEntry entity) {
+        private PositionEntryResponse toResponse(PositionEntry entity) {
         return PositionEntryResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())

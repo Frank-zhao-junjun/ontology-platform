@@ -56,10 +56,9 @@ public class BusinessMetricService {
         if (req.getTargetEntity() != null) entity.setTargetEntity(req.getTargetEntity());
     }
 
-    private BusinessMetricPO toPO(BusinessMetric entity) {
+        private BusinessMetricPO toPO(BusinessMetric entity) {
         return BusinessMetricPO.builder()
                 .id(entity.getId())
-                .ontologyId(entity.getOntologyId())
                 .name(entity.getName())
                 .nameEn(entity.getNameEn())
                 .description(entity.getDescription())
@@ -72,10 +71,9 @@ public class BusinessMetricService {
                 .build();
     }
 
-    private BusinessMetric fromPO(BusinessMetricPO po) {
+        private BusinessMetric fromPO(BusinessMetricPO po) {
         return BusinessMetric.builder()
                 .id(po.getId())
-                .ontologyId(po.getOntologyId())
                 .name(po.getName())
                 .nameEn(po.getNameEn())
                 .description(po.getDescription())
@@ -88,7 +86,7 @@ public class BusinessMetricService {
                 .build();
     }
 
-    private BusinessMetricResponse toResponse(BusinessMetric entity) {
+        private BusinessMetricResponse toResponse(BusinessMetric entity) {
         return BusinessMetricResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())

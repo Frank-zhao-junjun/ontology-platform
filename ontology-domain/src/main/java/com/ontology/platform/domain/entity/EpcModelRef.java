@@ -1,21 +1,21 @@
-package com.ontology.platform.domain.entity.epc;
+package com.ontology.platform.domain.entity;
 
 import lombok.*;
 import java.time.Instant;
 import java.util.UUID;
 
 @Getter @Builder @NoArgsConstructor @AllArgsConstructor
-public class EpcProfile {
+public class EpcModelRef {
     private String id;
     private String chainId;
-    private String profileData;
-    private String profileVersion;
-    private Boolean isActive;
+    private String modelType;
+    private String modelId;
+    private String refMetadata;
     private Instant createdAt;
     private Instant updatedAt;
 
-    public static EpcProfile create() {
-        return EpcProfile.builder().id(UUID.randomUUID().toString())
+    public static EpcModelRef create() {
+        return EpcModelRef.builder().id(UUID.randomUUID().toString())
                 .createdAt(Instant.now()).updatedAt(Instant.now()).build();
     }
 }

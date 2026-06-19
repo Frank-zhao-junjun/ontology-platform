@@ -40,21 +40,45 @@ public class ErrorRecoveryService {
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
 
-    private ErrorRecoveryPO toPO(ErrorRecovery entity) {
+        private ErrorRecoveryPO toPO(ErrorRecovery entity) {
         return ErrorRecoveryPO.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .actionId(entity.getActionId())
+                .errorPattern(entity.getErrorPattern())
+                .recoveryStrategy(entity.getRecoveryStrategy())
+                .maxRetries(entity.getMaxRetries())
+                .fallbackActionId(entity.getFallbackActionId())
+                .description(entity.getDescription())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
-    private ErrorRecovery fromPO(ErrorRecoveryPO po) {
+        private ErrorRecovery fromPO(ErrorRecoveryPO po) {
         return ErrorRecovery.builder()
-                .id(po.getId())        .createdAt(po.getCreatedAt())
+                .id(po.getId())
+                .actionId(po.getActionId())
+                .errorPattern(po.getErrorPattern())
+                .recoveryStrategy(po.getRecoveryStrategy())
+                .maxRetries(po.getMaxRetries())
+                .fallbackActionId(po.getFallbackActionId())
+                .description(po.getDescription())
+                .createdAt(po.getCreatedAt())
+                .updatedAt(po.getUpdatedAt())
                 .build();
     }
 
-    private ErrorRecoveryResponse toResponse(ErrorRecovery entity) {
+        private ErrorRecoveryResponse toResponse(ErrorRecovery entity) {
         return ErrorRecoveryResponse.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .actionId(entity.getActionId())
+                .errorPattern(entity.getErrorPattern())
+                .recoveryStrategy(entity.getRecoveryStrategy())
+                .maxRetries(entity.getMaxRetries())
+                .fallbackActionId(entity.getFallbackActionId())
+                .description(entity.getDescription())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 }

@@ -40,23 +40,38 @@ public class EpcProfileService {
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
 
-    private EpcProfilePO toPO(EpcProfile entity) {
+        private EpcProfilePO toPO(EpcProfile entity) {
         return EpcProfilePO.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .chainId(entity.getChainId())
+                .profileData(entity.getProfileData())
+                .profileVersion(entity.getProfileVersion())
+                .isActive(entity.getIsActive())
+                .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
-    private EpcProfile fromPO(EpcProfilePO po) {
+        private EpcProfile fromPO(EpcProfilePO po) {
         return EpcProfile.builder()
-                .id(po.getId())        .createdAt(po.getCreatedAt())
+                .id(po.getId())
+                .chainId(po.getChainId())
+                .profileData(po.getProfileData())
+                .profileVersion(po.getProfileVersion())
+                .isActive(po.getIsActive())
+                .createdAt(po.getCreatedAt())
                 .updatedAt(po.getUpdatedAt())
                 .build();
     }
 
-    private EpcProfileResponse toResponse(EpcProfile entity) {
+        private EpcProfileResponse toResponse(EpcProfile entity) {
         return EpcProfileResponse.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .chainId(entity.getChainId())
+                .profileData(entity.getProfileData())
+                .profileVersion(entity.getProfileVersion())
+                .isActive(entity.getIsActive())
+                .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }

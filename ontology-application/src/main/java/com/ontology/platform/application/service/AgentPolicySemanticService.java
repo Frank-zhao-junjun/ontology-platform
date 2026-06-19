@@ -40,23 +40,47 @@ public class AgentPolicySemanticService {
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
 
-    private AgentPolicySemanticPO toPO(AgentPolicySemantic entity) {
+        private AgentPolicySemanticPO toPO(AgentPolicySemantic entity) {
         return AgentPolicySemanticPO.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .name(entity.getName())
+                .roleId(entity.getRoleId())
+                .intentPatterns(entity.getIntentPatterns())
+                .allowActions(entity.getAllowActions())
+                .denyActions(entity.getDenyActions())
+                .requireConfirm(entity.getRequireConfirm())
+                .isActive(entity.getIsActive())
+                .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
-    private AgentPolicySemantic fromPO(AgentPolicySemanticPO po) {
+        private AgentPolicySemantic fromPO(AgentPolicySemanticPO po) {
         return AgentPolicySemantic.builder()
-                .id(po.getId())        .createdAt(po.getCreatedAt())
+                .id(po.getId())
+                .name(po.getName())
+                .roleId(po.getRoleId())
+                .intentPatterns(po.getIntentPatterns())
+                .allowActions(po.getAllowActions())
+                .denyActions(po.getDenyActions())
+                .requireConfirm(po.getRequireConfirm())
+                .isActive(po.getIsActive())
+                .createdAt(po.getCreatedAt())
                 .updatedAt(po.getUpdatedAt())
                 .build();
     }
 
-    private AgentPolicySemanticResponse toResponse(AgentPolicySemantic entity) {
+        private AgentPolicySemanticResponse toResponse(AgentPolicySemantic entity) {
         return AgentPolicySemanticResponse.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .name(entity.getName())
+                .roleId(entity.getRoleId())
+                .intentPatterns(entity.getIntentPatterns())
+                .allowActions(entity.getAllowActions())
+                .denyActions(entity.getDenyActions())
+                .requireConfirm(entity.getRequireConfirm())
+                .isActive(entity.getIsActive())
+                .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }

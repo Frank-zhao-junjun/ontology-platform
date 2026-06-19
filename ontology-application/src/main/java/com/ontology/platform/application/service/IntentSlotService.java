@@ -40,21 +40,42 @@ public class IntentSlotService {
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
 
-    private IntentSlotPO toPO(IntentSlot entity) {
+        private IntentSlotPO toPO(IntentSlot entity) {
         return IntentSlotPO.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .intentId(entity.getIntentId())
+                .name(entity.getName())
+                .slotType(entity.getSlotType())
+                .required(entity.getRequired())
+                .examples(entity.getExamples())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
-    private IntentSlot fromPO(IntentSlotPO po) {
+        private IntentSlot fromPO(IntentSlotPO po) {
         return IntentSlot.builder()
-                .id(po.getId())        .createdAt(po.getCreatedAt())
+                .id(po.getId())
+                .intentId(po.getIntentId())
+                .name(po.getName())
+                .slotType(po.getSlotType())
+                .required(po.getRequired())
+                .examples(po.getExamples())
+                .createdAt(po.getCreatedAt())
+                .updatedAt(po.getUpdatedAt())
                 .build();
     }
 
-    private IntentSlotResponse toResponse(IntentSlot entity) {
+        private IntentSlotResponse toResponse(IntentSlot entity) {
         return IntentSlotResponse.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .intentId(entity.getIntentId())
+                .name(entity.getName())
+                .slotType(entity.getSlotType())
+                .required(entity.getRequired())
+                .examples(entity.getExamples())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 }

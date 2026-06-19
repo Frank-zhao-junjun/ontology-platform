@@ -54,10 +54,9 @@ public class DepartmentService {
         if (req.getParentDepartmentId() != null) entity.setParentDepartmentId(req.getParentDepartmentId());
     }
 
-    private DepartmentPO toPO(Department entity) {
+        private DepartmentPO toPO(Department entity) {
         return DepartmentPO.builder()
                 .id(entity.getId())
-                .ontologyId(entity.getOntologyId())
                 .name(entity.getName())
                 .nameEn(entity.getNameEn())
                 .description(entity.getDescription())
@@ -67,10 +66,9 @@ public class DepartmentService {
                 .build();
     }
 
-    private Department fromPO(DepartmentPO po) {
+        private Department fromPO(DepartmentPO po) {
         return Department.builder()
                 .id(po.getId())
-                .ontologyId(po.getOntologyId())
                 .name(po.getName())
                 .nameEn(po.getNameEn())
                 .description(po.getDescription())
@@ -80,7 +78,7 @@ public class DepartmentService {
                 .build();
     }
 
-    private DepartmentResponse toResponse(Department entity) {
+        private DepartmentResponse toResponse(Department entity) {
         return DepartmentResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())

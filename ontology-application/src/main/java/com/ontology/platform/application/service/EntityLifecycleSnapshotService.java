@@ -40,21 +40,39 @@ public class EntityLifecycleSnapshotService {
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
 
-    private EntityLifecycleSnapshotPO toPO(EntityLifecycleSnapshot entity) {
+        private EntityLifecycleSnapshotPO toPO(EntityLifecycleSnapshot entity) {
         return EntityLifecycleSnapshotPO.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .entityId(entity.getEntityId())
+                .ontologyId(entity.getOntologyId())
+                .lifecycleData(entity.getLifecycleData())
+                .snapshotVersion(entity.getSnapshotVersion())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
-    private EntityLifecycleSnapshot fromPO(EntityLifecycleSnapshotPO po) {
+        private EntityLifecycleSnapshot fromPO(EntityLifecycleSnapshotPO po) {
         return EntityLifecycleSnapshot.builder()
-                .id(po.getId())        .createdAt(po.getCreatedAt())
+                .id(po.getId())
+                .entityId(po.getEntityId())
+                .ontologyId(po.getOntologyId())
+                .lifecycleData(po.getLifecycleData())
+                .snapshotVersion(po.getSnapshotVersion())
+                .createdAt(po.getCreatedAt())
+                .updatedAt(po.getUpdatedAt())
                 .build();
     }
 
-    private EntityLifecycleSnapshotResponse toResponse(EntityLifecycleSnapshot entity) {
+        private EntityLifecycleSnapshotResponse toResponse(EntityLifecycleSnapshot entity) {
         return EntityLifecycleSnapshotResponse.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .entityId(entity.getEntityId())
+                .ontologyId(entity.getOntologyId())
+                .lifecycleData(entity.getLifecycleData())
+                .snapshotVersion(entity.getSnapshotVersion())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 }

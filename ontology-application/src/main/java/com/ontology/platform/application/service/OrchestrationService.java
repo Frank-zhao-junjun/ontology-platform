@@ -52,10 +52,9 @@ public class OrchestrationService {
         if (req.getEntryPoints() != null) entity.setEntryPoints(req.getEntryPoints());
     }
 
-    private OrchestrationPO toPO(Orchestration entity) {
+        private OrchestrationPO toPO(Orchestration entity) {
         return OrchestrationPO.builder()
                 .id(entity.getId())
-                .ontologyId(entity.getOntologyId())
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .entryPoints(entity.getEntryPoints())
@@ -64,10 +63,9 @@ public class OrchestrationService {
                 .build();
     }
 
-    private Orchestration fromPO(OrchestrationPO po) {
+        private Orchestration fromPO(OrchestrationPO po) {
         return Orchestration.builder()
                 .id(po.getId())
-                .ontologyId(po.getOntologyId())
                 .name(po.getName())
                 .description(po.getDescription())
                 .entryPoints(po.getEntryPoints())
@@ -76,7 +74,7 @@ public class OrchestrationService {
                 .build();
     }
 
-    private OrchestrationResponse toResponse(Orchestration entity) {
+        private OrchestrationResponse toResponse(Orchestration entity) {
         return OrchestrationResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())

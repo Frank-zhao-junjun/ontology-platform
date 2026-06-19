@@ -40,23 +40,50 @@ public class EpcEdgeService {
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
 
-    private EpcEdgePO toPO(EpcEdge entity) {
+        private EpcEdgePO toPO(EpcEdge entity) {
         return EpcEdgePO.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .chainId(entity.getChainId())
+                .sourceNodeId(entity.getSourceNodeId())
+                .targetNodeId(entity.getTargetNodeId())
+                .edgeType(entity.getEdgeType())
+                .label(entity.getLabel())
+                .conditionExpr(entity.getConditionExpr())
+                .metadata(entity.getMetadata())
+                .sortOrder(entity.getSortOrder())
+                .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
-    private EpcEdge fromPO(EpcEdgePO po) {
+        private EpcEdge fromPO(EpcEdgePO po) {
         return EpcEdge.builder()
-                .id(po.getId())        .createdAt(po.getCreatedAt())
+                .id(po.getId())
+                .chainId(po.getChainId())
+                .sourceNodeId(po.getSourceNodeId())
+                .targetNodeId(po.getTargetNodeId())
+                .edgeType(po.getEdgeType())
+                .label(po.getLabel())
+                .conditionExpr(po.getConditionExpr())
+                .metadata(po.getMetadata())
+                .sortOrder(po.getSortOrder())
+                .createdAt(po.getCreatedAt())
                 .updatedAt(po.getUpdatedAt())
                 .build();
     }
 
-    private EpcEdgeResponse toResponse(EpcEdge entity) {
+        private EpcEdgeResponse toResponse(EpcEdge entity) {
         return EpcEdgeResponse.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .chainId(entity.getChainId())
+                .sourceNodeId(entity.getSourceNodeId())
+                .targetNodeId(entity.getTargetNodeId())
+                .edgeType(entity.getEdgeType())
+                .label(entity.getLabel())
+                .conditionExpr(entity.getConditionExpr())
+                .metadata(entity.getMetadata())
+                .sortOrder(entity.getSortOrder())
+                .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }

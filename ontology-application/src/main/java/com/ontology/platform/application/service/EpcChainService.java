@@ -40,23 +40,41 @@ public class EpcChainService {
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
 
-    private EpcChainPO toPO(EpcChain entity) {
+        private EpcChainPO toPO(EpcChain entity) {
         return EpcChainPO.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .name(entity.getName())
+                .aggregateRootId(entity.getAggregateRootId())
+                .description(entity.getDescription())
+                .chainType(entity.getChainType())
+                .isActive(entity.getIsActive())
+                .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
-    private EpcChain fromPO(EpcChainPO po) {
+        private EpcChain fromPO(EpcChainPO po) {
         return EpcChain.builder()
-                .id(po.getId())        .createdAt(po.getCreatedAt())
+                .id(po.getId())
+                .name(po.getName())
+                .aggregateRootId(po.getAggregateRootId())
+                .description(po.getDescription())
+                .chainType(po.getChainType())
+                .isActive(po.getIsActive())
+                .createdAt(po.getCreatedAt())
                 .updatedAt(po.getUpdatedAt())
                 .build();
     }
 
-    private EpcChainResponse toResponse(EpcChain entity) {
+        private EpcChainResponse toResponse(EpcChain entity) {
         return EpcChainResponse.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .name(entity.getName())
+                .aggregateRootId(entity.getAggregateRootId())
+                .description(entity.getDescription())
+                .chainType(entity.getChainType())
+                .isActive(entity.getIsActive())
+                .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }

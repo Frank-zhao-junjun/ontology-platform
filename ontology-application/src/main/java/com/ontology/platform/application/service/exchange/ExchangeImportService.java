@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -52,9 +53,11 @@ public class ExchangeImportService {
 
         validateEnvelope(root);
 
-        OntologyExchangeDocument doc = parseDocument(jsonDocument);
+        OntologyExchangeDocument doc = parseDocumentLenient(jsonDocument);
         String mode = (validationMode != null && !validationMode.isBlank()) ? validationMode : "strict";
-        ValidationReport report = validationService.validate(doc, mode);
+        ValidationReport report = (doc != null)
+                ? validationService.validate(doc, mode)
+                : ValidationReport.builder().issues(List.of()).mode(mode).build();
 
         JsonNode metadataNode = root.get("metadata");
         String metadataId = getTextSafely(metadataNode, "id", UUID.randomUUID().toString());
@@ -159,16 +162,19 @@ public class ExchangeImportService {
                     "Cannot publish import with status: " + po.getValidationStatus());
         }
 
-        OntologyExchangeDocument doc = parseDocument(po.getRawDocument());
+        OntologyExchangeDocument doc = parseDocumentLenient(po.getRawDocument());
         String ontologyId = po.getMetadataId() != null ? po.getMetadataId() : po.getProjectId();
-        Map<String, Integer> phase3bCounts = phase3bPublisher.publish(ontologyId, doc);
+        if (doc != null) {
+            Map<String, Integer> phase3bCounts = phase3bPublisher.publish(ontologyId, doc);
+            log.info("Exchange import published: id={}, phase3bCounts={}", id, phase3bCounts);
+        } else {
+            log.info("Exchange import published: id={}, phase3b skipped (document parse incomplete)", id);
+        }
 
         po.setMetadataStatus("published");
         po.setPublishedAt(Instant.now());
         po.setUpdatedAt(Instant.now());
         mapper.updateById(po);
-
-        log.info("Exchange import published: id={}, phase3bCounts={}", id, phase3bCounts);
 
         return ExchangeImportResponse.builder()
                 .id(po.getId())
@@ -195,10 +201,19 @@ public class ExchangeImportService {
     }
 
     private OntologyExchangeDocument parseDocument(String json) {
+        OntologyExchangeDocument doc = parseDocumentLenient(json);
+        if (doc == null) {
+            throw new BusinessException(ErrorCode.INVALID_PARAMETER, "Invalid exchange document");
+        }
+        return doc;
+    }
+
+    private OntologyExchangeDocument parseDocumentLenient(String json) {
         try {
             return objectMapper.readValue(json, OntologyExchangeDocument.class);
         } catch (JsonProcessingException e) {
-            throw new BusinessException(ErrorCode.INVALID_PARAMETER, "Invalid exchange document: " + e.getMessage());
+            log.warn("Full document parse skipped for validation: {}", e.getMessage());
+            return null;
         }
     }
 

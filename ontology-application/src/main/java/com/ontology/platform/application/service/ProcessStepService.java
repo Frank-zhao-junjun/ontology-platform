@@ -55,10 +55,9 @@ public class ProcessStepService {
         if (req.getConfig() != null) entity.setConfig(req.getConfig());
     }
 
-    private ProcessStepPO toPO(ProcessStep entity) {
+        private ProcessStepPO toPO(ProcessStep entity) {
         return ProcessStepPO.builder()
                 .id(entity.getId())
-                .ontologyId(entity.getOntologyId())
                 .orchestrationId(entity.getOrchestrationId())
                 .name(entity.getName())
                 .stepType(entity.getStepType())
@@ -70,10 +69,9 @@ public class ProcessStepService {
                 .build();
     }
 
-    private ProcessStep fromPO(ProcessStepPO po) {
+        private ProcessStep fromPO(ProcessStepPO po) {
         return ProcessStep.builder()
                 .id(po.getId())
-                .ontologyId(po.getOntologyId())
                 .orchestrationId(po.getOrchestrationId())
                 .name(po.getName())
                 .stepType(po.getStepType())
@@ -85,7 +83,7 @@ public class ProcessStepService {
                 .build();
     }
 
-    private ProcessStepResponse toResponse(ProcessStep entity) {
+        private ProcessStepResponse toResponse(ProcessStep entity) {
         return ProcessStepResponse.builder()
                 .id(entity.getId())
                 .orchestrationId(entity.getOrchestrationId())

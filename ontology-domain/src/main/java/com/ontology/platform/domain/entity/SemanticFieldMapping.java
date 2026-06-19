@@ -1,4 +1,4 @@
-package com.ontology.platform.domain.entity.phase3c;
+package com.ontology.platform.domain.entity;
 
 import lombok.*;
 import java.time.Instant;

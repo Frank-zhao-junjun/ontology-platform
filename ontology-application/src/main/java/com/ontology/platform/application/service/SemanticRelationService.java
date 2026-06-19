@@ -40,21 +40,39 @@ public class SemanticRelationService {
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
 
-    private SemanticRelationPO toPO(SemanticRelation entity) {
+        private SemanticRelationPO toPO(SemanticRelation entity) {
         return SemanticRelationPO.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .sourceTermId(entity.getSourceTermId())
+                .targetTermId(entity.getTargetTermId())
+                .relationType(entity.getRelationType())
+                .description(entity.getDescription())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
-    private SemanticRelation fromPO(SemanticRelationPO po) {
+        private SemanticRelation fromPO(SemanticRelationPO po) {
         return SemanticRelation.builder()
-                .id(po.getId())        .createdAt(po.getCreatedAt())
+                .id(po.getId())
+                .sourceTermId(po.getSourceTermId())
+                .targetTermId(po.getTargetTermId())
+                .relationType(po.getRelationType())
+                .description(po.getDescription())
+                .createdAt(po.getCreatedAt())
+                .updatedAt(po.getUpdatedAt())
                 .build();
     }
 
-    private SemanticRelationResponse toResponse(SemanticRelation entity) {
+        private SemanticRelationResponse toResponse(SemanticRelation entity) {
         return SemanticRelationResponse.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .sourceTermId(entity.getSourceTermId())
+                .targetTermId(entity.getTargetTermId())
+                .relationType(entity.getRelationType())
+                .description(entity.getDescription())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 }

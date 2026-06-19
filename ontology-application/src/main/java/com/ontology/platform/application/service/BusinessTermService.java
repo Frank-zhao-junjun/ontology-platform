@@ -53,39 +53,40 @@ public class BusinessTermService {
         if (req.getSynonyms() != null) entity.setSynonyms(req.getSynonyms());
     }
 
-    private BusinessTermPO toPO(BusinessTerm entity) {
+        private BusinessTermPO toPO(BusinessTerm entity) {
         return BusinessTermPO.builder()
                 .id(entity.getId())
-                .ontologyId(entity.getOntologyId())
                 .name(entity.getName())
                 .nameEn(entity.getNameEn())
                 .definition(entity.getDefinition())
                 .synonyms(entity.getSynonyms())
+                .ontologyId(entity.getOntologyId())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
-    private BusinessTerm fromPO(BusinessTermPO po) {
+        private BusinessTerm fromPO(BusinessTermPO po) {
         return BusinessTerm.builder()
                 .id(po.getId())
-                .ontologyId(po.getOntologyId())
                 .name(po.getName())
                 .nameEn(po.getNameEn())
                 .definition(po.getDefinition())
                 .synonyms(po.getSynonyms())
+                .ontologyId(po.getOntologyId())
                 .createdAt(po.getCreatedAt())
                 .updatedAt(po.getUpdatedAt())
                 .build();
     }
 
-    private BusinessTermResponse toResponse(BusinessTerm entity) {
+        private BusinessTermResponse toResponse(BusinessTerm entity) {
         return BusinessTermResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .nameEn(entity.getNameEn())
                 .definition(entity.getDefinition())
                 .synonyms(entity.getSynonyms())
+                .ontologyId(entity.getOntologyId())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();

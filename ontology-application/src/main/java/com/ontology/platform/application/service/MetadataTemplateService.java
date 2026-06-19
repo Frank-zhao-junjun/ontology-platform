@@ -54,10 +54,9 @@ public class MetadataTemplateService {
         if (req.getTemplateType() != null) entity.setTemplateType(req.getTemplateType());
     }
 
-    private MetadataTemplatePO toPO(MetadataTemplate entity) {
+        private MetadataTemplatePO toPO(MetadataTemplate entity) {
         return MetadataTemplatePO.builder()
                 .id(entity.getId())
-                .ontologyId(entity.getOntologyId())
                 .name(entity.getName())
                 .nameEn(entity.getNameEn())
                 .description(entity.getDescription())
@@ -68,10 +67,9 @@ public class MetadataTemplateService {
                 .build();
     }
 
-    private MetadataTemplate fromPO(MetadataTemplatePO po) {
+        private MetadataTemplate fromPO(MetadataTemplatePO po) {
         return MetadataTemplate.builder()
                 .id(po.getId())
-                .ontologyId(po.getOntologyId())
                 .name(po.getName())
                 .nameEn(po.getNameEn())
                 .description(po.getDescription())
@@ -82,7 +80,7 @@ public class MetadataTemplateService {
                 .build();
     }
 
-    private MetadataTemplateResponse toResponse(MetadataTemplate entity) {
+        private MetadataTemplateResponse toResponse(MetadataTemplate entity) {
         return MetadataTemplateResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())

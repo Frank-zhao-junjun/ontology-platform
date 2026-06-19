@@ -60,6 +60,12 @@ class ExchangeImportServiceE2ETest {
     @Mock
     private ExchangeImportPOMapper mapper;
 
+    @Mock
+    private ExchangePhase3bPublisher phase3bPublisher;
+
+    @Mock
+    private ExcelExchangeMapper excelExchangeMapper;
+
     private ObjectMapper objectMapper;
 
     private ExchangeImportService service;
@@ -75,9 +81,7 @@ class ExchangeImportServiceE2ETest {
         objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
         ExchangeValidationService validationService = new ExchangeValidationService(List.of());
-        ExchangePhase3bPublisher phase3bPublisher = org.mockito.Mockito.mock(ExchangePhase3bPublisher.class);
-        ExcelExchangeMapper excelMapper = org.mockito.Mockito.mock(ExcelExchangeMapper.class);
-        service = new ExchangeImportService(mapper, objectMapper, validationService, phase3bPublisher, excelMapper);
+        service = new ExchangeImportService(mapper, objectMapper, validationService, phase3bPublisher, excelExchangeMapper);
 
         // Read the golden JSON fixture once and cache it
         if (goldenJson == null) {

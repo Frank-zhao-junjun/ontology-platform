@@ -1,4 +1,4 @@
-package com.ontology.platform.domain.entity.epc;
+package com.ontology.platform.domain.entity;
 
 import lombok.*;
 import java.time.Instant;

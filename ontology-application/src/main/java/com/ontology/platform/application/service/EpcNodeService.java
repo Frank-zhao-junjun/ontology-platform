@@ -40,23 +40,50 @@ public class EpcNodeService {
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
 
-    private EpcNodePO toPO(EpcNode entity) {
+        private EpcNodePO toPO(EpcNode entity) {
         return EpcNodePO.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .chainId(entity.getChainId())
+                .nodeType(entity.getNodeType())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .refType(entity.getRefType())
+                .refId(entity.getRefId())
+                .metadata(entity.getMetadata())
+                .sortOrder(entity.getSortOrder())
+                .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
-    private EpcNode fromPO(EpcNodePO po) {
+        private EpcNode fromPO(EpcNodePO po) {
         return EpcNode.builder()
-                .id(po.getId())        .createdAt(po.getCreatedAt())
+                .id(po.getId())
+                .chainId(po.getChainId())
+                .nodeType(po.getNodeType())
+                .name(po.getName())
+                .description(po.getDescription())
+                .refType(po.getRefType())
+                .refId(po.getRefId())
+                .metadata(po.getMetadata())
+                .sortOrder(po.getSortOrder())
+                .createdAt(po.getCreatedAt())
                 .updatedAt(po.getUpdatedAt())
                 .build();
     }
 
-    private EpcNodeResponse toResponse(EpcNode entity) {
+        private EpcNodeResponse toResponse(EpcNode entity) {
         return EpcNodeResponse.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .chainId(entity.getChainId())
+                .nodeType(entity.getNodeType())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .refType(entity.getRefType())
+                .refId(entity.getRefId())
+                .metadata(entity.getMetadata())
+                .sortOrder(entity.getSortOrder())
+                .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }

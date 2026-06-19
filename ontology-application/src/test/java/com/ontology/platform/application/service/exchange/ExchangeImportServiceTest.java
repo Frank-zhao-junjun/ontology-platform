@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontology.platform.common.exception.BusinessException;
 import com.ontology.platform.common.exception.ResourceNotFoundException;
 import com.ontology.platform.domain.dto.imports.ExchangeImportResponse;
+import com.ontology.platform.infrastructure.imports.ExcelExchangeMapper;
 import com.ontology.platform.infrastructure.persistence.ExchangeImportPO;
 import com.ontology.platform.infrastructure.persistence.ExchangeImportPOMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,12 @@ class ExchangeImportServiceTest {
 
     @Mock
     private ExchangeImportPOMapper mapper;
+
+    @Mock
+    private ExchangePhase3bPublisher phase3bPublisher;
+
+    @Mock
+    private ExcelExchangeMapper excelExchangeMapper;
 
     private ObjectMapper objectMapper;
 
@@ -97,9 +104,7 @@ class ExchangeImportServiceTest {
         objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
         ExchangeValidationService validationService = new ExchangeValidationService(List.of());
-        ExchangePhase3bPublisher phase3bPublisher = org.mockito.Mockito.mock(ExchangePhase3bPublisher.class);
-        ExcelExchangeMapper excelMapper = org.mockito.Mockito.mock(ExcelExchangeMapper.class);
-        service = new ExchangeImportService(mapper, objectMapper, validationService, phase3bPublisher, excelMapper);
+        service = new ExchangeImportService(mapper, objectMapper, validationService, phase3bPublisher, excelExchangeMapper);
     }
 
     @Nested
@@ -288,8 +293,10 @@ class ExchangeImportServiceTest {
         void publishImportSuccess() {
             ExchangeImportPO po = ExchangeImportPO.builder()
                     .id("test-id")
+                    .metadataId("test-ontology")
                     .validationStatus("passed")
                     .validationReport("{\"totalEntities\":5,\"warnings\":0}")
+                    .rawDocument(VALID_MINIMAL_JSON)
                     .build();
 
             when(mapper.selectById("test-id")).thenReturn(po);

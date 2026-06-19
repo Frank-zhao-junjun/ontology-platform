@@ -40,23 +40,38 @@ public class EpcModelRefService {
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
 
-    private EpcModelRefPO toPO(EpcModelRef entity) {
+        private EpcModelRefPO toPO(EpcModelRef entity) {
         return EpcModelRefPO.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .chainId(entity.getChainId())
+                .modelType(entity.getModelType())
+                .modelId(entity.getModelId())
+                .refMetadata(entity.getRefMetadata())
+                .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
-    private EpcModelRef fromPO(EpcModelRefPO po) {
+        private EpcModelRef fromPO(EpcModelRefPO po) {
         return EpcModelRef.builder()
-                .id(po.getId())        .createdAt(po.getCreatedAt())
+                .id(po.getId())
+                .chainId(po.getChainId())
+                .modelType(po.getModelType())
+                .modelId(po.getModelId())
+                .refMetadata(po.getRefMetadata())
+                .createdAt(po.getCreatedAt())
                 .updatedAt(po.getUpdatedAt())
                 .build();
     }
 
-    private EpcModelRefResponse toResponse(EpcModelRef entity) {
+        private EpcModelRefResponse toResponse(EpcModelRef entity) {
         return EpcModelRefResponse.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .chainId(entity.getChainId())
+                .modelType(entity.getModelType())
+                .modelId(entity.getModelId())
+                .refMetadata(entity.getRefMetadata())
+                .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }

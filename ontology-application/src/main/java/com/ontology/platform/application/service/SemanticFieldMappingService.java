@@ -40,21 +40,42 @@ public class SemanticFieldMappingService {
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
 
-    private SemanticFieldMappingPO toPO(SemanticFieldMapping entity) {
+        private SemanticFieldMappingPO toPO(SemanticFieldMapping entity) {
         return SemanticFieldMappingPO.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .entityId(entity.getEntityId())
+                .fieldNameEn(entity.getFieldNameEn())
+                .businessTermId(entity.getBusinessTermId())
+                .mappingType(entity.getMappingType())
+                .transformRule(entity.getTransformRule())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
-    private SemanticFieldMapping fromPO(SemanticFieldMappingPO po) {
+        private SemanticFieldMapping fromPO(SemanticFieldMappingPO po) {
         return SemanticFieldMapping.builder()
-                .id(po.getId())        .createdAt(po.getCreatedAt())
+                .id(po.getId())
+                .entityId(po.getEntityId())
+                .fieldNameEn(po.getFieldNameEn())
+                .businessTermId(po.getBusinessTermId())
+                .mappingType(po.getMappingType())
+                .transformRule(po.getTransformRule())
+                .createdAt(po.getCreatedAt())
+                .updatedAt(po.getUpdatedAt())
                 .build();
     }
 
-    private SemanticFieldMappingResponse toResponse(SemanticFieldMapping entity) {
+        private SemanticFieldMappingResponse toResponse(SemanticFieldMapping entity) {
         return SemanticFieldMappingResponse.builder()
-                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .id(entity.getId())
+                .entityId(entity.getEntityId())
+                .fieldNameEn(entity.getFieldNameEn())
+                .businessTermId(entity.getBusinessTermId())
+                .mappingType(entity.getMappingType())
+                .transformRule(entity.getTransformRule())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 }
