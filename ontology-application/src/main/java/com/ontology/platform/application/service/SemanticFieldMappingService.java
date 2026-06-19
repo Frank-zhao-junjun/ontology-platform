@@ -49,7 +49,7 @@ public class SemanticFieldMappingService {
                 .mappingType(entity.getMappingType())
                 .transformRule(entity.getTransformRule())
                 .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
+                
                 .build();
     }
 
@@ -62,7 +62,7 @@ public class SemanticFieldMappingService {
                 .mappingType(po.getMappingType())
                 .transformRule(po.getTransformRule())
                 .createdAt(po.getCreatedAt())
-                .updatedAt(po.getUpdatedAt())
+                
                 .build();
     }
 
@@ -75,7 +75,7 @@ public class SemanticFieldMappingService {
                 .mappingType(entity.getMappingType())
                 .transformRule(entity.getTransformRule())
                 .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
+                
                 .build();
     }
 }

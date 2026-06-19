@@ -48,7 +48,7 @@ public class EntityLifecycleSnapshotService {
                 .lifecycleData(entity.getLifecycleData())
                 .snapshotVersion(entity.getSnapshotVersion())
                 .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
+                
                 .build();
     }
 
@@ -60,7 +60,7 @@ public class EntityLifecycleSnapshotService {
                 .lifecycleData(po.getLifecycleData())
                 .snapshotVersion(po.getSnapshotVersion())
                 .createdAt(po.getCreatedAt())
-                .updatedAt(po.getUpdatedAt())
+                
                 .build();
     }
 
@@ -72,7 +72,7 @@ public class EntityLifecycleSnapshotService {
                 .lifecycleData(entity.getLifecycleData())
                 .snapshotVersion(entity.getSnapshotVersion())
                 .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
+                
                 .build();
     }
 }

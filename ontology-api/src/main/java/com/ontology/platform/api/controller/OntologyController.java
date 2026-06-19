@@ -3,6 +3,8 @@ package com.ontology.platform.api.controller;
 import com.ontology.platform.api.dto.ApiResponse;
 import com.ontology.platform.application.dto.*;
 import com.ontology.platform.application.service.OntologyService;
+import com.ontology.platform.application.service.semantic.SemanticService;
+import com.ontology.platform.domain.dto.semantic.SemanticLayerResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,6 +29,7 @@ import java.util.List;
 public class OntologyController {
 
     private final OntologyService ontologyService;
+    private final SemanticService semanticService;
 
     /**
      * 创建本体
@@ -126,6 +129,18 @@ public class OntologyController {
             @Parameter(description = "本体ID") @PathVariable String id) {
         log.info("REST: Validate ontology, id={}", id);
         ValidationResultResponse response = ontologyService.validateOntology(id);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /**
+     * 获取 Agent 语义层（Phase 3c）
+     */
+    @GetMapping("/{id}/semantic-layer")
+    @Operation(summary = "获取语义层", description = "返回已发布本体的 AgentSemanticLayer 聚合视图")
+    public ResponseEntity<ApiResponse<SemanticLayerResponse>> getSemanticLayer(
+            @Parameter(description = "本体ID") @PathVariable String id) {
+        log.debug("REST: Get semantic layer, ontologyId={}", id);
+        SemanticLayerResponse response = semanticService.getSemanticLayer(id);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

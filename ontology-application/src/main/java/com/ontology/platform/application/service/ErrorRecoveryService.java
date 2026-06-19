@@ -50,7 +50,7 @@ public class ErrorRecoveryService {
                 .fallbackActionId(entity.getFallbackActionId())
                 .description(entity.getDescription())
                 .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
+                
                 .build();
     }
 
@@ -64,7 +64,7 @@ public class ErrorRecoveryService {
                 .fallbackActionId(po.getFallbackActionId())
                 .description(po.getDescription())
                 .createdAt(po.getCreatedAt())
-                .updatedAt(po.getUpdatedAt())
+                
                 .build();
     }
 
@@ -78,7 +78,7 @@ public class ErrorRecoveryService {
                 .fallbackActionId(entity.getFallbackActionId())
                 .description(entity.getDescription())
                 .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
+                
                 .build();
     }
 }

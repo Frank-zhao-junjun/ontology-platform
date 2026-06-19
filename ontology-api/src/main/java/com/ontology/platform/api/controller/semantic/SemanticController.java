@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-/**
- * REST controller for Phase 3c semantic operations including intent resolution.
- */
 @Slf4j
 @RestController
 @RequestMapping("/api/v2/semantic")
@@ -24,26 +21,22 @@ public class SemanticController {
 
     private final SemanticService semanticService;
 
-    /**
-     * Resolve an intent from a natural language phrase.
-     * Matches the phrase against stored intents' triggerPhrases.
-     *
-     * @param body request body containing the "phrase" field
-     * @return matched IntentResult or 404 if no match found
-     */
     @PostMapping("/resolve-intent")
-    @Operation(summary = "解析意图", description = "根据输入的自然语言短语匹配意图（triggerPhrases 匹配）")
+    @Operation(summary = "解析意图", description = "根据 ontologyId + 自然语言短语匹配 intent（triggerPhrases）")
     public ResponseEntity<ApiResponse<IntentResult>> resolveIntent(
             @RequestBody Map<String, String> body) {
 
+        String ontologyId = body != null ? body.get("ontologyId") : null;
         String phrase = body != null ? body.get("phrase") : null;
-        log.info("REST: resolveIntent, phrase={}", phrase);
+        if (phrase == null && body != null) {
+            phrase = body.get("query");
+        }
+        log.info("REST: resolveIntent, ontologyId={}, phrase={}", ontologyId, phrase);
 
-        IntentResult result = semanticService.resolveIntent(phrase);
+        IntentResult result = semanticService.resolveIntent(ontologyId, phrase);
         if (result == null) {
             return ResponseEntity.ok(ApiResponse.error(404, "No matching intent found for phrase: " + phrase));
         }
-
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 }

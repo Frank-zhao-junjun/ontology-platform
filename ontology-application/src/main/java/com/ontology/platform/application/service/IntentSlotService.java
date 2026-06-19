@@ -49,7 +49,7 @@ public class IntentSlotService {
                 .required(entity.getRequired())
                 .examples(entity.getExamples())
                 .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
+                
                 .build();
     }
 
@@ -62,7 +62,7 @@ public class IntentSlotService {
                 .required(po.getRequired())
                 .examples(po.getExamples())
                 .createdAt(po.getCreatedAt())
-                .updatedAt(po.getUpdatedAt())
+                
                 .build();
     }
 
@@ -75,7 +75,7 @@ public class IntentSlotService {
                 .required(entity.getRequired())
                 .examples(entity.getExamples())
                 .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
+                
                 .build();
     }
 }

@@ -1,11 +1,13 @@
 // =============================================
-// resolve_intent — Natural language to IntentCategory
+// resolve_intent — Natural language to IntentCategory / Semantic Layer
 // =============================================
 
 import type { ToolDefinition } from '../../types/index.js';
 import { IntentCategory } from '../../types/index.js';
+import { platformClient } from '../../client/platform-client.js';
 
-// Simple keyword-based intent mapping (Phase 2: replace with LLM/embedding)
+const PLATFORM_ONTOLOGY_ID = process.env.PLATFORM_ONTOLOGY_ID || '';
+
 function resolveIntentFromQuery(query: string): {
   category: IntentCategory;
   confidence: number;
@@ -14,7 +16,6 @@ function resolveIntentFromQuery(query: string): {
 } {
   const lower = query.toLowerCase();
 
-  // QUERY patterns
   const queryPatterns = ['查', '查看', '查询', '显示', '列出', 'get', 'list', 'show', 'find', 'search', '获取', '看看', '有哪些'];
   const createPatterns = ['创建', '新建', '添加', 'create', 'add', 'new', '下达', '下达生产订单'];
   const updatePatterns = ['更新', '修改', '变更', 'update', 'edit', 'change', 'modify', '报工'];
@@ -48,7 +49,6 @@ function resolveIntentFromQuery(query: string): {
     }
   }
 
-  // Entity extraction (simple)
   const entities: string[] = [];
   const entityPatterns = [
     '生产订单', '工单', '物料', 'BOM', '库存', '工艺路线',
@@ -83,6 +83,23 @@ function resolveIntentFromQuery(query: string): {
   };
 }
 
+function formatStructuredResult(data: Record<string, unknown>) {
+  const confidence = typeof data.confidence === 'number' ? data.confidence : 0.5;
+  return {
+    content: [{ type: 'text', text: JSON.stringify(data) }],
+    structuredContent: {
+      status: 'success' as const,
+      data,
+      metadata: {
+        version: '1.0.0',
+        generated_at: new Date().toISOString(),
+        trace_id: crypto.randomUUID(),
+        confidence,
+      },
+    },
+  };
+}
+
 export const resolveIntentTool: ToolDefinition = {
   name: 'resolve_intent',
   description: '将自然语言业务查询解析为意图分类、关联实体和建议的下一个工具',
@@ -97,19 +114,30 @@ export const resolveIntentTool: ToolDefinition = {
   riskLevel: 'READ',
   handler: async (args) => {
     const query = (args.query as string) || '';
+
+    if (PLATFORM_ONTOLOGY_ID) {
+      try {
+        const platformResult = await platformClient.resolveIntent(PLATFORM_ONTOLOGY_ID, query);
+        if (platformResult?.actionId) {
+          const confidence = Math.min(0.5 + (platformResult.matchScore ?? 5) / 20, 0.95);
+          return formatStructuredResult({
+            category: IntentCategory.EXECUTE,
+            confidence,
+            entities: [],
+            suggestedTool: 'validate_instruction',
+            intentId: platformResult.id,
+            actionId: platformResult.actionId,
+            intentName: platformResult.name,
+            slots: platformResult.slots ?? [],
+            source: 'semantic-layer',
+          });
+        }
+      } catch (err) {
+        console.warn('[resolve_intent] Platform semantic lookup failed, falling back to keywords:', err);
+      }
+    }
+
     const result = resolveIntentFromQuery(query);
-    return {
-      content: [{ type: 'text', text: JSON.stringify(result) }],
-      structuredContent: {
-        status: 'success',
-        data: result,
-        metadata: {
-          version: '1.0.0',
-          generated_at: new Date().toISOString(),
-          trace_id: crypto.randomUUID(),
-          confidence: result.confidence,
-        },
-      },
-    };
+    return formatStructuredResult({ ...result, source: 'keyword-fallback' });
   },
 };

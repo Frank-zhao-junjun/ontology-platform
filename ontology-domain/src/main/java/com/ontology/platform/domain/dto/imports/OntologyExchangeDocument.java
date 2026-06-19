@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -559,22 +560,44 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class AgentSemanticLayer {
         @Builder.Default private List<Intent> intents = new ArrayList<>();
         @Builder.Default private List<BusinessTerm> businessTerms = new ArrayList<>();
-        @Builder.Default private List<AgentPolicy> agentPolicies = new ArrayList<>();
+        @Builder.Default private List<SemanticAgentPolicy> agentPolicies = new ArrayList<>();
+        @Builder.Default private List<SemanticRelation> semanticRelations = new ArrayList<>();
+        @Builder.Default private List<SemanticErrorRecovery> errorRecoveries = new ArrayList<>();
+        @Builder.Default private List<SemanticFieldMapping> fieldMappings = new ArrayList<>();
     }
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Intent {
         private String id;
         private String name;
         private String description;
+        private String category;
+        private String targetEntityId;
         @Builder.Default private List<String> triggerPhrases = new ArrayList<>();
         private String actionId;
+        private SlotFilling slotFilling;
+        private Integer priority;
+        private Boolean requiresConfirmation;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class SlotFilling {
+        @Builder.Default private List<IntentSlot> slots = new ArrayList<>();
+        @Builder.Default private List<String> requiredSlots = new ArrayList<>();
+        @Builder.Default private List<String> fillOrder = new ArrayList<>();
+        private Boolean allowBatchFill;
     }
 
     @Data
@@ -593,11 +616,16 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class IntentSlot {
         private String id;
+        private String paramName;
+        private String displayName;
         private String name;
+        private String prompt;
         @Builder.Default private String slotType = "string";
         private Boolean required;
+        private Boolean inferableFromContext;
         @Builder.Default private List<String> examples = new ArrayList<>();
     }
 
@@ -605,12 +633,55 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class SemanticRelation {
         private String id;
         private String sourceTermId;
         private String targetTermId;
         private String relationType;
         private String description;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class SemanticAgentPolicy {
+        private String id;
+        private String roleId;
+        @Builder.Default private List<String> allowedMcpTools = new ArrayList<>();
+        @Builder.Default private List<String> allowedAggregateRootIds = new ArrayList<>();
+        private Boolean defaultDeny;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class SemanticErrorRecovery {
+        private String id;
+        private String actionId;
+        private String errorPattern;
+        private String recoveryStrategy;
+        private Integer maxRetries;
+        private String fallbackActionId;
+        private String description;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class SemanticFieldMapping {
+        private String id;
+        private String entityId;
+        private String fieldNameEn;
+        private String businessTermId;
+        private String mappingType;
+        private String transformRule;
     }
 
     // ==================== EpcModel (Phase 3d: EPC Chain) ====================

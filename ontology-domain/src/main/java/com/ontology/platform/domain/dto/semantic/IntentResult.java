@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,6 +16,11 @@ public class IntentResult {
     private String id;
     private String name;
     private String description;
+    private String category;
+    private String targetEntityId;
     private List<String> triggerPhrases;
     private String actionId;
+    @Builder.Default
+    private List<IntentSlotResult> slots = new ArrayList<>();
+    private int matchScore;
 }

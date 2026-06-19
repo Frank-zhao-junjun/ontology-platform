@@ -48,7 +48,7 @@ public class SemanticRelationService {
                 .relationType(entity.getRelationType())
                 .description(entity.getDescription())
                 .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
+                
                 .build();
     }
 
@@ -60,7 +60,7 @@ public class SemanticRelationService {
                 .relationType(po.getRelationType())
                 .description(po.getDescription())
                 .createdAt(po.getCreatedAt())
-                .updatedAt(po.getUpdatedAt())
+                
                 .build();
     }
 
@@ -72,7 +72,7 @@ public class SemanticRelationService {
                 .relationType(entity.getRelationType())
                 .description(entity.getDescription())
                 .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
+                
                 .build();
     }
 }

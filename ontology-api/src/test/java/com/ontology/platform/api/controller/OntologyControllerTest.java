@@ -50,6 +50,9 @@ class OntologyControllerTest {
     @Mock
     private OntologyService ontologyService;
 
+    @Mock
+    private com.ontology.platform.application.service.semantic.SemanticService semanticService;
+
     @InjectMocks
     private OntologyController ontologyController;
 

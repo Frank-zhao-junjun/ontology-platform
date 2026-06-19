@@ -100,6 +100,38 @@ class PlatformClient {
     );
     return res.data;
   }
+
+  async resolveIntent(
+    ontologyId: string,
+    phrase: string
+  ): Promise<{
+    id: string;
+    name: string;
+    actionId: string;
+    triggerPhrases?: string[];
+    slots?: unknown[];
+    matchScore?: number;
+  } | null> {
+    const res = await this.request<{
+      code: number;
+      data: {
+        id: string;
+        name: string;
+        actionId: string;
+        triggerPhrases?: string[];
+        slots?: unknown[];
+        matchScore?: number;
+      };
+      message?: string;
+    }>('/api/v2/semantic/resolve-intent', {
+      method: 'POST',
+      body: JSON.stringify({ ontologyId, phrase, query: phrase }),
+    });
+    if (res.code !== 200 || !res.data) {
+      return null;
+    }
+    return res.data;
+  }
 }
 
 export const platformClient = new PlatformClient();
