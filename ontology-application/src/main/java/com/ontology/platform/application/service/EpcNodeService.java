@@ -22,6 +22,7 @@ public class EpcNodeService {
     public EpcNodeResponse create(String ontologyId, CreateEpcNodeRequest request, String userId) {
         log.info("Creating EpcNode");
         EpcNode entity = EpcNode.create();
+        mapRequest(request, entity);
         EpcNodePO po = toPO(entity);
         mapper.insert(po);
         return toResponse(entity);
@@ -39,6 +40,17 @@ public class EpcNodeService {
 
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
+
+    private void mapRequest(CreateEpcNodeRequest req, EpcNode entity) {
+        entity.setName(req.getName());
+                entity.setDescription(req.getDescription());
+                entity.setChainId(req.getChainId());
+                entity.setNodeType(req.getNodeType());
+                entity.setRefType(req.getRefType());
+                entity.setRefId(req.getRefId());
+                entity.setMetadata(req.getMetadata());
+                entity.setSortOrder(req.getSortOrder());
+    }
 
         private EpcNodePO toPO(EpcNode entity) {
         return EpcNodePO.builder()

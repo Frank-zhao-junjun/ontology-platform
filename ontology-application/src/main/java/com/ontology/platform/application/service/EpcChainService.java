@@ -20,8 +20,9 @@ public class EpcChainService {
 
     @Transactional
     public EpcChainResponse create(String ontologyId, CreateEpcChainRequest request, String userId) {
-        log.info("Creating EpcChain");
+        log.info("Creating EpcChain: name={}", request.getName());
         EpcChain entity = EpcChain.create();
+        mapRequest(request, entity);
         EpcChainPO po = toPO(entity);
         mapper.insert(po);
         return toResponse(entity);
@@ -40,7 +41,15 @@ public class EpcChainService {
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
 
-        private EpcChainPO toPO(EpcChain entity) {
+    private void mapRequest(CreateEpcChainRequest req, EpcChain entity) {
+        if (req.getName() != null) entity.setName(req.getName());
+        if (req.getAggregateRootId() != null) entity.setAggregateRootId(req.getAggregateRootId());
+        if (req.getDescription() != null) entity.setDescription(req.getDescription());
+        if (req.getChainType() != null) entity.setChainType(req.getChainType());
+        entity.setIsActive(req.getIsActive() != null ? req.getIsActive() : true);
+    }
+
+    private EpcChainPO toPO(EpcChain entity) {
         return EpcChainPO.builder()
                 .id(entity.getId())
                 .name(entity.getName())

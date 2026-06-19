@@ -22,6 +22,7 @@ public class EpcProfileService {
     public EpcProfileResponse create(String ontologyId, CreateEpcProfileRequest request, String userId) {
         log.info("Creating EpcProfile");
         EpcProfile entity = EpcProfile.create();
+        mapRequest(entity, request);
         EpcProfilePO po = toPO(entity);
         mapper.insert(po);
         return toResponse(entity);
@@ -39,6 +40,13 @@ public class EpcProfileService {
 
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
+
+    private void mapRequest(EpcProfile entity, CreateEpcProfileRequest request) {
+        entity.setChainId(request.getChainId());
+        entity.setProfileData(request.getProfileData());
+        entity.setProfileVersion(request.getProfileVersion());
+        entity.setIsActive(request.getIsActive());
+    }
 
         private EpcProfilePO toPO(EpcProfile entity) {
         return EpcProfilePO.builder()

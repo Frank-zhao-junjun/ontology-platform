@@ -22,6 +22,7 @@ public class AgentPolicySemanticService {
     public AgentPolicySemanticResponse create(String ontologyId, CreateAgentPolicySemanticRequest request, String userId) {
         log.info("Creating AgentPolicySemantic");
         AgentPolicySemantic entity = AgentPolicySemantic.create();
+        mapRequest(request, entity);
         AgentPolicySemanticPO po = toPO(entity);
         mapper.insert(po);
         return toResponse(entity);
@@ -83,5 +84,15 @@ public class AgentPolicySemanticService {
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
+    }
+
+    private void mapRequest(CreateAgentPolicySemanticRequest req, AgentPolicySemantic entity) {
+        entity.setName(req.getName());
+        entity.setRoleId(req.getRoleId());
+        entity.setIntentPatterns(req.getIntentPatterns());
+        entity.setAllowActions(req.getAllowActions());
+        entity.setDenyActions(req.getDenyActions());
+        entity.setRequireConfirm(req.getRequireConfirm());
+        entity.setIsActive(req.getIsActive());
     }
 }

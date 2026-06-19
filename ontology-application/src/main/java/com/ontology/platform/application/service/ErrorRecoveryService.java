@@ -22,6 +22,7 @@ public class ErrorRecoveryService {
     public ErrorRecoveryResponse create(String ontologyId, CreateErrorRecoveryRequest request, String userId) {
         log.info("Creating ErrorRecovery");
         ErrorRecovery entity = ErrorRecovery.create();
+        mapRequest(request, entity);
         ErrorRecoveryPO po = toPO(entity);
         mapper.insert(po);
         return toResponse(entity);
@@ -39,6 +40,15 @@ public class ErrorRecoveryService {
 
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
+
+    private void mapRequest(CreateErrorRecoveryRequest req, ErrorRecovery entity) {
+        if (req.getActionId() != null) entity.setActionId(req.getActionId());
+        if (req.getErrorPattern() != null) entity.setErrorPattern(req.getErrorPattern());
+        if (req.getRecoveryStrategy() != null) entity.setRecoveryStrategy(req.getRecoveryStrategy());
+        if (req.getMaxRetries() != null) entity.setMaxRetries(req.getMaxRetries());
+        if (req.getFallbackActionId() != null) entity.setFallbackActionId(req.getFallbackActionId());
+        if (req.getDescription() != null) entity.setDescription(req.getDescription());
+    }
 
         private ErrorRecoveryPO toPO(ErrorRecovery entity) {
         return ErrorRecoveryPO.builder()

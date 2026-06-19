@@ -22,6 +22,7 @@ public class SemanticRelationService {
     public SemanticRelationResponse create(String ontologyId, CreateSemanticRelationRequest request, String userId) {
         log.info("Creating SemanticRelation");
         SemanticRelation entity = SemanticRelation.create();
+        mapRequest(entity, request);
         SemanticRelationPO po = toPO(entity);
         mapper.insert(po);
         return toResponse(entity);
@@ -39,6 +40,13 @@ public class SemanticRelationService {
 
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
+
+    private void mapRequest(SemanticRelation entity, CreateSemanticRelationRequest request) {
+        entity.setSourceTermId(request.getSourceTermId());
+        entity.setTargetTermId(request.getTargetTermId());
+        entity.setRelationType(request.getRelationType());
+        entity.setDescription(request.getDescription());
+    }
 
         private SemanticRelationPO toPO(SemanticRelation entity) {
         return SemanticRelationPO.builder()

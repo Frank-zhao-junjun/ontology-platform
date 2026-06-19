@@ -4,7 +4,7 @@ import lombok.*;
 import java.time.Instant;
 import java.util.UUID;
 
-@Getter @Builder @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
 public class ErrorRecovery {
     private String id;
     private String actionId;

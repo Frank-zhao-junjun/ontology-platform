@@ -22,6 +22,7 @@ public class SemanticFieldMappingService {
     public SemanticFieldMappingResponse create(String ontologyId, CreateSemanticFieldMappingRequest request, String userId) {
         log.info("Creating SemanticFieldMapping");
         SemanticFieldMapping entity = SemanticFieldMapping.create();
+        mapRequest(request, entity);
         SemanticFieldMappingPO po = toPO(entity);
         mapper.insert(po);
         return toResponse(entity);
@@ -39,6 +40,14 @@ public class SemanticFieldMappingService {
 
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
+
+    private void mapRequest(CreateSemanticFieldMappingRequest req, SemanticFieldMapping entity) {
+        if (req.getEntityId() != null) entity.setEntityId(req.getEntityId());
+        if (req.getFieldNameEn() != null) entity.setFieldNameEn(req.getFieldNameEn());
+        if (req.getBusinessTermId() != null) entity.setBusinessTermId(req.getBusinessTermId());
+        if (req.getMappingType() != null) entity.setMappingType(req.getMappingType());
+        if (req.getTransformRule() != null) entity.setTransformRule(req.getTransformRule());
+    }
 
         private SemanticFieldMappingPO toPO(SemanticFieldMapping entity) {
         return SemanticFieldMappingPO.builder()

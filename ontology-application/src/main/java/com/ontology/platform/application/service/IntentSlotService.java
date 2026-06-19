@@ -22,9 +22,18 @@ public class IntentSlotService {
     public IntentSlotResponse create(String ontologyId, CreateIntentSlotRequest request, String userId) {
         log.info("Creating IntentSlot");
         IntentSlot entity = IntentSlot.create();
+        mapRequest(entity, request);
         IntentSlotPO po = toPO(entity);
         mapper.insert(po);
         return toResponse(entity);
+    }
+
+    private void mapRequest(IntentSlot entity, CreateIntentSlotRequest request) {
+        entity.setIntentId(request.getIntentId());
+        entity.setName(request.getName());
+        entity.setSlotType(request.getSlotType());
+        entity.setRequired(request.getRequired());
+        entity.setExamples(request.getExamples());
     }
 
     public IntentSlotResponse getById(String id) {

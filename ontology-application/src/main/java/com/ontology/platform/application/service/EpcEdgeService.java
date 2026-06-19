@@ -22,9 +22,18 @@ public class EpcEdgeService {
     public EpcEdgeResponse create(String ontologyId, CreateEpcEdgeRequest request, String userId) {
         log.info("Creating EpcEdge");
         EpcEdge entity = EpcEdge.create();
+        mapRequest(request, entity);
         EpcEdgePO po = toPO(entity);
         mapper.insert(po);
         return toResponse(entity);
+    }
+
+    private void mapRequest(CreateEpcEdgeRequest req, EpcEdge entity) {
+        entity.setSourceNodeId(req.getSourceNodeId());
+        entity.setTargetNodeId(req.getTargetNodeId());
+        entity.setEdgeType(req.getEdgeType());
+        entity.setLabel(req.getLabel());
+        entity.setConditionExpr(req.getConditionExpr());
     }
 
     public EpcEdgeResponse getById(String id) {

@@ -22,6 +22,7 @@ public class EpcModelRefService {
     public EpcModelRefResponse create(String ontologyId, CreateEpcModelRefRequest request, String userId) {
         log.info("Creating EpcModelRef");
         EpcModelRef entity = EpcModelRef.create();
+        mapRequest(request, entity);
         EpcModelRefPO po = toPO(entity);
         mapper.insert(po);
         return toResponse(entity);
@@ -39,6 +40,13 @@ public class EpcModelRefService {
 
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
+
+        private void mapRequest(CreateEpcModelRefRequest req, EpcModelRef entity) {
+        entity.setChainId(req.getChainId());
+        entity.setModelType(req.getModelType());
+        entity.setModelId(req.getModelId());
+        entity.setRefMetadata(req.getRefMetadata());
+    }
 
         private EpcModelRefPO toPO(EpcModelRef entity) {
         return EpcModelRefPO.builder()

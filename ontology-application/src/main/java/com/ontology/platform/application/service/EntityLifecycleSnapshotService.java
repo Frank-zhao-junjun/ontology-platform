@@ -22,6 +22,7 @@ public class EntityLifecycleSnapshotService {
     public EntityLifecycleSnapshotResponse create(String ontologyId, CreateEntityLifecycleSnapshotRequest request, String userId) {
         log.info("Creating EntityLifecycleSnapshot");
         EntityLifecycleSnapshot entity = EntityLifecycleSnapshot.create();
+        mapRequest(entity, request);
         EntityLifecycleSnapshotPO po = toPO(entity);
         mapper.insert(po);
         return toResponse(entity);
@@ -40,7 +41,14 @@ public class EntityLifecycleSnapshotService {
     @Transactional
     public void delete(String id) { mapper.deleteById(id); }
 
-        private EntityLifecycleSnapshotPO toPO(EntityLifecycleSnapshot entity) {
+    private void mapRequest(EntityLifecycleSnapshot entity, CreateEntityLifecycleSnapshotRequest request) {
+        entity.setEntityId(request.getEntityId());
+        entity.setOntologyId(request.getOntologyId());
+        entity.setLifecycleData(request.getLifecycleData());
+        entity.setSnapshotVersion(request.getSnapshotVersion());
+    }
+
+    private EntityLifecycleSnapshotPO toPO(EntityLifecycleSnapshot entity) {
         return EntityLifecycleSnapshotPO.builder()
                 .id(entity.getId())
                 .entityId(entity.getEntityId())
@@ -52,7 +60,7 @@ public class EntityLifecycleSnapshotService {
                 .build();
     }
 
-        private EntityLifecycleSnapshot fromPO(EntityLifecycleSnapshotPO po) {
+    private EntityLifecycleSnapshot fromPO(EntityLifecycleSnapshotPO po) {
         return EntityLifecycleSnapshot.builder()
                 .id(po.getId())
                 .entityId(po.getEntityId())
@@ -64,7 +72,7 @@ public class EntityLifecycleSnapshotService {
                 .build();
     }
 
-        private EntityLifecycleSnapshotResponse toResponse(EntityLifecycleSnapshot entity) {
+    private EntityLifecycleSnapshotResponse toResponse(EntityLifecycleSnapshot entity) {
         return EntityLifecycleSnapshotResponse.builder()
                 .id(entity.getId())
                 .entityId(entity.getEntityId())
