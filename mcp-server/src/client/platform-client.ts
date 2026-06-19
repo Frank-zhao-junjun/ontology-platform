@@ -127,7 +127,10 @@ class PlatformClient {
       method: 'POST',
       body: JSON.stringify({ ontologyId, phrase, query: phrase }),
     });
-    if (res.code !== 200 || !res.data) {
+    if (res.code !== 200 && res.code !== 0) {
+      return null;
+    }
+    if (!res.data) {
       return null;
     }
     return res.data;

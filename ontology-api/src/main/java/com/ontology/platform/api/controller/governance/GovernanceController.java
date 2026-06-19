@@ -86,8 +86,10 @@ public class GovernanceController {
     @PostMapping("/approvals")
     @Operation(summary = "Submit approval request")
     public ResponseEntity<ApiResponse<ApprovalRequest>> submitApproval(
-            @RequestParam String agentId, @RequestParam String actionId, @RequestParam String requestedOp) {
-        ApprovalRequest approval = governanceService.submitApproval(agentId, actionId, requestedOp);
+            @Valid @RequestBody SubmitApprovalRequest request) {
+        log.info("REST: Submit approval, agentId={}, actionId={}, op={}", request.getAgentId(), request.getActionId(), request.getRequestedOp());
+        ApprovalRequest approval = governanceService.submitApproval(
+                request.getAgentId(), request.getActionId(), request.getRequestedOp());
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(approval));
     }
 
