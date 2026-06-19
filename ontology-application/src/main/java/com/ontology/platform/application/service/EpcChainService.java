@@ -1,0 +1,63 @@
+package com.ontology.platform.application.service;
+
+import com.ontology.platform.application.dto.domain.CreateEpcChainRequest;
+import com.ontology.platform.application.dto.domain.EpcChainResponse;
+import com.ontology.platform.domain.entity.EpcChain;
+import com.ontology.platform.infrastructure.persistence.EpcChainPO;
+import com.ontology.platform.infrastructure.persistence.EpcChainPOMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Slf4j @Service @RequiredArgsConstructor
+public class EpcChainService {
+    private final EpcChainPOMapper mapper;
+
+    @Transactional
+    public EpcChainResponse create(String ontologyId, CreateEpcChainRequest request, String userId) {
+        log.info("Creating EpcChain");
+        EpcChain entity = EpcChain.create();
+        EpcChainPO po = toPO(entity);
+        mapper.insert(po);
+        return toResponse(entity);
+    }
+
+    public EpcChainResponse getById(String id) {
+        EpcChainPO po = mapper.selectById(id);
+        return po == null ? null : toResponse(fromPO(po));
+    }
+
+    public List<EpcChainResponse> list() {
+        return mapper.selectList(null).stream()
+                .map(po -> toResponse(fromPO(po))).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void delete(String id) { mapper.deleteById(id); }
+
+    private EpcChainPO toPO(EpcChain entity) {
+        return EpcChainPO.builder()
+                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .build();
+    }
+
+    private EpcChain fromPO(EpcChainPO po) {
+        return EpcChain.builder()
+                .id(po.getId())        .createdAt(po.getCreatedAt())
+                .updatedAt(po.getUpdatedAt())
+                .build();
+    }
+
+    private EpcChainResponse toResponse(EpcChain entity) {
+        return EpcChainResponse.builder()
+                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .build();
+    }
+}

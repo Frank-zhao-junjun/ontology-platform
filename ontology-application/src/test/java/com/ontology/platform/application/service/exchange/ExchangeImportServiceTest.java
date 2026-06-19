@@ -17,6 +17,8 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -94,7 +96,10 @@ class ExchangeImportServiceTest {
     void setUp() {
         objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
-        service = new ExchangeImportService(mapper, objectMapper);
+        ExchangeValidationService validationService = new ExchangeValidationService(List.of());
+        ExchangePhase3bPublisher phase3bPublisher = org.mockito.Mockito.mock(ExchangePhase3bPublisher.class);
+        ExcelExchangeMapper excelMapper = org.mockito.Mockito.mock(ExcelExchangeMapper.class);
+        service = new ExchangeImportService(mapper, objectMapper, validationService, phase3bPublisher, excelMapper);
     }
 
     @Nested

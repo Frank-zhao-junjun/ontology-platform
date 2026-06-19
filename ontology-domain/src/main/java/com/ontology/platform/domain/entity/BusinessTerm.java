@@ -1,25 +1,28 @@
-package com.ontology.platform.domain.entity.phase3b;
+package com.ontology.platform.domain.entity;
 
 import lombok.*;
 import java.time.Instant;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Department {
+public class BusinessTerm {
     private String id;
+    private String ontologyId;
     private String name;
     private String nameEn;
-    private String description;
-    private String parentDepartmentId;
+    private String definition;
+    private String synonyms;
     private Instant createdAt;
     private Instant updatedAt;
 
-    public static Department create() {
-        return Department.builder()
+    public static BusinessTerm create(String ontologyId) {
+        return BusinessTerm.builder()
                 .id(UUID.randomUUID().toString())
+                .ontologyId(ontologyId)
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
                 .build();

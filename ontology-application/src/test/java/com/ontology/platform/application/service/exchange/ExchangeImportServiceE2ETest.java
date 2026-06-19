@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontology.platform.common.exception.BusinessException;
 import com.ontology.platform.common.exception.ResourceNotFoundException;
 import com.ontology.platform.domain.dto.imports.ExchangeImportResponse;
+import com.ontology.platform.infrastructure.imports.ExcelExchangeMapper;
 import com.ontology.platform.infrastructure.persistence.ExchangeImportPO;
 import com.ontology.platform.infrastructure.persistence.ExchangeImportPOMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -72,7 +74,10 @@ class ExchangeImportServiceE2ETest {
     void setUp() throws IOException {
         objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
-        service = new ExchangeImportService(mapper, objectMapper);
+        ExchangeValidationService validationService = new ExchangeValidationService(List.of());
+        ExchangePhase3bPublisher phase3bPublisher = org.mockito.Mockito.mock(ExchangePhase3bPublisher.class);
+        ExcelExchangeMapper excelMapper = org.mockito.Mockito.mock(ExcelExchangeMapper.class);
+        service = new ExchangeImportService(mapper, objectMapper, validationService, phase3bPublisher, excelMapper);
 
         // Read the golden JSON fixture once and cache it
         if (goldenJson == null) {

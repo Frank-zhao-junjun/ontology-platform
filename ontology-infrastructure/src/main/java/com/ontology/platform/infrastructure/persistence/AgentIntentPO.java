@@ -19,6 +19,9 @@ public class AgentIntentPO {
     @TableId(type = IdType.INPUT)
     private String id;
 
+    @TableField("ontology_id")
+    private String ontologyId;
+
     @TableField("name")
     private String name;
 

@@ -1,27 +1,28 @@
-package com.ontology.platform.domain.entity.phase3b;
+package com.ontology.platform.domain.entity;
 
 import lombok.*;
 import java.time.Instant;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProcessStep {
+public class Department {
     private String id;
-    private String orchestrationId;
+    private String ontologyId;
     private String name;
-    private String stepType;
+    private String nameEn;
     private String description;
-    private Integer sortOrder;
-    private String config;
+    private String parentDepartmentId;
     private Instant createdAt;
     private Instant updatedAt;
 
-    public static ProcessStep create() {
-        return ProcessStep.builder()
+    public static Department create(String ontologyId) {
+        return Department.builder()
                 .id(UUID.randomUUID().toString())
+                .ontologyId(ontologyId)
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
                 .build();

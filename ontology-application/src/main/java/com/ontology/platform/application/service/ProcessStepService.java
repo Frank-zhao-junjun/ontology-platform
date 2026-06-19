@@ -10,9 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,8 +22,10 @@ public class ProcessStepService {
 
     @Transactional
     public ProcessStepResponse create(String ontologyId, CreateProcessStepRequest request, String userId) {
-        log.info("Creating ProcessStep: ontologyId={}", ontologyId);
-        ProcessStep entity = ProcessStep.create();
+        log.info("Creating ProcessStep: ontologyId={}, name={}", ontologyId, request.getName());
+        ProcessStep entity = ProcessStep.create(ontologyId);
+        mapRequest(request, entity);
+        mapper.insert(toPO(entity));
         return toResponse(entity);
     }
 
@@ -36,28 +36,66 @@ public class ProcessStepService {
     }
 
     public List<ProcessStepResponse> listByOntologyId(String ontologyId) {
-        List<ProcessStepPO> pos = mapper.selectByOntologyId(ontologyId);
-        return pos.stream().map(po -> toResponse(fromPO(po))).collect(Collectors.toList());
+        return mapper.selectByOntologyId(ontologyId).stream()
+                .map(po -> toResponse(fromPO(po)))
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public void delete(String id) {
-        ProcessStepPO po = mapper.selectById(id);
-        if (po != null) mapper.deleteById(id);
+        if (mapper.selectById(id) != null) mapper.deleteById(id);
+    }
+
+    private void mapRequest(CreateProcessStepRequest req, ProcessStep entity) {
+        if (req.getOrchestrationId() != null) entity.setOrchestrationId(req.getOrchestrationId());
+        if (req.getName() != null) entity.setName(req.getName());
+        if (req.getStepType() != null) entity.setStepType(req.getStepType());
+        if (req.getDescription() != null) entity.setDescription(req.getDescription());
+        if (req.getSortOrder() != null) entity.setSortOrder(req.getSortOrder());
+        if (req.getConfig() != null) entity.setConfig(req.getConfig());
     }
 
     private ProcessStepPO toPO(ProcessStep entity) {
-        return ProcessStepPO.builder().id(entity.getId())
-                .createdAt(entity.getCreatedAt()).updatedAt(entity.getUpdatedAt()).build();
+        return ProcessStepPO.builder()
+                .id(entity.getId())
+                .ontologyId(entity.getOntologyId())
+                .orchestrationId(entity.getOrchestrationId())
+                .name(entity.getName())
+                .stepType(entity.getStepType())
+                .description(entity.getDescription())
+                .sortOrder(entity.getSortOrder())
+                .config(entity.getConfig())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .build();
     }
 
     private ProcessStep fromPO(ProcessStepPO po) {
-        return ProcessStep.builder().id(po.getId())
-                .createdAt(po.getCreatedAt()).updatedAt(po.getUpdatedAt()).build();
+        return ProcessStep.builder()
+                .id(po.getId())
+                .ontologyId(po.getOntologyId())
+                .orchestrationId(po.getOrchestrationId())
+                .name(po.getName())
+                .stepType(po.getStepType())
+                .description(po.getDescription())
+                .sortOrder(po.getSortOrder())
+                .config(po.getConfig())
+                .createdAt(po.getCreatedAt())
+                .updatedAt(po.getUpdatedAt())
+                .build();
     }
 
     private ProcessStepResponse toResponse(ProcessStep entity) {
-        return ProcessStepResponse.builder().id(entity.getId())
-                .createdAt(entity.getCreatedAt()).updatedAt(entity.getUpdatedAt()).build();
+        return ProcessStepResponse.builder()
+                .id(entity.getId())
+                .orchestrationId(entity.getOrchestrationId())
+                .name(entity.getName())
+                .stepType(entity.getStepType())
+                .description(entity.getDescription())
+                .sortOrder(entity.getSortOrder())
+                .config(entity.getConfig())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .build();
     }
 }

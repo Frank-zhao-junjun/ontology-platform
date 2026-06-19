@@ -10,9 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,8 +22,10 @@ public class OrchestrationService {
 
     @Transactional
     public OrchestrationResponse create(String ontologyId, CreateOrchestrationRequest request, String userId) {
-        log.info("Creating Orchestration: ontologyId={}", ontologyId);
-        Orchestration entity = Orchestration.create();
+        log.info("Creating Orchestration: ontologyId={}, name={}", ontologyId, request.getName());
+        Orchestration entity = Orchestration.create(ontologyId);
+        mapRequest(request, entity);
+        mapper.insert(toPO(entity));
         return toResponse(entity);
     }
 
@@ -36,28 +36,54 @@ public class OrchestrationService {
     }
 
     public List<OrchestrationResponse> listByOntologyId(String ontologyId) {
-        List<OrchestrationPO> pos = mapper.selectByOntologyId(ontologyId);
-        return pos.stream().map(po -> toResponse(fromPO(po))).collect(Collectors.toList());
+        return mapper.selectByOntologyId(ontologyId).stream()
+                .map(po -> toResponse(fromPO(po)))
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public void delete(String id) {
-        OrchestrationPO po = mapper.selectById(id);
-        if (po != null) mapper.deleteById(id);
+        if (mapper.selectById(id) != null) mapper.deleteById(id);
+    }
+
+    private void mapRequest(CreateOrchestrationRequest req, Orchestration entity) {
+        if (req.getName() != null) entity.setName(req.getName());
+        if (req.getDescription() != null) entity.setDescription(req.getDescription());
+        if (req.getEntryPoints() != null) entity.setEntryPoints(req.getEntryPoints());
     }
 
     private OrchestrationPO toPO(Orchestration entity) {
-        return OrchestrationPO.builder().id(entity.getId())
-                .createdAt(entity.getCreatedAt()).updatedAt(entity.getUpdatedAt()).build();
+        return OrchestrationPO.builder()
+                .id(entity.getId())
+                .ontologyId(entity.getOntologyId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .entryPoints(entity.getEntryPoints())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .build();
     }
 
     private Orchestration fromPO(OrchestrationPO po) {
-        return Orchestration.builder().id(po.getId())
-                .createdAt(po.getCreatedAt()).updatedAt(po.getUpdatedAt()).build();
+        return Orchestration.builder()
+                .id(po.getId())
+                .ontologyId(po.getOntologyId())
+                .name(po.getName())
+                .description(po.getDescription())
+                .entryPoints(po.getEntryPoints())
+                .createdAt(po.getCreatedAt())
+                .updatedAt(po.getUpdatedAt())
+                .build();
     }
 
     private OrchestrationResponse toResponse(Orchestration entity) {
-        return OrchestrationResponse.builder().id(entity.getId())
-                .createdAt(entity.getCreatedAt()).updatedAt(entity.getUpdatedAt()).build();
+        return OrchestrationResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .entryPoints(entity.getEntryPoints())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .build();
     }
 }

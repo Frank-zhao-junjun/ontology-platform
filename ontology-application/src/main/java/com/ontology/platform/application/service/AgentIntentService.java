@@ -10,9 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,8 +22,10 @@ public class AgentIntentService {
 
     @Transactional
     public AgentIntentResponse create(String ontologyId, CreateAgentIntentRequest request, String userId) {
-        log.info("Creating AgentIntent: ontologyId={}", ontologyId);
-        AgentIntent entity = AgentIntent.create();
+        log.info("Creating AgentIntent: ontologyId={}, name={}", ontologyId, request.getName());
+        AgentIntent entity = AgentIntent.create(ontologyId);
+        mapRequest(request, entity);
+        mapper.insert(toPO(entity));
         return toResponse(entity);
     }
 
@@ -36,28 +36,58 @@ public class AgentIntentService {
     }
 
     public List<AgentIntentResponse> listByOntologyId(String ontologyId) {
-        List<AgentIntentPO> pos = mapper.selectByOntologyId(ontologyId);
-        return pos.stream().map(po -> toResponse(fromPO(po))).collect(Collectors.toList());
+        return mapper.selectByOntologyId(ontologyId).stream()
+                .map(po -> toResponse(fromPO(po)))
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public void delete(String id) {
-        AgentIntentPO po = mapper.selectById(id);
-        if (po != null) mapper.deleteById(id);
+        if (mapper.selectById(id) != null) mapper.deleteById(id);
+    }
+
+    private void mapRequest(CreateAgentIntentRequest req, AgentIntent entity) {
+        if (req.getName() != null) entity.setName(req.getName());
+        if (req.getDescription() != null) entity.setDescription(req.getDescription());
+        if (req.getTriggerPhrases() != null) entity.setTriggerPhrases(req.getTriggerPhrases());
+        if (req.getActionId() != null) entity.setActionId(req.getActionId());
     }
 
     private AgentIntentPO toPO(AgentIntent entity) {
-        return AgentIntentPO.builder().id(entity.getId())
-                .createdAt(entity.getCreatedAt()).updatedAt(entity.getUpdatedAt()).build();
+        return AgentIntentPO.builder()
+                .id(entity.getId())
+                .ontologyId(entity.getOntologyId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .triggerPhrases(entity.getTriggerPhrases())
+                .actionId(entity.getActionId())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .build();
     }
 
     private AgentIntent fromPO(AgentIntentPO po) {
-        return AgentIntent.builder().id(po.getId())
-                .createdAt(po.getCreatedAt()).updatedAt(po.getUpdatedAt()).build();
+        return AgentIntent.builder()
+                .id(po.getId())
+                .ontologyId(po.getOntologyId())
+                .name(po.getName())
+                .description(po.getDescription())
+                .triggerPhrases(po.getTriggerPhrases())
+                .actionId(po.getActionId())
+                .createdAt(po.getCreatedAt())
+                .updatedAt(po.getUpdatedAt())
+                .build();
     }
 
     private AgentIntentResponse toResponse(AgentIntent entity) {
-        return AgentIntentResponse.builder().id(entity.getId())
-                .createdAt(entity.getCreatedAt()).updatedAt(entity.getUpdatedAt()).build();
+        return AgentIntentResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .triggerPhrases(entity.getTriggerPhrases())
+                .actionId(entity.getActionId())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .build();
     }
 }

@@ -1,0 +1,60 @@
+package com.ontology.platform.application.service;
+
+import com.ontology.platform.application.dto.domain.CreateSemanticFieldMappingRequest;
+import com.ontology.platform.application.dto.domain.SemanticFieldMappingResponse;
+import com.ontology.platform.domain.entity.SemanticFieldMapping;
+import com.ontology.platform.infrastructure.persistence.SemanticFieldMappingPO;
+import com.ontology.platform.infrastructure.persistence.SemanticFieldMappingPOMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Slf4j @Service @RequiredArgsConstructor
+public class SemanticFieldMappingService {
+    private final SemanticFieldMappingPOMapper mapper;
+
+    @Transactional
+    public SemanticFieldMappingResponse create(String ontologyId, CreateSemanticFieldMappingRequest request, String userId) {
+        log.info("Creating SemanticFieldMapping");
+        SemanticFieldMapping entity = SemanticFieldMapping.create();
+        SemanticFieldMappingPO po = toPO(entity);
+        mapper.insert(po);
+        return toResponse(entity);
+    }
+
+    public SemanticFieldMappingResponse getById(String id) {
+        SemanticFieldMappingPO po = mapper.selectById(id);
+        return po == null ? null : toResponse(fromPO(po));
+    }
+
+    public List<SemanticFieldMappingResponse> list() {
+        return mapper.selectList(null).stream()
+                .map(po -> toResponse(fromPO(po))).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void delete(String id) { mapper.deleteById(id); }
+
+    private SemanticFieldMappingPO toPO(SemanticFieldMapping entity) {
+        return SemanticFieldMappingPO.builder()
+                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .build();
+    }
+
+    private SemanticFieldMapping fromPO(SemanticFieldMappingPO po) {
+        return SemanticFieldMapping.builder()
+                .id(po.getId())        .createdAt(po.getCreatedAt())
+                .build();
+    }
+
+    private SemanticFieldMappingResponse toResponse(SemanticFieldMapping entity) {
+        return SemanticFieldMappingResponse.builder()
+                .id(entity.getId())        .createdAt(entity.getCreatedAt())
+                .build();
+    }
+}

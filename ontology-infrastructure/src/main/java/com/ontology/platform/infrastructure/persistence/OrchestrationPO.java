@@ -12,6 +12,8 @@ import java.time.Instant;
 public class OrchestrationPO {
     @TableId(type = IdType.ASSIGN_UUID)
     private String id;
+    @TableField("ontology_id")
+    private String ontologyId;
     @TableField("name")
     private String name;
     @TableField("description")

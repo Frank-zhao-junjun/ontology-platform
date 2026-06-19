@@ -12,6 +12,8 @@ import java.time.Instant;
 public class ProcessStepPO {
     @TableId(type = IdType.ASSIGN_UUID)
     private String id;
+    @TableField("ontology_id")
+    private String ontologyId;
     @TableField("orchestration_id")
     private String orchestrationId;
     @TableField("name")
