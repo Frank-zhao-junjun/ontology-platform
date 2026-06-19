@@ -1,7 +1,7 @@
 # 项目2 — TODO
 
 > 最后更新：2026-06-19
-> 最近提交：`1444a9e` — import module complete
+> 最新合并：`main ← 2401b43`
 
 ---
 
@@ -11,72 +11,54 @@
 
 | 状态 | Unit | 说明 | 测试 |
 |:----:|:----:|------|:----:|
-| ✅ | P2-I01-U01 | Sheet A → Ontology 导入适配器 | 11/11 |
-| ✅ | P2-I01-U02 | Sheet B → ObjectType | 8/8 |
-| ✅ | P2-I01-U03 | Sheet C → ObjectType | 8/8 |
-| ✅ | P2-I01-U04 | Sheet EPC → EPC 步骤解析 | 8/8 |
-| ✅ | P2-I01-U05 | Sheet E1~E8 通用维度要素解析 | 11/11 |
-| ✅ | P2-I02-U01 | JSON Manifest 格式转换器 | 4/4 |
-| ✅ | P2-I03-U01 | YAML OntologyManifest 完整解析器 | 13/13 |
-| | | **小计** | **59/59** |
+| ✅ | P2-I01-U01~U05 | Excel Sheets A~E + EPC 导入适配器 | 46/46 |
+| ✅ | P2-I02-U01 | JSON Manifest 转换器 | 4/4 |
+| ✅ | P2-I03-U01 | YAML Manifest 解析器 | 13/13 |
+| ✅ | V9+V10 | 规则约束表 + 接口指标表（10张新表全链路代码） | — |
+| ✅ | V11 | exchange_import 表 + ExchangeImportService | — |
 
-### Phase 3 — V2 交换契约
+### Phase 3 — V2 交换契约 + 语义 + EPC
 
-| 状态 | Task | 说明 |
-|:----:|:----:|------|
-| ✅ | 3a-0 | golden JSON test fixture |
-| ✅ | 3a-1 | OntologyExchangeDocument + OntologyProject VO |
-| ✅ | 3a-2 | ManifestUpcasterV1ToV2 |
-| ✅ | 3a-3 | ExchangeImportService + exchange_import 表 |
-| ✅ | 3a-4 | ExchangeController + 单元测试 |
-| ✅ | 3a-5 | E2E 测试 |
+| 状态 | 阶段 | 内容 | 文件数 |
+|:----:|:----:|------|:-----:|
+| ✅ | 3a V2核心管道 | OntologyExchangeDocument + ManifestUpcaster + ExchangeController | ~30 |
+| ✅ | 3b V12 | 8表: Department/Position/BusinessMetric/Orchestration/ProcessStep/MetadataTemplate/BusinessTerm/AgentIntent | ~64 |
+| ✅ | 3c V13 | 6表: SemanticRelation/IntentSlot/AgentPolicySemantic/ErrorRecovery/SemanticFieldMapping/EntityLifecycleSnapshot | ~48 |
+| ✅ | 3d V14 | 5表: EpcChain/EpcNode/EpcEdge/EpcModelRef/EpcProfile | ~40 |
 
-### 基础设施
+### 质量
 
-| 状态 | 说明 |
-|:----:|------|
-| ✅ | V9: 规则约束表 (validation/guardrail/policy/probe) |
-| ✅ | V10: 接口+指标表 (api/query/compute/notification/report/indicator) |
-| ✅ | V11: exchange_import 表 |
-| ✅ | V12: phase3b 表 |
-| ✅ | V13: phase3c 表 |
-| ✅ | V14: epc_chain 表 |
-| ✅ | V1→V9/10/11/12/13/14 全链路 10张新表 Domain Entity/PO/Mapper/Service/DTO/Controller |
+| 状态 | 内容 | 统计 |
+|:----:|------|:----:|
+| ✅ | Service 单测 | 111 tests, 0 failures |
+| ✅ | Controller 集成测试 | 19 个测试文件 |
+| ✅ | mvn compile | BUILD SUCCESS |
+| ✅ | 合并 main | 已推送 |
 
 ---
 
 ## 📋 待办
 
-### Phase 3b — 语义层
+### P1 — 短期（1天内）
 
-| 优先级 | 任务 | 说明 |
-|:------:|:----:|------|
-| P1 | 补全 V12 表代码层 | AgentIntent 的 Service/DTO/Controller 尚未实现 |
-| P1 | 补全 V13 表代码层 | 同上 |
-| P1 | 补全 V14 表代码层 | EpcChain 的 Service/DTO/Controller 尚未实现 |
-| P2 | SemanticService 集成测试 | 当前只有 Controller，缺少完整业务流程 |
+| # | 任务 | 说明 |
+|:-:|------|------|
+| 1 | Controller 测试 mvn test 跑通 | 刚写的 19 个测试需验证编译+通过 |
+| 2 | Service create() 字段映射补全 | V12/V13/V14 的 create() 还没把 request 字段映射到 entity |
+| 3 | Docker E2E 验证 | 完整拉起 PostgreSQL + Redis + App，调通全链路 API |
 
-### Phase 3c — EPC 链
+### P2 — 中期（1周内）
 
-| 优先级 | 任务 | 说明 |
-|:------:|:----:|------|
-| P1 | EpcChainService | 完整的 EPC 链业务逻辑 |
-| P1 | EpcChainController | 增删改查端点 |
-| P2 | EpcChain 导入适配器 | Excel EPC → EpcChain 转换 |
+| # | 任务 | 说明 |
+|:-:|------|------|
+| 4 | Agent 编排集成 | ACP 协议接入 Kimi/Claude/Codex → delegate_task 分发 |
+| 5 | CI 流水线 | GitHub Actions 自动编译+测试 |
+| 6 | Project 1 → 2 端到端导入测试 | 真实 Excel/JSON 文件导入验证 |
 
-### 质量 & 运维
+### P3 — 长期
 
-| 优先级 | 任务 | 说明 |
-|:------:|:----:|------|
-| P1 | `mvn compile` 全量编译验证 | 确保无编译错误 |
-| P1 | 全量测试回归 | `mvn test` 通过 |
-| P2 | Swagger API 文档补充 | 新 Controller 的 OpenAPI 注解 |
-| P2 | 端到端启动验证 | Docker Compose 拉起 + API 调用 |
-
-### 长期
-
-| 任务 | 说明 |
-|:----:|------|
-| Cursor agent CLI | 重新安装 |
-| ACP 协议集成 | Kimi / Claude 的 ACP 模式接入 Hermes 编排 |
-| CI 流水线 | GitHub Actions 自动编译+测试 |
+| # | 任务 | 说明 |
+|:-:|------|------|
+| 7 | Swagger API 描述补全 | 补充 @Schema description |
+| 8 | README 更新 | 新 API 模块说明 |
+| 9 | Cursor agent CLI | 重新安装 |
