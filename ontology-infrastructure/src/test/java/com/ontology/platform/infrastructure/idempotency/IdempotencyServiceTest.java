@@ -132,7 +132,7 @@ class IdempotencyServiceTest {
             verify(mapper).updateById(captor.capture());
             IdempotencyRecordPO updated = captor.getValue();
             assertThat(updated.getResponseStatus()).isEqualTo(201);
-            assertThat(updated.getResponseBody()).isEqualTo("\"{\\\"id\\\":1}\"");
+            assertThat(updated.getResponseBody()).isEqualTo("{\"id\":1}");
         }
 
         @Test

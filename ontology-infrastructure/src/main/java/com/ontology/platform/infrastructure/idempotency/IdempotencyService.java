@@ -40,7 +40,18 @@ public class IdempotencyService {
                 .responseStatus(null).createdAt(Instant.now())
                 .expiresAt(Instant.now().plus(TTL_HOURS, ChronoUnit.HOURS))
                 .build();
-        mapper.insert(po);
+        try {
+            mapper.insert(po);
+        } catch (Exception e) {
+            // Concurrent insert: another request created the record first
+            var concurrent = mapper.selectById(key);
+            if (concurrent != null) {
+                if (concurrent.getResponseStatus() == null) {
+                    return IdempotencyResult.inProgress();
+                }
+                return IdempotencyResult.completed(concurrent.getResponseStatus(), concurrent.getResponseBody());
+            }
+        }
         return IdempotencyResult.firstRequest();
     }
 
@@ -50,7 +61,11 @@ public class IdempotencyService {
         if (po == null) return;
         try {
             po.setResponseStatus(statusCode);
-            po.setResponseBody(objectMapper.writeValueAsString(responseBody));
+            if (responseBody instanceof String) {
+                po.setResponseBody((String) responseBody);
+            } else {
+                po.setResponseBody(objectMapper.writeValueAsString(responseBody));
+            }
         } catch (Exception e) {
             po.setResponseStatus(statusCode);
             po.setResponseBody("{}");
@@ -61,8 +76,7 @@ public class IdempotencyService {
     @Scheduled(cron = "0 0 * * * *")
     @Transactional
     public void cleanupExpired() {
-        var before = Instant.now().minus(TTL_HOURS, ChronoUnit.HOURS);
-        int deleted = mapper.deleteExpired(before);
+        int deleted = mapper.deleteExpired(Instant.now());
         if (deleted > 0) log.info("Cleaned {} expired idempotency records", deleted);
     }
 

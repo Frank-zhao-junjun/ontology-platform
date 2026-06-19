@@ -1,0 +1,317 @@
+{
+  "apiVersion": "ontology.platform/v2",
+  "kind": "OntologyExchange",
+  "metadata": {
+    "id": "manufacturing-ontology",
+    "version": "0.1.0",
+    "name": "生产制造本体",
+    "displayName": "生产制造本体",
+    "description": "MVP 制造域参考模型（生产订单 / 物料 / BOM / 工艺路线）",
+    "source": "ontology-designer",
+    "status": "draft",
+    "projectId": "manufacturing-project",
+    "exportedAt": "2026-06-19T16:00:00.000Z",
+    "exporterVersion": "2.0.0"
+  },
+  "spec": {
+    "project": {
+      "id": "manufacturing-project",
+      "name": "生产制造本体",
+      "description": "MVP 制造域参考模型",
+      "domain": {
+        "id": "domain-manufacturing",
+        "name": "生产制造",
+        "nameEn": "Manufacturing",
+        "description": "生产执行与工单生命周期"
+      },
+      "dataModel": {
+        "id": "dm-manufacturing",
+        "name": "生产制造数据模型",
+        "version": "0.1.0",
+        "domain": "生产制造",
+        "projects": [
+          {
+            "id": "proj-manufacturing",
+            "name": "生产制造",
+            "description": "生产制造项目"
+          }
+        ],
+        "businessScenarios": [
+          {
+            "id": "scenario-mts",
+            "name": "面向库存生产",
+            "nameEn": "MTS",
+            "description": "按库存补货驱动生产",
+            "projectId": "manufacturing-project"
+          },
+          {
+            "id": "scenario-mto",
+            "name": "面向订单生产",
+            "nameEn": "MTO",
+            "description": "严格按销售订单驱动",
+            "projectId": "manufacturing-project"
+          }
+        ],
+        "entities": [
+          {
+            "id": "production-order",
+            "name": "生产订单",
+            "nameEn": "ProductionOrder",
+            "projectId": "manufacturing-project",
+            "businessScenarioId": "scenario-mts",
+            "description": "核心生产执行单据",
+            "entityRole": "aggregate_root",
+            "attributes": [
+              { "id": "attr-order-id", "name": "生产订单号", "nameEn": "order_id", "dataType": "string", "required": true },
+              { "id": "attr-order-type", "name": "订单类型", "nameEn": "order_type", "dataType": "enum", "required": true, "enumRef": "order-type-enum" },
+              { "id": "attr-status", "name": "订单状态", "nameEn": "status", "dataType": "enum", "required": true, "enumRef": "order-status-enum" },
+              { "id": "attr-planned-qty", "name": "计划数量", "nameEn": "planned_qty", "dataType": "decimal", "required": true },
+              { "id": "attr-cost-price", "name": "成本价", "nameEn": "cost_price", "dataType": "decimal", "required": false }
+            ],
+            "relations": [
+              {
+                "id": "rel-po-bom",
+                "name": "引用BOM",
+                "type": "many_to_one",
+                "targetEntity": "bom",
+                "description": "生产订单引用的物料清单"
+              }
+            ]
+          },
+          {
+            "id": "operation",
+            "name": "工序",
+            "nameEn": "Operation",
+            "projectId": "manufacturing-project",
+            "businessScenarioId": "scenario-mts",
+            "entityRole": "child_entity",
+            "parentAggregateId": "production-order",
+            "description": "生产订单的工序明细",
+            "attributes": [
+              { "id": "attr-op-number", "name": "工序号", "nameEn": "op_number", "dataType": "integer", "required": true }
+            ]
+          },
+          {
+            "id": "material",
+            "name": "物料",
+            "nameEn": "Material",
+            "projectId": "manufacturing-project",
+            "businessScenarioId": "scenario-mts",
+            "entityRole": "aggregate_root",
+            "description": "生产用物料主数据",
+            "attributes": [
+              { "id": "attr-material-code", "name": "物料编码", "nameEn": "material_code", "dataType": "string", "required": true }
+            ]
+          },
+          {
+            "id": "bom",
+            "name": "BOM",
+            "nameEn": "BillOfMaterial",
+            "projectId": "manufacturing-project",
+            "businessScenarioId": "scenario-mts",
+            "entityRole": "aggregate_root",
+            "description": "物料清单"
+          },
+          {
+            "id": "routing",
+            "name": "工艺路线",
+            "nameEn": "Routing",
+            "projectId": "manufacturing-project",
+            "businessScenarioId": "scenario-mts",
+            "entityRole": "aggregate_root",
+            "description": "工艺路线"
+          },
+          {
+            "id": "vo-quantity",
+            "name": "数量",
+            "nameEn": "Quantity",
+            "projectId": "manufacturing-project",
+            "businessScenarioId": "scenario-mts",
+            "entityRole": "child_entity",
+            "description": "数量值对象",
+            "attributes": [
+              { "id": "vo-q-amount", "name": "数值", "nameEn": "amount", "dataType": "decimal", "required": true },
+              { "id": "vo-q-unit", "name": "单位", "nameEn": "unit", "dataType": "string", "required": true }
+            ]
+          }
+        ],
+        "createdAt": "2026-06-19T16:00:00.000Z",
+        "updatedAt": "2026-06-19T16:00:00.000Z"
+      },
+      "behaviorModel": {
+        "id": "bm-manufacturing",
+        "name": "生产制造行为模型",
+        "version": "0.1.0",
+        "domain": "生产制造",
+        "stateMachines": [
+          {
+            "id": "sm-production-order",
+            "name": "生产订单生命周期",
+            "entity": "production-order",
+            "statusField": "status",
+            "states": [
+              { "id": "state-created", "name": "创建", "description": "初始状态", "isInitial": true },
+              { "id": "state-released", "name": "已下达", "description": "已下达生产" },
+              { "id": "state-in-progress", "name": "执行中", "description": "正在执行" },
+              { "id": "state-reported", "name": "已报工", "description": "已报工" },
+              { "id": "state-produced", "name": "已产出", "description": "已产出" },
+              { "id": "state-tech-closed", "name": "技术关闭", "description": "技术关闭", "isFinal": true }
+            ],
+            "transitions": [
+              {
+                "id": "trans-release", "name": "下达",
+                "from": "state-created", "to": "state-released",
+                "trigger": "manual",
+                "preConditions": ["rule-kitting", "rule-routing-valid"]
+              }
+            ]
+          }
+        ],
+        "actions": [
+          {
+            "id": "action-create-order",
+            "name": "创建生产订单",
+            "nameEn": "CreateProductionOrder",
+            "targetEntityId": "production-order",
+            "actionType": "create",
+            "parameters": [
+              { "id": "param-material-code", "name": "物料编码", "nameEn": "material_code", "dataType": "string", "required": true }
+            ]
+          },
+          {
+            "id": "action-release-order",
+            "name": "生产订单下达",
+            "nameEn": "ReleaseProductionOrder",
+            "targetEntityId": "production-order",
+            "actionType": "execute",
+            "parameters": [
+              { "id": "param-order-id", "name": "生产订单号", "nameEn": "order_id", "dataType": "string", "required": true }
+            ],
+            "preConditions": ["rule-kitting", "rule-routing-valid"]
+          },
+          {
+            "id": "action-reserve-material",
+            "name": "物料预留",
+            "nameEn": "ReserveMaterial",
+            "targetEntityId": "material",
+            "actionType": "custom",
+            "description": "事件处理器示例：响应订单已下达"
+          }
+        ],
+        "createdAt": "2026-06-19T16:00:00.000Z",
+        "updatedAt": "2026-06-19T16:00:00.000Z"
+      },
+      "ruleModel": {
+        "id": "rm-manufacturing",
+        "name": "生产制造规则模型",
+        "version": "0.1.0",
+        "domain": "生产制造",
+        "rules": [
+          {
+            "id": "rule-kitting",
+            "name": "物料齐套校验",
+            "type": "cross_entity_validation",
+            "entity": "production-order",
+            "condition": {
+              "type": "expression",
+              "expression": "BOM 中所有物料库存余量 ≥ 工单需求量"
+            },
+            "errorMessage": "物料未齐套，无法下达工单",
+            "severity": "error"
+          },
+          {
+            "id": "rule-routing-valid",
+            "name": "工艺路线校验",
+            "type": "cross_entity_validation",
+            "entity": "production-order",
+            "condition": {
+              "type": "expression",
+              "expression": "成品必须有且仅有一条有效工艺路线，工序无环"
+            },
+            "errorMessage": "工艺路线无效",
+            "severity": "error"
+          }
+        ],
+        "createdAt": "2026-06-19T16:00:00.000Z",
+        "updatedAt": "2026-06-19T16:00:00.000Z"
+      },
+      "eventModel": {
+        "id": "em-manufacturing",
+        "name": "生产制造事件模型",
+        "version": "0.1.0",
+        "domain": "生产制造",
+        "events": [
+          {
+            "id": "evt-order-created",
+            "name": "生产订单已创建",
+            "nameEn": "ProductionOrderCreated",
+            "entity": "production-order",
+            "isDomainEvent": true
+          },
+          {
+            "id": "evt-order-released",
+            "name": "生产订单已下达",
+            "nameEn": "ProductionOrderReleased",
+            "entity": "production-order",
+            "isDomainEvent": true
+          },
+          {
+            "id": "evt-order-tech-closed",
+            "name": "生产订单技术关闭",
+            "nameEn": "ProductionOrderTechnicallyClosed",
+            "entity": "production-order",
+            "isDomainEvent": true
+          }
+        ],
+        "createdAt": "2026-06-19T16:00:00.000Z",
+        "updatedAt": "2026-06-19T16:00:00.000Z"
+      },
+      "governanceModel": {
+        "roles": [
+          {
+            "id": "role-planner",
+            "name": "生产计划员",
+            "permissions": [
+              { "objectTypeId": "production-order", "ops": ["READ", "EXECUTE"] }
+            ]
+          },
+          {
+            "id": "role-cost-accountant",
+            "name": "成本会计",
+            "permissions": [
+              { "objectTypeId": "production-order", "ops": ["READ"] }
+            ]
+          }
+        ],
+        "fieldPermissions": [
+          { "objectTypeId": "production-order", "propertyNameEn": "cost_price", "allowedRoleIds": ["role-cost-accountant"] }
+        ],
+        "agentPolicies": [
+          {
+            "id": "sandbox-prod-planner",
+            "roleId": "role-planner",
+            "allowedMcpTools": ["query_ontology", "execute_production_order_release"],
+            "allowedAggregateRootIds": ["production-order"]
+          }
+        ]
+      },
+      "dataSourcesModel": {
+        "sources": [
+          {
+            "id": "ds-sap-po",
+            "name": "SAP 生产订单 OData",
+            "type": "api",
+            "boundObjectTypeId": "production-order",
+            "api": {
+              "baseUrl": "https://sap.example/odata/s4",
+              "entitySet": "ProductionOrders",
+              "authSecretRef": "secret/sap-oauth-prod"
+            }
+          }
+        ]
+      },
+      "createdAt": "2026-06-19T16:00:00.000Z",
+      "updatedAt": "2026-06-19T16:00:00.000Z"
+    }
+  }
+}

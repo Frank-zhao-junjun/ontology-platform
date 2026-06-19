@@ -1,0 +1,183 @@
+package com.ontology.platform.infrastructure.imports;
+
+/* ============================================================
+ * 导入适配器测试模板
+ *
+ * 使用方式：复制此文件，搜索替换以下占位符：
+ *   {{ADAPTER_CLASS}}  → 适配器类名（如 ExcelBImportAdapter）
+ *   {{SHEET_NAME}}     → Sheet 名称（如 "B"）
+ *   {{ENTITY_CLASS}}   → 目标实体类（如 ObjectType）
+ *   {{SAMPLE_ID}}      → 示例 ID（如 CAP-001）
+ *   {{SAMPLE_NAME}}    → 示例名称（如 计划能力）
+ *   {{COL_COUNT}}      → 数据列数
+ * ============================================================ */
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ontology.platform.domain.dto.imports.ImportResult;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.*;
+
+/**
+ * {{ADAPTER_CLASS}} 单元测试
+ *
+ * <p>依据 Spec §5 的测试用例。</p>
+ */
+class {{ADAPTER_CLASS}}Test {
+
+    private static final String CREATED_BY = "test-user";
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    private /* use actual class */ ExcelOntologyImportAdapter adapter;
+
+    @BeforeEach
+    void setUp() {
+        adapter = new ExcelOntologyImportAdapter(MAPPER);
+        // adapter.setNameConflictChecker(...);
+    }
+
+    @Test
+    @DisplayName("TC-1: 1行有效数据 → 创建成功")
+    void shouldCreateSingle() throws IOException {
+        byte[] xlsx = createSheet(1);
+        ImportResult</*EntityType*/> result = adapter.execute(toStream(xlsx), CREATED_BY);
+
+        assertThat(result.getImported()).hasSize(1);
+        assertThat(result.getErrors()).isEmpty();
+        assertThat(result.getSkipped()).isEmpty();
+
+        // var entity = result.getImported().get(0);
+        // assertThat(entity.getName()).isEqualTo("{{SAMPLE_ID}}");
+    }
+
+    @Test
+    @DisplayName("TC-2: 多行有效数据 → 全部创建成功")
+    void shouldCreateMultiple() throws IOException {
+        byte[] xlsx = createSheet(3);
+        ImportResult</*EntityType*/> result = adapter.execute(toStream(xlsx), CREATED_BY);
+
+        assertThat(result.getImported()).hasSize(3);
+        assertThat(result.getErrors()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("TC-3: 必填列缺失 → errors")
+    void shouldReportErrorWhenRequiredMissing() throws IOException {
+        byte[] xlsx = createSheetWithMissingRequired();
+        ImportResult</*EntityType*/> result = adapter.execute(toStream(xlsx), CREATED_BY);
+
+        assertThat(result.getImported()).isEmpty();
+        assertThat(result.getErrors()).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("TC-4: 主键冲突 → skipped")
+    void shouldSkipWhenConflict() throws IOException {
+        // adapter.setNameConflictChecker(name -> "{{SAMPLE_ID}}".equals(name));
+        byte[] xlsx = createSheet(1);
+        ImportResult</*EntityType*/> result = adapter.execute(toStream(xlsx), CREATED_BY);
+
+        assertThat(result.getImported()).isEmpty();
+        assertThat(result.getSkipped()).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("TC-5: 空Sheet → 0 imported")
+    void shouldHandleEmptySheet() throws IOException {
+        byte[] xlsx = createEmptySheet();
+        ImportResult</*EntityType*/> result = adapter.execute(toStream(xlsx), CREATED_BY);
+
+        assertThat(result.getImported()).isEmpty();
+        assertThat(result.getErrors()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("TC-6: Sheet不存在 → 异常")
+    void shouldThrowWhenSheetNotFound() {
+        byte[] xlsx = createSheetWithoutTarget();
+        assertThatThrownBy(() -> adapter.execute(toStream(xlsx), CREATED_BY))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("{{SHEET_NAME}}");
+    }
+
+    @Test
+    @DisplayName("TC-7: 非法文件 → 异常")
+    void shouldThrowWhenNotValidExcel() {
+        byte[] garbage = "not an excel file".getBytes();
+        assertThatThrownBy(() -> adapter.execute(toStream(garbage), CREATED_BY))
+                .isInstanceOf(RuntimeException.class);
+    }
+
+    // ==================== 测试夹具 ====================
+
+    private static byte[] createSheet(int rowCount) throws IOException {
+        try (Workbook wb = new XSSFWorkbook()) {
+            Sheet sh = wb.createSheet("{{SHEET_NAME}}");
+            createHeader(sh);
+            for (int i = 0; i < rowCount; i++) {
+                Row r = sh.createRow(1 + i);
+                r.createCell(0, CellType.STRING).setCellValue("{{SAMPLE_ID}}-" + (i + 1));
+                r.createCell(1, CellType.STRING).setCellValue("{{SAMPLE_NAME}}" + (i + 1));
+                // ... 按需填充更多列
+            }
+            return toBytes(wb);
+        }
+    }
+
+    private static byte[] createSheetWithMissingRequired() throws IOException {
+        try (Workbook wb = new XSSFWorkbook()) {
+            Sheet sh = wb.createSheet("{{SHEET_NAME}}");
+            createHeader(sh);
+            Row r = sh.createRow(1);
+            r.createCell(0, CellType.STRING).setCellValue("");  // 缺失ID或父节点ID
+            r.createCell(1, CellType.STRING).setCellValue("测试");
+            return toBytes(wb);
+        }
+    }
+
+    private static byte[] createEmptySheet() throws IOException {
+        try (Workbook wb = new XSSFWorkbook()) {
+            wb.createSheet("{{SHEET_NAME}}");
+            createHeader(wb.getSheet("{{SHEET_NAME}}"));
+            return toBytes(wb);
+        }
+    }
+
+    private static byte[] createSheetWithoutTarget() {
+        try (Workbook wb = new XSSFWorkbook()) {
+            wb.createSheet("OTHER");
+            return toBytes(wb);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void createHeader(Sheet sh) {
+        Row header = sh.createRow(0);
+        // 根据实际列定义填充
+        header.createCell(0, CellType.STRING).setCellValue("ID");
+        header.createCell(1, CellType.STRING).setCellValue("名称");
+        // ...
+    }
+
+    private static byte[] toBytes(Workbook wb) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        wb.write(bos);
+        return bos.toByteArray();
+    }
+
+    private static InputStream toStream(byte[] data) {
+        return new ByteArrayInputStream(data);
+    }
+}

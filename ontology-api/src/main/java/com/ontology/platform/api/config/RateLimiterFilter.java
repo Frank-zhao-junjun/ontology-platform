@@ -32,7 +32,8 @@ public class RateLimiterFilter implements Filter {
     private final PlatformMetrics metrics;
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    private static final int DEFAULT_MAX_REQUESTS = 100;
+    private static final int DEFAULT_MAX_REQUESTS = 1000;
+    private static final int AGENT_MAX_REQUESTS = 100;
     private static final int DEFAULT_WINDOW_SECONDS = 60;
 
     @Override
@@ -55,7 +56,7 @@ public class RateLimiterFilter implements Filter {
 
         // Check agent-level rate limit (if agent header present)
         if (agentId != null && !agentId.isBlank()) {
-            if (!tryAcquire("AGENT", agentId, DEFAULT_MAX_REQUESTS / 2, DEFAULT_WINDOW_SECONDS)) {
+            if (!tryAcquire("AGENT", agentId, AGENT_MAX_REQUESTS, DEFAULT_WINDOW_SECONDS)) {
                 sendRateLimitError(response, "AGENT", agentId);
                 return;
             }

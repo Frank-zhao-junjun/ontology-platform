@@ -64,7 +64,14 @@ public class WebhookDispatcher {
                 log.warn("Webhook error: url={}, attempt={}, error={}", callbackUrl, attempt, e.getMessage());
             }
             if (attempt < MAX_RETRIES) {
-                sleep((long) Math.pow(5, attempt) * 100); // 500ms, 2.5s, 12.5s
+                // Spec: 1s / 5s / 25s interval
+                long delay = 0;
+                switch (attempt) {
+                    case 1 -> delay = 1000;
+                    case 2 -> delay = 5000;
+                    default -> delay = 25000;
+                }
+                sleep(delay);
             }
         }
         log.error("Webhook exhausted retries: url={}", callbackUrl);
