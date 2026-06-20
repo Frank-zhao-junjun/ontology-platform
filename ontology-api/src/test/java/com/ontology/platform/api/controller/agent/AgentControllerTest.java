@@ -16,6 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +44,7 @@ class AgentControllerTest {
                 .output("src/main/java/...")
                 .durationMs(1500L)
                 .build();
-        when(agentOrchestrationService.executeTask(any())).thenReturn(expected);
+        when(agentOrchestrationService.executeTask(any(), anyString())).thenReturn(expected);
 
         ResponseEntity<ApiResponse<AgentTaskResponse>> resp = controller.submitTask(request, "admin");
 
@@ -67,7 +68,7 @@ class AgentControllerTest {
                 .output("代码审查结果...")
                 .durationMs(45000L)
                 .build();
-        when(agentOrchestrationService.executeTask(any())).thenReturn(expected);
+        when(agentOrchestrationService.executeTask(any(), anyString())).thenReturn(expected);
 
         ResponseEntity<ApiResponse<AgentTaskResponse>> resp = controller.submitTask(request, "admin");
 
@@ -87,7 +88,7 @@ class AgentControllerTest {
                 .errorMessage("Command not found")
                 .durationMs(200L)
                 .build();
-        when(agentOrchestrationService.executeTask(any())).thenReturn(expected);
+        when(agentOrchestrationService.executeTask(any(), anyString())).thenReturn(expected);
 
         ResponseEntity<ApiResponse<AgentTaskResponse>> resp = controller.submitTask(request, "admin");
 

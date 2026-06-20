@@ -43,7 +43,7 @@ class AgentOrchestrationServiceTest {
                         .durationMs(1000L)
                         .build());
 
-        AgentTaskResponse resp = service.executeTask(request);
+        AgentTaskResponse resp = service.executeTask(request, "admin");
 
         assertEquals("kimi", resp.getAgentType());
         assertEquals("SUCCESS", resp.getStatus());
@@ -64,7 +64,7 @@ class AgentOrchestrationServiceTest {
                         .durationMs(5000L)
                         .build());
 
-        AgentTaskResponse resp = service.executeTask(request);
+        AgentTaskResponse resp = service.executeTask(request, "admin");
 
         assertEquals("claude", resp.getAgentType());
         assertEquals("SUCCESS", resp.getStatus());
@@ -83,7 +83,7 @@ class AgentOrchestrationServiceTest {
                         .durationMs(30000L)
                         .build());
 
-        AgentTaskResponse resp = service.executeTask(request);
+        AgentTaskResponse resp = service.executeTask(request, "admin");
 
         assertEquals("codex", resp.getAgentType());
         assertEquals("SUCCESS", resp.getStatus());
@@ -96,7 +96,7 @@ class AgentOrchestrationServiceTest {
                 .prompt("测试")
                 .build();
 
-        AgentTaskResponse resp = service.executeTask(request);
+        AgentTaskResponse resp = service.executeTask(request, "admin");
 
         assertEquals("FAILURE", resp.getStatus());
         assertTrue(resp.getErrorMessage().contains("不支持的 agent 类型"));
@@ -115,7 +115,7 @@ class AgentOrchestrationServiceTest {
                         .durationMs(500L)
                         .build());
 
-        AgentTaskResponse resp = service.executeTask(request);
+        AgentTaskResponse resp = service.executeTask(request, "admin");
 
         assertEquals("FAILURE", resp.getStatus());
         assertEquals("脚本执行失败", resp.getErrorMessage());
@@ -136,7 +136,7 @@ class AgentOrchestrationServiceTest {
                         .durationMs(5000L)
                         .build());
 
-        AgentTaskResponse resp = service.executeTask(request);
+        AgentTaskResponse resp = service.executeTask(request, "admin");
 
         assertEquals("TIMEOUT", resp.getStatus());
         assertNotNull(resp.getOutput());

@@ -31,7 +31,7 @@ public class AgentController {
             @RequestHeader(value = "X-User-Id", defaultValue = "admin") String userId) {
 
         log.info("REST: Submit agent task, type={}, userId={}", request.getAgentType(), userId);
-        AgentTaskResponse response = agentOrchestrationService.executeTask(request);
+        AgentTaskResponse response = agentOrchestrationService.executeTask(request, userId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 

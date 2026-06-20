@@ -7,6 +7,7 @@ import com.ontology.platform.infrastructure.bridge.AgentBridgeService;
 import com.ontology.platform.infrastructure.bridge.AgentBridgeService.AgentResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,15 +22,16 @@ public class AgentOrchestrationService {
 
     private final AgentBridgeService bridgeService;
 
-    private static final String PROJECT_ROOT = "D:\\AI\\ontology-platform";
+    @Value("${agent.project-root:D:\\AI\\ontology-platform}")
+    private String projectRoot;
 
-    public AgentTaskResponse executeTask(SubmitAgentTaskRequest request) {
+    public AgentTaskResponse executeTask(SubmitAgentTaskRequest request, String userId) {
         String agentType = request.getAgentType().toLowerCase().trim();
         String prompt = request.getPrompt();
-        String cwd = request.getCwd() != null ? request.getCwd() : PROJECT_ROOT;
+        String cwd = request.getCwd() != null ? request.getCwd() : projectRoot;
         Long timeout = request.getTimeout() != null ? request.getTimeout().longValue() : null;
 
-        log.info("Agent task: type={}, prompt(len)={}, cwd={}", agentType, prompt.length(), cwd);
+        log.info("Agent task: type={}, prompt(len)={}, cwd={}, userId={}", agentType, prompt.length(), cwd, userId);
 
         AgentResult result = switch (agentType) {
             case "kimi" -> bridgeService.executeKimi(prompt, cwd, timeout);

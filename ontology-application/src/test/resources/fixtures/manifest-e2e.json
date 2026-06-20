@@ -1,0 +1,187 @@
+{
+  "apiVersion": "ontology.platform/v1",
+  "kind": "OntologyManifest",
+  "metadata": {
+    "id": "it-001",
+    "name": "生产制造",
+    "version": "0.2.0",
+    "description": "生产制造领域本体 — 端到端测试",
+    "boundedContext": "manufacturing",
+    "domainTags": ["manufacturing", "production"],
+    "compiledAt": "2026-06-20T00:00:00Z",
+    "source": "项目1-Ontology",
+    "status": "DRAFT"
+  },
+  "spec": {
+    "semantic": {
+      "boundedContext": {
+        "id": "bc-manufacturing",
+        "name": "生产制造",
+        "nameEn": "Manufacturing",
+        "description": "生产执行限界上下文"
+      },
+      "businessScenarios": [
+        {
+          "id": "scenario-mts",
+          "name": "面向库存生产",
+          "nameEn": "MTS",
+          "description": "MTS 生产模式",
+          "applicableObjectTypeIds": ["production-order", "operation"]
+        }
+      ],
+      "valueObjects": [
+        {
+          "id": "vo-address",
+          "name": "地址",
+          "nameEn": "Address",
+          "properties": [
+            {"id": "prop-street", "name": "街道", "nameEn": "street", "dataType": "string", "required": true},
+            {"id": "prop-city", "name": "城市", "nameEn": "city", "dataType": "string", "required": true}
+          ]
+        }
+      ],
+      "objectTypes": [
+        {
+          "id": "production-order",
+          "name": "生产订单",
+          "nameEn": "ProductionOrder",
+          "kind": "aggregate_root",
+          "businessScenarioIds": ["scenario-mts"],
+          "description": "生产执行的核心聚合",
+          "properties": [
+            {"id": "order-id", "name": "生产订单号", "nameEn": "order_id", "dataType": "string", "required": true, "isPrimary": true},
+            {"id": "order-qty", "name": "订单数量", "nameEn": "order_qty", "dataType": "integer", "required": true},
+            {"id": "order-status", "name": "状态", "nameEn": "status", "dataType": "string", "isState": true}
+          ]
+        },
+        {
+          "id": "operation",
+          "name": "工序",
+          "nameEn": "Operation",
+          "kind": "child_entity",
+          "businessScenarioIds": ["scenario-mts"],
+          "aggregateRootId": "production-order",
+          "properties": [
+            {"id": "op-number", "name": "工序号", "nameEn": "op_number", "dataType": "integer", "required": true},
+            {"id": "op-name", "name": "工序名称", "nameEn": "op_name", "dataType": "string", "required": true}
+          ]
+        }
+      ]
+    },
+    "behavior": {
+      "actions": [
+        {
+          "id": "release-order",
+          "name": "下达生产订单",
+          "nameEn": "release",
+          "aggregateRootId": "production-order",
+          "description": "将生产订单状态从 DRAFT 变更为 RELEASED",
+          "inputSchema": {"plannedDate": "string", "qty": "integer"},
+          "riskLevel": "medium"
+        },
+        {
+          "id": "complete-order",
+          "name": "完成生产订单",
+          "nameEn": "complete",
+          "aggregateRootId": "production-order",
+          "description": "标记生产订单为完成状态",
+          "riskLevel": "low"
+        }
+      ],
+      "rules": [
+        {
+          "id": "qty-positive",
+          "name": "数量必须大于零",
+          "description": "生产订单数量不能为负",
+          "expression": "order_qty > 0"
+        }
+      ],
+      "stateMachines": [
+        {
+          "id": "sm-production-order",
+          "name": "生产订单生命周期",
+          "aggregateRootId": "production-order",
+          "states": [
+            {"name": "DRAFT", "initial": true, "final": false},
+            {"name": "RELEASED", "initial": false, "final": false},
+            {"name": "COMPLETED", "initial": false, "final": true}
+          ],
+          "transitions": [
+            {"from": "DRAFT", "to": "RELEASED", "trigger": "release", "guard": "qty_positive"},
+            {"from": "RELEASED", "to": "COMPLETED", "trigger": "complete"}
+          ]
+        }
+      ]
+    },
+    "events": {
+      "domainEvents": [
+        {
+          "id": "order-released",
+          "name": "订单已下达",
+          "nameEn": "order_released",
+          "eventType": "domain_event",
+          "severity": "info",
+          "aggregateRootId": "production-order",
+          "payloadSchema": {"orderId": "string", "releasedAt": "string"}
+        },
+        {
+          "id": "order-completed",
+          "name": "订单已完成",
+          "nameEn": "order_completed",
+          "eventType": "domain_event",
+          "severity": "info",
+          "aggregateRootId": "production-order",
+          "payloadSchema": {"orderId": "string", "completedAt": "string"}
+        }
+      ],
+      "causalities": [
+        {
+          "id": "causality-release-complete",
+          "causeEventId": "order-released",
+          "effectEventId": "order-completed",
+          "description": "下达后最终完成"
+        }
+      ]
+    },
+    "governance": {
+      "roles": [
+        {
+          "id": "role-prod-manager",
+          "name": "生产经理",
+          "code": "prod_mgr",
+          "permissions": ["release-order", "complete-order"]
+        }
+      ],
+      "agentPolicies": [
+        {
+          "id": "policy-prod-agent",
+          "name": "生产执行Agent策略",
+          "agentRoleId": "role-prod-manager",
+          "allowedTools": ["release-order", "complete-order"]
+        }
+      ]
+    },
+    "dataSources": [
+      {
+        "id": "ds-sap",
+        "name": "SAP ERP",
+        "code": "SAP_ERP",
+        "sourceType": "api",
+        "connectionConfig": {
+          "baseUrl": "https://sap.example.com/api",
+          "authType": "basic"
+        }
+      }
+    ],
+    "epc": [
+      {
+        "id": "epc-production-flow",
+        "flowName": "生产执行流程",
+        "steps": [
+          {"stepOrder": 1, "triggerEventId": "order-released", "actionId": "release-order", "conditions": ["qty_positive"]},
+          {"stepOrder": 2, "triggerEventId": "order-completed", "actionId": "complete-order"}
+        ]
+      }
+    ]
+  }
+}
