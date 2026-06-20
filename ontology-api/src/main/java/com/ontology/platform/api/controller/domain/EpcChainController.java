@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateEpcChainRequest;
 import com.ontology.platform.application.dto.domain.EpcChainResponse;
 import com.ontology.platform.application.service.EpcChainService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,9 @@ public class EpcChainController {
     private final EpcChainService epcChainService;
 
     @PostMapping @Operation(summary = "创建EPC链")
-    public ResponseEntity<ApiResponse<EpcChainResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<EpcChainResponse>> create(@Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateEpcChainRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(epcChainService.create(ontologyId, request, userId)));
     }
@@ -35,14 +36,14 @@ public class EpcChainController {
     }
 
     @GetMapping("/{id}") @Operation(summary = "详情")
-    public ResponseEntity<ApiResponse<EpcChainResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<EpcChainResponse>> getById(@Parameter(description = "EPC链ID") @PathVariable String id) {
         EpcChainResponse r = epcChainService.getById(id);
         return r == null ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok(ApiResponse.success(r));
     }
 
     @DeleteMapping("/{id}") @Operation(summary = "删除")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "EPC链ID") @PathVariable String id) {
         epcChainService.delete(id);
         return ResponseEntity.noContent().build();
     }

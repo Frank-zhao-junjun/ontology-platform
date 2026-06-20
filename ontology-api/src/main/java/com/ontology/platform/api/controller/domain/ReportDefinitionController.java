@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateReportDefinitionReques
 import com.ontology.platform.application.dto.domain.ReportDefinitionResponse;
 import com.ontology.platform.application.service.ReportDefinitionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,9 @@ public class ReportDefinitionController {
     @PostMapping
     @Operation(summary = "创建报表定义", description = "在指定本体下创建数据报表")
     public ResponseEntity<ApiResponse<ReportDefinitionResponse>> create(
-            @PathVariable String ontologyId,
+            @Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateReportDefinitionRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         log.info("REST Create ReportDefinition: ontologyId={}", ontologyId);
         ReportDefinitionResponse response = reportDefinitionService.create(ontologyId, request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
@@ -37,14 +38,14 @@ public class ReportDefinitionController {
 
     @GetMapping
     @Operation(summary = "获取报表定义列表", description = "获取指定本体下所有数据报表")
-    public ResponseEntity<ApiResponse<List<ReportDefinitionResponse>>> list(@PathVariable String ontologyId) {
+    public ResponseEntity<ApiResponse<List<ReportDefinitionResponse>>> list(@Parameter(description = "本体ID") @PathVariable String ontologyId) {
         List<ReportDefinitionResponse> list = reportDefinitionService.listByOntologyId(ontologyId);
         return ResponseEntity.ok(ApiResponse.success(list));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "获取报表定义详情", description = "根据ID获取数据报表详细信息")
-    public ResponseEntity<ApiResponse<ReportDefinitionResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<ReportDefinitionResponse>> getById(@Parameter(description = "报表定义ID") @PathVariable String id) {
         ReportDefinitionResponse response = reportDefinitionService.getById(id);
         if (response == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ApiResponse.success(response));
@@ -61,7 +62,7 @@ public class ReportDefinitionController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除报表定义", description = "删除数据报表")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "报表定义ID") @PathVariable String id) {
         reportDefinitionService.delete(id);
         return ResponseEntity.noContent().build();
     }

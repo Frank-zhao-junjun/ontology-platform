@@ -1,6 +1,6 @@
 # Ontology Platform — 本体建模平台
 
-企业级本体管理系统，基于 DDD 分层架构，提供本体 CRUD、Manifest 导入/发布、行为/事件/EPC 查询、Agent 治理，以及 Phase 2 异步任务、Webhook、幂等与限流能力。MCP Server 将 REST API 暴露为 AI Agent 可调用的 MCP 工具。
+企业级本体管理系统，基于 DDD 分层架构，提供本体 CRUD、Manifest 导入/发布（JSON/YAML/Excel）、行为/事件/EPC 查询、Agent 编排（ACP 协议接入 Kimi/Claude/Codex）、V12-V14 领域模型（19 张新表）、CI 自动构建测试，以及 Phase 2 异步任务、Webhook、幂等与限流能力。MCP Server 将 REST API 暴露为 AI Agent 可调用的 MCP 工具。
 
 **仓库**: [Frank-zhao-junjun/ontology-platform](https://github.com/Frank-zhao-junjun/ontology-platform)
 
@@ -31,7 +31,9 @@ ontology-platform/
 ├── frontend/                  # Vite + Tailwind（PPT 等辅助前端）
 ├── docs/
 │   ├── shared/                # PRD、TDD、API 契约、Manifest 规范
-│   └── superpowers/specs/     # Phase 1 / Phase 2 实施 Spec
+│   ├── superpowers/specs/     # Phase 1 / Phase 2 / Phase 3 实施 Spec
+│   └── import/                # 导入模块分析与规划
+├── .github/workflows/         # CI 自动编译+测试（GitHub Actions）
 ├── docker/                    # Docker Compose（PG + Redis + App + MCP）
 ├── scripts/                   # 启动脚本、证书生成等
 ├── .coze                      # Coze CLI 配置文件
@@ -157,15 +159,30 @@ npm test       # Vitest
 | 对象类型 | `/api/v1/ontologies/{id}/object-types` | 类型与属性 |
 | 关系 | `/api/v1/ontologies/{id}/relations` | 关系 CRUD |
 | 图遍历 | `/api/v1/ontologies/{id}/graph/*` | traverse / paths / subgraph |
+| Agent 编排 | `/api/v1/agents/*` | Agent 任务提交/查询（Kimi/Claude/Codex） |
 | Manifest | `/api/v1/manifests/*` | 导入、预览、发布、导出 |
-| 行为/事件/EPC | `/api/v1/ontologies/{id}/actions|events|epc` | 领域定义查询 |
+| 行为/事件/EPC | `/api/v1/ontologies/{id}/actions\|events\|epc` | 领域定义查询 |
+| V12 组织/指标 | `/api/v1/ontologies/{id}/departments\|positions\|business-metrics\|orchestrations\|process-steps` | 部门、岗位、业务指标、编排、流程步骤 |
+| V12 元数据/术语 | `/api/v1/ontologies/{id}/metadata-templates\|business-terms\|agent-intents` | 元数据模板、业务术语、Agent 意图 |
+| V13 语义 | `/api/v1/ontologies/{id}/semantic-relations\|intent-slots\|agent-policies-semantic\|error-recoveries\|semantic-field-mappings\|entity-lifecycle-snapshots` | 语义关系、意图槽位、策略、容错、字段映射、生命周期 |
+| V14 EPC | `/api/v1/ontologies/{id}/epc-chains\|epc-nodes\|epc-edges\|epc-model-refs\|epc-profiles` | EPC 链/节点/边/模型引用/配置 |
 | 治理 | `/api/v1/governance/*` | Token、角色、权限、审批 |
 | 上传/导入 | `/api/v1/uploads/*`, `/api/v1/imports/*` | 分片上传与导入任务 |
 | 异步任务 | `/api/v1/jobs` | 提交/查询/取消 Job（Phase 2） |
 | Webhook | `/api/v1/webhooks` | 订阅 job 完成/失败回调（Phase 2） |
 | 可观测 | `/api/actuator/prometheus` | Prometheus 指标 |
+| 健康检查 | `/api/v1/health/details` | 构建信息、JVM 版本、测试统计、运行时长 |
 
 Manifest v2 交换契约见 [ontology-manifest-spec-v2.md](docs/shared/ontology-manifest-spec-v2.md)；v1 Legacy（V01–V11）见 [ontology-manifest-spec.md](docs/shared/ontology-manifest-spec.md)。
+
+## CI 流水线
+
+项目配置了 GitHub Actions 自动构建与测试（[`.github/workflows/ci.yml`](.github/workflows/ci.yml)）：
+
+- **触发**: `main` / `release/**` 分支 push 或 PR
+- **环境**: `ubuntu-latest`, JDK 21, 15 分钟超时
+- **步骤**: Checkout → `mvn compile` → `mvn test` → 上传测试报告
+- **测试统计**: 171 tests, 0 failures（2026-06-20）
 
 ## 文档索引
 
@@ -174,18 +191,22 @@ Manifest v2 交换契约见 [ontology-manifest-spec-v2.md](docs/shared/ontology-
 | 故事地图 v1.2 | [docs/shared/PRD-本体建模平台-UserStoryMap-v1.2.md](docs/shared/PRD-本体建模平台-UserStoryMap-v1.2.md) |
 | PRD v2.0 | [docs/shared/PRD-本体建模平台-v2.0.md](docs/shared/PRD-本体建模平台-v2.0.md) |
 | TDD v2.0 | [docs/shared/TDD-本体建模平台-v2.0.md](docs/shared/TDD-本体建模平台-v2.0.md) |
+| 项目结构速查 | [AGENTS.md](AGENTS.md) |
 | API 契约 | [docs/shared/API契约-本体建模平台-v2.0.yaml](docs/shared/API契约-本体建模平台-v2.0.yaml) |
 | Manifest 规范 | [docs/shared/ontology-manifest-spec-v2.md](docs/shared/ontology-manifest-spec-v2.md) |
 | Phase 3 Spec | [docs/superpowers/specs/phase3-spec-v1.md](docs/superpowers/specs/phase3-spec-v1.md) |
 | Phase 1 Spec | [docs/superpowers/specs/phase1-spec-v1.md](docs/superpowers/specs/phase1-spec-v1.md) |
 | Phase 2 Spec | [docs/superpowers/specs/phase2-spec-v1.md](docs/superpowers/specs/phase2-spec-v1.md) |
-| 工作日志 | [WORKLOG-2026-06-14.md](WORKLOG-2026-06-14.md) · [WORKLOG-2026-06-16.md](WORKLOG-2026-06-16.md) |
+| 工作日志 | [WORKLOG-2026-06-14.md](WORKLOG-2026-06-14.md) · [WORKLOG-2026-06-16.md](WORKLOG-2026-06-16.md) · [WORKLOG-2026-06-19.md](WORKLOG-2026-06-19.md) · [WORKLOG-2026-06-20.md](WORKLOG-2026-06-20.md) |
 
 ## 测试
 
 ```bash
-# 后端单元测试
+# 后端单元测试（171 tests, 0 failures）
 mvn test
+
+# 指定模块测试
+mvn test -pl ontology-application
 
 # MCP Server
 cd mcp-server && npm test
@@ -194,7 +215,7 @@ cd mcp-server && npm test
 mvn test jacoco:report
 ```
 
-> Integration Test（Testcontainers PG/Redis）需在 Docker 可用环境下单独执行；详见 TDD v2.0 与 Worklog §十七。
+> Integration Test（Testcontainers PG/Redis）需在 Docker 可用环境下单独执行；详见 TDD v2.0。
 
 ## 监控
 

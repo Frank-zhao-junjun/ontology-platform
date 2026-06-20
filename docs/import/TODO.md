@@ -66,8 +66,8 @@
 
 ### P3 — 长期
 
-| # | 任务 | 说明 |
-|:-:|------|------|
-| 7 | Swagger API 描述补全 | 补充 @Schema description |
-| 8 | README 更新 | 新 API 模块说明 |
-| 9 | Cursor agent CLI | 重新安装 |
+| 状态 | # | 任务 | 说明 |
+|:----:|:-:|------|------|
+| ✅ | 7 | Swagger API 描述补全 | 35+ Controller 补充 @Parameter + @ApiResponse |
+| ✅ | 8 | README 更新 | V12-V14、Agent 编排、CI 流水线、测试统计 |
+| ✅ | 9 | Cursor agent CLI | Cursor 3.0.16 已安装，agent mode 内置于 IDE |

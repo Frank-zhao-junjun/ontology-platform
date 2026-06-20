@@ -22,7 +22,7 @@ public class BehaviorController {
     @GetMapping
     @Operation(summary = "查询行为定义列表", description = "按本体ID查询行为定义，可按实体过滤")
     public ApiResponse<List<ActionDefinitionResponse>> queryActions(
-            @PathVariable String ontologyId,
+            @Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Parameter(description = "实体ID过滤") @RequestParam(required = false) String entityId) {
         List<ActionDefinitionResponse> actions = domainQueryService.queryActions(ontologyId, entityId);
         return ApiResponse.success(actions);

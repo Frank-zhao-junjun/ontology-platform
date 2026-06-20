@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
  * 属性定义请求DTO（用于在创建ObjectType时同时创建属性）
  * Property Definition Request DTO
  */
+@Schema(description = "属性定义请求DTO，用于在创建对象类型时定义属性")
 @Getter
 @Setter
 @Builder

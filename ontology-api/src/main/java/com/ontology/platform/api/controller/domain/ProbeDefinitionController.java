@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateProbeDefinitionRequest
 import com.ontology.platform.application.dto.domain.ProbeDefinitionResponse;
 import com.ontology.platform.application.service.ProbeDefinitionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,9 @@ public class ProbeDefinitionController {
     @PostMapping
     @Operation(summary = "创建探针定义", description = "在指定本体下创建健康探测")
     public ResponseEntity<ApiResponse<ProbeDefinitionResponse>> create(
-            @PathVariable String ontologyId,
+            @Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateProbeDefinitionRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         log.info("REST Create ProbeDefinition: ontologyId={}", ontologyId);
         ProbeDefinitionResponse response = probeDefinitionService.create(ontologyId, request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
@@ -37,14 +38,14 @@ public class ProbeDefinitionController {
 
     @GetMapping
     @Operation(summary = "获取探针定义列表", description = "获取指定本体下所有健康探测")
-    public ResponseEntity<ApiResponse<List<ProbeDefinitionResponse>>> list(@PathVariable String ontologyId) {
+    public ResponseEntity<ApiResponse<List<ProbeDefinitionResponse>>> list(@Parameter(description = "本体ID") @PathVariable String ontologyId) {
         List<ProbeDefinitionResponse> list = probeDefinitionService.listByOntologyId(ontologyId);
         return ResponseEntity.ok(ApiResponse.success(list));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "获取探针定义详情", description = "根据ID获取健康探测详细信息")
-    public ResponseEntity<ApiResponse<ProbeDefinitionResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<ProbeDefinitionResponse>> getById(@Parameter(description = "探针定义ID") @PathVariable String id) {
         ProbeDefinitionResponse response = probeDefinitionService.getById(id);
         if (response == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ApiResponse.success(response));
@@ -61,7 +62,7 @@ public class ProbeDefinitionController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除探针定义", description = "删除健康探测")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "探针定义ID") @PathVariable String id) {
         probeDefinitionService.delete(id);
         return ResponseEntity.noContent().build();
     }

@@ -6,6 +6,7 @@ import com.ontology.platform.application.service.upload.ExportService;
 import com.ontology.platform.application.service.upload.ImportService;
 import com.ontology.platform.application.service.upload.UploadService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -42,8 +43,8 @@ public class UploadController {
     @Operation(summary = "初始化上传", description = "初始化分片上传任务")
     public ApiResponse<UploadTaskResponse> initUpload(
             @Valid @RequestBody InitUploadRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "default") String userId,
-            @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "default") String userId,
+            @Parameter(description = "租户ID") @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId) {
         
         log.info("Init upload request: fileName={}, fileSize={}", 
                 request.getFileName(), request.getFileSize());
@@ -58,8 +59,8 @@ public class UploadController {
     @PutMapping("/uploads/{uploadId}/chunks/{chunkNumber}")
     @Operation(summary = "上传分片", description = "上传单个文件分片")
     public ApiResponse<UploadTaskResponse> uploadChunk(
-            @PathVariable String uploadId,
-            @PathVariable int chunkNumber,
+            @Parameter(description = "上传任务ID") @PathVariable String uploadId,
+            @Parameter(description = "分片编号") @PathVariable int chunkNumber,
             @RequestBody byte[] chunkData,
             @RequestHeader(value = "Content-MD5", required = false) String contentMd5) {
         
@@ -75,7 +76,7 @@ public class UploadController {
      */
     @GetMapping("/uploads/{uploadId}")
     @Operation(summary = "查询上传状态", description = "获取上传任务进度")
-    public ApiResponse<UploadTaskResponse> getUploadStatus(@PathVariable String uploadId) {
+    public ApiResponse<UploadTaskResponse> getUploadStatus(@Parameter(description = "上传任务ID") @PathVariable String uploadId) {
         UploadTaskResponse response = uploadService.getUploadStatus(uploadId);
         return ApiResponse.success(response);
     }
@@ -86,7 +87,7 @@ public class UploadController {
     @PostMapping("/uploads/{uploadId}/complete")
     @Operation(summary = "完成上传", description = "完成分片上传并合并文件")
     public ApiResponse<UploadTaskResponse> completeUpload(
-            @PathVariable String uploadId,
+            @Parameter(description = "上传任务ID") @PathVariable String uploadId,
             @RequestBody(required = false) CompleteUploadRequest request) {
         
         String finalMd5 = request != null ? request.getFinalMd5() : null;
@@ -99,7 +100,7 @@ public class UploadController {
      */
     @DeleteMapping("/uploads/{uploadId}")
     @Operation(summary = "取消上传", description = "取消上传任务并清理分片")
-    public ApiResponse<CancelUploadResponse> cancelUpload(@PathVariable String uploadId) {
+    public ApiResponse<CancelUploadResponse> cancelUpload(@Parameter(description = "上传任务ID") @PathVariable String uploadId) {
         int deletedChunks = uploadService.cancelUpload(uploadId);
         return ApiResponse.success(new CancelUploadResponse(uploadId, true, deletedChunks));
     }
@@ -112,10 +113,10 @@ public class UploadController {
     @PostMapping("/ontologies/{ontologyId}/import")
     @Operation(summary = "执行导入", description = "导入对象实例数据")
     public ApiResponse<ImportTaskResponse> executeImport(
-            @PathVariable String ontologyId,
+            @Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody ImportRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "default") String userId,
-            @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "default") String userId,
+            @Parameter(description = "租户ID") @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId) {
         
         request.setOntologyId(ontologyId);
         log.info("Execute import: ontologyId={}, objectType={}", ontologyId, request.getObjectTypeName());
@@ -129,7 +130,7 @@ public class UploadController {
      */
     @GetMapping("/imports/{importId}")
     @Operation(summary = "查询导入状态", description = "获取导入任务进度")
-    public ApiResponse<ImportTaskResponse> getImportStatus(@PathVariable String importId) {
+    public ApiResponse<ImportTaskResponse> getImportStatus(@Parameter(description = "导入任务ID") @PathVariable String importId) {
         ImportTaskResponse response = importService.getImportStatus(importId);
         return ApiResponse.success(response);
     }
@@ -139,7 +140,7 @@ public class UploadController {
      */
     @DeleteMapping("/imports/{importId}")
     @Operation(summary = "取消导入", description = "取消正在运行的导入任务")
-    public ApiResponse<Void> cancelImport(@PathVariable String importId) {
+    public ApiResponse<Void> cancelImport(@Parameter(description = "导入任务ID") @PathVariable String importId) {
         importService.cancelImport(importId);
         return ApiResponse.success(null);
     }
@@ -150,8 +151,8 @@ public class UploadController {
     @GetMapping("/ontologies/{ontologyId}/object-types/{objectTypeName}/import-template")
     @Operation(summary = "下载导入模板", description = "获取指定对象类型的导入模板")
     public ResponseEntity<byte[]> downloadImportTemplate(
-            @PathVariable String ontologyId,
-            @PathVariable String objectTypeName,
+            @Parameter(description = "本体ID") @PathVariable String ontologyId,
+            @Parameter(description = "对象类型名称") @PathVariable String objectTypeName,
             @RequestParam(defaultValue = "csv") String format) {
         
         log.info("Download import template: objectType={}, format={}", objectTypeName, format);
@@ -178,13 +179,13 @@ public class UploadController {
     @GetMapping("/ontologies/{ontologyId}/export")
     @Operation(summary = "执行导出", description = "导出对象实例数据")
     public void executeExport(
-            @PathVariable String ontologyId,
+            @Parameter(description = "本体ID") @PathVariable String ontologyId,
             @RequestParam String objectTypeName,
             @RequestParam(defaultValue = "csv") String format,
             @RequestParam(required = false) String encoding,
             @RequestParam(required = false) Integer limit,
-            @RequestHeader(value = "X-User-Id", defaultValue = "default") String userId,
-            @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId,
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "default") String userId,
+            @Parameter(description = "租户ID") @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId,
             HttpServletResponse response) throws IOException {
         
         log.info("Execute export: ontologyId={}, objectType={}, format={}", 
@@ -217,12 +218,12 @@ public class UploadController {
     @GetMapping(value = "/ontologies/{ontologyId}/export/stream")
     @Operation(summary = "流式导出", description = "大文件流式导出，减少内存占用")
     public StreamingResponseBody streamExport(
-            @PathVariable String ontologyId,
+            @Parameter(description = "本体ID") @PathVariable String ontologyId,
             @RequestParam String objectTypeName,
             @RequestParam(defaultValue = "csv") String format,
             @RequestParam(required = false) String encoding,
-            @RequestHeader(value = "X-User-Id", defaultValue = "default") String userId,
-            @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "default") String userId,
+            @Parameter(description = "租户ID") @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId) {
         
         ExportRequest request = ExportRequest.builder()
                 .ontologyId(ontologyId)

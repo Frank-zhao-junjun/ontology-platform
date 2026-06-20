@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateComputeDefinitionReque
 import com.ontology.platform.application.dto.domain.ComputeDefinitionResponse;
 import com.ontology.platform.application.service.ComputeDefinitionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,9 @@ public class ComputeDefinitionController {
     @PostMapping
     @Operation(summary = "创建计算定义", description = "在指定本体下创建公式计算")
     public ResponseEntity<ApiResponse<ComputeDefinitionResponse>> create(
-            @PathVariable String ontologyId,
+            @Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateComputeDefinitionRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         log.info("REST Create ComputeDefinition: ontologyId={}", ontologyId);
         ComputeDefinitionResponse response = computeDefinitionService.create(ontologyId, request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
@@ -37,14 +38,14 @@ public class ComputeDefinitionController {
 
     @GetMapping
     @Operation(summary = "获取计算定义列表", description = "获取指定本体下所有公式计算")
-    public ResponseEntity<ApiResponse<List<ComputeDefinitionResponse>>> list(@PathVariable String ontologyId) {
+    public ResponseEntity<ApiResponse<List<ComputeDefinitionResponse>>> list(@Parameter(description = "本体ID") @PathVariable String ontologyId) {
         List<ComputeDefinitionResponse> list = computeDefinitionService.listByOntologyId(ontologyId);
         return ResponseEntity.ok(ApiResponse.success(list));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "获取计算定义详情", description = "根据ID获取公式计算详细信息")
-    public ResponseEntity<ApiResponse<ComputeDefinitionResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<ComputeDefinitionResponse>> getById(@Parameter(description = "计算定义ID") @PathVariable String id) {
         ComputeDefinitionResponse response = computeDefinitionService.getById(id);
         if (response == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ApiResponse.success(response));
@@ -61,7 +62,7 @@ public class ComputeDefinitionController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除计算定义", description = "删除公式计算")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "计算定义ID") @PathVariable String id) {
         computeDefinitionService.delete(id);
         return ResponseEntity.noContent().build();
     }

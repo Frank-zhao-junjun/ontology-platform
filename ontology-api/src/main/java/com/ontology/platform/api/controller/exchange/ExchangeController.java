@@ -38,8 +38,8 @@ public class ExchangeController {
     @Operation(summary = "导入 v2 Exchange 文档", description = "解析并导入一个 v2 OntologyExchange JSON 文档")
     public ResponseEntity<ApiResponse<ExchangeImportResponse>> importExchange(
             @Valid @RequestBody ExchangeImportDocument request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId,
-            @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId,
+            @Parameter(description = "租户ID") @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId) {
 
         log.info("REST: Import exchange, userId={}, tenantId={}", userId, tenantId);
 

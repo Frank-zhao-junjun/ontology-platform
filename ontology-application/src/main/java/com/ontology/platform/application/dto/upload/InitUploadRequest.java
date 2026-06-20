@@ -1,5 +1,6 @@
 package com.ontology.platform.application.dto.upload;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -7,14 +8,12 @@ import lombok.*;
 
 import java.util.Map;
 
-/**
- * 初始化上传请求
- */
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "初始化上传请求DTO")
 public class InitUploadRequest {
 
     /**

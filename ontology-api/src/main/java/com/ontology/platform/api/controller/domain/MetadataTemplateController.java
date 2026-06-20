@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateMetadataTemplateReques
 import com.ontology.platform.application.dto.domain.MetadataTemplateResponse;
 import com.ontology.platform.application.service.MetadataTemplateService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,22 +27,22 @@ public class MetadataTemplateController {
 
     @PostMapping
     @Operation(summary = "创建元数据模板")
-    public ResponseEntity<ApiResponse<MetadataTemplateResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<MetadataTemplateResponse>> create(@Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateMetadataTemplateRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(metadataTemplateService.create(ontologyId, request, userId)));
     }
 
     @GetMapping
     @Operation(summary = "获取元数据模板列表")
-    public ResponseEntity<ApiResponse<List<MetadataTemplateResponse>>> list(@PathVariable String ontologyId) {
+    public ResponseEntity<ApiResponse<List<MetadataTemplateResponse>>> list(@Parameter(description = "本体ID") @PathVariable String ontologyId) {
         return ResponseEntity.ok(ApiResponse.success(metadataTemplateService.listByOntologyId(ontologyId)));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "获取元数据模板详情")
-    public ResponseEntity<ApiResponse<MetadataTemplateResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<MetadataTemplateResponse>> getById(@Parameter(description = "元数据模板ID") @PathVariable String id) {
         MetadataTemplateResponse response = metadataTemplateService.getById(id);
         if (response == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ApiResponse.success(response));
@@ -49,7 +50,7 @@ public class MetadataTemplateController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除元数据模板")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "元数据模板ID") @PathVariable String id) {
         metadataTemplateService.delete(id);
         return ResponseEntity.noContent().build();
     }

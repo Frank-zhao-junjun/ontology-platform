@@ -1,17 +1,16 @@
 package com.ontology.platform.application.dto.upload;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.util.List;
 
-/**
- * 导入任务响应
- */
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "导入任务响应DTO，包含导入结果和统计")
 public class ImportTaskResponse {
 
     /**

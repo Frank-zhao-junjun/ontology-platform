@@ -26,6 +26,7 @@ public class OntologyResponse {
     @Schema(description = "版本号")
     private String version;
     @Schema(description = "状态")
+    @Schema(description = "状态")
     private OntologyStatus status;
     @Schema(description = "发布时间")
     private Instant publishedAt;

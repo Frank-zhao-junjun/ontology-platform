@@ -1,5 +1,6 @@
 package com.ontology.platform.application.dto.webhook;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -10,6 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "创建Webhook请求DTO")
 public class CreateWebhookRequest {
 
     @NotBlank(message = "callbackUrl不能为空")

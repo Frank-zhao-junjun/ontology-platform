@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateBusinessTermRequest;
 import com.ontology.platform.application.dto.domain.BusinessTermResponse;
 import com.ontology.platform.application.service.BusinessTermService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,22 +27,22 @@ public class BusinessTermController {
 
     @PostMapping
     @Operation(summary = "创建业务术语")
-    public ResponseEntity<ApiResponse<BusinessTermResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<BusinessTermResponse>> create(@Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateBusinessTermRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(businessTermService.create(ontologyId, request, userId)));
     }
 
     @GetMapping
     @Operation(summary = "获取业务术语列表")
-    public ResponseEntity<ApiResponse<List<BusinessTermResponse>>> list(@PathVariable String ontologyId) {
+    public ResponseEntity<ApiResponse<List<BusinessTermResponse>>> list(@Parameter(description = "本体ID") @PathVariable String ontologyId) {
         return ResponseEntity.ok(ApiResponse.success(businessTermService.listByOntologyId(ontologyId)));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "获取业务术语详情")
-    public ResponseEntity<ApiResponse<BusinessTermResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<BusinessTermResponse>> getById(@Parameter(description = "业务术语ID") @PathVariable String id) {
         BusinessTermResponse response = businessTermService.getById(id);
         if (response == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ApiResponse.success(response));
@@ -49,7 +50,7 @@ public class BusinessTermController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除业务术语")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "业务术语ID") @PathVariable String id) {
         businessTermService.delete(id);
         return ResponseEntity.noContent().build();
     }

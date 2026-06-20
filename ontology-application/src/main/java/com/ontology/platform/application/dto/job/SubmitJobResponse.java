@@ -1,5 +1,6 @@
 package com.ontology.platform.application.dto.job;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.Instant;
@@ -9,6 +10,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "提交Job响应DTO，包含任务ID和初始状态")
 public class SubmitJobResponse {
 
     private String jobId;

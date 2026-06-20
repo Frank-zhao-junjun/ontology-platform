@@ -33,8 +33,8 @@ public class WebhookController {
     @Operation(summary = "注册Webhook", description = "注册一个Webhook回调地址")
     public ResponseEntity<ApiResponse<WebhookResponse>> createWebhook(
             @Valid @RequestBody CreateWebhookRequest request,
-            @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "租户ID") @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId,
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
 
         log.info("REST: Register webhook, url={}, tenant={}", request.getCallbackUrl(), tenantId);
         WebhookResponse response = webhookService.createWebhook(request, tenantId, userId);
@@ -45,7 +45,7 @@ public class WebhookController {
     @GetMapping
     @Operation(summary = "查询Webhook列表", description = "获取当前租户的所有活跃Webhook")
     public ResponseEntity<ApiResponse<List<WebhookResponse>>> listWebhooks(
-            @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId) {
+            @Parameter(description = "租户ID") @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId) {
 
         log.debug("REST: List webhooks, tenant={}", tenantId);
         List<WebhookResponse> response = webhookService.listWebhooks(tenantId);

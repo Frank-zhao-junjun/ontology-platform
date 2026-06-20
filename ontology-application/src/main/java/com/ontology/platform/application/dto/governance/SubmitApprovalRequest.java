@@ -1,16 +1,15 @@
 package com.ontology.platform.application.dto.governance;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-/**
- * 提交审批请求 DTO
- */
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "提交审批请求DTO")
 public class SubmitApprovalRequest {
 
     @NotBlank(message = "agentId is required")

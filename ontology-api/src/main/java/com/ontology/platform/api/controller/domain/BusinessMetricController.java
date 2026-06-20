@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateBusinessMetricRequest;
 import com.ontology.platform.application.dto.domain.BusinessMetricResponse;
 import com.ontology.platform.application.service.BusinessMetricService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,22 +27,22 @@ public class BusinessMetricController {
 
     @PostMapping
     @Operation(summary = "创建业务指标")
-    public ResponseEntity<ApiResponse<BusinessMetricResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<BusinessMetricResponse>> create(@Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateBusinessMetricRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(businessMetricService.create(ontologyId, request, userId)));
     }
 
     @GetMapping
     @Operation(summary = "获取业务指标列表")
-    public ResponseEntity<ApiResponse<List<BusinessMetricResponse>>> list(@PathVariable String ontologyId) {
+    public ResponseEntity<ApiResponse<List<BusinessMetricResponse>>> list(@Parameter(description = "本体ID") @PathVariable String ontologyId) {
         return ResponseEntity.ok(ApiResponse.success(businessMetricService.listByOntologyId(ontologyId)));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "获取业务指标详情")
-    public ResponseEntity<ApiResponse<BusinessMetricResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<BusinessMetricResponse>> getById(@Parameter(description = "业务指标ID") @PathVariable String id) {
         BusinessMetricResponse response = businessMetricService.getById(id);
         if (response == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ApiResponse.success(response));
@@ -49,7 +50,7 @@ public class BusinessMetricController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除业务指标")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "业务指标ID") @PathVariable String id) {
         businessMetricService.delete(id);
         return ResponseEntity.noContent().build();
     }

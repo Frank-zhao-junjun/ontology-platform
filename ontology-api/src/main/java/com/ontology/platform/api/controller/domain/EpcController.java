@@ -22,7 +22,7 @@ public class EpcController {
     @GetMapping
     @Operation(summary = "查询EPC步骤列表", description = "按本体ID查询EPC步骤，可按流程名过滤")
     public ApiResponse<List<EpcStepResponse>> queryEpc(
-            @PathVariable String ontologyId,
+            @Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Parameter(description = "流程名过滤") @RequestParam(required = false) String flowName) {
         List<EpcStepResponse> steps = domainQueryService.queryEpc(ontologyId, flowName);
         return ApiResponse.success(steps);

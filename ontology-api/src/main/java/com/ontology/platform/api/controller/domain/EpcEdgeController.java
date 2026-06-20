@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateEpcEdgeRequest;
 import com.ontology.platform.application.dto.domain.EpcEdgeResponse;
 import com.ontology.platform.application.service.EpcEdgeService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,9 @@ public class EpcEdgeController {
     private final EpcEdgeService epcEdgeService;
 
     @PostMapping @Operation(summary = "创建EPC边")
-    public ResponseEntity<ApiResponse<EpcEdgeResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<EpcEdgeResponse>> create(@Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateEpcEdgeRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(epcEdgeService.create(ontologyId, request, userId)));
     }
@@ -35,14 +36,14 @@ public class EpcEdgeController {
     }
 
     @GetMapping("/{id}") @Operation(summary = "详情")
-    public ResponseEntity<ApiResponse<EpcEdgeResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<EpcEdgeResponse>> getById(@Parameter(description = "EPC边ID") @PathVariable String id) {
         EpcEdgeResponse r = epcEdgeService.getById(id);
         return r == null ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok(ApiResponse.success(r));
     }
 
     @DeleteMapping("/{id}") @Operation(summary = "删除")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "EPC边ID") @PathVariable String id) {
         epcEdgeService.delete(id);
         return ResponseEntity.noContent().build();
     }

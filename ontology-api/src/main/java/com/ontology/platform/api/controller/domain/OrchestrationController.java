@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateOrchestrationRequest;
 import com.ontology.platform.application.dto.domain.OrchestrationResponse;
 import com.ontology.platform.application.service.OrchestrationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,22 +27,22 @@ public class OrchestrationController {
 
     @PostMapping
     @Operation(summary = "创建编排")
-    public ResponseEntity<ApiResponse<OrchestrationResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<OrchestrationResponse>> create(@Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateOrchestrationRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(orchestrationService.create(ontologyId, request, userId)));
     }
 
     @GetMapping
     @Operation(summary = "获取编排列表")
-    public ResponseEntity<ApiResponse<List<OrchestrationResponse>>> list(@PathVariable String ontologyId) {
+    public ResponseEntity<ApiResponse<List<OrchestrationResponse>>> list(@Parameter(description = "本体ID") @PathVariable String ontologyId) {
         return ResponseEntity.ok(ApiResponse.success(orchestrationService.listByOntologyId(ontologyId)));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "获取编排详情")
-    public ResponseEntity<ApiResponse<OrchestrationResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<OrchestrationResponse>> getById(@Parameter(description = "编排ID") @PathVariable String id) {
         OrchestrationResponse response = orchestrationService.getById(id);
         if (response == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ApiResponse.success(response));
@@ -49,7 +50,7 @@ public class OrchestrationController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除编排")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "编排ID") @PathVariable String id) {
         orchestrationService.delete(id);
         return ResponseEntity.noContent().build();
     }

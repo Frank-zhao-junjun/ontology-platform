@@ -4,7 +4,6 @@ import com.ontology.platform.api.dto.ApiResponse;
 import com.ontology.platform.application.dto.BuildInfoResponse;
 import com.ontology.platform.application.service.BuildInfoService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +35,6 @@ public class HealthDetailController {
             summary = "获取健康检查详情",
             description = "返回聚合的构建信息与运行时健康状态，包括版本号、构建时间、Java 版本、活跃 Profile、测试数量、运行时长等"
     )
-    @ApiResponse(responseCode = "200", description = "成功返回健康检查详情")
     public ResponseEntity<ApiResponse<BuildInfoResponse>> getHealthDetails() {
         log.debug("REST: Get health details");
         BuildInfoResponse buildInfo = buildInfoService.getBuildInfo();

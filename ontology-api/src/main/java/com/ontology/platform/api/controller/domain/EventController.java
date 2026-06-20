@@ -22,7 +22,7 @@ public class EventController {
     @GetMapping
     @Operation(summary = "查询领域事件列表", description = "按本体ID查询领域事件，可按实体过滤")
     public ApiResponse<List<EventDefinitionResponse>> queryEvents(
-            @PathVariable String ontologyId,
+            @Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Parameter(description = "实体ID过滤") @RequestParam(required = false) String entityId) {
         List<EventDefinitionResponse> events = domainQueryService.queryEvents(ontologyId, entityId);
         return ApiResponse.success(events);

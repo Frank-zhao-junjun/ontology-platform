@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateErrorRecoveryRequest;
 import com.ontology.platform.application.dto.domain.ErrorRecoveryResponse;
 import com.ontology.platform.application.service.ErrorRecoveryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,9 @@ public class ErrorRecoveryController {
     private final ErrorRecoveryService errorRecoveryService;
 
     @PostMapping @Operation(summary = "创建错误恢复")
-    public ResponseEntity<ApiResponse<ErrorRecoveryResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<ErrorRecoveryResponse>> create(@Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateErrorRecoveryRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(errorRecoveryService.create(ontologyId, request, userId)));
     }
@@ -35,14 +36,14 @@ public class ErrorRecoveryController {
     }
 
     @GetMapping("/{id}") @Operation(summary = "详情")
-    public ResponseEntity<ApiResponse<ErrorRecoveryResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<ErrorRecoveryResponse>> getById(@Parameter(description = "容错策略ID") @PathVariable String id) {
         ErrorRecoveryResponse r = errorRecoveryService.getById(id);
         return r == null ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok(ApiResponse.success(r));
     }
 
     @DeleteMapping("/{id}") @Operation(summary = "删除")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "容错策略ID") @PathVariable String id) {
         errorRecoveryService.delete(id);
         return ResponseEntity.noContent().build();
     }

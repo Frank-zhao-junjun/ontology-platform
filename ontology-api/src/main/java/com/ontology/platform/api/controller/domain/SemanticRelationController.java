@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateSemanticRelationReques
 import com.ontology.platform.application.dto.domain.SemanticRelationResponse;
 import com.ontology.platform.application.service.SemanticRelationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,9 @@ public class SemanticRelationController {
     private final SemanticRelationService semanticRelationService;
 
     @PostMapping @Operation(summary = "创建语义关系")
-    public ResponseEntity<ApiResponse<SemanticRelationResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<SemanticRelationResponse>> create(@Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateSemanticRelationRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(semanticRelationService.create(ontologyId, request, userId)));
     }
@@ -35,14 +36,14 @@ public class SemanticRelationController {
     }
 
     @GetMapping("/{id}") @Operation(summary = "详情")
-    public ResponseEntity<ApiResponse<SemanticRelationResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<SemanticRelationResponse>> getById(@Parameter(description = "语义关系ID") @PathVariable String id) {
         SemanticRelationResponse r = semanticRelationService.getById(id);
         return r == null ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok(ApiResponse.success(r));
     }
 
     @DeleteMapping("/{id}") @Operation(summary = "删除")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "语义关系ID") @PathVariable String id) {
         semanticRelationService.delete(id);
         return ResponseEntity.noContent().build();
     }

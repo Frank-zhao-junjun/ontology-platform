@@ -1,5 +1,6 @@
 package com.ontology.platform.application.dto.job;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.Instant;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Job执行结果响应DTO，包含任务状态和输出")
 public class JobResponse {
 
     private UUID jobId;

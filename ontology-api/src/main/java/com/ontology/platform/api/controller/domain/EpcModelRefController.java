@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateEpcModelRefRequest;
 import com.ontology.platform.application.dto.domain.EpcModelRefResponse;
 import com.ontology.platform.application.service.EpcModelRefService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,9 @@ public class EpcModelRefController {
     private final EpcModelRefService epcModelRefService;
 
     @PostMapping @Operation(summary = "创建EPC模型引用")
-    public ResponseEntity<ApiResponse<EpcModelRefResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<EpcModelRefResponse>> create(@Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateEpcModelRefRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(epcModelRefService.create(ontologyId, request, userId)));
     }
@@ -35,14 +36,14 @@ public class EpcModelRefController {
     }
 
     @GetMapping("/{id}") @Operation(summary = "详情")
-    public ResponseEntity<ApiResponse<EpcModelRefResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<EpcModelRefResponse>> getById(@Parameter(description = "EPC模型引用ID") @PathVariable String id) {
         EpcModelRefResponse r = epcModelRefService.getById(id);
         return r == null ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok(ApiResponse.success(r));
     }
 
     @DeleteMapping("/{id}") @Operation(summary = "删除")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "EPC模型引用ID") @PathVariable String id) {
         epcModelRefService.delete(id);
         return ResponseEntity.noContent().build();
     }

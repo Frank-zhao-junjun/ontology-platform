@@ -1,18 +1,17 @@
 package com.ontology.platform.application.dto.upload;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.util.List;
 import java.util.Map;
 
-/**
- * 导入请求
- */
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "导入请求DTO")
 public class ImportRequest {
 
     /**

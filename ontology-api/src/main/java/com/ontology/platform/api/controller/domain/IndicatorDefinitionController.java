@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateIndicatorDefinitionReq
 import com.ontology.platform.application.dto.domain.IndicatorDefinitionResponse;
 import com.ontology.platform.application.service.IndicatorDefinitionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,9 @@ public class IndicatorDefinitionController {
     @PostMapping
     @Operation(summary = "创建指标定义", description = "在指定本体下创建业务指标")
     public ResponseEntity<ApiResponse<IndicatorDefinitionResponse>> create(
-            @PathVariable String ontologyId,
+            @Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateIndicatorDefinitionRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         log.info("REST Create IndicatorDefinition: ontologyId={}", ontologyId);
         IndicatorDefinitionResponse response = indicatorDefinitionService.create(ontologyId, request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
@@ -37,14 +38,14 @@ public class IndicatorDefinitionController {
 
     @GetMapping
     @Operation(summary = "获取指标定义列表", description = "获取指定本体下所有业务指标")
-    public ResponseEntity<ApiResponse<List<IndicatorDefinitionResponse>>> list(@PathVariable String ontologyId) {
+    public ResponseEntity<ApiResponse<List<IndicatorDefinitionResponse>>> list(@Parameter(description = "本体ID") @PathVariable String ontologyId) {
         List<IndicatorDefinitionResponse> list = indicatorDefinitionService.listByOntologyId(ontologyId);
         return ResponseEntity.ok(ApiResponse.success(list));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "获取指标定义详情", description = "根据ID获取业务指标详细信息")
-    public ResponseEntity<ApiResponse<IndicatorDefinitionResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<IndicatorDefinitionResponse>> getById(@Parameter(description = "指标定义ID") @PathVariable String id) {
         IndicatorDefinitionResponse response = indicatorDefinitionService.getById(id);
         if (response == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ApiResponse.success(response));
@@ -61,7 +62,7 @@ public class IndicatorDefinitionController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除指标定义", description = "删除业务指标")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "指标定义ID") @PathVariable String id) {
         indicatorDefinitionService.delete(id);
         return ResponseEntity.noContent().build();
     }

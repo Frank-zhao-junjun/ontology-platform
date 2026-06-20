@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateValidationRuleRequest;
 import com.ontology.platform.application.dto.domain.ValidationRuleResponse;
 import com.ontology.platform.application.service.ValidationRuleService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,9 @@ public class ValidationRuleController {
     @PostMapping
     @Operation(summary = "创建校验规则", description = "在指定本体下创建规则验证定义")
     public ResponseEntity<ApiResponse<ValidationRuleResponse>> create(
-            @PathVariable String ontologyId,
+            @Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateValidationRuleRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         log.info("REST Create ValidationRule: ontologyId={}", ontologyId);
         ValidationRuleResponse response = validationRuleService.create(ontologyId, request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
@@ -37,14 +38,14 @@ public class ValidationRuleController {
 
     @GetMapping
     @Operation(summary = "获取校验规则列表", description = "获取指定本体下所有规则验证定义")
-    public ResponseEntity<ApiResponse<List<ValidationRuleResponse>>> list(@PathVariable String ontologyId) {
+    public ResponseEntity<ApiResponse<List<ValidationRuleResponse>>> list(@Parameter(description = "本体ID") @PathVariable String ontologyId) {
         List<ValidationRuleResponse> list = validationRuleService.listByOntologyId(ontologyId);
         return ResponseEntity.ok(ApiResponse.success(list));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "获取校验规则详情", description = "根据ID获取规则验证定义详细信息")
-    public ResponseEntity<ApiResponse<ValidationRuleResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<ValidationRuleResponse>> getById(@Parameter(description = "校验规则ID") @PathVariable String id) {
         ValidationRuleResponse response = validationRuleService.getById(id);
         if (response == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ApiResponse.success(response));
@@ -61,7 +62,7 @@ public class ValidationRuleController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除校验规则", description = "删除规则验证定义")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "校验规则ID") @PathVariable String id) {
         validationRuleService.delete(id);
         return ResponseEntity.noContent().build();
     }

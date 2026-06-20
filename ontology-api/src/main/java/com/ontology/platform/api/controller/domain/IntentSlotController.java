@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateIntentSlotRequest;
 import com.ontology.platform.application.dto.domain.IntentSlotResponse;
 import com.ontology.platform.application.service.IntentSlotService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,9 @@ public class IntentSlotController {
     private final IntentSlotService intentSlotService;
 
     @PostMapping @Operation(summary = "创建意图槽位")
-    public ResponseEntity<ApiResponse<IntentSlotResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<IntentSlotResponse>> create(@Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateIntentSlotRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(intentSlotService.create(ontologyId, request, userId)));
     }
@@ -35,14 +36,14 @@ public class IntentSlotController {
     }
 
     @GetMapping("/{id}") @Operation(summary = "详情")
-    public ResponseEntity<ApiResponse<IntentSlotResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<IntentSlotResponse>> getById(@Parameter(description = "意图槽位ID") @PathVariable String id) {
         IntentSlotResponse r = intentSlotService.getById(id);
         return r == null ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok(ApiResponse.success(r));
     }
 
     @DeleteMapping("/{id}") @Operation(summary = "删除")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "意图槽位ID") @PathVariable String id) {
         intentSlotService.delete(id);
         return ResponseEntity.noContent().build();
     }

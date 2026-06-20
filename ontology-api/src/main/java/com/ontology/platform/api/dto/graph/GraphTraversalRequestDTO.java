@@ -2,6 +2,7 @@ package com.ontology.platform.api.dto.graph;
 
 import com.ontology.platform.common.enums.ReturnFormat;
 import com.ontology.platform.common.enums.TraversalDirection;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -17,6 +18,7 @@ import java.util.List;
  * 图遍历请求DTO
  * Graph Traversal Request DTO
  */
+@Schema(description = "图遍历请求DTO，用于指定遍历起点、路径条件和最大深度")
 @Data
 @Builder
 @NoArgsConstructor

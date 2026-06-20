@@ -34,8 +34,8 @@ public class JobController {
     @Operation(summary = "提交异步任务", description = "将任务提交到队列异步执行")
     public ResponseEntity<ApiResponse<SubmitJobResponse>> submitJob(
             @Valid @RequestBody SubmitJobRequest request,
-            @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "租户ID") @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId,
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
 
         log.info("REST: Submit job, type={}, tenant={}", request.getJobType(), tenantId);
         SubmitJobResponse response = jobService.submitJob(request, tenantId, userId);
@@ -57,7 +57,7 @@ public class JobController {
     @Operation(summary = "按状态查询任务列表", description = "分页查询指定状态的任务")
     public ResponseEntity<ApiResponse<List<JobResponse>>> listJobs(
             @Parameter(description = "任务状态") @RequestParam(required = false) String status,
-            @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId,
+            @Parameter(description = "租户ID") @RequestHeader(value = "X-Tenant-Id", defaultValue = "default") String tenantId,
             @Parameter(description = "返回数量") @RequestParam(defaultValue = "50") int limit) {
 
         log.debug("REST: List jobs, status={}, tenant={}", status, tenantId);

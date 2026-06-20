@@ -1,15 +1,14 @@
 package com.ontology.platform.application.dto.upload;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-/**
- * 验证规则配置
- */
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "验证规则配置DTO")
 public class ValidationRuleConfig {
 
     /**

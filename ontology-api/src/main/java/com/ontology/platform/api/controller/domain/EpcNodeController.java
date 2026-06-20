@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateEpcNodeRequest;
 import com.ontology.platform.application.dto.domain.EpcNodeResponse;
 import com.ontology.platform.application.service.EpcNodeService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,9 @@ public class EpcNodeController {
     private final EpcNodeService epcNodeService;
 
     @PostMapping @Operation(summary = "创建EPC节点")
-    public ResponseEntity<ApiResponse<EpcNodeResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<EpcNodeResponse>> create(@Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateEpcNodeRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(epcNodeService.create(ontologyId, request, userId)));
     }
@@ -35,14 +36,14 @@ public class EpcNodeController {
     }
 
     @GetMapping("/{id}") @Operation(summary = "详情")
-    public ResponseEntity<ApiResponse<EpcNodeResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<EpcNodeResponse>> getById(@Parameter(description = "EPC节点ID") @PathVariable String id) {
         EpcNodeResponse r = epcNodeService.getById(id);
         return r == null ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok(ApiResponse.success(r));
     }
 
     @DeleteMapping("/{id}") @Operation(summary = "删除")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "EPC节点ID") @PathVariable String id) {
         epcNodeService.delete(id);
         return ResponseEntity.noContent().build();
     }

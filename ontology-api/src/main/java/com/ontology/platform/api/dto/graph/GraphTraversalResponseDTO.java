@@ -1,5 +1,6 @@
 package com.ontology.platform.api.dto.graph;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.util.Map;
  * 图遍历响应DTO
  * Graph Traversal Response DTO
  */
+@Schema(description = "图遍历响应DTO，包含遍历结果路径、节点和边的详细信息")
 @Data
 @Builder
 @NoArgsConstructor

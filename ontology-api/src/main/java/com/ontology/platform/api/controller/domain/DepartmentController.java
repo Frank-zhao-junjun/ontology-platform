@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateDepartmentRequest;
 import com.ontology.platform.application.dto.domain.DepartmentResponse;
 import com.ontology.platform.application.service.DepartmentService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,22 +27,25 @@ public class DepartmentController {
 
     @PostMapping
     @Operation(summary = "创建部门")
-    public ResponseEntity<ApiResponse<DepartmentResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<DepartmentResponse>> create(
+            @Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateDepartmentRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(departmentService.create(ontologyId, request, userId)));
     }
 
     @GetMapping
     @Operation(summary = "获取部门列表")
-    public ResponseEntity<ApiResponse<List<DepartmentResponse>>> list(@PathVariable String ontologyId) {
+    public ResponseEntity<ApiResponse<List<DepartmentResponse>>> list(
+            @Parameter(description = "本体ID") @PathVariable String ontologyId) {
         return ResponseEntity.ok(ApiResponse.success(departmentService.listByOntologyId(ontologyId)));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "获取部门详情")
-    public ResponseEntity<ApiResponse<DepartmentResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<DepartmentResponse>> getById(
+            @Parameter(description = "部门ID") @PathVariable String id) {
         DepartmentResponse response = departmentService.getById(id);
         if (response == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ApiResponse.success(response));
@@ -49,7 +53,8 @@ public class DepartmentController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除部门")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(
+            @Parameter(description = "部门ID") @PathVariable String id) {
         departmentService.delete(id);
         return ResponseEntity.noContent().build();
     }

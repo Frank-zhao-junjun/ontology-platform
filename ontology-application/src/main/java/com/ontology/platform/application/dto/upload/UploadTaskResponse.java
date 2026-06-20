@@ -1,19 +1,18 @@
 package com.ontology.platform.application.dto.upload;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.Instant;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * 上传任务响应
- */
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "上传任务响应DTO，包含任务状态和文件信息")
 public class UploadTaskResponse {
 
     /**

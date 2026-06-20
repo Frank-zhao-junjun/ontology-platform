@@ -6,6 +6,7 @@ import com.ontology.platform.application.dto.agent.AgentTaskResponse;
 import com.ontology.platform.application.dto.agent.SubmitAgentTaskRequest;
 import com.ontology.platform.application.service.agent.AgentOrchestrationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class AgentController {
     @Operation(summary = "提交 Agent 任务", description = "将任务转发到指定的 Agent CLI 执行（kimi/claude/codex）")
     public ResponseEntity<ApiResponse<AgentTaskResponse>> submitTask(
             @Valid @RequestBody SubmitAgentTaskRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "admin") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "admin") String userId) {
 
         log.info("REST: Submit agent task, type={}, userId={}", request.getAgentType(), userId);
         AgentTaskResponse response = agentOrchestrationService.executeTask(request, userId);

@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateProcessStepRequest;
 import com.ontology.platform.application.dto.domain.ProcessStepResponse;
 import com.ontology.platform.application.service.ProcessStepService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,22 +27,22 @@ public class ProcessStepController {
 
     @PostMapping
     @Operation(summary = "创建流程步骤")
-    public ResponseEntity<ApiResponse<ProcessStepResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<ProcessStepResponse>> create(@Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateProcessStepRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(processStepService.create(ontologyId, request, userId)));
     }
 
     @GetMapping
     @Operation(summary = "获取流程步骤列表")
-    public ResponseEntity<ApiResponse<List<ProcessStepResponse>>> list(@PathVariable String ontologyId) {
+    public ResponseEntity<ApiResponse<List<ProcessStepResponse>>> list(@Parameter(description = "本体ID") @PathVariable String ontologyId) {
         return ResponseEntity.ok(ApiResponse.success(processStepService.listByOntologyId(ontologyId)));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "获取流程步骤详情")
-    public ResponseEntity<ApiResponse<ProcessStepResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<ProcessStepResponse>> getById(@Parameter(description = "流程步骤ID") @PathVariable String id) {
         ProcessStepResponse response = processStepService.getById(id);
         if (response == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ApiResponse.success(response));
@@ -49,7 +50,7 @@ public class ProcessStepController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除流程步骤")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "流程步骤ID") @PathVariable String id) {
         processStepService.delete(id);
         return ResponseEntity.noContent().build();
     }

@@ -5,6 +5,7 @@ import com.ontology.platform.application.dto.domain.CreateSemanticFieldMappingRe
 import com.ontology.platform.application.dto.domain.SemanticFieldMappingResponse;
 import com.ontology.platform.application.service.SemanticFieldMappingService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,9 @@ public class SemanticFieldMappingController {
     private final SemanticFieldMappingService semanticFieldMappingService;
 
     @PostMapping @Operation(summary = "创建字段映射")
-    public ResponseEntity<ApiResponse<SemanticFieldMappingResponse>> create(@PathVariable String ontologyId,
+    public ResponseEntity<ApiResponse<SemanticFieldMappingResponse>> create(@Parameter(description = "本体ID") @PathVariable String ontologyId,
             @Valid @RequestBody CreateSemanticFieldMappingRequest request,
-            @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
+            @Parameter(description = "操作用户ID") @RequestHeader(value = "X-User-Id", defaultValue = "system") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(semanticFieldMappingService.create(ontologyId, request, userId)));
     }
@@ -35,14 +36,14 @@ public class SemanticFieldMappingController {
     }
 
     @GetMapping("/{id}") @Operation(summary = "详情")
-    public ResponseEntity<ApiResponse<SemanticFieldMappingResponse>> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<SemanticFieldMappingResponse>> getById(@Parameter(description = "语义字段映射ID") @PathVariable String id) {
         SemanticFieldMappingResponse r = semanticFieldMappingService.getById(id);
         return r == null ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok(ApiResponse.success(r));
     }
 
     @DeleteMapping("/{id}") @Operation(summary = "删除")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "语义字段映射ID") @PathVariable String id) {
         semanticFieldMappingService.delete(id);
         return ResponseEntity.noContent().build();
     }
