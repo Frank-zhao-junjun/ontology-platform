@@ -7,6 +7,14 @@
 
 ## ✅ 已完成
 
+### P1 — 短期修复
+
+| 状态 | # | 任务 | 说明 |
+|:----:|:-:|------|------|
+| ✅ | 1 | Controller 测试 mvn test 跑通 | 19 个测试文件 95/95 通过 |
+| ✅ | 2 | Service create() 字段映射补全 | 11 Services 补全 mapRequest |
+| ⏳ | 3 | Docker E2E 验证 | 本机无 Docker/PostgreSQL, 待环境就绪 |
+
 ### Phase 2 — 项目1导入功能
 
 | 状态 | Unit | 说明 | 测试 |
@@ -39,19 +47,11 @@
 
 ## 📋 待办
 
-### P1 — 短期（1天内）
-
-| # | 任务 | 说明 |
-|:-:|------|------|
-| 1 | Controller 测试 mvn test 跑通 | 刚写的 19 个测试需验证编译+通过 |
-| 2 | Service create() 字段映射补全 | V12/V13/V14 的 create() 还没把 request 字段映射到 entity |
-| 3 | Docker E2E 验证 | 完整拉起 PostgreSQL + Redis + App，调通全链路 API |
-
 ### P2 — 中期（1周内）
 
 | # | 任务 | 说明 |
 |:-:|------|------|
-| 4 | Agent 编排集成 | ACP 协议接入 Kimi/Claude/Codex → delegate_task 分发 |
+| ✅ | 4 | Agent 编排集成 | ACP 协议接入 Kimi/Claude/Codex → REST API |
 | 5 | CI 流水线 | GitHub Actions 自动编译+测试 |
 | 6 | Project 1 → 2 端到端导入测试 | 真实 Excel/JSON 文件导入验证 |
 

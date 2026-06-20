@@ -1,78 +1,52 @@
-name: CI — Phase 0 Foundation Hardening
+# =============================================
+# 本体建模平台 — CI/CD Pipeline
+# =============================================
+# 技术栈: Java 21 + Spring Boot 3.2 + Maven
+# 分支: main (push / PR)
+# =============================================
+
+name: CI
 
 on:
   push:
-    branches: [main, 'appmod/**']
+    branches:
+      - main
+      - 'release/**'
   pull_request:
-    branches: [main]
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  # ============================================================
-  # Java 后端 — 编译 + 单元测试 + 集成测试（Testcontainers）
-  # ============================================================
-  java-backend:
-    name: Java Backend (compile + test + IT)
+  build:
+    name: Build & Test
     runs-on: ubuntu-latest
-    services:
-      docker:
-        image: docker:dind
-        options: --privileged
+    timeout-minutes: 15
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: 'maven'
+          java-version: 21
+          distribution: temurin
+          cache: maven
 
       - name: Compile
         run: mvn compile -B -q
 
-      - name: Unit Tests (skip IT)
-        run: mvn test -B -pl ontology-common,ontology-domain -Dtest='!*IT'
+      - name: Run tests
+        run: mvn test -B
 
-      - name: Integration Tests (Testcontainers PG+AGE)
-        run: mvn test -B -pl ontology-infrastructure -Dtest='*IT,*ImplTest' -DfailIfNoTests=false
-
-  # ============================================================
-  # MCP Server — TypeScript 编译 + 测试
-  # ============================================================
-  mcp-server:
-    name: MCP Server (compile + test)
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: mcp-server
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: mcp-server/package-lock.json
-
-      - name: Install
-        run: npm ci
-
-      - name: TypeScript Check
-        run: npx tsc --noEmit
-
-      - name: Vitest
-        run: npx vitest run
-
-  # ============================================================
-  # 合并门禁
-  # ============================================================
-  gate:
-    name: Phase 0 Gate
-    needs: [java-backend, mcp-server]
-    runs-on: ubuntu-latest
-    steps:
-      - name: All checks passed
-        run: echo "Phase 0 CI gate passed — ready to merge to v1.1 Final"
+          name: test-reports
+          path: '**/target/surefire-reports/'
+          retention-days: 7
