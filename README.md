@@ -1,6 +1,6 @@
 # Ontology Platform — 本体建模平台
 
-企业级本体管理系统，基于 DDD 分层架构，提供本体 CRUD、Manifest 导入/发布（JSON/YAML/Excel）、行为/事件/EPC 查询、Agent 编排（ACP 协议接入 Kimi/Claude/Codex）、V12-V14 领域模型（19 张新表）、CI 自动构建测试，以及 Phase 2 异步任务、Webhook、幂等与限流能力。MCP Server 将 REST API 暴露为 AI Agent 可调用的 MCP 工具。
+企业级本体管理系统，基于 DDD 分层架构，提供本体 CRUD、Manifest 导入/发布（JSON/YAML/Excel）、行为/事件/EPC 查询、Agent 编排（ACP 协议接入 Kimi/Claude/Codex）、V12-V14 领域模型（19 张新表）、CI 自动构建测试（1m26s）、跨项目 E2E 导入/导出测试（6 个场景），以及 Phase 2 异步任务、Webhook、幂等与限流能力。MCP Server 将 REST API 暴露为 AI Agent 可调用的 MCP 工具。
 
 **仓库**: [Frank-zhao-junjun/ontology-platform](https://github.com/Frank-zhao-junjun/ontology-platform)
 
@@ -173,6 +173,22 @@ npm test       # Vitest
 | 可观测 | `/api/actuator/prometheus` | Prometheus 指标 |
 | 健康检查 | `/api/v1/health/details` | 构建信息、JVM 版本、测试统计、运行时长 |
 
+### Agent 编排
+
+平台内置 Agent 编排网关，通过 ACP 协议接入多款 AI Agent CLI：
+
+| Agent | 协议 | 用途 |
+|:-----:|:----:|:----:|
+| Kimi | ACP Bridge (Python) | 深度推理、架构分析 |
+| Claude Code | ACP Bridge (Python) | 代码审阅、架构决策 |
+| Codex CLI | ACP Bridge (Python) | 批量编码、测试执行 |
+
+**关键特性：**
+- RESTful API：`POST /api/v1/agents/tasks`（提交）→ `GET /api/v1/agents/tasks/{id}`（轮询）
+- 跨 Agent 任务编排：`AgentOrchestrationService` 支持按策略分发任务
+- 安全保护：CWD 白名单、输出 1MB 硬限、stdout/stderr 合并防死锁
+- 11 个单元测试覆盖 Controller、OrchestrationService、BridgeService
+
 Manifest v2 交换契约见 [ontology-manifest-spec-v2.md](docs/shared/ontology-manifest-spec-v2.md)；v1 Legacy（V01–V11）见 [ontology-manifest-spec.md](docs/shared/ontology-manifest-spec.md)。
 
 ## CI 流水线
@@ -180,9 +196,29 @@ Manifest v2 交换契约见 [ontology-manifest-spec-v2.md](docs/shared/ontology-
 项目配置了 GitHub Actions 自动构建与测试（[`.github/workflows/ci.yml`](.github/workflows/ci.yml)）：
 
 - **触发**: `main` / `release/**` 分支 push 或 PR
-- **环境**: `ubuntu-latest`, JDK 21, 15 分钟超时
-- **步骤**: Checkout → `mvn compile` → `mvn test` → 上传测试报告
-- **测试统计**: 171 tests, 0 failures（2026-06-20）
+- **环境**: `ubuntu-latest`, JDK 21 (Temurin), Maven 依赖缓存
+- **步骤**: Checkout → `mvn compile -B -q` → `mvn test -B` → 上传测试报告（7天保留）
+- **运行耗时**: 约 1 分 26 秒
+- **测试统计**: 全量 171 tests, 0 failures（2026-06-20）
+
+## 跨项目 E2E 测试
+
+项目内置了从**项目1（OntologyManifest JSON 格式）→ 项目2（本平台）**的完整导入/导出端到端测试：
+
+| 测试 | 场景 | 验证点 |
+|:----:|------|:------:|
+| CROSS-1 | 导入 + 预览（完整 JSON） | ManifestConverter → JSON → 结构化数据 |
+| CROSS-2 | 发布 | 合法化 → 持久化 → 状态变更 |
+| CROSS-3 | 按 Agent 名称导出 | 过滤导出 → 字段完整性 |
+| CROSS-4 | 按 ID 精确导出 | 单条导出 → 结构正确性 |
+| CROSS-5 | 最小合法清单 | 最小 JSON 能通过验证 |
+| CROSS-6 | 非法 JSON 拒绝 | 格式错误 → 400 拒绝 |
+
+**测试文件**: [`Project1ToProject2E2ETest.java`](ontology-application/src/test/java/com/ontology/platform/application/manifest/Project1ToProject2E2ETest.java)  
+**Fixture**: [`project1-manifest-export.json`](ontology-application/src/test/resources/fixtures/project1-manifest-export.json)
+
+覆盖场景：Kimi/Codex 两种 Agent 类型、2 个本体、6 维度状态机、语义层信息。
+执行：`mvn test -pl ontology-application -am -Dtest="Project1ToProject2E2ETest"`
 
 ## 文档索引
 
@@ -207,6 +243,12 @@ mvn test
 
 # 指定模块测试
 mvn test -pl ontology-application
+
+# 跨项目 E2E 导入/导出测试（6 个场景）
+mvn test -pl ontology-application -am -Dtest="Project1ToProject2E2ETest"
+
+# Agent 编排测试（11 tests）
+mvn test -pl ontology-application -am -Dtest="*Agent*"
 
 # MCP Server
 cd mcp-server && npm test

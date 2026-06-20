@@ -68,6 +68,6 @@
 
 | 状态 | # | 任务 | 说明 |
 |:----:|:-:|------|------|
-| ✅ | 7 | Swagger API 描述补全 | 35+ Controller 补充 @Parameter + @ApiResponse |
-| ✅ | 8 | README 更新 | V12-V14、Agent 编排、CI 流水线、测试统计 |
+| ✅ | 7 | Swagger API 描述补全 | 22 个核心 DTO 补充 @Schema description（含中文字段描述 + example） |
+| ✅ | 8 | README 更新 | Agent 编排详情、CI 耗时、跨项目 E2E 测试、测试指南 |
 | ✅ | 9 | Cursor agent CLI | Cursor 3.0.16 已安装，agent mode 内置于 IDE |
