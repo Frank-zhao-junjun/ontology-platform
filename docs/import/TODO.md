@@ -1,7 +1,7 @@
 # 项目2 — TODO
 
-> 最后更新：2026-06-19
-> 最新合并：`main ← 2401b43`
+> 最后更新：2026-06-20
+> 最新合并：`main ← c24ba0b`
 
 ---
 
@@ -30,30 +30,39 @@
 | 状态 | 阶段 | 内容 | 文件数 |
 |:----:|:----:|------|:-----:|
 | ✅ | 3a V2核心管道 | OntologyExchangeDocument + ManifestUpcaster + ExchangeController | ~30 |
-| ✅ | 3b V12 | 8表: Department/Position/BusinessMetric/Orchestration/ProcessStep/MetadataTemplate/BusinessTerm/AgentIntent | ~64 |
-| ✅ | 3c V13 | 6表: SemanticRelation/IntentSlot/AgentPolicySemantic/ErrorRecovery/SemanticFieldMapping/EntityLifecycleSnapshot | ~48 |
+| ✅ | 3b V12 | 8表 | ~64 |
+| ✅ | 3c V13 | 6表 | ~48 |
 | ✅ | 3d V14 | 5表: EpcChain/EpcNode/EpcEdge/EpcModelRef/EpcProfile | ~40 |
+
+### P2 — Agent 编排 + CI + 端到端
+
+| 状态 | # | 任务 | 说明 | 测试 |
+|:----:|:-:|------|------|:----:|
+| ✅ | 4 | Agent 编排集成 | ACP 协议 REST API (kimi/claude/codex) | 11 tests |
+| ✅ | 5 | CI 流水线 | GitHub Actions 自动编译+测试 | 1m26s ✅ |
+| ✅ | 6 | 项目1→2 E2E 导入 | ManifestConverter + ManifestService 全链路 | 6 tests |
 
 ### 质量
 
 | 状态 | 内容 | 统计 |
 |:----:|------|:----:|
-| ✅ | Service 单测 | 111 tests, 0 failures |
-| ✅ | Controller 集成测试 | 19 个测试文件 |
+| ✅ | 全量测试 | **171 tests, 0 failures** |
 | ✅ | mvn compile | BUILD SUCCESS |
+| ✅ | CI (GitHub Actions) | ✅ 通过 |
 | ✅ | 合并 main | 已推送 |
+
+### 新增文件统计
+
+| 批次 | 文件 | 行数 |
+|:----:|:-----|:----:|
+| P2 #4 | AgentController + AgentOrchestrationService + AgentBridgeService + 3 DTOs + 2 Tests | ~640 |
+| P2 #5 | .github/workflows/ci.yml | 37 |
+| P2 #6 | Project1ToProject2E2ETest + project1-manifest-export.json | ~280 |
+| Docs | P2-I04-import-chain-analysis.md | 1004 |
 
 ---
 
 ## 📋 待办
-
-### P2 — 中期（1周内）
-
-| # | 任务 | 说明 |
-|:-:|------|------|
-| ✅ | 4 | Agent 编排集成 | ACP 协议接入 Kimi/Claude/Codex → REST API |
-| ✅ | 5 | CI 流水线 | GitHub Actions 自动编译+测试 |
-| ✅ | 6 | 项目1→2 端到端导入测试 | ManifestConverter + ManifestService 全链路 |
 
 ### P3 — 长期
 
