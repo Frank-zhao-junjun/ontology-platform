@@ -308,6 +308,32 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <!-- 跳过集成测试（IT后缀） -->
+                        <excludes>
+                            <exclude>**/*IT.java</exclude>
+                            <exclude>**/*E2ETest.java</exclude>
+                        </excludes>
+                        <!-- 并行执行配置 -->
+                        <parallel>methods</parallel>
+                        <threadCount>4</threadCount>
+                        <forkCount>1</forkCount>
+                        <reuseForks>true</reuseForks>
+                        <!-- 超时配置 -->
+                        <forkedProcessTimeoutInSeconds>300</forkedProcessTimeoutInSeconds>
+                    </configuration>
+                </plugin>
+                <!-- Failsafe Plugin for IT tests -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <includes>
+                            <include>**/*IT.java</include>
+                            <include>**/*E2ETest.java</include>
+                        </includes>
+                    </configuration>
                 </plugin>
 
                 <!-- Spring Boot Maven Plugin -->
