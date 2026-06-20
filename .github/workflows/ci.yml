@@ -50,3 +50,33 @@ jobs:
           name: test-reports
           path: '**/target/surefire-reports/'
           retention-days: 7
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          curl -s -X POST "${{ secrets.FEISHU_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "msg_type": "interactive",
+              "card": {
+                "header": { "title": { "tag": "plain_text", "content": "❌ CI Failed" }, "template": "red" },
+                "elements": [
+                  { "tag": "markdown", "content": "**仓库:** ontology-platform\n**分支:** ${{ github.ref_name }}\n**提交:** [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\n**运行:** [查看详情](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" }
+                ]
+              }
+            }'
+
+      - name: Notify on success
+        if: success()
+        run: |
+          curl -s -X POST "${{ secrets.FEISHU_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "msg_type": "interactive",
+              "card": {
+                "header": { "title": { "tag": "plain_text", "content": "✅ CI Passed" }, "template": "green" },
+                "elements": [
+                  { "tag": "markdown", "content": "**仓库:** ontology-platform\n**分支:** ${{ github.ref_name }}\n**提交:** [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\n**运行:** [查看详情](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" }
+                ]
+              }
+            }'
