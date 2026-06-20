@@ -3,8 +3,7 @@ package com.ontology.platform.application.service.agent;
 import com.ontology.platform.application.dto.agent.AgentInfoResponse;
 import com.ontology.platform.application.dto.agent.AgentTaskResponse;
 import com.ontology.platform.application.dto.agent.SubmitAgentTaskRequest;
-import com.ontology.platform.infrastructure.bridge.AgentBridgeService;
-import com.ontology.platform.infrastructure.bridge.AgentBridgeService.AgentResult;
+import com.ontology.platform.application.service.agent.AgentBridgePort.AgentResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AgentOrchestrationService {
 
-    private final AgentBridgeService bridgeService;
+    private final AgentBridgePort bridgeService;
 
     @Value("${agent.project-root:D:\\AI\\ontology-platform}")
     private String projectRoot;

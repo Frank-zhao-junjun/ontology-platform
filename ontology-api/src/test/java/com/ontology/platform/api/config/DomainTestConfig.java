@@ -19,12 +19,20 @@ public class DomainTestConfig {
 
     @Bean
     public IdempotencyService idempotencyService() {
-        return Mockito.mock(IdempotencyService.class);
+        IdempotencyService service = Mockito.mock(IdempotencyService.class);
+        Mockito.when(service.acquire(Mockito.anyString(), Mockito.anyString(), Mockito.any(),
+                        Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(IdempotencyService.IdempotencyResult.firstRequest());
+        return service;
     }
 
     @Bean
     public RateLimiterService rateLimiterService() {
-        return Mockito.mock(RateLimiterService.class);
+        RateLimiterService service = Mockito.mock(RateLimiterService.class);
+        Mockito.when(service.tryAcquire(Mockito.anyString(), Mockito.anyString(),
+                        Mockito.anyInt(), Mockito.anyInt()))
+                .thenReturn(true);
+        return service;
     }
 
     @Bean

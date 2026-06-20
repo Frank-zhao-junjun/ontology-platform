@@ -1,6 +1,6 @@
 package com.ontology.platform.api.controller.agent;
 
-import com.ontology.platform.api.dto.ApiResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontology.platform.application.dto.agent.AgentInfoResponse;
 import com.ontology.platform.application.dto.agent.AgentTaskResponse;
 import com.ontology.platform.application.dto.agent.SubmitAgentTaskRequest;
@@ -10,30 +10,38 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 class AgentControllerTest {
 
+    private MockMvc mockMvc;
+
     @Mock
     private AgentOrchestrationService agentOrchestrationService;
 
-    private AgentController controller;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        controller = new AgentController(agentOrchestrationService);
+        var controller = new AgentController(agentOrchestrationService);
+        objectMapper = new ObjectMapper();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
-    void submitTask_kimi_shouldReturnResult() {
+    void submitTask_kimi_shouldReturnResult() throws Exception {
         var request = SubmitAgentTaskRequest.builder()
                 .agentType("kimi")
                 .prompt("列出项目目录结构")
@@ -46,17 +54,17 @@ class AgentControllerTest {
                 .build();
         when(agentOrchestrationService.executeTask(any(), anyString())).thenReturn(expected);
 
-        ResponseEntity<ApiResponse<AgentTaskResponse>> resp = controller.submitTask(request, "admin");
-
-        assertEquals(200, resp.getStatusCode().value());
-        assertNotNull(resp.getBody());
-        assertEquals(0, resp.getBody().getCode());
-        assertEquals("kimi", resp.getBody().getData().getAgentType());
-        assertEquals("SUCCESS", resp.getBody().getData().getStatus());
+        mockMvc.perform(post("/api/v1/agents/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("X-User-Id", "admin")
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.agentType").value("kimi"))
+                .andExpect(jsonPath("$.data.status").value("SUCCESS"));
     }
 
     @Test
-    void submitTask_claude_shouldReturnResult() {
+    void submitTask_claude_shouldReturnResult() throws Exception {
         var request = SubmitAgentTaskRequest.builder()
                 .agentType("claude")
                 .prompt("审查这段代码")
@@ -70,14 +78,16 @@ class AgentControllerTest {
                 .build();
         when(agentOrchestrationService.executeTask(any(), anyString())).thenReturn(expected);
 
-        ResponseEntity<ApiResponse<AgentTaskResponse>> resp = controller.submitTask(request, "admin");
-
-        assertEquals(200, resp.getStatusCode().value());
-        assertEquals("claude", resp.getBody().getData().getAgentType());
+        mockMvc.perform(post("/api/v1/agents/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("X-User-Id", "admin")
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.agentType").value("claude"));
     }
 
     @Test
-    void submitTask_failure_shouldReturnError() {
+    void submitTask_failure_shouldReturnError() throws Exception {
         var request = SubmitAgentTaskRequest.builder()
                 .agentType("kimi")
                 .prompt("不存在的命令")
@@ -90,14 +100,17 @@ class AgentControllerTest {
                 .build();
         when(agentOrchestrationService.executeTask(any(), anyString())).thenReturn(expected);
 
-        ResponseEntity<ApiResponse<AgentTaskResponse>> resp = controller.submitTask(request, "admin");
-
-        assertFalse(resp.getBody().getData().getStatus().equals("SUCCESS"));
-        assertNotNull(resp.getBody().getData().getErrorMessage());
+        mockMvc.perform(post("/api/v1/agents/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("X-User-Id", "admin")
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.status").value("FAILURE"))
+                .andExpect(jsonPath("$.data.errorMessage").value("Command not found"));
     }
 
     @Test
-    void listAgents_shouldReturnThree() {
+    void listAgents_shouldReturnThree() throws Exception {
         var agents = List.of(
                 AgentInfoResponse.builder().agentType("kimi").available(true).build(),
                 AgentInfoResponse.builder().agentType("claude").available(true).build(),
@@ -105,8 +118,8 @@ class AgentControllerTest {
         );
         when(agentOrchestrationService.listAgents()).thenReturn(agents);
 
-        ResponseEntity<ApiResponse<List<AgentInfoResponse>>> resp = controller.listAgents();
-
-        assertEquals(3, resp.getBody().getData().size());
+        mockMvc.perform(get("/api/v1/agents"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(3));
     }
 }

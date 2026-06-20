@@ -53,7 +53,7 @@
 |:-:|------|------|
 | ✅ | 4 | Agent 编排集成 | ACP 协议接入 Kimi/Claude/Codex → REST API |
 | ✅ | 5 | CI 流水线 | GitHub Actions 自动编译+测试 |
-| 6 | Project 1 → 2 端到端导入测试 | 真实 Excel/JSON 文件导入验证 |
+| ✅ | 6 | 项目1→2 端到端导入测试 | ManifestConverter + ManifestService 全链路 |
 
 ### P3 — 长期
 

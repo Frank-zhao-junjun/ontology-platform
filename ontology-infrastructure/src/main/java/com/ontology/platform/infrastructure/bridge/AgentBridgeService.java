@@ -1,7 +1,6 @@
 package com.ontology.platform.infrastructure.bridge;
 
-import lombok.Builder;
-import lombok.Getter;
+import com.ontology.platform.application.service.agent.AgentBridgePort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,10 +16,11 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 桥接执行层 — 通过 subprocess 调用 Python 桥接脚本（kimi/claude/codex）。
+ * 实现 {@link AgentBridgePort} 端口。
  */
 @Slf4j
 @Service
-public class AgentBridgeService {
+public class AgentBridgeService implements AgentBridgePort {
 
     private static final long DEFAULT_TIMEOUT_SECONDS = 300;
     private static final int MAX_OUTPUT_BYTES = 1_048_576; // 1MB 输出上限
@@ -65,7 +65,7 @@ public class AgentBridgeService {
                     .build();
         }
 
-        List<String> cmd = new ArrayList<>(List.of("python", scriptPath));
+        List<String> cmd = new ArrayList<>(List.of(detectPython(), scriptPath));
         if (prompt != null && !prompt.isBlank()) {
             cmd.add(prompt);
         }
@@ -207,12 +207,10 @@ public class AgentBridgeService {
         return output;
     }
 
-    @Getter
-    @Builder
-    public static class AgentResult {
-        private final String status;       // SUCCESS / FAILURE / TIMEOUT
-        private final String output;
-        private final String errorMessage;
-        private final Long durationMs;
+    /**
+     * 跨平台检测 Python 命令（Windows 用 python，Linux/macOS 用 python3）。
+     */
+    private static String detectPython() {
+        return System.getProperty("os.name", "").toLowerCase().contains("win") ? "python" : "python3";
     }
 }

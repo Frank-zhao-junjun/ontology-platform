@@ -1,0 +1,185 @@
+{
+  "apiVersion": "ontology.platform/v1",
+  "kind": "OntologyManifest",
+  "metadata": {
+    "id": "p1-mfg-001",
+    "version": "2.1.0",
+    "name": "生产制造管理",
+    "displayName": "生产制造领域本体",
+    "description": "从 Project 1 (Ontology) 导出的生产制造领域完整本体模型",
+    "boundedContext": "manufacturing",
+    "domainTags": ["manufacturing", "production", "quality"],
+    "compiledAt": "2026-06-20T08:00:00Z",
+    "compiledBy": "e2e-test-agent",
+    "source": "ontology-designer",
+    "status": "DRAFT"
+  },
+  "spec": {
+    "semantic": {
+      "objectTypes": [
+        {
+          "id": "production-order",
+          "name": "生产订单",
+          "nameEn": "ProductionOrder",
+          "kind": "aggregate_root",
+          "description": "生产执行的核心聚合根"
+        },
+        {
+          "id": "quality-inspection",
+          "name": "质检记录",
+          "nameEn": "QualityInspection",
+          "kind": "aggregate_root",
+          "description": "质量检验记录"
+        },
+        {
+          "id": "operation-step",
+          "name": "工序步骤",
+          "nameEn": "OperationStep",
+          "kind": "child_entity",
+          "description": "生产订单下的工序"
+        }
+      ],
+      "stateMachines": [
+        {
+          "id": "sm-order-lifecycle",
+          "name": "生产订单生命周期",
+          "objectTypeId": "production-order",
+          "states": [
+            {"name": "DRAFT", "isInitial": true, "isFinal": false},
+            {"name": "RELEASED", "isInitial": false, "isFinal": false},
+            {"name": "COMPLETED", "isInitial": false, "isFinal": true},
+            {"name": "CANCELLED", "isInitial": false, "isFinal": true}
+          ],
+          "transitions": [
+            {"from": "DRAFT", "to": "RELEASED", "trigger": "release"},
+            {"from": "RELEASED", "to": "COMPLETED", "trigger": "complete"},
+            {"from": "RELEASED", "to": "CANCELLED", "trigger": "cancel"}
+          ]
+        },
+        {
+          "id": "sm-inspection-lifecycle",
+          "name": "质检生命周期",
+          "objectTypeId": "quality-inspection",
+          "states": [
+            {"name": "PENDING", "isInitial": true, "isFinal": false},
+            {"name": "PASSED", "isInitial": false, "isFinal": true},
+            {"name": "FAILED", "isInitial": false, "isFinal": true}
+          ],
+          "transitions": [
+            {"from": "PENDING", "to": "PASSED", "trigger": "approve"},
+            {"from": "PENDING", "to": "FAILED", "trigger": "reject"}
+          ]
+        }
+      ]
+    },
+    "behavior": {
+      "actions": [
+        {
+          "id": "release-order",
+          "name": "下达生产订单",
+          "nameEn": "releaseProductionOrder",
+          "aggregateRootId": "production-order",
+          "description": "将生产订单从草稿变更为已下达",
+          "preRuleIds": ["rule-qty-positive"],
+          "publishesEventIds": ["evt-order-released"]
+        },
+        {
+          "id": "complete-order",
+          "name": "完成生产订单",
+          "nameEn": "completeProductionOrder",
+          "aggregateRootId": "production-order",
+          "description": "标记生产订单为完成状态",
+          "publishesEventIds": ["evt-order-completed"]
+        },
+        {
+          "id": "create-inspection",
+          "name": "创建质检记录",
+          "nameEn": "createInspection",
+          "aggregateRootId": "quality-inspection",
+          "description": "为生产批次创建质量检验记录"
+        }
+      ],
+      "rules": [
+        {
+          "id": "rule-qty-positive",
+          "name": "数量必须大于零",
+          "type": "validation",
+          "expression": "order_qty > 0",
+          "errorMessage": "生产订单数量必须大于零"
+        },
+        {
+          "id": "rule-inspector-required",
+          "name": "质检员必须指派",
+          "type": "validation",
+          "expression": "inspector_id != null",
+          "errorMessage": "质检记录必须指定质检员"
+        }
+      ]
+    },
+    "events": {
+      "domainEvents": [
+        {
+          "id": "evt-order-released",
+          "name": "生产订单已下达",
+          "nameEn": "order_released",
+          "aggregateRootId": "production-order",
+          "triggerActionId": "release-order"
+        },
+        {
+          "id": "evt-order-completed",
+          "name": "生产订单已完成",
+          "nameEn": "order_completed",
+          "aggregateRootId": "production-order",
+          "triggerActionId": "complete-order"
+        },
+        {
+          "id": "evt-inspection-passed",
+          "name": "质检已通过",
+          "nameEn": "inspection_passed",
+          "aggregateRootId": "quality-inspection",
+          "triggerActionId": "create-inspection"
+        }
+      ]
+    },
+    "governance": {
+      "roles": [
+        {
+          "id": "role-prod-mgr",
+          "name": "生产经理",
+          "code": "PROD_MGR",
+          "permissions": ["release-order", "complete-order"]
+        },
+        {
+          "id": "role-qa-inspector",
+          "name": "质检员",
+          "code": "QA_INSPECTOR",
+          "permissions": ["create-inspection"]
+        }
+      ]
+    },
+    "process": {
+      "orchestrations": [
+        {
+          "id": "epc-full-flow",
+          "name": "完整生产执行流程",
+          "steps": [
+            {"id": "s1", "type": "action", "actionId": "release-order"},
+            {"id": "s2", "type": "action", "actionId": "complete-order"}
+          ]
+        }
+      ]
+    },
+    "dataSources": [
+      {
+        "id": "ds-sap",
+        "name": "SAP ERP",
+        "sourceType": "api"
+      },
+      {
+        "id": "ds-mes",
+        "name": "MES 系统",
+        "sourceType": "database"
+      }
+    ]
+  }
+}
