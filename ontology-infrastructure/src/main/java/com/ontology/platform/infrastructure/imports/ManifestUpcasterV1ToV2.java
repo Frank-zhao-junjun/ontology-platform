@@ -411,8 +411,8 @@ public class ManifestUpcasterV1ToV2 {
                 .actionType("custom")
                 .parameters(params)
                 .preConditions(def.getPreRuleIds() != null
-                        ? String.join(",", def.getPreRuleIds())
-                        : null)
+                        ? def.getPreRuleIds()
+                        : List.of())
                 .build();
     }
 

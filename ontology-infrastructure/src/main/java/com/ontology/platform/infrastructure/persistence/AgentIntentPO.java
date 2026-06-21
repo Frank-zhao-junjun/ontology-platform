@@ -34,6 +34,18 @@ public class AgentIntentPO {
     @TableField("action_id")
     private String actionId;
 
+    @TableField("category")
+    private String category;
+
+    @TableField("target_entity_id")
+    private String targetEntityId;
+
+    @TableField("priority")
+    private Integer priority;
+
+    @TableField("requires_confirmation")
+    private Boolean requiresConfirmation;
+
     @TableField("created_at")
     private Instant createdAt;
 

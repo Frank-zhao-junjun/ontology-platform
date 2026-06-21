@@ -116,6 +116,10 @@ public class ExchangePhase3cPublisher {
                     .description(intent.getDescription())
                     .triggerPhrases(toJson(intent.getTriggerPhrases()))
                     .actionId(intent.getActionId())
+                    .category(intent.getCategory())
+                    .targetEntityId(intent.getTargetEntityId())
+                    .priority(intent.getPriority())
+                    .requiresConfirmation(intent.getRequiresConfirmation())
                     .createdAt(now)
                     .updatedAt(now)
                     .build());

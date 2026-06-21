@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * OntologyExchange 顶层信封结构
@@ -19,6 +21,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OntologyExchangeDocument {
 
     /** apiVersion: "ontology.platform/v2" */
@@ -55,9 +58,11 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Spec {
         private OntologyProject project;
         private Extensions extensions;
+        private LifecycleSpec lifecycle;
     }
 
     // ==================== OntologyProject ====================
@@ -66,6 +71,7 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class OntologyProject {
         private String id;
         private String name;
@@ -124,9 +130,11 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ProjectRef {
         private String id;
         private String name;
+        private String nameEn;
         private String description;
     }
 
@@ -233,25 +241,34 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class State {
         private String id;
         private String name;
         private String description;
         private Boolean isInitial;
         private Boolean isFinal;
+        @Builder.Default
+        private List<String> availableActions = new ArrayList<>();
+        private String semanticTag;
     }
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Transition {
         private String id;
         private String name;
         private String from;
         private String to;
         private String trigger; // "manual", "automatic", "scheduled"
-        private String preConditions;
+        @Builder.Default
+        private List<String> preConditions = new ArrayList<>();
+        private String guardCondition;
+        private String publishEventId;
+        private Boolean requiresApproval;
         private String description;
     }
 
@@ -259,6 +276,7 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Action {
         private String id;
         private String name;
@@ -268,9 +286,14 @@ public class OntologyExchangeDocument {
         private String actionType;
         @Builder.Default
         private List<Parameter> parameters = new ArrayList<>();
-        private String preConditions;
+        @Builder.Default
+        private List<String> preConditions = new ArrayList<>();
+        @Builder.Default
+        private List<String> triggerPhrases = new ArrayList<>();
         private String executionType;
         private List<String> requiredRoles;
+        private String idempotencyKeyTemplate;
+        private Boolean requiresConfirmation;
     }
 
     @Data
@@ -338,6 +361,7 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class EventModel {
         private String id;
         private String name;
@@ -345,6 +369,8 @@ public class OntologyExchangeDocument {
         private String domain;
         @Builder.Default
         private List<EventDefinition> events = new ArrayList<>();
+        @Builder.Default
+        private List<Object> subscriptions = new ArrayList<>();
         private String createdAt;
         private String updatedAt;
     }
@@ -353,13 +379,28 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class EventDefinition {
         private String id;
         private String name;
         private String nameEn;
         private String entity;
+        private String trigger;
         private Boolean isDomainEvent;
         private String description;
+        @Builder.Default
+        private List<EventPayloadField> payload = new ArrayList<>();
+        @Builder.Default
+        private List<String> payloadFields = new ArrayList<>();
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class EventPayloadField {
+        private String field;
     }
 
     // ==================== GovernanceModel ====================
@@ -368,13 +409,17 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class GovernanceModel {
+        private String id;
         @Builder.Default
         private List<GovernanceRole> roles = new ArrayList<>();
         @Builder.Default
         private List<FieldPermission> fieldPermissions = new ArrayList<>();
         @Builder.Default
         private List<AgentPolicy> agentPolicies = new ArrayList<>();
+        private String createdAt;
+        private String updatedAt;
     }
 
     @Data
@@ -413,6 +458,7 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class AgentPolicy {
         private String id;
         private String manifestsVersion;
@@ -421,6 +467,7 @@ public class OntologyExchangeDocument {
         private List<String> allowedMcpTools = new ArrayList<>();
         @Builder.Default
         private List<String> allowedAggregateRootIds = new ArrayList<>();
+        private Boolean defaultDeny;
     }
 
     // ==================== DataSourcesModel ====================
@@ -682,6 +729,36 @@ public class OntologyExchangeDocument {
         private String businessTermId;
         private String mappingType;
         private String transformRule;
+    }
+
+    // ==================== Lifecycle (Phase 3c) ====================
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class LifecycleSpec {
+        @Builder.Default
+        private Map<String, EntityLifecycleEntry> byEntityId = new LinkedHashMap<>();
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class EntityLifecycleEntry {
+        private String entityId;
+        private String entityNameEn;
+        private String statusField;
+        private Object stateMachine;
+        private Map<String, Object> actionsByState;
+        private Map<String, Object> rulesByState;
+        private Map<String, Object> eventsByState;
+        private Map<String, Object> rolesByState;
+        private List<Object> auditTrail;
+        private Map<String, Object> stats;
     }
 
     // ==================== EpcModel (Phase 3d: EPC Chain) ====================

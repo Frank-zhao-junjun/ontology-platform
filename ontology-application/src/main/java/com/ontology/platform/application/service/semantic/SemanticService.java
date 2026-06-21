@@ -109,6 +109,8 @@ public class SemanticService {
                 .id(po.getId())
                 .name(po.getName())
                 .description(po.getDescription())
+                .category(po.getCategory())
+                .targetEntityId(po.getTargetEntityId())
                 .triggerPhrases(triggerPhrases)
                 .actionId(po.getActionId())
                 .slots(loadSlots(po.getId()))

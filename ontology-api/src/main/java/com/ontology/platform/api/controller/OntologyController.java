@@ -3,7 +3,9 @@ package com.ontology.platform.api.controller;
 import com.ontology.platform.api.dto.ApiResponse;
 import com.ontology.platform.application.dto.*;
 import com.ontology.platform.application.service.OntologyService;
+import com.ontology.platform.application.service.lifecycle.LifecycleService;
 import com.ontology.platform.application.service.semantic.SemanticService;
+import com.ontology.platform.domain.dto.lifecycle.EntityLifecycleResponse;
 import com.ontology.platform.domain.dto.semantic.SemanticLayerResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,6 +32,7 @@ public class OntologyController {
 
     private final OntologyService ontologyService;
     private final SemanticService semanticService;
+    private final LifecycleService lifecycleService;
 
     /**
      * 创建本体
@@ -141,6 +144,19 @@ public class OntologyController {
             @Parameter(description = "本体ID") @PathVariable String id) {
         log.debug("REST: Get semantic layer, ontologyId={}", id);
         SemanticLayerResponse response = semanticService.getSemanticLayer(id);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /**
+     * 获取实体生命周期聚合（Phase 3c）
+     */
+    @GetMapping("/{id}/lifecycle/{entityId}")
+    @Operation(summary = "获取实体生命周期", description = "返回已发布本体的 EntityLifecycle 聚合视图")
+    public ResponseEntity<ApiResponse<EntityLifecycleResponse>> getEntityLifecycle(
+            @Parameter(description = "本体ID") @PathVariable String id,
+            @Parameter(description = "实体ID") @PathVariable String entityId) {
+        log.debug("REST: Get entity lifecycle, ontologyId={}, entityId={}", id, entityId);
+        EntityLifecycleResponse response = lifecycleService.getEntityLifecycle(id, entityId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }
