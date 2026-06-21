@@ -48,6 +48,9 @@ class ExchangeImportServiceTest {
     private ExchangePhase3cLifecyclePublisher phase3cLifecyclePublisher;
 
     @Mock
+    private ExchangePhase3dPublisher phase3dPublisher;
+
+    @Mock
     private ExcelExchangeMapper excelExchangeMapper;
 
     private ObjectMapper objectMapper;
@@ -111,7 +114,7 @@ class ExchangeImportServiceTest {
         objectMapper.findAndRegisterModules();
         ExchangeValidationService validationService = new ExchangeValidationService(List.of());
         service = new ExchangeImportService(mapper, objectMapper, validationService,
-                phase3bPublisher, phase3cPublisher, phase3cLifecyclePublisher, excelExchangeMapper);
+                phase3bPublisher, phase3cPublisher, phase3cLifecyclePublisher, phase3dPublisher, excelExchangeMapper);
     }
 
     @Nested

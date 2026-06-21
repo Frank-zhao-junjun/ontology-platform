@@ -7,7 +7,7 @@ import java.time.Instant;
 @Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
 @TableName("epc_edge")
 public class EpcEdgePO {
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.INPUT)
     private String id;
     @TableField("chain_id")
     private String chainId;

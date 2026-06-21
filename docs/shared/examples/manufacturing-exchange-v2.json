@@ -186,7 +186,46 @@
         "createdAt": "2026-06-15T10:00:00Z",
         "updatedAt": "2026-06-15T10:00:00Z"
       },
-      "epcModel": null,
+      "epcModel": {
+        "chains": [
+          {
+            "id": "epc-po-release",
+            "name": "生产订单下达链",
+            "aggregateRootId": "production-order",
+            "chainType": "production",
+            "description": "生产订单从创建到下达的 EPC 控制流",
+            "nodes": [
+              {
+                "id": "node-po-created",
+                "nodeType": "event",
+                "name": "订单已创建",
+                "refType": "state",
+                "refId": "st-created",
+                "sortOrder": 0
+              },
+              {
+                "id": "node-po-release",
+                "nodeType": "function",
+                "name": "下达生产订单",
+                "refType": "action",
+                "refId": "action-release-order",
+                "sortOrder": 1
+              }
+            ],
+            "edges": [
+              {
+                "id": "edge-po-release",
+                "sourceNodeId": "node-po-created",
+                "targetNodeId": "node-po-release",
+                "edgeType": "control_flow",
+                "label": "下达",
+                "sortOrder": 0
+              }
+            ]
+          }
+        ],
+        "profiles": []
+      },
       "governanceModel": {
         "id": "gov-manufacturing",
         "roles": [

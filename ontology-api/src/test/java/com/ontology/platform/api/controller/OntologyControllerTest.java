@@ -56,6 +56,9 @@ class OntologyControllerTest {
     @Mock
     private com.ontology.platform.application.service.lifecycle.LifecycleService lifecycleService;
 
+    @Mock
+    private com.ontology.platform.application.service.epc.EpcGraphService epcGraphService;
+
     @InjectMocks
     private OntologyController ontologyController;
 

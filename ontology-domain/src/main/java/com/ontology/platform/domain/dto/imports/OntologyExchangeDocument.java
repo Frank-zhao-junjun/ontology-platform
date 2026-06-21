@@ -767,6 +767,7 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class EpcModel {
         @Builder.Default private List<EpcChain> chains = new ArrayList<>();
         @Builder.Default private List<EpcProfile> profiles = new ArrayList<>();
@@ -776,6 +777,7 @@ public class OntologyExchangeDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class EpcChain {
         private String id;
         private String name;

@@ -7,8 +7,10 @@ import java.time.Instant;
 @Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
 @TableName("epc_chain")
 public class EpcChainPO {
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.INPUT)
     private String id;
+    @TableField("ontology_id")
+    private String ontologyId;
     @TableField("name")
     private String name;
     @TableField("aggregate_root_id")

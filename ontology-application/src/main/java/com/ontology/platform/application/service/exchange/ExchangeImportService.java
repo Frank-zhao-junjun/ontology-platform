@@ -39,6 +39,7 @@ public class ExchangeImportService {
     private final ExchangePhase3bPublisher phase3bPublisher;
     private final ExchangePhase3cPublisher phase3cPublisher;
     private final ExchangePhase3cLifecyclePublisher phase3cLifecyclePublisher;
+    private final ExchangePhase3dPublisher phase3dPublisher;
     private final ExcelExchangeMapper excelExchangeMapper;
 
     public ExchangeImportResponse importExchange(String jsonDocument, String validationMode) {
@@ -177,6 +178,8 @@ public class ExchangeImportService {
         Map<String, Integer> lifecycleCounts =
                 phase3cLifecyclePublisher.publish(ontologyId, doc, po.getRawDocument());
         log.info("Exchange import published: id={}, lifecycleCounts={}", id, lifecycleCounts);
+        Map<String, Integer> phase3dCounts = phase3dPublisher.publish(ontologyId, doc, po.getRawDocument());
+        log.info("Exchange import published: id={}, phase3dCounts={}", id, phase3dCounts);
 
         po.setMetadataStatus("published");
         po.setPublishedAt(Instant.now());

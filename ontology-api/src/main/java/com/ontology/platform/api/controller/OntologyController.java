@@ -4,7 +4,9 @@ import com.ontology.platform.api.dto.ApiResponse;
 import com.ontology.platform.application.dto.*;
 import com.ontology.platform.application.service.OntologyService;
 import com.ontology.platform.application.service.lifecycle.LifecycleService;
+import com.ontology.platform.application.service.epc.EpcGraphService;
 import com.ontology.platform.application.service.semantic.SemanticService;
+import com.ontology.platform.domain.dto.epc.EpcCoverageResponse;
 import com.ontology.platform.domain.dto.lifecycle.EntityLifecycleResponse;
 import com.ontology.platform.domain.dto.semantic.SemanticLayerResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +35,7 @@ public class OntologyController {
     private final OntologyService ontologyService;
     private final SemanticService semanticService;
     private final LifecycleService lifecycleService;
+    private final EpcGraphService epcGraphService;
 
     /**
      * 创建本体
@@ -157,6 +160,18 @@ public class OntologyController {
             @Parameter(description = "实体ID") @PathVariable String entityId) {
         log.debug("REST: Get entity lifecycle, ontologyId={}, entityId={}", id, entityId);
         EntityLifecycleResponse response = lifecycleService.getEntityLifecycle(id, entityId);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /**
+     * EPC 覆盖报告（Phase 3d）
+     */
+    @GetMapping("/{id}/epc/coverage")
+    @Operation(summary = "EPC 覆盖报告", description = "返回已发布本体的 EPC 链覆盖统计")
+    public ResponseEntity<ApiResponse<EpcCoverageResponse>> getEpcCoverage(
+            @Parameter(description = "本体ID") @PathVariable String id) {
+        log.debug("REST: Get EPC coverage, ontologyId={}", id);
+        EpcCoverageResponse response = epcGraphService.getCoverage(id);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

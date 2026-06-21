@@ -46,6 +46,7 @@ class OntologyExchangeDocumentParseTest {
         var transition = doc.getSpec().getProject().getBehaviorModel().getStateMachines().get(0)
                 .getTransitions().get(0);
         assertThat(transition.getPreConditions()).contains("rule-kitting");
+        assertThat(doc.getSpec().getProject().getEpcModel().getChains()).hasSize(1);
     }
 
     @Test
@@ -60,6 +61,7 @@ class OntologyExchangeDocumentParseTest {
         assertThat(doc.getSpec().getProject().getAgentSemanticLayer()).isNotNull();
         assertThat(doc.getSpec().getProject().getAgentSemanticLayer().getIntents()).hasSize(1);
         assertThat(doc.getSpec().getProject().getBehaviorModel().getActions()).hasSize(3);
+        assertThat(doc.getSpec().getProject().getEpcModel().getChains()).hasSize(1);
 
         var initialState = doc.getSpec().getProject().getBehaviorModel().getStateMachines().get(0)
                 .getStates().get(0);
