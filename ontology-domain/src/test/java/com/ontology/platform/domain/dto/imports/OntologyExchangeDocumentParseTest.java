@@ -13,20 +13,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("OntologyExchangeDocument Golden JSON Parse Test")
 class OntologyExchangeDocumentParseTest {
 
-    private static final String GOLDEN_PATH = "../docs/shared/examples/manufacturing-exchange-v2.json";
+    private static final String SHARED_GOLDEN_PATH = "../docs/shared/examples/manufacturing-exchange-v2.json";
+    private static final String IMPORT_GOLDEN_PATH = "../docs/import/manufacturing-exchange-v2.json";
     private static ObjectMapper objectMapper;
-    private static String goldenJson;
 
     @BeforeAll
-    static void loadFixture() throws Exception {
+    static void loadFixture() {
         objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
-        goldenJson = Files.readString(Path.of(GOLDEN_PATH));
     }
 
     @Test
-    @DisplayName("should fully deserialize manufacturing-exchange-v2.json")
-    void parseGoldenJson() throws Exception {
+    @DisplayName("should fully deserialize shared manufacturing-exchange-v2.json")
+    void parseSharedGoldenJson() throws Exception {
+        String goldenJson = Files.readString(Path.of(SHARED_GOLDEN_PATH));
         OntologyExchangeDocument doc = objectMapper.readValue(goldenJson, OntologyExchangeDocument.class);
 
         assertThat(doc).isNotNull();
@@ -46,5 +46,30 @@ class OntologyExchangeDocumentParseTest {
         var transition = doc.getSpec().getProject().getBehaviorModel().getStateMachines().get(0)
                 .getTransitions().get(0);
         assertThat(transition.getPreConditions()).contains("rule-kitting");
+    }
+
+    @Test
+    @DisplayName("should fully deserialize import manufacturing-exchange-v2.json (6 entities)")
+    void parseImportGoldenJson() throws Exception {
+        String goldenJson = Files.readString(Path.of(IMPORT_GOLDEN_PATH));
+        OntologyExchangeDocument doc = objectMapper.readValue(goldenJson, OntologyExchangeDocument.class);
+
+        assertThat(doc).isNotNull();
+        assertThat(doc.getMetadata().getProjectId()).isEqualTo("manufacturing-project");
+        assertThat(doc.getSpec().getProject().getDataModel().getEntities()).hasSize(6);
+        assertThat(doc.getSpec().getProject().getAgentSemanticLayer()).isNotNull();
+        assertThat(doc.getSpec().getProject().getAgentSemanticLayer().getIntents()).hasSize(1);
+        assertThat(doc.getSpec().getProject().getBehaviorModel().getActions()).hasSize(3);
+
+        var initialState = doc.getSpec().getProject().getBehaviorModel().getStateMachines().get(0)
+                .getStates().get(0);
+        assertThat(initialState.getAvailableActions()).contains("action-release-order");
+        assertThat(initialState.getSemanticTag()).isEqualTo("created");
+
+        var releaseAction = doc.getSpec().getProject().getBehaviorModel().getActions().stream()
+                .filter(a -> "action-release-order".equals(a.getId()))
+                .findFirst().orElseThrow();
+        assertThat(releaseAction.getTriggerPhrases()).isNotEmpty();
+        assertThat(releaseAction.getRequiresConfirmation()).isTrue();
     }
 }
