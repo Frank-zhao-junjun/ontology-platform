@@ -10,6 +10,7 @@ import com.ontology.platform.domain.dto.imports.ExchangeImportResponse;
 import com.ontology.platform.domain.dto.imports.OntologyExchangeDocument;
 import com.ontology.platform.domain.service.validation.ValidationReport;
 import com.ontology.platform.infrastructure.imports.ExcelExchangeMapper;
+import com.ontology.platform.infrastructure.imports.MarkdownExchangeMapper;
 import com.ontology.platform.infrastructure.persistence.ExchangeImportPO;
 import com.ontology.platform.infrastructure.persistence.ExchangeImportPOMapper;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class ExchangeImportService {
     private final ExchangePhase3cLifecyclePublisher phase3cLifecyclePublisher;
     private final ExchangePhase3dPublisher phase3dPublisher;
     private final ExcelExchangeMapper excelExchangeMapper;
+    private final MarkdownExchangeMapper markdownExchangeMapper;
 
     public ExchangeImportResponse importExchange(String jsonDocument, String validationMode) {
         if (jsonDocument == null || jsonDocument.isBlank()) {
@@ -138,6 +140,17 @@ public class ExchangeImportService {
             throws IOException {
         OntologyExchangeDocument doc = excelExchangeMapper.mapFromParsedData(parsedDataJson);
         String json = excelExchangeMapper.toJson(doc);
+        return importExchange(json, validationMode);
+    }
+
+    /**
+     * Import from Markdown text (project1 export format).
+     * Compiles sections (A/B/C/EPC/E1-E8) to v2 OntologyExchange then imports.
+     */
+    public ExchangeImportResponse importFromMarkdown(String markdownContent, String externalId, String validationMode)
+            throws IOException {
+        OntologyExchangeDocument doc = markdownExchangeMapper.mapFromMarkdown(markdownContent, externalId);
+        String json = markdownExchangeMapper.toJson(doc);
         return importExchange(json, validationMode);
     }
 

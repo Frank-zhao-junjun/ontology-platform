@@ -87,6 +87,24 @@ public class ExchangeController {
     }
 
     /**
+     * Import from Markdown (project1 export format).
+     */
+    @PostMapping(value = "/import/markdown", consumes = MediaType.TEXT_PLAIN_VALUE)
+    @Operation(summary = "从 Markdown 导入", description = "将项目1导出的 Markdown 本体模型编译为 v2 OntologyExchange 并导入")
+    public ResponseEntity<ApiResponse<ExchangeImportResponse>> importMarkdown(
+            @RequestBody String markdownContent,
+            @RequestParam(value = "externalId", required = false) String externalId,
+            @RequestParam(value = "validationMode", defaultValue = "strict") String validationMode) throws IOException {
+
+        log.info("REST: Import exchange from Markdown, length={}", markdownContent.length());
+
+        ExchangeImportResponse response = exchangeService.importFromMarkdown(markdownContent, externalId, validationMode);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(response));
+    }
+
+    /**
      * Get the status of an exchange import by ID.
      */
     @GetMapping("/{id}")
