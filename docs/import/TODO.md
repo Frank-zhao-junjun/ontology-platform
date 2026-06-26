@@ -1,6 +1,6 @@
 # 项目2 — TODO
 
-> 最后更新：2026-06-20
+> 最后更新：2026-06-26
 > 最新合并：`main ← c24ba0b`
 
 ---
@@ -11,9 +11,17 @@
 
 | 状态 | # | 任务 | 说明 |
 |:----:|:-:|------|------|
-| ✅ | 1 | Controller 测试 mvn test 跑通 | 19 个测试文件 95/95 通过 |
+| ✅ | 1 | Controller 测试 mvn test 跑通 | 19 个测试文件 174/174 通过 |
 | ✅ | 2 | Service create() 字段映射补全 | 11 Services 补全 mapRequest |
 | ⏳ | 3 | Docker E2E 验证 | 本机无 Docker/PostgreSQL, 待环境就绪 |
+
+### Phase 1 — 项目1 Import API (POST /api/v1/ontologies/import)
+
+| 状态 | # | 任务 | 说明 |
+|:----:|:-:|------|------|
+| ✅ | P1-I01 | OntologyImportController + ManifestImportPO/Mapper | 7/7 tests |
+| ✅ | P1-I02 | draftId client-side UUID (不依赖 ASSIGN_UUID 回写) | Testable |
+| ✅ | P1-I03 | 404/422/409 错误码处理 | TC-01~TC-06 |
 
 ### Phase 2 — 项目1导入功能
 
@@ -46,7 +54,7 @@
 
 | 状态 | 内容 | 统计 |
 |:----:|------|:----:|
-| ✅ | 全量测试 | **171 tests, 0 failures** |
+| ✅ | 全量测试 | **174 tests, 0 failures** |
 | ✅ | mvn compile | BUILD SUCCESS |
 | ✅ | CI (GitHub Actions) | ✅ 通过 |
 | ✅ | 合并 main | 已推送 |

@@ -70,11 +70,11 @@ coze start
 
 服务就绪后：
 
-- Spring Boot: `http://localhost:8080/api`
-- Swagger UI: `http://localhost:8080/api/swagger-ui.html`
-- 健康检查: `http://localhost:8080/api/actuator/health`
+- Spring Boot: `http://localhost:8081/api`（dev profile 默认 8081）
+- Swagger UI: `http://localhost:8081/api/swagger-ui.html`
+- 健康检查: `http://localhost:8081/api/actuator/health`
 
-> **注意**: `dev` profile 使用 **PostgreSQL + Flyway + MyBatis-Plus**（与生产栈一致）。Flyway 脚本含 PG 专有语法，**不能用 H2 替代**。无 Redis 时本体 CRUD 可部分可用，Job / 限流 / Webhook 不可用。
+> **注意**: `dev` profile 使用 **PostgreSQL + Flyway + MyBatis-Plus**（与生产栈一致）。Flyway 脚本含 PG 专有语法，**不能用 H2 替代**。dev profile 使用无 Redis 模式（`DevRedisConfig`），Redis 非必需。
 
 ### 方式二：Docker Compose（完整环境）
 
@@ -161,7 +161,8 @@ npm test       # Vitest
 | 图遍历 | `/api/v1/ontologies/{id}/graph/*` | traverse / paths / subgraph |
 | Agent 编排 | `/api/v1/agents/*` | Agent 任务提交/查询（Kimi/Claude/Codex） |
 | Manifest | `/api/v1/manifests/*` | 导入、预览、发布、导出 |
-| 行为/事件/EPC | `/api/v1/ontologies/{id}/actions\|events\|epc` | 领域定义查询 |
+| 项目1导入 | `/api/v1/ontologies/import` | 接收项目1导出的本体模型 JSON |
+| 行为/事件/EPC | `/api/v1/ontologies/{id}/actions|events|epc` | 领域定义查询 |
 | V12 组织/指标 | `/api/v1/ontologies/{id}/departments\|positions\|business-metrics\|orchestrations\|process-steps` | 部门、岗位、业务指标、编排、流程步骤 |
 | V12 元数据/术语 | `/api/v1/ontologies/{id}/metadata-templates\|business-terms\|agent-intents` | 元数据模板、业务术语、Agent 意图 |
 | V13 语义 | `/api/v1/ontologies/{id}/semantic-relations\|intent-slots\|agent-policies-semantic\|error-recoveries\|semantic-field-mappings\|entity-lifecycle-snapshots` | 语义关系、意图槽位、策略、容错、字段映射、生命周期 |
@@ -199,7 +200,7 @@ Manifest v2 交换契约见 [ontology-manifest-spec-v2.md](docs/shared/ontology-
 - **环境**: `ubuntu-latest`, JDK 21 (Temurin), Maven 依赖缓存
 - **步骤**: Checkout → `mvn compile -B -q` → `mvn test -B` → 上传测试报告（7天保留）
 - **运行耗时**: 约 1 分 26 秒
-- **测试统计**: 全量 171 tests, 0 failures（2026-06-20）
+- **测试统计**: 全量 174 tests, 0 failures（2026-06-26）
 
 ## 跨项目 E2E 测试
 
@@ -233,12 +234,12 @@ Manifest v2 交换契约见 [ontology-manifest-spec-v2.md](docs/shared/ontology-
 | Phase 3 Spec | [docs/superpowers/specs/phase3-spec-v1.md](docs/superpowers/specs/phase3-spec-v1.md) |
 | Phase 1 Spec | [docs/superpowers/specs/phase1-spec-v1.md](docs/superpowers/specs/phase1-spec-v1.md) |
 | Phase 2 Spec | [docs/superpowers/specs/phase2-spec-v1.md](docs/superpowers/specs/phase2-spec-v1.md) |
-| 工作日志 | [WORKLOG-2026-06-14.md](WORKLOG-2026-06-14.md) · [WORKLOG-2026-06-16.md](WORKLOG-2026-06-16.md) · [WORKLOG-2026-06-19.md](WORKLOG-2026-06-19.md) · [WORKLOG-2026-06-20.md](WORKLOG-2026-06-20.md) |
+| 工作日志 | [WORKLOG-2026-06-14.md](WORKLOG-2026-06-14.md) · [WORKLOG-2026-06-16.md](WORKLOG-2026-06-16.md) · [WORKLOG-2026-06-19.md](WORKLOG-2026-06-19.md) · [WORKLOG-2026-06-20.md](WORKLOG-2026-06-20.md) · [WORKLOG-2026-06-26.md](WORKLOG-2026-06-26.md) |
 
 ## 测试
 
 ```bash
-# 后端单元测试（171 tests, 0 failures）
+# 后端单元测试（174 tests, 0 failures）
 mvn test
 
 # 指定模块测试
