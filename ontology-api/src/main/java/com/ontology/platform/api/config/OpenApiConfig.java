@@ -32,7 +32,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Ontology Platform API")
                         .version("1.0.0")
-                        .description("本体建模平台REST API文档\n\n" +
+                        .description("本体模型服务平台REST API文档\n\n" +
                                 "## 认证方式\n" +
                                 "- API Key认证：在请求头中添加 `X-API-Key`\n\n" +
                                 "## 通用响应格式\n" +

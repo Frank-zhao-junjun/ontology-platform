@@ -91,7 +91,8 @@ class ExchangeImportServiceE2ETest {
         objectMapper.findAndRegisterModules();
         ExchangeValidationService validationService = new ExchangeValidationService(List.of());
         service = new ExchangeImportService(mapper, objectMapper, validationService,
-                phase3bPublisher, phase3cPublisher, phase3cLifecyclePublisher, phase3dPublisher, excelExchangeMapper);
+                phase3bPublisher, phase3cPublisher, phase3cLifecyclePublisher, phase3dPublisher,
+                excelExchangeMapper, markdownExchangeMapper);
 
         // Read the golden JSON fixture once and cache it
         if (goldenJson == null) {

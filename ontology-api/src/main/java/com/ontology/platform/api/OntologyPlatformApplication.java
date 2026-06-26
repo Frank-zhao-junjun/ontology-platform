@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * 本体建模平台应用入口
+ * 本体模型服务平台应用入口
  * Ontology Platform Application Entry Point
  */
 @SpringBootApplication(

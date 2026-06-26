@@ -2,36 +2,34 @@ package com.ontology.platform.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontology.platform.api.dto.ApiResponse;
-import com.ontology.platform.infrastructure.persistence.ManifestImportPO;
-import com.ontology.platform.infrastructure.persistence.ManifestImportPOMapper;
+import com.ontology.platform.application.service.exchange.ExchangeImportService;
+import com.ontology.platform.domain.dto.imports.ExchangeImportResponse;
+import com.ontology.platform.infrastructure.imports.Project1JsonToExchangeConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OntologyImportControllerTest {
 
     @Mock
-    private ManifestImportPOMapper mapper;
+    private ExchangeImportService exchangeImportService;
 
-    @Captor
-    private ArgumentCaptor<ManifestImportPO> poCaptor;
-
-    private OntologyImportController controller;
+    private Project1JsonToExchangeConverter converter;
     private ObjectMapper objectMapper;
+    private OntologyImportController controller;
 
     private final String SAMPLE_MODEL = """
             {
@@ -52,25 +50,32 @@ class OntologyImportControllerTest {
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
-        controller = new OntologyImportController(mapper, objectMapper);
+        converter = new Project1JsonToExchangeConverter(objectMapper);
+        controller = new OntologyImportController(converter, exchangeImportService, objectMapper);
     }
 
     @Test
     void import_shouldReturn200_whenValid() {
-        OntologyImportRequest request = new OntologyImportRequest(SAMPLE_MODEL, "admin");
+        ExchangeImportResponse mockResp = ExchangeImportResponse.builder()
+                .id("import-001").status("passed").totalEntities(1).warnings(0).build();
+        when(exchangeImportService.importExchange(anyString(), eq("strict"))).thenReturn(mockResp);
 
+        OntologyImportRequest request = new OntologyImportRequest(SAMPLE_MODEL, "admin", false, "strict");
         ResponseEntity<ApiResponse<OntologyImportResponse>> response = controller.importOntology(request);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(0, response.getBody().getCode());
         assertEquals("TP-001", response.getBody().getData().getExternalId());
-        assertNotNull(response.getBody().getData().getDraftId());
+        assertEquals("import-001", response.getBody().getData().getDraftId());
+        assertEquals("passed", response.getBody().getData().getStatus());
+        assertEquals(1, response.getBody().getData().getTotalEntities());
+        assertEquals(0, response.getBody().getData().getWarnings());
         assertEquals(1, response.getBody().getData().getImportedCounts().get("entities"));
     }
 
     @Test
     void import_shouldReturn400_whenInvalidJson() {
-        OntologyImportRequest request = new OntologyImportRequest("not valid json", "admin");
+        OntologyImportRequest request = new OntologyImportRequest("not valid json", "admin", false, "strict");
 
         ResponseEntity<ApiResponse<OntologyImportResponse>> response = controller.importOntology(request);
 
@@ -81,18 +86,20 @@ class OntologyImportControllerTest {
 
     @Test
     void import_shouldReturn422_whenMissingFields() {
-        OntologyImportRequest request = new OntologyImportRequest("{\"version\":\"v1\"}", "admin");
+        // JSON parse succeeds but converter returns null for incomplete document
+        String incomplete = "{\"version\":\"v1\"}";
+        OntologyImportRequest request = new OntologyImportRequest(incomplete, "admin", false, "strict");
 
         ResponseEntity<ApiResponse<OntologyImportResponse>> response = controller.importOntology(request);
 
         assertEquals(422, response.getStatusCodeValue());
         assertEquals(422, response.getBody().getCode());
-        assertTrue(response.getBody().getMessage().contains("VALIDATION_ERROR"));
+        assertTrue(response.getBody().getMessage().contains("CONVERSION_ERROR"));
     }
 
     @Test
     void import_shouldReturn422_whenEmptyBody() {
-        OntologyImportRequest request = new OntologyImportRequest("", "admin");
+        OntologyImportRequest request = new OntologyImportRequest("", "admin", false, "strict");
 
         ResponseEntity<ApiResponse<OntologyImportResponse>> response = controller.importOntology(request);
 
@@ -102,16 +109,17 @@ class OntologyImportControllerTest {
 
     @Test
     void import_shouldPersistToDB() {
-        OntologyImportRequest request = new OntologyImportRequest(SAMPLE_MODEL, "admin");
+        ExchangeImportResponse mockResp = ExchangeImportResponse.builder()
+                .id("import-002").status("passed").totalEntities(1).warnings(0).build();
+        when(exchangeImportService.importExchange(anyString(), eq("strict"))).thenReturn(mockResp);
 
-        controller.importOntology(request);
+        OntologyImportRequest request = new OntologyImportRequest(SAMPLE_MODEL, "admin", false, "strict");
+        ResponseEntity<ApiResponse<OntologyImportResponse>> response = controller.importOntology(request);
 
-        verify(mapper).insert(poCaptor.capture());
-        ManifestImportPO po = poCaptor.getValue();
-        assertEquals("TP-001", po.getExternalId());
-        assertEquals("v1", po.getManifestVersion());
-        assertEquals("DRAFT", po.getStatus());
-        assertNotNull(po.getRawContent());
+        // Verify ExchangeImportService was called (persistence delegated)
+        verify(exchangeImportService).importExchange(anyString(), eq("strict"));
+        assertEquals("import-002", response.getBody().getData().getDraftId());
+        assertEquals("passed", response.getBody().getData().getStatus());
     }
 
     @Test
@@ -129,8 +137,11 @@ class OntologyImportControllerTest {
                   "governance": {"roles":[]}
                 }
                 """;
-        OntologyImportRequest request = new OntologyImportRequest(multiModel, "admin");
+        ExchangeImportResponse mockResp = ExchangeImportResponse.builder()
+                .id("import-003").status("passed").totalEntities(5).warnings(0).build();
+        when(exchangeImportService.importExchange(anyString(), eq("strict"))).thenReturn(mockResp);
 
+        OntologyImportRequest request = new OntologyImportRequest(multiModel, "admin", false, "strict");
         ResponseEntity<ApiResponse<OntologyImportResponse>> response = controller.importOntology(request);
 
         Map<String, Integer> counts = response.getBody().getData().getImportedCounts();
@@ -142,14 +153,47 @@ class OntologyImportControllerTest {
     }
 
     @Test
-    void import_shouldReturn409_whenDuplicate() {
-        OntologyImportRequest request = new OntologyImportRequest(SAMPLE_MODEL, "admin");
-        doThrow(new DataIntegrityViolationException("duplicate")).when(mapper).insert(any());
+    void import_shouldReturn422_whenServiceFails() {
+        when(exchangeImportService.importExchange(anyString(), eq("strict")))
+                .thenThrow(new RuntimeException("Database error"));
 
+        OntologyImportRequest request = new OntologyImportRequest(SAMPLE_MODEL, "admin", false, "strict");
         ResponseEntity<ApiResponse<OntologyImportResponse>> response = controller.importOntology(request);
 
-        assertEquals(409, response.getStatusCodeValue());
-        assertEquals(409, response.getBody().getCode());
-        assertTrue(response.getBody().getMessage().contains("DUPLICATE"));
+        assertEquals(422, response.getStatusCodeValue());
+        assertEquals(422, response.getBody().getCode());
+        assertTrue(response.getBody().getMessage().contains("IMPORT_ERROR"));
+    }
+
+    @Test
+    void import_shouldAutoPublish_whenEnabled() {
+        ExchangeImportResponse importResp = ExchangeImportResponse.builder()
+                .id("import-004").status("passed").totalEntities(1).warnings(0).build();
+        ExchangeImportResponse publishResp = ExchangeImportResponse.builder()
+                .id("import-004").status("published").totalEntities(1).warnings(0).build();
+        when(exchangeImportService.importExchange(anyString(), eq("strict"))).thenReturn(importResp);
+        when(exchangeImportService.publishImport("import-004")).thenReturn(publishResp);
+
+        OntologyImportRequest request = new OntologyImportRequest(SAMPLE_MODEL, "admin", true, "strict");
+        ResponseEntity<ApiResponse<OntologyImportResponse>> response = controller.importOntology(request);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("published", response.getBody().getData().getStatus());
+        verify(exchangeImportService).publishImport("import-004");
+    }
+
+    @Test
+    void import_shouldNotPublish_whenValidationFailed() {
+        ExchangeImportResponse importResp = ExchangeImportResponse.builder()
+                .id("import-005").status("failed").totalEntities(0).warnings(3).build();
+        when(exchangeImportService.importExchange(anyString(), eq("warn"))).thenReturn(importResp);
+
+        OntologyImportRequest request = new OntologyImportRequest(SAMPLE_MODEL, "admin", true, "warn");
+        ResponseEntity<ApiResponse<OntologyImportResponse>> response = controller.importOntology(request);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("failed", response.getBody().getData().getStatus());
+        // Publish should NOT be called when status is "failed"
+        verify(exchangeImportService, never()).publishImport(anyString());
     }
 }

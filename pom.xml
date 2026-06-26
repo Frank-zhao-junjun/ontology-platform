@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <name>Ontology Platform</name>
-    <description>本体建模平台 - 企业级本体管理系统</description>
+    <description>本体模型服务平台 - 企业级本体服务治理平台</description>
 
     <modules>
         <module>ontology-common</module>

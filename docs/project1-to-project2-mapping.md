@@ -2,7 +2,7 @@
 
 > 项目1: Ontology 设计工具 (Flask + React, :5000)
 > 项目2: Ontology-platform 服务平台 (Spring Boot, :8080)
-> 更新日期: 2026-06-16
+> 更新日期: 2026-06-26
 
 ---
 
@@ -201,7 +201,7 @@
 | 外部接口·查询/计算/通知/报表 | Sheet 6 | ❌ 无 | **0%** |
 | EPC流程 | Sheet 7 | `epc_step` | ✅ 85%（需名称/顺序字段） |
 
-**总体匹配度：约 65%** (表结构 95%，代码层 0%)
+**总体匹配度：约 65%** (核心表 100% 代码覆盖；规则/接口/指标 10 表仍缺代码层)
 
 | 层次 | 状态 | 说明 |
 |------|------|------|
@@ -211,17 +211,20 @@
 | ✅ Service + DTO (30个) | 已完成 | Request/Response + Service CRUD |
 | ✅ REST Controller (10个) | 已完成 | CRUD 端点 + OpenAPI |
 | ✅ 导入适配器 | 已完成 | `scripts/import_from_project1.py` 可直接调用全链路 API |
+| ✅ V12–V14 新域 (19表) | 已完成 | REST API + Controller + Service 全链路 |
 
 
 - ✅ **可直导** (已有表+代码): ontology, object_type, property_definition, relation_definition, action_definition, state_machine, state_transition, domain_event, causality, epc_step
-- ✅ **表已就绪** (V9+V10): validation_rule, guardrail_rule, policy_rule, probe_definition, api_definition, query_definition, compute_definition, notification_definition, report_definition, indicator_definition
-- ❌ **代码未实现**: 以上 10 张新表均无 PO/Mapper/Service/Controller
+- ✅ **V12–V14 新域** (19表+全链路): department, position, business_metric, orchestration, process_step, metadata_template, business_term, agent_intent, semantic_relation, intent_slot, agent_policy, error_recovery, semantic_field_mapping, entity_lifecycle_snapshot, epc_chain, epc_node, epc_edge, epc_model_ref, epc_profile
+- ✅ **表已就绪** (V9+V10 Flyway): validation_rule, guardrail_rule, policy_rule, probe_definition, api_definition, query_definition, compute_definition, notification_definition, report_definition, indicator_definition
+- ❌ **代码未实现**: 以上 10 张规则/接口/指标表均无 PO/Mapper/Service/Controller
 
-### 修复记录 (2026-06-16)
+### 修复记录 (2026-06-26 更新)
 
 | 操作 | 状态 | 说明 |
 |------|------|------|
 | ✅ Flyway V9 | 已完成 | 4张规则表 SQL |
 | ✅ Flyway V10 | 已完成 | 6张接口+指标表 SQL |
-| ❌ 代码层 | 未开始 | PO/Mapper/XML/Service/DTO/Controller 约 70文件 |
-| ❌ 导入适配器 | 等待中 | 需 API 就绪后才能调通 |
+| ✅ V12–V14 新域 | 已完成 | 19 张表 + REST API 全链路 |
+| ❌ 规则/接口/指标代码层 | 未开始 | 10 表 PO/Mapper/XML/Service/DTO/Controller 约 70 文件 |
+| ✅ 导入适配器 | 已完成 | `POST /api/v1/ontologies/import` + 6 E2E 场景 |

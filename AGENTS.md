@@ -1,13 +1,13 @@
 ## 项目概述
 
-本体建模平台（Ontology Platform）是一个企业级本体管理系统，基于领域驱动设计（DDD）和本体论架构，提供完整的本体模型定义、对象类型管理、属性管理、关系管理和图遍历查询能力。
+本体模型服务平台（Ontology Service Platform）是一个企业级本体服务治理平台，基于领域驱动设计（DDD）和本体论架构，为本体模型提供持久化、查询、校验、发布、Agent 编排和 MCP 协议适配能力。
 
 ## 技术栈
 
 | 层级 | 技术 | 版本 |
 |------|------|------|
 | 后端框架 | Spring Boot | 3.2.5 |
-| Java 版本 | Java | 25 |
+| Java 版本 | Java | 21 |
 | 数据库 | PostgreSQL + Apache AGE | 15+ / 1.5.x |
 | 缓存 | Redis | 7.x |
 | API 文档 | SpringDoc OpenAPI | 2.5.0 |
@@ -76,7 +76,7 @@ API 文档地址：启动后访问 `/swagger-ui.html`
 - 关系仓储（RelationRepository）当前使用内存存储（ConcurrentHashMap），待 PostgreSQL + AGE 就绪后替换
 - 属性仓储（PropertyRepository）已接入 MyBatis-Plus
 - 图操作依赖 Apache AGE 扩展，需要 PostgreSQL 15+ 环境
-- Java 版本要求 25+
+- Java 版本要求 21+
 
 ## 常见问题和预防
 

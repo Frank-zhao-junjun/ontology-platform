@@ -3,25 +3,27 @@ package com.ontology.platform.api.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontology.platform.api.dto.ApiResponse;
-import com.ontology.platform.infrastructure.persistence.ManifestImportPO;
-import com.ontology.platform.infrastructure.persistence.ManifestImportPOMapper;
+import com.ontology.platform.application.service.exchange.ExchangeImportService;
+import com.ontology.platform.domain.dto.imports.ExchangeImportResponse;
+import com.ontology.platform.domain.dto.imports.OntologyExchangeDocument;
+import com.ontology.platform.infrastructure.imports.Project1JsonToExchangeConverter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
- * 项目1 本体模型导入 API
- * 接收项目1（Ontology 设计台）导出的 JSON，持久化到 manifest_import 表
+ * 项目1 本体模型导入 API。
+ *
+ * <p>接收项目1（Ontology 设计台）导出的 JSON，通过
+ * {@link Project1JsonToExchangeConverter} 转换为 v2 交换格式，
+ * 再委托 {@link ExchangeImportService} 统一校验与持久化。
+ * 支持 autoPublish 一键发布到 V12-V14 领域表。</p>
  */
 @Slf4j
 @RestController
@@ -29,11 +31,13 @@ import java.util.UUID;
 @Tag(name = "Ontology Import", description = "项目1 本体模型导入 API (P01)")
 public class OntologyImportController {
 
-    private final ManifestImportPOMapper manifestImportMapper;
+    private final Project1JsonToExchangeConverter converter;
+    private final ExchangeImportService exchangeImportService;
     private final ObjectMapper objectMapper;
 
     @PostMapping("/api/v1/ontologies/import")
-    @Operation(summary = "导入本体模型", description = "接收项目1导出的 .ontology-model.json，解析校验后写入 manifest_import 表")
+    @Operation(summary = "导入本体模型",
+            description = "接收项目1导出的本体模型 JSON，转换为 v2 交换格式后统一校验+持久化。支持 autoPublish 一键发布")
     public ResponseEntity<ApiResponse<OntologyImportResponse>> importOntology(
             @RequestBody OntologyImportRequest request) {
 
@@ -53,23 +57,68 @@ public class OntologyImportController {
                     .body(ApiResponse.error(400, "PARSE_ERROR: JSON 解析失败：" + e.getMessage()));
         }
 
-        // ── Validate structure ──
-        if (!root.has("version") || !root.has("project") || !root.has("entities")) {
+        // ── Convert Project1 JSON → OntologyExchangeDocument ──
+        OntologyExchangeDocument doc = converter.convert(rawContent);
+        if (doc == null) {
             return ResponseEntity.status(422)
                     .body(ApiResponse.error(422,
-                            "VALIDATION_ERROR: 模型 JSON 格式不正确，缺少 version / project / entities 字段"));
+                            "CONVERSION_ERROR: 无法将 Project1 JSON 转换为 v2 交换格式"));
+        }
+        String exchangeJson;
+        try {
+            exchangeJson = objectMapper.writeValueAsString(doc);
+        } catch (Exception e) {
+            return ResponseEntity.status(422)
+                    .body(ApiResponse.error(422,
+                            "CONVERSION_ERROR: 序列化 v2 交换文档失败：" + e.getMessage()));
         }
 
-        // ── Extract identifiers ──
-        String version = root.get("version").asText();
-        String externalId = root.get("project").has("id")
-                ? root.get("project").get("id").asText()
-                : root.get("project").get("name").asText("unknown");
-        String projectName = root.get("project").has("name")
-                ? root.get("project").get("name").asText("")
-                : "";
+        // ── Extract metadata for response ──
+        String externalId = doc.getMetadata() != null ? doc.getMetadata().getId() : null;
+        String validationMode = request.getValidationMode() != null
+                ? request.getValidationMode() : "strict";
 
-        // ── Compute counts ──
+        // ── Compute counts from raw JSON (backward compat) ──
+        Map<String, Integer> counts = computeCounts(root);
+
+        // ── Delegate to unified v2 pipeline ──
+        ExchangeImportResponse importResponse;
+        try {
+            importResponse = exchangeImportService.importExchange(exchangeJson, validationMode);
+        } catch (Exception e) {
+            log.error("Exchange import failed: {}", e.getMessage());
+            return ResponseEntity.status(422)
+                    .body(ApiResponse.error(422, "IMPORT_ERROR: " + e.getMessage()));
+        }
+
+        String status = importResponse.getStatus();
+
+        // ── Auto-publish if requested ──
+        if (Boolean.TRUE.equals(request.getAutoPublish()) && "passed".equals(status)) {
+            try {
+                ExchangeImportResponse pubResponse =
+                        exchangeImportService.publishImport(importResponse.getId());
+                status = pubResponse.getStatus(); // "published"
+                log.info("Auto-published import: id={}, status={}", importResponse.getId(), status);
+            } catch (Exception e) {
+                log.warn("Auto-publish failed for import {}: {}", importResponse.getId(), e.getMessage());
+                // Don't fail the import — return "passed" with a note
+            }
+        }
+
+        OntologyImportResponse response = OntologyImportResponse.builder()
+                .draftId(importResponse.getId())
+                .externalId(externalId)
+                .status(status)
+                .totalEntities(importResponse.getTotalEntities())
+                .warnings(importResponse.getWarnings())
+                .importedCounts(counts)
+                .build();
+
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    private Map<String, Integer> computeCounts(JsonNode root) {
         Map<String, Integer> counts = new HashMap<>();
         counts.put("entities", root.has("entities") ? root.get("entities").size() : 0);
         counts.put("stateMachines", root.has("stateMachines") ? root.get("stateMachines").size() : 0);
@@ -78,53 +127,6 @@ public class OntologyImportController {
         counts.put("dataSources", root.has("dataSources") ? root.get("dataSources").size() : 0);
         counts.put("businessChain", root.has("businessChain") ? 1 : 0);
         counts.put("governance", root.has("governance") ? 1 : 0);
-
-        // ── Build PO and insert ──
-        String draftId = UUID.randomUUID().toString();
-        ManifestImportPO po = ManifestImportPO.builder()
-                .id(draftId)
-                .ontologyId(UUID.randomUUID().toString())
-                .externalId(externalId)
-                .tenantId("default")
-                .status("DRAFT")
-                .apiVersion("v1")
-                .manifestVersion(version)
-                .sourceFormat("JSON")
-                .rawContent(rawContent)
-                .importedCounts(toJsonString(counts))
-                .validationErrors("[]")
-                .createdBy(request.getCreatedBy() != null ? request.getCreatedBy() : "system")
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
-                .build();
-
-        try {
-            manifestImportMapper.insert(po);
-
-            log.info("Ontology model imported: project={}, version={}, externalId={}, draftId={}, counts={}",
-                projectName, version, externalId, draftId, counts);
-
-            OntologyImportResponse response = OntologyImportResponse.builder()
-                .draftId(draftId)
-                .externalId(externalId)
-                .importedCounts(counts)
-                .build();
-
-            return ResponseEntity.ok(ApiResponse.success(response));
-        } catch (DataIntegrityViolationException e) {
-            log.warn("Duplicate import: externalId={}, version={}", externalId, version);
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(ApiResponse.error(409,
-                            "DUPLICATE: 该模型版本已存在：" + externalId + " / " + version));
-        }
-    }
-
-    private String toJsonString(Object obj) {
-        try {
-            return objectMapper.writeValueAsString(obj);
-        } catch (Exception e) {
-            log.error("Failed to serialize to JSON", e);
-            return "{}";
-        }
+        return counts;
     }
 }

@@ -1,6 +1,6 @@
-# Ontology Platform — 本体建模平台
+# Ontology Platform — 本体模型服务平台
 
-企业级本体管理系统，基于 DDD 分层架构，提供本体 CRUD、Manifest 导入/发布（JSON/YAML/Excel）、行为/事件/EPC 查询、Agent 编排（ACP 协议接入 Kimi/Claude/Codex）、V12-V14 领域模型（19 张新表）、CI 自动构建测试（1m26s）、跨项目 E2E 导入/导出测试（6 个场景），以及 Phase 2 异步任务、Webhook、幂等与限流能力。MCP Server 将 REST API 暴露为 AI Agent 可调用的 MCP 工具。
+企业级本体服务治理平台，基于 DDD 分层架构，为上游本体建模工具产出的本体模型提供持久化、查询、校验、发布、Agent 编排（ACP 协议接入 Kimi/Claude/Codex）、V12-V14 领域模型（19 张新表）、CI 自动构建测试（1m26s）、跨项目 E2E 导入/导出测试（6 个场景），以及 Phase 2 异步任务、Webhook、幂等与限流能力。MCP Server 将 REST API 暴露为 AI Agent 可调用的 MCP 工具。
 
 **仓库**: [Frank-zhao-junjun/ontology-platform](https://github.com/Frank-zhao-junjun/ontology-platform)
 
@@ -46,7 +46,7 @@ ontology-platform/
 
 - JDK 21+
 - Maven 3.8+
-- **Docker Desktop**（本地 dev 需 PostgreSQL + Redis）
+- **Docker Desktop**（本地 dev 需 PostgreSQL；Redis 可选，dev profile 使用 no-op 模式）
 - Node.js 22+（仅 MCP Server 开发）
 
 ### 方式一：Coze CLI
@@ -103,14 +103,11 @@ mvn clean compile
 # 单元测试（不依赖 Docker）
 mvn test
 
-# 开发模式（PowerShell 示例）
-$env:SPRING_PROFILES_ACTIVE = "dev"
-$env:REDIS_PASSWORD = "redis123"      # 与 docker/.env.example 一致
-$env:DB_PASSWORD = "ontology123"
-mvn -pl ontology-api spring-boot:run -DskipTests
+# 开发模式（bash / git-bash）
+SPRING_PROFILES_ACTIVE=dev mvn -pl ontology-api spring-boot:run -DskipTests
 
 # 验证
-curl http://localhost:8080/api/actuator/health
+curl http://localhost:8081/api/actuator/health
 ```
 
 ### 开发环境配置
@@ -143,7 +140,7 @@ npm test       # Vitest
 
 ## API 约定
 
-- **基址**: `http://localhost:8080`（`server.servlet.context-path=/api`）
+- **基址**: `http://localhost:{port}/api`（`server.servlet.context-path=/api`；dev profile 默认 8081，Docker Compose 默认 8080）
 - **公开路径**: 以 `/api/v1/...` 开头（与 [API 契约 v2.0](docs/shared/API契约-本体建模平台-v2.0.yaml) 一致）
 - **统一响应**: `{ code, message, data, meta: { trace_id, ... } }`
 - **幂等（可选）**: 写请求可带 `Idempotency-Key` Header（Phase 2）
@@ -164,8 +161,8 @@ npm test       # Vitest
 | 项目1导入 | `/api/v1/ontologies/import` | 接收项目1导出的本体模型 JSON |
 | 行为/事件/EPC | `/api/v1/ontologies/{id}/actions|events|epc` | 领域定义查询 |
 | V12 组织/指标 | `/api/v1/ontologies/{id}/departments\|positions\|business-metrics\|orchestrations\|process-steps` | 部门、岗位、业务指标、编排、流程步骤 |
-| V12 元数据/术语 | `/api/v1/ontologies/{id}/metadata-templates\|business-terms\|agent-intents` | 元数据模板、业务术语、Agent 意图 |
-| V13 语义 | `/api/v1/ontologies/{id}/semantic-relations\|intent-slots\|agent-policies-semantic\|error-recoveries\|semantic-field-mappings\|entity-lifecycle-snapshots` | 语义关系、意图槽位、策略、容错、字段映射、生命周期 |
+| V12 元数据/术语 | `/api/v1/ontologies/{id}/metadata-templates|business-terms|agent-intents` | 元数据模板、业务术语、Agent 意图 |
+|| V13 语义 | `/api/v1/ontologies/{id}/semantic-relations|intent-slots|agent-policies-semantic|error-recoveries|semantic-field-mappings|entity-lifecycle-snapshots` | 语义关系、意图槽位、策略、容错、字段映射、生命周期 |
 | V14 EPC | `/api/v1/ontologies/{id}/epc-chains\|epc-nodes\|epc-edges\|epc-model-refs\|epc-profiles` | EPC 链/节点/边/模型引用/配置 |
 | 治理 | `/api/v1/governance/*` | Token、角色、权限、审批 |
 | 上传/导入 | `/api/v1/uploads/*`, `/api/v1/imports/*` | 分片上传与导入任务 |

@@ -6,6 +6,7 @@ import com.ontology.platform.common.exception.BusinessException;
 import com.ontology.platform.common.exception.ResourceNotFoundException;
 import com.ontology.platform.domain.dto.imports.ExchangeImportResponse;
 import com.ontology.platform.infrastructure.imports.ExcelExchangeMapper;
+import com.ontology.platform.infrastructure.imports.MarkdownExchangeMapper;
 import com.ontology.platform.infrastructure.persistence.ExchangeImportPO;
 import com.ontology.platform.infrastructure.persistence.ExchangeImportPOMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,6 +53,9 @@ class ExchangeImportServiceTest {
 
     @Mock
     private ExcelExchangeMapper excelExchangeMapper;
+
+    @Mock
+    private MarkdownExchangeMapper markdownExchangeMapper;
 
     private ObjectMapper objectMapper;
 
@@ -114,7 +118,8 @@ class ExchangeImportServiceTest {
         objectMapper.findAndRegisterModules();
         ExchangeValidationService validationService = new ExchangeValidationService(List.of());
         service = new ExchangeImportService(mapper, objectMapper, validationService,
-                phase3bPublisher, phase3cPublisher, phase3cLifecyclePublisher, phase3dPublisher, excelExchangeMapper);
+                phase3bPublisher, phase3cPublisher, phase3cLifecyclePublisher, phase3dPublisher,
+                excelExchangeMapper, markdownExchangeMapper);
     }
 
     @Nested

@@ -1,7 +1,7 @@
 # 项目2 — TODO
 
 > 最后更新：2026-06-26
-> 最新合并：`main ← c24ba0b`
+> 最新合并：`main ← 2d95763`
 
 ---
 
@@ -74,8 +74,7 @@
 
 ### P3 — 长期
 
-| 状态 | # | 任务 | 说明 |
-|:----:|:-:|------|------|
-| ✅ | 7 | Swagger API 描述补全 | 22 个核心 DTO 补充 @Schema description（含中文字段描述 + example） |
-| ✅ | 8 | README 更新 | Agent 编排详情、CI 耗时、跨项目 E2E 测试、测试指南 |
-| ✅ | 9 | Cursor agent CLI | Cursor 3.0.16 已安装，agent mode 内置于 IDE |
+| 日期 | 内容 |
+|------|------|
+| 06-26 | Swagger DTO 补全 ✅ · README 更新 ✅ · Cursor agent CLI 不再维护（改用 Hermes）✅ |
+| — | **P3 所有任务完成。新需求请在此添加。** |
