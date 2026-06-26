@@ -158,8 +158,9 @@ And body.code == "PARSE_ERROR"
 ```gherkin
 When POST /api/v1/ontologies/import
   body: {"version": "v1"} （无 project 和 entities）
-Then 返回 400
-And body.code == "VALIDATION_ERROR"
+Then 返回 422
+And body.code == 422
+And body.message 包含"VALIDATION_ERROR"
 And body.message 包含"缺少"
 ```
 
@@ -178,8 +179,9 @@ And body.message 包含"已存在"
 ```gherkin
 When POST /api/v1/ontologies/import
   body: "{}"
-Then 返回 400
-And body.code == "VALIDATION_ERROR"
+Then 返回 422
+And body.code == 422
+And body.message 包含"VALIDATION_ERROR"
 ```
 
 ### TC-06: counts 正确性

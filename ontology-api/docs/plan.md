@@ -29,7 +29,7 @@
 | **DTO (Request)** | `OntologyImportRequest` | `{ rawContent, createdBy }` | 嵌入 Controller 或独立文件 |
 | **DTO (Response)** | `OntologyImportResponse` | `{ draftId, externalId, importedCounts }` | 嵌入或独立 |
 | **Mapper** | `ManifestImportMapper` (已有) | MyBatis-Plus insert | `infrastructure/persistence/ManifestImportPOMapper.java` (已有) |
-| **Config** | `application-dev.yml` | port 已为 8080，无需修改 |
+|| **Config** | `application-dev.yml` | port 已改为 8081 |
 
 **不新建：**
 - Service 层（逻辑太简单，不需要）

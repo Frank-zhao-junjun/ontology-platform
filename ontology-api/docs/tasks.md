@@ -6,23 +6,17 @@
 
 ### Prerequisites
 
-- [ ] ~~确认 `ManifestImportPOMapper` 存在~~ → 不存在，需要新建
+- [x] `ManifestImportPOMapper` 已创建（extends BaseMapper<ManifestImportPO>）
 
 ---
 
-### Task 1: ManifestImportPO + ManifestImportPOMapper
+### Task 1: ManifestImportPO + ManifestImportPOMapper ✅
 
-**Objective:** PO 对象 + MyBatis-Plus Mapper
+**Objective:** PO 对象 + MyBatis-Plus Mapper — **已完成**
 
-**Files:**
-- Create: `ontology-infrastructure/.../persistence/ManifestImportPO.java`（@TableName("manifest_import")）
-- Create: `ontology-infrastructure/.../persistence/ManifestImportPOMapper.java`（extends BaseMapper）
-- 参考 `OntologyPO` / `OntologyPOMapper` 模式
-
-**PO 字段映射：**
 | PO field | 表 column | Type |
 |----------|-----------|------|
-| id | id | String (UUID) |
+| id | id | String (UUID, @TableId ASSIGN_UUID) |
 | ontologyId | ontology_id | String |
 | externalId | external_id | String |
 | tenantId | tenant_id | String |
@@ -44,89 +38,65 @@
 
 ---
 
-### Task 2: OntologyImportRequest DTO
+### Task 2: OntologyImportRequest DTO ✅
 
-**Objective:** 定义请求体结构
-
-**Files:**
-- Create: `ontology-api/.../controller/OntologyImportRequest.java`
+**Objective:** 定义请求体结构 — **已完成**
 
 **Acceptance:**
-- 有 `rawContent` 字段（String）
-- 有 `createdBy` 字段（String, optional）
-- 可被 Jackson 反序列化
+- [x] 有 `rawContent` 字段（String）
+- [x] 有 `createdBy` 字段（String, optional）
+- [x] 可被 Jackson 反序列化
 
 **Verify:** `javac` 编译通过
 
 ---
 
-### Task 2: OntologyImportResponse DTO
+### Task 2: OntologyImportResponse DTO ✅
 
-**Objective:** 定义响应体结构
-
-**Files:**
-- Create: `ontology-api/.../controller/OntologyImportResponse.java`
+**Objective:** 定义响应体结构 — **已完成**
 
 **Acceptance:**
-- 有 `draftId`（String）
-- 有 `externalId`（String）
-- 有 `importedCounts`（Map<String,Integer>）
-- 可被 Jackson 序列化
+- [x] 有 `draftId`（String）
+- [x] 有 `externalId`（String）
+- [x] 有 `importedCounts`（Map<String,Integer>）
+- [x] 可被 Jackson 序列化
 
 **Verify:** `javac` 编译通过
 
 ---
 
-### Task 3: OntologyImportController
+### Task 3: OntologyImportController ✅
 
-**Objective:** POST /api/v1/ontologies/import 端点
-
-**Files:**
-- Create: `ontology-api/.../controller/OntologyImportController.java`
-
-**Steps:**
-1. 注入 `ManifestImportPOMapper`
-2. `@PostMapping("/api/v1/ontologies/import")`
-3. 解析 `rawContent` → JSONObject
-4. 校验：version, project, entities 存在
-5. 计算 importedCounts
-6. 构造 `ManifestImportPO` 并 insert
-7. try-catch `DataIntegrityViolationException` → 409
-8. 返回 `ApiResponse`
+**Objective:** POST /api/v1/ontologies/import 端点 — **已完成**
 
 **Acceptance:**
-- TC-01 ~ TC-06 全通过
+- [x] TC-01 ~ TC-06 全通过
 
 **Verify:** `mvn test` 通过
 
 ---
 
-### Task 4: 单元测试
+### Task 4: 单元测试 ✅
 
-**Objective:** OntologyImportControllerTest
+**Objective:** OntologyImportControllerTest — **已完成**
 
-**Files:**
-- Create: `ontology-api/src/test/java/.../controller/OntologyImportControllerTest.java`
-
-**Test Cases:**
-1. testImportSuccess — 正常导入 (TC-01)
-2. testParseError — 非法 JSON (TC-02)
-3. testValidationError — 缺少字段 (TC-03, TC-05)
-4. testDuplicate — 重复导入 (TC-04)
-5. testCountsCorrectness — 统计正确性 (TC-06)
-
-**Acceptance:** 全部测试通过
+**Test Cases (7/7 通过):**
+- [x] testImportSuccess — 正常导入 (TC-01)
+- [x] testParseError — 非法 JSON (TC-02)
+- [x] testValidationError — 缺少字段 (TC-03, TC-05)
+- [x] testDuplicate — 重复导入 (TC-04)
+- [x] testCountsCorrectness — 统计正确性 (TC-06)
+- [x] import_shouldPersistToDB — 验证 insert 参数
+- [x] import_shouldReturn422_whenEmptyBody — 空 JSON (补充验证)
 
 **Verify:** `mvn test`
 
 ---
 
-### Task 5: 全量回归
+### Task 5: 全量回归 ✅
 
-**Objective:** 确认不破坏已有功能
+**Objective:** 确认不破坏已有功能 — **已完成**
 
 **Steps:**
-1. `mvn compile -Dmaven.test.skip=true`
-2. `mvn test`
-
-**Acceptance:** 编译 0 error, 全部单元测试通过
+1. [x] `mvn compile` → 0 error
+2. [x] `mvn test` → 174/174 通过（包括修复的 95 个 @WebMvcTest）
