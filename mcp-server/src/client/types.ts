@@ -73,3 +73,26 @@ export interface EpcStepResponse {
   guards: string;
   timeoutMs: number;
 }
+
+export interface EpcCoverageResponse {
+  ontologyId: string;
+  chainCount: number;
+  nodeCount: number;
+  edgeCount: number;
+  modelRefCount: number;
+  profileCount: number;
+  aggregateRootsCovered: number;
+  aggregateRootIds: string[];
+  coverageRatio: number;
+  chains: EpcChainSummary[];
+}
+
+export interface EpcChainSummary {
+  id: string;
+  name: string;
+  aggregateRootId: string;
+  chainType: string;
+  nodeCount: number;
+  edgeCount: number;
+  modelRefCount: number;
+}

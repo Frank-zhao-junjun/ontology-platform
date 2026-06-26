@@ -1,0 +1,3882 @@
+{
+  ".claude/settings.local.json": {
+    "mtime": 1781934342.6237457,
+    "ast_hash": "ca316800d2d4af87b130d8620c2df96b",
+    "semantic_hash": "ca316800d2d4af87b130d8620c2df96b"
+  },
+  ".github/modernize/java-upgrade/hooks/scripts/recordToolUse.ps1": {
+    "mtime": 1781924413.5048807,
+    "ast_hash": "9ecf230451dfd20ff4e0a2a01e80a4e6",
+    "semantic_hash": "9ecf230451dfd20ff4e0a2a01e80a4e6"
+  },
+  ".github/modernize/java-upgrade/hooks/scripts/recordToolUse.sh": {
+    "mtime": 1781924413.506822,
+    "ast_hash": "e25ae501603ce6bf738198f5ce32ba83",
+    "semantic_hash": "e25ae501603ce6bf738198f5ce32ba83"
+  },
+  "analyze_pptx.py": {
+    "mtime": 1780928515.758703,
+    "ast_hash": "ce18573fb6e9c782643a7ed13e939076",
+    "semantic_hash": "ce18573fb6e9c782643a7ed13e939076"
+  },
+  "db/migrations/V1__init_schema.sql": {
+    "mtime": 1780928515.758703,
+    "ast_hash": "631b55b28c82ddc53760e6a94011b37d",
+    "semantic_hash": "631b55b28c82ddc53760e6a94011b37d"
+  },
+  "db/migrations/V2__create_manifest_tables.sql": {
+    "mtime": 1781882381.0995488,
+    "ast_hash": "ba76349c9acb3425534e5d0b59154744",
+    "semantic_hash": "ba76349c9acb3425534e5d0b59154744"
+  },
+  "db/migrations/V3__create_action_state_machine.sql": {
+    "mtime": 1781882381.1015491,
+    "ast_hash": "f22d75269da4151b8348bc2cc36c97e8",
+    "semantic_hash": "f22d75269da4151b8348bc2cc36c97e8"
+  },
+  "db/migrations/V4__create_domain_event.sql": {
+    "mtime": 1781882381.1045525,
+    "ast_hash": "3fe462b6b718978d2610f917a891d74a",
+    "semantic_hash": "3fe462b6b718978d2610f917a891d74a"
+  },
+  "db/migrations/V5__create_epc_step.sql": {
+    "mtime": 1781882381.1060736,
+    "ast_hash": "d329524bac31288b3973c3e21beac017",
+    "semantic_hash": "d329524bac31288b3973c3e21beac017"
+  },
+  "db/migrations/V6__create_governance_tables.sql": {
+    "mtime": 1781882381.108133,
+    "ast_hash": "bbbe5a8ffc7d9f874b333194e3a408bd",
+    "semantic_hash": "bbbe5a8ffc7d9f874b333194e3a408bd"
+  },
+  "docs/import/manufacturing-exchange-v2.json": {
+    "mtime": 1782043064.9052174,
+    "ast_hash": "8a56b44b5e65523584e2277954d84466",
+    "semantic_hash": "8a56b44b5e65523584e2277954d84466"
+  },
+  "docs/project.json": {
+    "mtime": 1780928515.758703,
+    "ast_hash": "40b33f54e440dbf448f379a2948790fb",
+    "semantic_hash": "40b33f54e440dbf448f379a2948790fb"
+  },
+  "docs/shared/examples/manufacturing-exchange-v2.json": {
+    "mtime": 1782043064.6804826,
+    "ast_hash": "8d630983e3cc29bfbf49a26991d9daa1",
+    "semantic_hash": "8d630983e3cc29bfbf49a26991d9daa1"
+  },
+  "frontend/package.json": {
+    "mtime": 1780928515.7642395,
+    "ast_hash": "0b0a49f6e5a5df33ff6309abcc100fe9",
+    "semantic_hash": "0b0a49f6e5a5df33ff6309abcc100fe9"
+  },
+  "frontend/postcss.config.js": {
+    "mtime": 1780928515.7642395,
+    "ast_hash": "5b84f4567208c7c747079c0477373231",
+    "semantic_hash": "5b84f4567208c7c747079c0477373231"
+  },
+  "frontend/scripts/build-slides.js": {
+    "mtime": 1780928515.7655206,
+    "ast_hash": "b5d9b06820ad84d9486a5f631a23f3d5",
+    "semantic_hash": "b5d9b06820ad84d9486a5f631a23f3d5"
+  },
+  "frontend/src/js/ppt-controller.js": {
+    "mtime": 1780928515.7661417,
+    "ast_hash": "27ae298874a06d49074180cadb00d2f8",
+    "semantic_hash": "27ae298874a06d49074180cadb00d2f8"
+  },
+  "frontend/src/js/route-handler.js": {
+    "mtime": 1780928515.7661417,
+    "ast_hash": "114c446a505769c7af445dab457d4ec1",
+    "semantic_hash": "114c446a505769c7af445dab457d4ec1"
+  },
+  "frontend/src/main.js": {
+    "mtime": 1780928515.7661417,
+    "ast_hash": "028d54fd2c787214a1c1228f30f53699",
+    "semantic_hash": "028d54fd2c787214a1c1228f30f53699"
+  },
+  "frontend/tailwind.config.js": {
+    "mtime": 1780928515.7661417,
+    "ast_hash": "9afb21cebd97d1d0507d3a6067926a05",
+    "semantic_hash": "9afb21cebd97d1d0507d3a6067926a05"
+  },
+  "frontend/vite.config.js": {
+    "mtime": 1780928515.7661417,
+    "ast_hash": "df1e77c0cae1766b59b48160bf043cb4",
+    "semantic_hash": "df1e77c0cae1766b59b48160bf043cb4"
+  },
+  "generate-ppt.js": {
+    "mtime": 1780928515.7661417,
+    "ast_hash": "6c84b089b8b308175835b9c0ab424a3f",
+    "semantic_hash": "6c84b089b8b308175835b9c0ab424a3f"
+  },
+  "mcp-server/package.json": {
+    "mtime": 1781882381.3216445,
+    "ast_hash": "20100592b07d8fe5d85967b01d0649c6",
+    "semantic_hash": "20100592b07d8fe5d85967b01d0649c6"
+  },
+  "mcp-server/src/auth/middleware.ts": {
+    "mtime": 1781882381.3246386,
+    "ast_hash": "c0841ac2334249bc95859f10293ee542",
+    "semantic_hash": "c0841ac2334249bc95859f10293ee542"
+  },
+  "mcp-server/src/auth/rbac.ts": {
+    "mtime": 1781882381.3266675,
+    "ast_hash": "f65a9d58329c563ac486474428528505",
+    "semantic_hash": "f65a9d58329c563ac486474428528505"
+  },
+  "mcp-server/src/client/platform-client.ts": {
+    "mtime": 1782051387.984929,
+    "ast_hash": "9e70390c89e9aac0925289769480126f",
+    "semantic_hash": "9e70390c89e9aac0925289769480126f"
+  },
+  "mcp-server/src/client/types.ts": {
+    "mtime": 1782051387.984929,
+    "ast_hash": "fb1ab0feb874a1d900870062e7fa559b",
+    "semantic_hash": "fb1ab0feb874a1d900870062e7fa559b"
+  },
+  "mcp-server/src/index.ts": {
+    "mtime": 1781882381.3336449,
+    "ast_hash": "4d0eb0bafcc52db1adf1486f56fdba77",
+    "semantic_hash": "4d0eb0bafcc52db1adf1486f56fdba77"
+  },
+  "mcp-server/src/mcp/server.ts": {
+    "mtime": 1781882381.335645,
+    "ast_hash": "a80a5eef868ff0f2973fc4043ca40aa0",
+    "semantic_hash": "a80a5eef868ff0f2973fc4043ca40aa0"
+  },
+  "mcp-server/src/mcp/tools/execute-action.ts": {
+    "mtime": 1781882381.3386688,
+    "ast_hash": "b3c6cfc12cbe496ddc08b4243672d35e",
+    "semantic_hash": "b3c6cfc12cbe496ddc08b4243672d35e"
+  },
+  "mcp-server/src/mcp/tools/init.ts": {
+    "mtime": 1781882381.3396692,
+    "ast_hash": "d36002e00b70de1dea13693aefca39f1",
+    "semantic_hash": "d36002e00b70de1dea13693aefca39f1"
+  },
+  "mcp-server/src/mcp/tools/query-ontology.ts": {
+    "mtime": 1782051387.984929,
+    "ast_hash": "48c09a40da42cdc6ee8dadfa143902db",
+    "semantic_hash": "48c09a40da42cdc6ee8dadfa143902db"
+  },
+  "mcp-server/src/mcp/tools/registry.ts": {
+    "mtime": 1781882381.3446422,
+    "ast_hash": "40a10c1e7ccae4a6467f4fd4124df632",
+    "semantic_hash": "40a10c1e7ccae4a6467f4fd4124df632"
+  },
+  "mcp-server/src/mcp/tools/resolve-intent.ts": {
+    "mtime": 1781882381.3460307,
+    "ast_hash": "ba2829bae8b16db05a8a992584baf928",
+    "semantic_hash": "ba2829bae8b16db05a8a992584baf928"
+  },
+  "mcp-server/src/mcp/tools/traverse-graph.ts": {
+    "mtime": 1781882381.3490222,
+    "ast_hash": "bc1c745e76613cf799e3b21860f0ac0d",
+    "semantic_hash": "bc1c745e76613cf799e3b21860f0ac0d"
+  },
+  "mcp-server/src/mcp/tools/validate-instruction.ts": {
+    "mtime": 1781882381.3510501,
+    "ast_hash": "4b5643ea5f6ac3e44c7d05dd5314e1ac",
+    "semantic_hash": "4b5643ea5f6ac3e44c7d05dd5314e1ac"
+  },
+  "mcp-server/src/types/index.ts": {
+    "mtime": 1781882381.3543925,
+    "ast_hash": "f9f15fd061b015844f823fc90b1ea1e1",
+    "semantic_hash": "f9f15fd061b015844f823fc90b1ea1e1"
+  },
+  "mcp-server/tests/e2e/http-transport.test.ts": {
+    "mtime": 1781882381.356388,
+    "ast_hash": "5f884b13028a62127c179f47605993cc",
+    "semantic_hash": "5f884b13028a62127c179f47605993cc"
+  },
+  "mcp-server/tests/e2e/smoke.test.ts": {
+    "mtime": 1781882381.3594167,
+    "ast_hash": "193714b2c480dbe95ba5f02b5335d2ff",
+    "semantic_hash": "193714b2c480dbe95ba5f02b5335d2ff"
+  },
+  "mcp-server/tests/unit/query-ontology.test.ts": {
+    "mtime": 1782051387.984929,
+    "ast_hash": "b6fcbdab0f80898a4fefd3f2ce18d6ba",
+    "semantic_hash": "b6fcbdab0f80898a4fefd3f2ce18d6ba"
+  },
+  "mcp-server/tsconfig.json": {
+    "mtime": 1781882381.3614247,
+    "ast_hash": "5f294e4e52a5f2639a770bac619b67b9",
+    "semantic_hash": "5f294e4e52a5f2639a770bac619b67b9"
+  },
+  "mcp-server/vitest.config.ts": {
+    "mtime": 1781882381.3624146,
+    "ast_hash": "9e701ba8211d2539af273e0a923dbe82",
+    "semantic_hash": "9e701ba8211d2539af273e0a923dbe82"
+  },
+  "ontology-api/pom.xml": {
+    "mtime": 1781931348.340266,
+    "ast_hash": "c766cde5c74399a0b0ecff463b61b889",
+    "semantic_hash": "c766cde5c74399a0b0ecff463b61b889"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/OntologyPlatformApplication.java": {
+    "mtime": 1781882381.3694386,
+    "ast_hash": "75fdac0c8b1bf4768661f8da9d0f560c",
+    "semantic_hash": "75fdac0c8b1bf4768661f8da9d0f560c"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/config/AsyncConfig.java": {
+    "mtime": 1780928515.7727222,
+    "ast_hash": "b723607bc43513f7fea10f62ffb26633",
+    "semantic_hash": "b723607bc43513f7fea10f62ffb26633"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/config/GlobalExceptionHandler.java": {
+    "mtime": 1781882381.372436,
+    "ast_hash": "f2ad8d5db7a00f74b7b569a5ae857c72",
+    "semantic_hash": "f2ad8d5db7a00f74b7b569a5ae857c72"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/config/IdempotencyFilter.java": {
+    "mtime": 1781882381.3744345,
+    "ast_hash": "9a09dd5c9997d66abc679eaad2f1aa63",
+    "semantic_hash": "9a09dd5c9997d66abc679eaad2f1aa63"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/config/OpenApiConfig.java": {
+    "mtime": 1780928515.7732556,
+    "ast_hash": "77659382d0370c22b5d36192b5a4719a",
+    "semantic_hash": "77659382d0370c22b5d36192b5a4719a"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/config/RateLimiterFilter.java": {
+    "mtime": 1781882381.3774357,
+    "ast_hash": "a5028180a51e5983ff8892ec8c6cf084",
+    "semantic_hash": "a5028180a51e5983ff8892ec8c6cf084"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/config/RequestContextFilter.java": {
+    "mtime": 1781882381.3800318,
+    "ast_hash": "675e479ec43c3a050576f4a655501b1d",
+    "semantic_hash": "675e479ec43c3a050576f4a655501b1d"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/HealthDetailController.java": {
+    "mtime": 1781934955.191682,
+    "ast_hash": "87090d8473231e27be037a50887dd18e",
+    "semantic_hash": "87090d8473231e27be037a50887dd18e"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/ManifestController.java": {
+    "mtime": 1781882381.3830614,
+    "ast_hash": "35fdbe9fe349699316e40b344847d600",
+    "semantic_hash": "35fdbe9fe349699316e40b344847d600"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/ObjectTypeController.java": {
+    "mtime": 1781882342.442959,
+    "ast_hash": "e9298cd4675e0250c2284b94b85a19ea",
+    "semantic_hash": "e9298cd4675e0250c2284b94b85a19ea"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/OntologyController.java": {
+    "mtime": 1782043053.198129,
+    "ast_hash": "6a5c058b34dc0eeb9c44782ffc02a53a",
+    "semantic_hash": "6a5c058b34dc0eeb9c44782ffc02a53a"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/RelationController.java": {
+    "mtime": 1781882342.4481864,
+    "ast_hash": "b195095c8e047edf85b6acc49b043dac",
+    "semantic_hash": "b195095c8e047edf85b6acc49b043dac"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/agent/AgentController.java": {
+    "mtime": 1781933729.4716735,
+    "ast_hash": "a4d0b1acb47c5de11e33340df2ebf6d9",
+    "semantic_hash": "a4d0b1acb47c5de11e33340df2ebf6d9"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/AgentIntentController.java": {
+    "mtime": 1781933558.2677383,
+    "ast_hash": "fcb0a549036457943f95074bb7ad352e",
+    "semantic_hash": "fcb0a549036457943f95074bb7ad352e"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/AgentPolicySemanticController.java": {
+    "mtime": 1781933579.9594383,
+    "ast_hash": "118f4a54fc76e8e4532ecccd923d54a2",
+    "semantic_hash": "118f4a54fc76e8e4532ecccd923d54a2"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/ApiDefinitionController.java": {
+    "mtime": 1781933601.4955404,
+    "ast_hash": "134393ab248cc396060f5269b60f6ad9",
+    "semantic_hash": "134393ab248cc396060f5269b60f6ad9"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/BehaviorController.java": {
+    "mtime": 1781933605.8314722,
+    "ast_hash": "9cf05c2826bd8bf459a74c6ee35a1781",
+    "semantic_hash": "9cf05c2826bd8bf459a74c6ee35a1781"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/BusinessMetricController.java": {
+    "mtime": 1781933625.5892546,
+    "ast_hash": "d45c8c3a15dab00a225abadaf38846ae",
+    "semantic_hash": "d45c8c3a15dab00a225abadaf38846ae"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/BusinessTermController.java": {
+    "mtime": 1781933644.4682398,
+    "ast_hash": "b30e25962fa3db91e27c9a27c97e8fb4",
+    "semantic_hash": "b30e25962fa3db91e27c9a27c97e8fb4"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/ComputeDefinitionController.java": {
+    "mtime": 1781933665.22451,
+    "ast_hash": "8fa68af95c2679aec75d8d2a8b98e782",
+    "semantic_hash": "8fa68af95c2679aec75d8d2a8b98e782"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/DepartmentController.java": {
+    "mtime": 1781933499.6509,
+    "ast_hash": "ad4bd4ebba16593579b1f33f2365b8a9",
+    "semantic_hash": "ad4bd4ebba16593579b1f33f2365b8a9"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/EntityLifecycleSnapshotController.java": {
+    "mtime": 1781933596.8096435,
+    "ast_hash": "bbf41e64a87081cf9086e7aaf8f21ef9",
+    "semantic_hash": "bbf41e64a87081cf9086e7aaf8f21ef9"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/EpcChainController.java": {
+    "mtime": 1781933598.9717176,
+    "ast_hash": "01af2cbc214d289bc8093c156352c1b1",
+    "semantic_hash": "01af2cbc214d289bc8093c156352c1b1"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/EpcController.java": {
+    "mtime": 1781933714.8824744,
+    "ast_hash": "e6e29c320681099ad0925e32f8683e5c",
+    "semantic_hash": "e6e29c320681099ad0925e32f8683e5c"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/EpcEdgeController.java": {
+    "mtime": 1781933601.100298,
+    "ast_hash": "f4a6cb1aab753e212e0b85d74bc21ce4",
+    "semantic_hash": "f4a6cb1aab753e212e0b85d74bc21ce4"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/EpcModelRefController.java": {
+    "mtime": 1781933605.2289956,
+    "ast_hash": "26b27da139572da123ecb72d4bf790bc",
+    "semantic_hash": "26b27da139572da123ecb72d4bf790bc"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/EpcNodeController.java": {
+    "mtime": 1781933607.5077746,
+    "ast_hash": "9c33cbb3143208a3530d24ed17aa3c1f",
+    "semantic_hash": "9c33cbb3143208a3530d24ed17aa3c1f"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/EpcProfileController.java": {
+    "mtime": 1781933609.6679525,
+    "ast_hash": "ba12661b389d5705a3c23744dd7a165d",
+    "semantic_hash": "ba12661b389d5705a3c23744dd7a165d"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/ErrorRecoveryController.java": {
+    "mtime": 1781933617.3179839,
+    "ast_hash": "5739389212fea29ef6c7304d7317961e",
+    "semantic_hash": "5739389212fea29ef6c7304d7317961e"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/EventController.java": {
+    "mtime": 1781933636.6434548,
+    "ast_hash": "0df8b8a02f0688357afcf4535f0f599f",
+    "semantic_hash": "0df8b8a02f0688357afcf4535f0f599f"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/GuardrailRuleController.java": {
+    "mtime": 1781933633.3639498,
+    "ast_hash": "ce7ac32075cdf9840b2a9cd97e95fd83",
+    "semantic_hash": "ce7ac32075cdf9840b2a9cd97e95fd83"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/IndicatorDefinitionController.java": {
+    "mtime": 1781933634.4851646,
+    "ast_hash": "9033f59ac3434b57f7d73f4cc08163e1",
+    "semantic_hash": "9033f59ac3434b57f7d73f4cc08163e1"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/IntentSlotController.java": {
+    "mtime": 1781933625.6595254,
+    "ast_hash": "f57a4afd3907586d808cab5f6f2ed4aa",
+    "semantic_hash": "f57a4afd3907586d808cab5f6f2ed4aa"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/MetadataTemplateController.java": {
+    "mtime": 1781933635.5522344,
+    "ast_hash": "3fc73f0eab96318011bf6023dd92cb03",
+    "semantic_hash": "3fc73f0eab96318011bf6023dd92cb03"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/NotificationDefinitionController.java": {
+    "mtime": 1781933622.5877383,
+    "ast_hash": "dc942bed4cbc3919ce8b944fa7ecd316",
+    "semantic_hash": "dc942bed4cbc3919ce8b944fa7ecd316"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/OrchestrationController.java": {
+    "mtime": 1781933681.6227956,
+    "ast_hash": "a7a34e2e2359cd08a300bd42656f7e25",
+    "semantic_hash": "a7a34e2e2359cd08a300bd42656f7e25"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/PolicyRuleController.java": {
+    "mtime": 1781933637.8792155,
+    "ast_hash": "ec8db81f1cfbec8c0cde6d7ba55f3309",
+    "semantic_hash": "ec8db81f1cfbec8c0cde6d7ba55f3309"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/PositionEntryController.java": {
+    "mtime": 1781933688.1234975,
+    "ast_hash": "d19be101bfea93f3df4ed8e9687da90c",
+    "semantic_hash": "d19be101bfea93f3df4ed8e9687da90c"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/ProbeDefinitionController.java": {
+    "mtime": 1781933645.4394715,
+    "ast_hash": "1225d455f112443fd362b13a4c44e149",
+    "semantic_hash": "1225d455f112443fd362b13a4c44e149"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/ProcessStepController.java": {
+    "mtime": 1781933694.3779662,
+    "ast_hash": "df9b138576fa684c4f8c71c439ef4d23",
+    "semantic_hash": "df9b138576fa684c4f8c71c439ef4d23"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/QueryDefinitionController.java": {
+    "mtime": 1781933652.9855661,
+    "ast_hash": "831da642769f6b6be15e42212e925b2a",
+    "semantic_hash": "831da642769f6b6be15e42212e925b2a"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/ReportDefinitionController.java": {
+    "mtime": 1781933660.1732213,
+    "ast_hash": "458d30c4f611412bf53236c338e88df4",
+    "semantic_hash": "458d30c4f611412bf53236c338e88df4"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/SemanticFieldMappingController.java": {
+    "mtime": 1781933707.3766665,
+    "ast_hash": "3b64bde4485c866f82a08cf4fd18f381",
+    "semantic_hash": "3b64bde4485c866f82a08cf4fd18f381"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/SemanticRelationController.java": {
+    "mtime": 1781933710.6940084,
+    "ast_hash": "16cb53b09576640919b55126b799180e",
+    "semantic_hash": "16cb53b09576640919b55126b799180e"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/domain/ValidationRuleController.java": {
+    "mtime": 1781933667.3900888,
+    "ast_hash": "8f8fad691aabb746fb7a4145c7478dff",
+    "semantic_hash": "8f8fad691aabb746fb7a4145c7478dff"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/exchange/ExchangeController.java": {
+    "mtime": 1781933782.5690014,
+    "ast_hash": "637a2b51fb6d0a0a5acf88105de58a85",
+    "semantic_hash": "637a2b51fb6d0a0a5acf88105de58a85"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/governance/GovernanceController.java": {
+    "mtime": 1781933739.1261556,
+    "ast_hash": "b3468e47d553882fd56f2953cbbf12e0",
+    "semantic_hash": "b3468e47d553882fd56f2953cbbf12e0"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/graph/GraphTraversalController.java": {
+    "mtime": 1781882342.4531777,
+    "ast_hash": "f8b3f1118f4a2cc8dbbbccf0deab7280",
+    "semantic_hash": "f8b3f1118f4a2cc8dbbbccf0deab7280"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/job/JobController.java": {
+    "mtime": 1781933787.5180373,
+    "ast_hash": "d6de789b5fbcc27f13fc8da84b898f14",
+    "semantic_hash": "d6de789b5fbcc27f13fc8da84b898f14"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/semantic/SemanticController.java": {
+    "mtime": 1781882381.4553008,
+    "ast_hash": "a2cf384cbe4b18bc910ded7b8174cd42",
+    "semantic_hash": "a2cf384cbe4b18bc910ded7b8174cd42"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/upload/UploadController.java": {
+    "mtime": 1781933776.5146074,
+    "ast_hash": "dac88816f7c399764a08ed0be1b7005b",
+    "semantic_hash": "dac88816f7c399764a08ed0be1b7005b"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/controller/webhook/WebhookController.java": {
+    "mtime": 1781933785.1723917,
+    "ast_hash": "8bc0ce42497e94ca2eed58852d29c991",
+    "semantic_hash": "8bc0ce42497e94ca2eed58852d29c991"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/dto/ApiResponse.java": {
+    "mtime": 1781930327.7074313,
+    "ast_hash": "60e02005e7eb4a25c2e359e29f3e09a5",
+    "semantic_hash": "60e02005e7eb4a25c2e359e29f3e09a5"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/dto/RequestContext.java": {
+    "mtime": 1780928515.7732556,
+    "ast_hash": "68e1ee126f107b95711d1718a097effd",
+    "semantic_hash": "68e1ee126f107b95711d1718a097effd"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/dto/graph/GraphTraversalRequestDTO.java": {
+    "mtime": 1781932504.307824,
+    "ast_hash": "84f0a8c92aa8a919cb69c87146314d9d",
+    "semantic_hash": "84f0a8c92aa8a919cb69c87146314d9d"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/dto/graph/GraphTraversalResponseDTO.java": {
+    "mtime": 1781932504.3298311,
+    "ast_hash": "3b56bb63885e10e61350bd2da38d55f7",
+    "semantic_hash": "3b56bb63885e10e61350bd2da38d55f7"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/dto/graph/ShortestPathRequestDTO.java": {
+    "mtime": 1781932504.3298311,
+    "ast_hash": "c91854db363a848685e089fc73fd41f2",
+    "semantic_hash": "c91854db363a848685e089fc73fd41f2"
+  },
+  "ontology-api/src/main/java/com/ontology/platform/api/dto/graph/SubgraphRequestDTO.java": {
+    "mtime": 1781932504.3298311,
+    "ast_hash": "5398d61bd319d0f951f6c5a82f7483f4",
+    "semantic_hash": "5398d61bd319d0f951f6c5a82f7483f4"
+  },
+  "ontology-api/src/main/resources/db/migration/V10__create_interface_indicator_tables.sql": {
+    "mtime": 1781882381.4647794,
+    "ast_hash": "dfaef7eda10e8669c47951251eb65448",
+    "semantic_hash": "dfaef7eda10e8669c47951251eb65448"
+  },
+  "ontology-api/src/main/resources/db/migration/V11__create_exchange_import_table.sql": {
+    "mtime": 1781882381.4657793,
+    "ast_hash": "575cfba9ec7b7e4aebccd6b38e74d533",
+    "semantic_hash": "575cfba9ec7b7e4aebccd6b38e74d533"
+  },
+  "ontology-api/src/main/resources/db/migration/V12__create_phase3b_tables.sql": {
+    "mtime": 1781882381.46778,
+    "ast_hash": "eadc0151955ff282fdd57efa30364a86",
+    "semantic_hash": "eadc0151955ff282fdd57efa30364a86"
+  },
+  "ontology-api/src/main/resources/db/migration/V13__create_phase3c_tables.sql": {
+    "mtime": 1781882381.4697783,
+    "ast_hash": "3b1504bba2c18cdb870a7c2111c1fa48",
+    "semantic_hash": "3b1504bba2c18cdb870a7c2111c1fa48"
+  },
+  "ontology-api/src/main/resources/db/migration/V14__create_epc_chain_tables.sql": {
+    "mtime": 1781882381.4707787,
+    "ast_hash": "79014274a6a2e69fdfdef86bc001b027",
+    "semantic_hash": "79014274a6a2e69fdfdef86bc001b027"
+  },
+  "ontology-api/src/main/resources/db/migration/V15__add_ontology_id_to_phase3b_tables.sql": {
+    "mtime": 1781882381.4737797,
+    "ast_hash": "17affb3fdef37fc7f5b56d1f0efc65f1",
+    "semantic_hash": "17affb3fdef37fc7f5b56d1f0efc65f1"
+  },
+  "ontology-api/src/main/resources/db/migration/V16__extend_agent_intent_semantic_fields.sql": {
+    "mtime": 1782036239.2719243,
+    "ast_hash": "ab9b405cab5b58a2b042d1d215f33336",
+    "semantic_hash": "ab9b405cab5b58a2b042d1d215f33336"
+  },
+  "ontology-api/src/main/resources/db/migration/V17__add_ontology_id_to_epc_chain.sql": {
+    "mtime": 1782043022.2521307,
+    "ast_hash": "fe24f93d27a013ba0d5237c1f904d85d",
+    "semantic_hash": "fe24f93d27a013ba0d5237c1f904d85d"
+  },
+  "ontology-api/src/main/resources/db/migration/V1__init_schema.sql": {
+    "mtime": 1781882342.4581804,
+    "ast_hash": "631b55b28c82ddc53760e6a94011b37d",
+    "semantic_hash": "631b55b28c82ddc53760e6a94011b37d"
+  },
+  "ontology-api/src/main/resources/db/migration/V2__create_manifest_tables.sql": {
+    "mtime": 1781882342.459181,
+    "ast_hash": "730d8e925129ccd00c8a489614b14f91",
+    "semantic_hash": "730d8e925129ccd00c8a489614b14f91"
+  },
+  "ontology-api/src/main/resources/db/migration/V3__create_action_state_machine.sql": {
+    "mtime": 1781882342.461179,
+    "ast_hash": "62d9bdd4876d4ee27f0fa2b2a405be6c",
+    "semantic_hash": "62d9bdd4876d4ee27f0fa2b2a405be6c"
+  },
+  "ontology-api/src/main/resources/db/migration/V4__create_domain_event.sql": {
+    "mtime": 1781882342.4621801,
+    "ast_hash": "f80c743aca1a559d8fca0f7058914280",
+    "semantic_hash": "f80c743aca1a559d8fca0f7058914280"
+  },
+  "ontology-api/src/main/resources/db/migration/V5__create_epc_step.sql": {
+    "mtime": 1781882342.4641778,
+    "ast_hash": "3310b2705f603aba645bbc7b8fa78627",
+    "semantic_hash": "3310b2705f603aba645bbc7b8fa78627"
+  },
+  "ontology-api/src/main/resources/db/migration/V6__create_governance_tables.sql": {
+    "mtime": 1781882342.4661784,
+    "ast_hash": "c9a5388a5b04013771b3a4188ddecee9",
+    "semantic_hash": "c9a5388a5b04013771b3a4188ddecee9"
+  },
+  "ontology-api/src/main/resources/db/migration/V7__create_upload_import_tables.sql": {
+    "mtime": 1781882381.4757774,
+    "ast_hash": "0c7a77ff1aa662a814540a2dc5affee5",
+    "semantic_hash": "0c7a77ff1aa662a814540a2dc5affee5"
+  },
+  "ontology-api/src/main/resources/db/migration/V8__create_idempotency_table.sql": {
+    "mtime": 1781882381.4777887,
+    "ast_hash": "bd8f510faf60f02fb82a625514c3b85f",
+    "semantic_hash": "bd8f510faf60f02fb82a625514c3b85f"
+  },
+  "ontology-api/src/main/resources/db/migration/V9__create_rule_tables.sql": {
+    "mtime": 1781882381.480341,
+    "ast_hash": "4c1d7f85fb9467d06aaf1db813d36ae2",
+    "semantic_hash": "4c1d7f85fb9467d06aaf1db813d36ae2"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/config/DomainTestConfig.java": {
+    "mtime": 1781924313.094905,
+    "ast_hash": "d6161e31c5701e38096225ed4f4f3ea8",
+    "semantic_hash": "d6161e31c5701e38096225ed4f4f3ea8"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/config/GlobalExceptionHandlerTest.java": {
+    "mtime": 1781882381.4841182,
+    "ast_hash": "4ab33403968619601da319e77d4980a0",
+    "semantic_hash": "4ab33403968619601da319e77d4980a0"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/config/IdempotencyFilterTest.java": {
+    "mtime": 1781882381.4867847,
+    "ast_hash": "4ba58fd367878c03d589b20f2172c162",
+    "semantic_hash": "4ba58fd367878c03d589b20f2172c162"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/config/RateLimiterFilterTest.java": {
+    "mtime": 1781882381.4907777,
+    "ast_hash": "3b2e24185c924cd4f7003368f5ab73a9",
+    "semantic_hash": "3b2e24185c924cd4f7003368f5ab73a9"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/config/RequestContextFilterTest.java": {
+    "mtime": 1781882381.492795,
+    "ast_hash": "c6024fbf141c13ded5b4bc7692e7749b",
+    "semantic_hash": "c6024fbf141c13ded5b4bc7692e7749b"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/OntologyControllerTest.java": {
+    "mtime": 1782043095.6976817,
+    "ast_hash": "d9b36cb73ffd2ca263860381aa6ee9f6",
+    "semantic_hash": "d9b36cb73ffd2ca263860381aa6ee9f6"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/AgentIntentControllerTest.java": {
+    "mtime": 1781932464.1632485,
+    "ast_hash": "8f092d5250787916b58a8016756b50ae",
+    "semantic_hash": "8f092d5250787916b58a8016756b50ae"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/AgentPolicySemanticControllerTest.java": {
+    "mtime": 1781932464.1652458,
+    "ast_hash": "caa30f7bc63c08a1bd1d8cc93cb44ddf",
+    "semantic_hash": "caa30f7bc63c08a1bd1d8cc93cb44ddf"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/BusinessMetricControllerTest.java": {
+    "mtime": 1781932464.1662452,
+    "ast_hash": "e2055c99bdb3bea2248681cdc5efcd75",
+    "semantic_hash": "e2055c99bdb3bea2248681cdc5efcd75"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/BusinessTermControllerTest.java": {
+    "mtime": 1781932464.168249,
+    "ast_hash": "4e976abae9e5331606995a4433ff9b14",
+    "semantic_hash": "4e976abae9e5331606995a4433ff9b14"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/DepartmentControllerTest.java": {
+    "mtime": 1781932464.170245,
+    "ast_hash": "82c091decbc6fceecaad5c8f33343057",
+    "semantic_hash": "82c091decbc6fceecaad5c8f33343057"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/DomainControllerTestBase.java": {
+    "mtime": 1781932321.395022,
+    "ast_hash": "81f149cbb85014097f021f2f9decd49c",
+    "semantic_hash": "81f149cbb85014097f021f2f9decd49c"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/EntityLifecycleSnapshotControllerTest.java": {
+    "mtime": 1781932464.1722457,
+    "ast_hash": "2cc3803e59143ded39cd24cbfcc99b2c",
+    "semantic_hash": "2cc3803e59143ded39cd24cbfcc99b2c"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/EpcChainControllerTest.java": {
+    "mtime": 1781932464.1738064,
+    "ast_hash": "4a0cd984936a859fa7800b894eb1d26e",
+    "semantic_hash": "4a0cd984936a859fa7800b894eb1d26e"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/EpcEdgeControllerTest.java": {
+    "mtime": 1781932464.174803,
+    "ast_hash": "d8e7198f955c7dfa2cfd4904c4345b32",
+    "semantic_hash": "d8e7198f955c7dfa2cfd4904c4345b32"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/EpcModelRefControllerTest.java": {
+    "mtime": 1781932464.1758099,
+    "ast_hash": "e29fdcca5ac71fb90da826fedcb9f5cd",
+    "semantic_hash": "e29fdcca5ac71fb90da826fedcb9f5cd"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/EpcNodeControllerTest.java": {
+    "mtime": 1781932464.1769004,
+    "ast_hash": "441f6d29ed06ff900807f61c66472701",
+    "semantic_hash": "441f6d29ed06ff900807f61c66472701"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/EpcProfileControllerTest.java": {
+    "mtime": 1781932464.1774251,
+    "ast_hash": "fdd18fb997d7c8742aecfd1262326961",
+    "semantic_hash": "fdd18fb997d7c8742aecfd1262326961"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/ErrorRecoveryControllerTest.java": {
+    "mtime": 1781932464.1784606,
+    "ast_hash": "bf0cc6b98e0b00017b814415d748c777",
+    "semantic_hash": "bf0cc6b98e0b00017b814415d748c777"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/IntentSlotControllerTest.java": {
+    "mtime": 1781932464.180459,
+    "ast_hash": "ceb0dbbaf173fdd688b145e7fad951f3",
+    "semantic_hash": "ceb0dbbaf173fdd688b145e7fad951f3"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/MetadataTemplateControllerTest.java": {
+    "mtime": 1781932464.1814685,
+    "ast_hash": "83c8e23557b8d5f65fe650d1a69ec48e",
+    "semantic_hash": "83c8e23557b8d5f65fe650d1a69ec48e"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/OrchestrationControllerTest.java": {
+    "mtime": 1781932464.182464,
+    "ast_hash": "2092ed6a94b53d660b2ab70298b0826f",
+    "semantic_hash": "2092ed6a94b53d660b2ab70298b0826f"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/PositionEntryControllerTest.java": {
+    "mtime": 1781932464.183463,
+    "ast_hash": "8c7a6684610eac4b0880b34769c1e63a",
+    "semantic_hash": "8c7a6684610eac4b0880b34769c1e63a"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/ProcessStepControllerTest.java": {
+    "mtime": 1781932464.1844673,
+    "ast_hash": "27bb2fdc60c2560d560a0c2ef71e6cee",
+    "semantic_hash": "27bb2fdc60c2560d560a0c2ef71e6cee"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/SemanticFieldMappingControllerTest.java": {
+    "mtime": 1781932464.185474,
+    "ast_hash": "5fa33e097fb1d60567897261b8f349ce",
+    "semantic_hash": "5fa33e097fb1d60567897261b8f349ce"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/domain/SemanticRelationControllerTest.java": {
+    "mtime": 1781932464.1864555,
+    "ast_hash": "bdbca520d342b90d37a5a2b39cff0354",
+    "semantic_hash": "bdbca520d342b90d37a5a2b39cff0354"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/exchange/ExchangeControllerTest.java": {
+    "mtime": 1781882381.4987996,
+    "ast_hash": "22db490061f35b3550f9932706a69e38",
+    "semantic_hash": "22db490061f35b3550f9932706a69e38"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/job/JobControllerTest.java": {
+    "mtime": 1781882381.502799,
+    "ast_hash": "ef9c1fda1a9067c9b53e2773c323c399",
+    "semantic_hash": "ef9c1fda1a9067c9b53e2773c323c399"
+  },
+  "ontology-api/src/test/java/com/ontology/platform/api/controller/webhook/WebhookControllerTest.java": {
+    "mtime": 1781882381.5065427,
+    "ast_hash": "c9cfc86efb5cd5bcafec86ee75bb5eac",
+    "semantic_hash": "c9cfc86efb5cd5bcafec86ee75bb5eac"
+  },
+  "ontology-application/pom.xml": {
+    "mtime": 1782035416.622779,
+    "ast_hash": "067db31a624892b15fae0f384adb17fb",
+    "semantic_hash": "067db31a624892b15fae0f384adb17fb"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/BuildInfoResponse.java": {
+    "mtime": 1781931345.5491269,
+    "ast_hash": "0297a1df2185ae8c1401c8533d0e7501",
+    "semantic_hash": "0297a1df2185ae8c1401c8533d0e7501"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/ConstraintDefinition.java": {
+    "mtime": 1781929573.5621836,
+    "ast_hash": "277cb6b4a916d16e41cf88b0ee0977d8",
+    "semantic_hash": "277cb6b4a916d16e41cf88b0ee0977d8"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/CreateObjectTypeRequest.java": {
+    "mtime": 1781929617.823379,
+    "ast_hash": "66541ced56f1d5b0d0a99ef5b7180f01",
+    "semantic_hash": "66541ced56f1d5b0d0a99ef5b7180f01"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/CreateOntologyRequest.java": {
+    "mtime": 1782035416.622779,
+    "ast_hash": "31afca410e7ee583a3f984b4caac12bd",
+    "semantic_hash": "31afca410e7ee583a3f984b4caac12bd"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/CreatePropertyRequest.java": {
+    "mtime": 1781929617.6623487,
+    "ast_hash": "eb38e3de3baa4fa5602892d494ddda3b",
+    "semantic_hash": "eb38e3de3baa4fa5602892d494ddda3b"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/CreateRelationRequest.java": {
+    "mtime": 1781929617.7798488,
+    "ast_hash": "be2f8c4f5a166fc5a649f641f292e23e",
+    "semantic_hash": "be2f8c4f5a166fc5a649f641f292e23e"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/GraphQueryRequest.java": {
+    "mtime": 1781930327.5791953,
+    "ast_hash": "ef6cb65a2cb56ed336a56fff0e763528",
+    "semantic_hash": "ef6cb65a2cb56ed336a56fff0e763528"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/GraphQueryResponse.java": {
+    "mtime": 1781929573.5401402,
+    "ast_hash": "4e3af39266aaba18df10c905df205417",
+    "semantic_hash": "4e3af39266aaba18df10c905df205417"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/ObjectListResponse.java": {
+    "mtime": 1781929573.4277956,
+    "ast_hash": "3d8bc3eb8e36b04429ec7ee75d67043d",
+    "semantic_hash": "3d8bc3eb8e36b04429ec7ee75d67043d"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/ObjectQueryRequest.java": {
+    "mtime": 1781930327.605108,
+    "ast_hash": "0e3831184408be9519b76c7ba58d5c00",
+    "semantic_hash": "0e3831184408be9519b76c7ba58d5c00"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/ObjectTypeDetailResponse.java": {
+    "mtime": 1781929537.7720878,
+    "ast_hash": "39174924a0b44517ca01ad1c247193e4",
+    "semantic_hash": "39174924a0b44517ca01ad1c247193e4"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/ObjectTypeResponse.java": {
+    "mtime": 1781929537.8875155,
+    "ast_hash": "57236d0edd4bdcdffcf4baae65ee68bd",
+    "semantic_hash": "57236d0edd4bdcdffcf4baae65ee68bd"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/OntologyDetailResponse.java": {
+    "mtime": 1781929537.8470151,
+    "ast_hash": "ba5b06601acea5c558432db42287c12a",
+    "semantic_hash": "ba5b06601acea5c558432db42287c12a"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/OntologyResponse.java": {
+    "mtime": 1782035416.622779,
+    "ast_hash": "caac8cffb0ca754d0f269df210cf1401",
+    "semantic_hash": "caac8cffb0ca754d0f269df210cf1401"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/PropertyDefinition.java": {
+    "mtime": 1781932504.3298311,
+    "ast_hash": "bce44a8dbb89e4e28b0a35899236aebf",
+    "semantic_hash": "bce44a8dbb89e4e28b0a35899236aebf"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/PropertyResponse.java": {
+    "mtime": 1781929573.5013406,
+    "ast_hash": "2c45de385f9ceafc50113d24f358ac49",
+    "semantic_hash": "2c45de385f9ceafc50113d24f358ac49"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/RelationPropertyDTO.java": {
+    "mtime": 1781929590.2361867,
+    "ast_hash": "f781221a0b838fd97a10943b1ca2d3df",
+    "semantic_hash": "f781221a0b838fd97a10943b1ca2d3df"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/RelationResponse.java": {
+    "mtime": 1781929573.494375,
+    "ast_hash": "a4950dd4c86205d75dd39cbb2e3d977f",
+    "semantic_hash": "a4950dd4c86205d75dd39cbb2e3d977f"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/UpdateObjectTypeRequest.java": {
+    "mtime": 1781930327.7094197,
+    "ast_hash": "0e3035b47c53d09c6029a4a257fb07ce",
+    "semantic_hash": "0e3035b47c53d09c6029a4a257fb07ce"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/UpdateOntologyRequest.java": {
+    "mtime": 1782035416.622779,
+    "ast_hash": "f5a367300ac1b2d4d32464fe35577e5b",
+    "semantic_hash": "f5a367300ac1b2d4d32464fe35577e5b"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/UpdatePropertyRequest.java": {
+    "mtime": 1781930327.683379,
+    "ast_hash": "267dafd29be94f83ead36a64af8f54ca",
+    "semantic_hash": "267dafd29be94f83ead36a64af8f54ca"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/UpdateRelationRequest.java": {
+    "mtime": 1781930327.6447473,
+    "ast_hash": "472114b71e226eb26be414a35fd41673",
+    "semantic_hash": "472114b71e226eb26be414a35fd41673"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/ValidationResultResponse.java": {
+    "mtime": 1781929573.417677,
+    "ast_hash": "0b93b6d7e6a4b770d5f822a9c3c578ab",
+    "semantic_hash": "0b93b6d7e6a4b770d5f822a9c3c578ab"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/agent/AgentInfoResponse.java": {
+    "mtime": 1781922306.9644642,
+    "ast_hash": "4df5c087844f5e41128a38f9243b7772",
+    "semantic_hash": "4df5c087844f5e41128a38f9243b7772"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/agent/AgentTaskResponse.java": {
+    "mtime": 1781922307.0738363,
+    "ast_hash": "c41711c0542c8f0ce253960d5fbe7099",
+    "semantic_hash": "c41711c0542c8f0ce253960d5fbe7099"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/agent/SubmitAgentTaskRequest.java": {
+    "mtime": 1781922307.0738363,
+    "ast_hash": "3ed0243d36ab3210032a964857e5d287",
+    "semantic_hash": "3ed0243d36ab3210032a964857e5d287"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/ActionDefinitionResponse.java": {
+    "mtime": 1781932737.3367317,
+    "ast_hash": "e68df7c95617ab648f207123986bc0d7",
+    "semantic_hash": "e68df7c95617ab648f207123986bc0d7"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/AgentIntentResponse.java": {
+    "mtime": 1781882381.5156128,
+    "ast_hash": "a0abdf632a52af7052bf92d05d504a1f",
+    "semantic_hash": "a0abdf632a52af7052bf92d05d504a1f"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/AgentPolicySemanticResponse.java": {
+    "mtime": 1781882381.51732,
+    "ast_hash": "581df46d75057437db1f6e7c97b3f59a",
+    "semantic_hash": "581df46d75057437db1f6e7c97b3f59a"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/ApiDefinitionResponse.java": {
+    "mtime": 1781882381.5183225,
+    "ast_hash": "af82d24a5055e8014dd5d5995c6c3da0",
+    "semantic_hash": "af82d24a5055e8014dd5d5995c6c3da0"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/BusinessMetricResponse.java": {
+    "mtime": 1781882381.5203166,
+    "ast_hash": "fe0d08ba6f2649aa85fcf39acc3ae367",
+    "semantic_hash": "fe0d08ba6f2649aa85fcf39acc3ae367"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/BusinessTermResponse.java": {
+    "mtime": 1781882381.5223243,
+    "ast_hash": "8bedbe26d20cbd70b4122d5e6d8953e9",
+    "semantic_hash": "8bedbe26d20cbd70b4122d5e6d8953e9"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CausalityResponse.java": {
+    "mtime": 1781932737.3367317,
+    "ast_hash": "e998f73a169c99511536ec86ab722b5d",
+    "semantic_hash": "e998f73a169c99511536ec86ab722b5d"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/ComputeDefinitionResponse.java": {
+    "mtime": 1781882381.5267854,
+    "ast_hash": "31bc4175d3f6d233b35272bcc2111d83",
+    "semantic_hash": "31bc4175d3f6d233b35272bcc2111d83"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateAgentIntentRequest.java": {
+    "mtime": 1781882381.5287535,
+    "ast_hash": "cb294a3492c76ac51637173e4b7e9d75",
+    "semantic_hash": "cb294a3492c76ac51637173e4b7e9d75"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateAgentPolicySemanticRequest.java": {
+    "mtime": 1781882381.5307825,
+    "ast_hash": "508f9b9cd383437e25dc57ddfee49aa2",
+    "semantic_hash": "508f9b9cd383437e25dc57ddfee49aa2"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateApiDefinitionRequest.java": {
+    "mtime": 1781882381.5317538,
+    "ast_hash": "5f3acf3dac9799b3a6b8c7c631e1f921",
+    "semantic_hash": "5f3acf3dac9799b3a6b8c7c631e1f921"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateBusinessMetricRequest.java": {
+    "mtime": 1781882381.5337825,
+    "ast_hash": "cd03948ab2249b48ed624085c8363eee",
+    "semantic_hash": "cd03948ab2249b48ed624085c8363eee"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateBusinessTermRequest.java": {
+    "mtime": 1781882381.5347817,
+    "ast_hash": "4a213ec4f3f88bf73f89d208aed4096d",
+    "semantic_hash": "4a213ec4f3f88bf73f89d208aed4096d"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateComputeDefinitionRequest.java": {
+    "mtime": 1781882381.5361764,
+    "ast_hash": "e7f6ef0918bb1bfbe7431628eed047af",
+    "semantic_hash": "e7f6ef0918bb1bfbe7431628eed047af"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateDepartmentRequest.java": {
+    "mtime": 1781882381.5371685,
+    "ast_hash": "87c8782d202b4b8c278cad05261bb331",
+    "semantic_hash": "87c8782d202b4b8c278cad05261bb331"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateEntityLifecycleSnapshotRequest.java": {
+    "mtime": 1781882381.5381663,
+    "ast_hash": "8bf95ed926b1acc79d72fbef728a6d44",
+    "semantic_hash": "8bf95ed926b1acc79d72fbef728a6d44"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateEpcChainRequest.java": {
+    "mtime": 1781882381.5401964,
+    "ast_hash": "d251b0db19583a88b14c3e78698f7017",
+    "semantic_hash": "d251b0db19583a88b14c3e78698f7017"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateEpcEdgeRequest.java": {
+    "mtime": 1781882381.5411956,
+    "ast_hash": "fc5e2e917fb307506c425028bb03f3b3",
+    "semantic_hash": "fc5e2e917fb307506c425028bb03f3b3"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateEpcModelRefRequest.java": {
+    "mtime": 1781882381.5421987,
+    "ast_hash": "a33a1c4d22cf9b943afba16be3c837dd",
+    "semantic_hash": "a33a1c4d22cf9b943afba16be3c837dd"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateEpcNodeRequest.java": {
+    "mtime": 1781882381.5431683,
+    "ast_hash": "47043ac45ec93daaa4f9be2d365dfd77",
+    "semantic_hash": "47043ac45ec93daaa4f9be2d365dfd77"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateEpcProfileRequest.java": {
+    "mtime": 1781882381.5441737,
+    "ast_hash": "8c39162b727f58716a45467849d72cdf",
+    "semantic_hash": "8c39162b727f58716a45467849d72cdf"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateErrorRecoveryRequest.java": {
+    "mtime": 1781882381.5461974,
+    "ast_hash": "37da9e9ff2df33cb8f77717b5cf45528",
+    "semantic_hash": "37da9e9ff2df33cb8f77717b5cf45528"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateGuardrailRuleRequest.java": {
+    "mtime": 1781882381.5471997,
+    "ast_hash": "c7276b3cff8140099500ba8efaaa0e64",
+    "semantic_hash": "c7276b3cff8140099500ba8efaaa0e64"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateIndicatorDefinitionRequest.java": {
+    "mtime": 1781882381.54917,
+    "ast_hash": "1cdf865ded57a428c20d65584b52bdf2",
+    "semantic_hash": "1cdf865ded57a428c20d65584b52bdf2"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateIntentSlotRequest.java": {
+    "mtime": 1781882381.5511734,
+    "ast_hash": "640449b31c795f99d663b468f9bbebf3",
+    "semantic_hash": "640449b31c795f99d663b468f9bbebf3"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateMetadataTemplateRequest.java": {
+    "mtime": 1781882381.553198,
+    "ast_hash": "45b0cdf6f41e38dded19886ac9a940d3",
+    "semantic_hash": "45b0cdf6f41e38dded19886ac9a940d3"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateNotificationDefinitionRequest.java": {
+    "mtime": 1781882381.5551722,
+    "ast_hash": "28ce6e55c50726b23cb99bcb1f2f5896",
+    "semantic_hash": "28ce6e55c50726b23cb99bcb1f2f5896"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateOrchestrationRequest.java": {
+    "mtime": 1781882381.55717,
+    "ast_hash": "c1bc4e33524335b9bd478da05fc4315b",
+    "semantic_hash": "c1bc4e33524335b9bd478da05fc4315b"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreatePolicyRuleRequest.java": {
+    "mtime": 1781882381.5581722,
+    "ast_hash": "1c23055fb72f9888c739e1b5366195a3",
+    "semantic_hash": "1c23055fb72f9888c739e1b5366195a3"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreatePositionEntryRequest.java": {
+    "mtime": 1781882381.5601726,
+    "ast_hash": "0aba9fb5c31c6373209d1eafcf623d96",
+    "semantic_hash": "0aba9fb5c31c6373209d1eafcf623d96"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateProbeDefinitionRequest.java": {
+    "mtime": 1781882381.5611708,
+    "ast_hash": "c8d1625bc434be400ffb7804eed02ab7",
+    "semantic_hash": "c8d1625bc434be400ffb7804eed02ab7"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateProcessStepRequest.java": {
+    "mtime": 1781882381.5631752,
+    "ast_hash": "41c4682b08fd7651f78abd1ecadfc768",
+    "semantic_hash": "41c4682b08fd7651f78abd1ecadfc768"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateQueryDefinitionRequest.java": {
+    "mtime": 1781882381.5656767,
+    "ast_hash": "4972ad5d93222964f82f6a21f222c70a",
+    "semantic_hash": "4972ad5d93222964f82f6a21f222c70a"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateReportDefinitionRequest.java": {
+    "mtime": 1781882381.5676937,
+    "ast_hash": "c1c9c0a2d337224a0f92fce0c6506dbd",
+    "semantic_hash": "c1c9c0a2d337224a0f92fce0c6506dbd"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateSemanticFieldMappingRequest.java": {
+    "mtime": 1781882381.5686939,
+    "ast_hash": "ec8c07a6afe8a2436583271a4eaadffb",
+    "semantic_hash": "ec8c07a6afe8a2436583271a4eaadffb"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateSemanticRelationRequest.java": {
+    "mtime": 1781882381.570673,
+    "ast_hash": "2177f243d6bf68df5055180d1f2b0880",
+    "semantic_hash": "2177f243d6bf68df5055180d1f2b0880"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/CreateValidationRuleRequest.java": {
+    "mtime": 1781882381.571696,
+    "ast_hash": "7fe420a5bd79653248c87df1caab1ce9",
+    "semantic_hash": "7fe420a5bd79653248c87df1caab1ce9"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/DepartmentResponse.java": {
+    "mtime": 1781882381.5726683,
+    "ast_hash": "224df32ea7b242122f9aae2505a0453b",
+    "semantic_hash": "224df32ea7b242122f9aae2505a0453b"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/EntityLifecycleSnapshotResponse.java": {
+    "mtime": 1781882381.5746958,
+    "ast_hash": "4d695287d74c10e06bb05963921ee395",
+    "semantic_hash": "4d695287d74c10e06bb05963921ee395"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/EpcChainResponse.java": {
+    "mtime": 1781882381.5766623,
+    "ast_hash": "a2a3180817815c8a92347b249c7be660",
+    "semantic_hash": "a2a3180817815c8a92347b249c7be660"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/EpcEdgeResponse.java": {
+    "mtime": 1781882381.5776944,
+    "ast_hash": "857ed50d5181b68449b6adf181dda99f",
+    "semantic_hash": "857ed50d5181b68449b6adf181dda99f"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/EpcModelRefResponse.java": {
+    "mtime": 1781882381.579666,
+    "ast_hash": "6b6e9f1f0ed6d9c4f835cbbba8654a07",
+    "semantic_hash": "6b6e9f1f0ed6d9c4f835cbbba8654a07"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/EpcNodeResponse.java": {
+    "mtime": 1781882381.58121,
+    "ast_hash": "7ea623d0a3a339c20129c6b49050b032",
+    "semantic_hash": "7ea623d0a3a339c20129c6b49050b032"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/EpcProfileResponse.java": {
+    "mtime": 1781882381.582209,
+    "ast_hash": "a22074ec754e92fb1734e1fbafbe7c40",
+    "semantic_hash": "a22074ec754e92fb1734e1fbafbe7c40"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/EpcStepResponse.java": {
+    "mtime": 1781932737.4085364,
+    "ast_hash": "fdafb29c84cdfe0566534cac60c7c87f",
+    "semantic_hash": "fdafb29c84cdfe0566534cac60c7c87f"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/ErrorRecoveryResponse.java": {
+    "mtime": 1781882381.5852106,
+    "ast_hash": "66cffdab7e5e41656e2dff42cab5d536",
+    "semantic_hash": "66cffdab7e5e41656e2dff42cab5d536"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/EventDefinitionResponse.java": {
+    "mtime": 1781932737.4105308,
+    "ast_hash": "4164b1661a14708c3466cabc6c4d4572",
+    "semantic_hash": "4164b1661a14708c3466cabc6c4d4572"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/GuardrailRuleResponse.java": {
+    "mtime": 1781882381.5892086,
+    "ast_hash": "889a80de4c7dd7afe9c3d9964cba268c",
+    "semantic_hash": "889a80de4c7dd7afe9c3d9964cba268c"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/IndicatorDefinitionResponse.java": {
+    "mtime": 1781882381.5912077,
+    "ast_hash": "2db0ec9e01929b23b4732e29e88cc197",
+    "semantic_hash": "2db0ec9e01929b23b4732e29e88cc197"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/IntentSlotResponse.java": {
+    "mtime": 1781882381.59221,
+    "ast_hash": "a66a530adbe0850da13c1511b9522e0e",
+    "semantic_hash": "a66a530adbe0850da13c1511b9522e0e"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/MetadataTemplateResponse.java": {
+    "mtime": 1781882381.5942109,
+    "ast_hash": "799a5f448405155404bddf600f23a3b2",
+    "semantic_hash": "799a5f448405155404bddf600f23a3b2"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/NotificationDefinitionResponse.java": {
+    "mtime": 1781882381.5952103,
+    "ast_hash": "24407f09efb5f71a44a7ef5ac07803e7",
+    "semantic_hash": "24407f09efb5f71a44a7ef5ac07803e7"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/OrchestrationResponse.java": {
+    "mtime": 1781882381.5975611,
+    "ast_hash": "40dcdd3b4b4b544870756943ee96ec2d",
+    "semantic_hash": "40dcdd3b4b4b544870756943ee96ec2d"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/PolicyRuleResponse.java": {
+    "mtime": 1781882381.5985584,
+    "ast_hash": "a17befbf5c602d6ada7b9badefe68ef5",
+    "semantic_hash": "a17befbf5c602d6ada7b9badefe68ef5"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/PositionEntryResponse.java": {
+    "mtime": 1781882381.6005502,
+    "ast_hash": "426068db50de4560a0eb504fdd21275f",
+    "semantic_hash": "426068db50de4560a0eb504fdd21275f"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/ProbeDefinitionResponse.java": {
+    "mtime": 1781882381.6015527,
+    "ast_hash": "fc92a93ccdabbbc5dbf37eecb2060566",
+    "semantic_hash": "fc92a93ccdabbbc5dbf37eecb2060566"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/ProcessStepResponse.java": {
+    "mtime": 1781882381.6035204,
+    "ast_hash": "571c95449239aceb1b70dc3aa8a5c601",
+    "semantic_hash": "571c95449239aceb1b70dc3aa8a5c601"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/QueryDefinitionResponse.java": {
+    "mtime": 1781882381.6055267,
+    "ast_hash": "89e4050de51f1d2a2acf9b3a5047e68e",
+    "semantic_hash": "89e4050de51f1d2a2acf9b3a5047e68e"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/ReportDefinitionResponse.java": {
+    "mtime": 1781882381.606529,
+    "ast_hash": "4a1ac2021b1f15d7c0c4fa5aa800ab78",
+    "semantic_hash": "4a1ac2021b1f15d7c0c4fa5aa800ab78"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/SemanticFieldMappingResponse.java": {
+    "mtime": 1781882381.6085248,
+    "ast_hash": "0e89573598be3ebcb751b1a6e4ee56c5",
+    "semantic_hash": "0e89573598be3ebcb751b1a6e4ee56c5"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/SemanticRelationResponse.java": {
+    "mtime": 1781882381.6105328,
+    "ast_hash": "88c32894a4889a67a2c8debcedf3244c",
+    "semantic_hash": "88c32894a4889a67a2c8debcedf3244c"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/StateMachineResponse.java": {
+    "mtime": 1781932737.4105308,
+    "ast_hash": "a557f46c8fa0eaafcfe0829bde9f1ca1",
+    "semantic_hash": "a557f46c8fa0eaafcfe0829bde9f1ca1"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/StateTransitionResponse.java": {
+    "mtime": 1781932737.4105308,
+    "ast_hash": "1ff1ef505ba873a24323bb29f8a587e9",
+    "semantic_hash": "1ff1ef505ba873a24323bb29f8a587e9"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/domain/ValidationRuleResponse.java": {
+    "mtime": 1781882381.6159897,
+    "ast_hash": "2fbb5bb99e3ff540e2392a190cef79b5",
+    "semantic_hash": "2fbb5bb99e3ff540e2392a190cef79b5"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/governance/CreatePermissionRequest.java": {
+    "mtime": 1781932737.322677,
+    "ast_hash": "20a96ee17d722738fe2bcd8462c9c8cc",
+    "semantic_hash": "20a96ee17d722738fe2bcd8462c9c8cc"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/governance/CreateRoleRequest.java": {
+    "mtime": 1781932737.3237371,
+    "ast_hash": "5dbb940d9798706e6c59eb8649c1b28a",
+    "semantic_hash": "5dbb940d9798706e6c59eb8649c1b28a"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/governance/CreateTokenRequest.java": {
+    "mtime": 1781932737.3237371,
+    "ast_hash": "2aa731cb2e916cfc371eb75591354d82",
+    "semantic_hash": "2aa731cb2e916cfc371eb75591354d82"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/governance/ResolveApprovalRequest.java": {
+    "mtime": 1781932737.3237371,
+    "ast_hash": "54a7aec373123c41410f2cfe029c3ae4",
+    "semantic_hash": "54a7aec373123c41410f2cfe029c3ae4"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/governance/SubmitApprovalRequest.java": {
+    "mtime": 1781932737.3237371,
+    "ast_hash": "5d2d0d1228d25a4748bdd2901221b1f6",
+    "semantic_hash": "5d2d0d1228d25a4748bdd2901221b1f6"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/governance/TokenResponse.java": {
+    "mtime": 1781932737.3237371,
+    "ast_hash": "8e30ab6166b1c46a96313af806f0c576",
+    "semantic_hash": "8e30ab6166b1c46a96313af806f0c576"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/job/JobResponse.java": {
+    "mtime": 1781932737.319673,
+    "ast_hash": "6933fb60fec8f1073aeaf693c93080e6",
+    "semantic_hash": "6933fb60fec8f1073aeaf693c93080e6"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/job/SubmitJobRequest.java": {
+    "mtime": 1781932737.322677,
+    "ast_hash": "5c1f746003a6560e5758897a34739676",
+    "semantic_hash": "5c1f746003a6560e5758897a34739676"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/job/SubmitJobResponse.java": {
+    "mtime": 1781932737.322677,
+    "ast_hash": "6875e970afcde3c4171c18ff507eee9d",
+    "semantic_hash": "6875e970afcde3c4171c18ff507eee9d"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/manifest/ImportManifestRequest.java": {
+    "mtime": 1781932737.3176088,
+    "ast_hash": "1955c348252126c469221da14f5898cc",
+    "semantic_hash": "1955c348252126c469221da14f5898cc"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/manifest/ImportManifestResponse.java": {
+    "mtime": 1781932737.3176088,
+    "ast_hash": "6295bb54913ccbb0ca21aff45fa62bf4",
+    "semantic_hash": "6295bb54913ccbb0ca21aff45fa62bf4"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/manifest/ManifestExportRequest.java": {
+    "mtime": 1781932737.3176088,
+    "ast_hash": "74ca1bb5f1c701bb81d1f58a996ad210",
+    "semantic_hash": "74ca1bb5f1c701bb81d1f58a996ad210"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/manifest/ManifestPreviewResponse.java": {
+    "mtime": 1781932737.3075998,
+    "ast_hash": "f02f6f4bec6ae0354c30054a003cb604",
+    "semantic_hash": "f02f6f4bec6ae0354c30054a003cb604"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/manifest/ManifestPublishResponse.java": {
+    "mtime": 1781932504.334854,
+    "ast_hash": "cdb30a9e4c0ea9c534d5cfa842484050",
+    "semantic_hash": "cdb30a9e4c0ea9c534d5cfa842484050"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/upload/ExportRequest.java": {
+    "mtime": 1781932737.3237371,
+    "ast_hash": "b3ff77d8b0e2636f79874f0dd2663eff",
+    "semantic_hash": "b3ff77d8b0e2636f79874f0dd2663eff"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/upload/ImportRequest.java": {
+    "mtime": 1781932737.3347323,
+    "ast_hash": "a9c098459cf8327d14b796182e81df83",
+    "semantic_hash": "a9c098459cf8327d14b796182e81df83"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/upload/ImportTaskResponse.java": {
+    "mtime": 1781932737.3357313,
+    "ast_hash": "f1b043c51b031fae57f510597234d4be",
+    "semantic_hash": "f1b043c51b031fae57f510597234d4be"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/upload/InitUploadRequest.java": {
+    "mtime": 1781932737.3357313,
+    "ast_hash": "314de4f89c1ecea383b4bc150fd65731",
+    "semantic_hash": "314de4f89c1ecea383b4bc150fd65731"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/upload/UploadTaskResponse.java": {
+    "mtime": 1781932737.3357313,
+    "ast_hash": "45b323ed087baa3ec88c000a628727e6",
+    "semantic_hash": "45b323ed087baa3ec88c000a628727e6"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/upload/ValidationRuleConfig.java": {
+    "mtime": 1781932737.3357313,
+    "ast_hash": "44eb9329e8928c76dd5abe2023e0927b",
+    "semantic_hash": "44eb9329e8928c76dd5abe2023e0927b"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/webhook/CreateWebhookRequest.java": {
+    "mtime": 1781932504.334854,
+    "ast_hash": "3f87591d161c3d418eeb1352d6025303",
+    "semantic_hash": "3f87591d161c3d418eeb1352d6025303"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/dto/webhook/WebhookResponse.java": {
+    "mtime": 1781932737.3075998,
+    "ast_hash": "2dce8cb25ddd44c82adfc47665906a98",
+    "semantic_hash": "2dce8cb25ddd44c82adfc47665906a98"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/security/FilterSecurityValidator.java": {
+    "mtime": 1780928515.789375,
+    "ast_hash": "81dab553bb930aadf5d32fb132f0d39b",
+    "semantic_hash": "81dab553bb930aadf5d32fb132f0d39b"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/security/GraphTraversalDSLParser.java": {
+    "mtime": 1781882342.488906,
+    "ast_hash": "ed708303b5b628a4eecf80e6f1700af2",
+    "semantic_hash": "ed708303b5b628a4eecf80e6f1700af2"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/AgentIntentService.java": {
+    "mtime": 1781882381.642197,
+    "ast_hash": "09fcbea71a1b461410a75510a6d212b3",
+    "semantic_hash": "09fcbea71a1b461410a75510a6d212b3"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/AgentPolicySemanticService.java": {
+    "mtime": 1781889847.6043346,
+    "ast_hash": "2a986e90942b149f1b26a5301374c15e",
+    "semantic_hash": "2a986e90942b149f1b26a5301374c15e"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/ApiDefinitionService.java": {
+    "mtime": 1781882381.6471913,
+    "ast_hash": "f142d0420439d0dffe30e83850e35403",
+    "semantic_hash": "f142d0420439d0dffe30e83850e35403"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/BuildInfoService.java": {
+    "mtime": 1781931563.2619011,
+    "ast_hash": "e22799664168bf796a9f98d6e5c04f34",
+    "semantic_hash": "e22799664168bf796a9f98d6e5c04f34"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/BusinessMetricService.java": {
+    "mtime": 1781882381.6491957,
+    "ast_hash": "592789b15866afddb6d4dd19c10c2501",
+    "semantic_hash": "592789b15866afddb6d4dd19c10c2501"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/BusinessTermService.java": {
+    "mtime": 1781882381.651196,
+    "ast_hash": "9078ff3efbd586ce89cadee8394de126",
+    "semantic_hash": "9078ff3efbd586ce89cadee8394de126"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/ComputeDefinitionService.java": {
+    "mtime": 1781882381.6531925,
+    "ast_hash": "132fb0793017868f396ed77233425359",
+    "semantic_hash": "132fb0793017868f396ed77233425359"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/DepartmentService.java": {
+    "mtime": 1781882381.6541939,
+    "ast_hash": "644f311061552a8103a81a678665c664",
+    "semantic_hash": "644f311061552a8103a81a678665c664"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/DomainQueryService.java": {
+    "mtime": 1781882381.6577995,
+    "ast_hash": "f91d8a2d69792ccad354146b575dad1c",
+    "semantic_hash": "f91d8a2d69792ccad354146b575dad1c"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/EntityLifecycleSnapshotService.java": {
+    "mtime": 1781889482.6385,
+    "ast_hash": "7f7b77f73e19835a0f49242538b0089a",
+    "semantic_hash": "7f7b77f73e19835a0f49242538b0089a"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/EpcChainService.java": {
+    "mtime": 1781888942.8742545,
+    "ast_hash": "1870cbd1705127bd9a13f24be006c6f9",
+    "semantic_hash": "1870cbd1705127bd9a13f24be006c6f9"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/EpcEdgeService.java": {
+    "mtime": 1781889395.039187,
+    "ast_hash": "ec398da0ba5afa7dc2f673eda96c11d9",
+    "semantic_hash": "ec398da0ba5afa7dc2f673eda96c11d9"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/EpcModelRefService.java": {
+    "mtime": 1781889390.5552967,
+    "ast_hash": "14e2eb77b6f77907bb1c163c0491db82",
+    "semantic_hash": "14e2eb77b6f77907bb1c163c0491db82"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/EpcNodeService.java": {
+    "mtime": 1781890111.6641066,
+    "ast_hash": "f8133573b905c0c622a7896e435d5167",
+    "semantic_hash": "f8133573b905c0c622a7896e435d5167"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/EpcProfileService.java": {
+    "mtime": 1781889464.1083326,
+    "ast_hash": "780d4ebf19303fe1cf343fe10f95a1ed",
+    "semantic_hash": "780d4ebf19303fe1cf343fe10f95a1ed"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/ErrorRecoveryService.java": {
+    "mtime": 1781889480.5894692,
+    "ast_hash": "5eddc3c422f2d2a9601b9a7ea465fc29",
+    "semantic_hash": "5eddc3c422f2d2a9601b9a7ea465fc29"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/GuardrailRuleService.java": {
+    "mtime": 1781882381.6707854,
+    "ast_hash": "c77b13a67e91f0e16b26a3a93b4be52c",
+    "semantic_hash": "c77b13a67e91f0e16b26a3a93b4be52c"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/IndicatorDefinitionService.java": {
+    "mtime": 1781882381.673049,
+    "ast_hash": "2cd9b1f5cb1ef2ed1492179fc32f30b5",
+    "semantic_hash": "2cd9b1f5cb1ef2ed1492179fc32f30b5"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/IntentSlotService.java": {
+    "mtime": 1781889780.8172297,
+    "ast_hash": "615f7a6e39cd81f6529d53115c959c8b",
+    "semantic_hash": "615f7a6e39cd81f6529d53115c959c8b"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/MetadataTemplateService.java": {
+    "mtime": 1781882381.6765165,
+    "ast_hash": "d7d80297c1dbf9040ac310b17cf7d1c3",
+    "semantic_hash": "d7d80297c1dbf9040ac310b17cf7d1c3"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/NotificationDefinitionService.java": {
+    "mtime": 1781882381.6785443,
+    "ast_hash": "3ed76eb364a51a909f69a9af5ac82aa8",
+    "semantic_hash": "3ed76eb364a51a909f69a9af5ac82aa8"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/ObjectTypeService.java": {
+    "mtime": 1780928515.789375,
+    "ast_hash": "9de2c18cf0f072c63823fcab496b4b7a",
+    "semantic_hash": "9de2c18cf0f072c63823fcab496b4b7a"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/OntologyService.java": {
+    "mtime": 1780928515.789375,
+    "ast_hash": "f8938b4a177cb3644938bde0240cbc81",
+    "semantic_hash": "f8938b4a177cb3644938bde0240cbc81"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/OrchestrationService.java": {
+    "mtime": 1781882381.6801314,
+    "ast_hash": "0787f40b86b6732d13127f2918f46ca8",
+    "semantic_hash": "0787f40b86b6732d13127f2918f46ca8"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/PolicyRuleService.java": {
+    "mtime": 1781882381.6830137,
+    "ast_hash": "c69603fa16eb75b065ad73e1db287c2a",
+    "semantic_hash": "c69603fa16eb75b065ad73e1db287c2a"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/PositionEntryService.java": {
+    "mtime": 1781882381.6850429,
+    "ast_hash": "bebf18d138b5a4c1c4257976f32ab4f6",
+    "semantic_hash": "bebf18d138b5a4c1c4257976f32ab4f6"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/ProbeDefinitionService.java": {
+    "mtime": 1781882381.687042,
+    "ast_hash": "6e6550522907a54e58e063e42dc6431f",
+    "semantic_hash": "6e6550522907a54e58e063e42dc6431f"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/ProcessStepService.java": {
+    "mtime": 1781882381.6890433,
+    "ast_hash": "a3bbc69737215542f1b7daefa1512a07",
+    "semantic_hash": "a3bbc69737215542f1b7daefa1512a07"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/QueryDefinitionService.java": {
+    "mtime": 1781882381.6920402,
+    "ast_hash": "80a7b50cda201efa737e60853b97b311",
+    "semantic_hash": "80a7b50cda201efa737e60853b97b311"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/RelationService.java": {
+    "mtime": 1780928515.789375,
+    "ast_hash": "634c0657d24204f919a7d26dc692e22f",
+    "semantic_hash": "634c0657d24204f919a7d26dc692e22f"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/ReportDefinitionService.java": {
+    "mtime": 1781882381.694065,
+    "ast_hash": "c28474d6666c7259f043b844e35ef818",
+    "semantic_hash": "c28474d6666c7259f043b844e35ef818"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/SemanticFieldMappingService.java": {
+    "mtime": 1781889787.6068742,
+    "ast_hash": "1d3aca9aeb0e27f965674e45d9cc1381",
+    "semantic_hash": "1d3aca9aeb0e27f965674e45d9cc1381"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/SemanticRelationService.java": {
+    "mtime": 1781889776.9362986,
+    "ast_hash": "6bc9da463cccffef80b96537d89ef55e",
+    "semantic_hash": "6bc9da463cccffef80b96537d89ef55e"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/ValidationRuleService.java": {
+    "mtime": 1781882381.7001052,
+    "ast_hash": "a97c184325dbbd685aff38d3cda19dff",
+    "semantic_hash": "a97c184325dbbd685aff38d3cda19dff"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/agent/AgentOrchestrationService.java": {
+    "mtime": 1781931573.6649518,
+    "ast_hash": "91d081c7af60ae62ac4452aab41ac89b",
+    "semantic_hash": "91d081c7af60ae62ac4452aab41ac89b"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/epc/EpcGraphService.java": {
+    "mtime": 1782043045.2070918,
+    "ast_hash": "e4e2b36c08745ffed4f10bc1d8566b25",
+    "semantic_hash": "e4e2b36c08745ffed4f10bc1d8566b25"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/exchange/ExchangeImportService.java": {
+    "mtime": 1782043051.5136292,
+    "ast_hash": "2fcd1c28e24ec74c519962271909a9c8",
+    "semantic_hash": "2fcd1c28e24ec74c519962271909a9c8"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/exchange/ExchangePhase3bPublisher.java": {
+    "mtime": 1781882381.7061894,
+    "ast_hash": "ee129b2c9b7a15c7b497ad05584e74b3",
+    "semantic_hash": "ee129b2c9b7a15c7b497ad05584e74b3"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/exchange/ExchangePhase3cLifecyclePublisher.java": {
+    "mtime": 1782036284.1008058,
+    "ast_hash": "91e680dad20745abc33d8a596713e64f",
+    "semantic_hash": "91e680dad20745abc33d8a596713e64f"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/exchange/ExchangePhase3cPublisher.java": {
+    "mtime": 1782036273.5216267,
+    "ast_hash": "73c52694c05aad7440110d646826ac5f",
+    "semantic_hash": "73c52694c05aad7440110d646826ac5f"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/exchange/ExchangePhase3dPublisher.java": {
+    "mtime": 1782043033.433612,
+    "ast_hash": "23beadf5b286f06623569dfd97c77844",
+    "semantic_hash": "23beadf5b286f06623569dfd97c77844"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/exchange/ExchangeValidationService.java": {
+    "mtime": 1781882381.7107692,
+    "ast_hash": "4fabd47b34975ddf1b1a9cfc0c181ee2",
+    "semantic_hash": "4fabd47b34975ddf1b1a9cfc0c181ee2"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/governance/GovernanceService.java": {
+    "mtime": 1781882342.4909055,
+    "ast_hash": "90adc2ed30a7ef95ae02edc7809f4076",
+    "semantic_hash": "90adc2ed30a7ef95ae02edc7809f4076"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/governance/impl/GovernanceServiceImpl.java": {
+    "mtime": 1781882381.713768,
+    "ast_hash": "4a41755a4fe828e51acbf4ef90c1aa01",
+    "semantic_hash": "4a41755a4fe828e51acbf4ef90c1aa01"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/graph/GraphQueryService.java": {
+    "mtime": 1780928515.789375,
+    "ast_hash": "06f262d488fd105846dfc7ed6589c18a",
+    "semantic_hash": "06f262d488fd105846dfc7ed6589c18a"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/graph/impl/GraphQueryServiceImpl.java": {
+    "mtime": 1781882342.4969049,
+    "ast_hash": "bfd5761eaa34affdf3d46e0f7fbad4cf",
+    "semantic_hash": "bfd5761eaa34affdf3d46e0f7fbad4cf"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/impl/DomainQueryServiceImpl.java": {
+    "mtime": 1781882381.7174473,
+    "ast_hash": "f238bd777dff48d6d2d5eaa51f9d879e",
+    "semantic_hash": "f238bd777dff48d6d2d5eaa51f9d879e"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/impl/ObjectTypeServiceImpl.java": {
+    "mtime": 1780928515.789375,
+    "ast_hash": "1dcb2c72e5d850d5861d89db22707b8c",
+    "semantic_hash": "1dcb2c72e5d850d5861d89db22707b8c"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/impl/OntologyServiceImpl.java": {
+    "mtime": 1781882381.7219684,
+    "ast_hash": "c325f0525ae8ff189bcf6ee2ae864ad0",
+    "semantic_hash": "c325f0525ae8ff189bcf6ee2ae864ad0"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/impl/RelationServiceImpl.java": {
+    "mtime": 1780928515.789375,
+    "ast_hash": "dd2d824c0a414987e53df29241085ebd",
+    "semantic_hash": "dd2d824c0a414987e53df29241085ebd"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/impl/upload/ExportServiceImpl.java": {
+    "mtime": 1781882342.502905,
+    "ast_hash": "ecefe00bfaf50afb07a7eae562d631b1",
+    "semantic_hash": "ecefe00bfaf50afb07a7eae562d631b1"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/impl/upload/ImportServiceImpl.java": {
+    "mtime": 1781882342.5049021,
+    "ast_hash": "12351210a040bf7e6935eaf2cffef5ca",
+    "semantic_hash": "12351210a040bf7e6935eaf2cffef5ca"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/impl/upload/UploadServiceImpl.java": {
+    "mtime": 1780928515.789375,
+    "ast_hash": "4648b288a233125abe6933c7588c4f58",
+    "semantic_hash": "4648b288a233125abe6933c7588c4f58"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/job/JobService.java": {
+    "mtime": 1781882381.7249641,
+    "ast_hash": "80f34076dab7b6f24aa0990464f434a9",
+    "semantic_hash": "80f34076dab7b6f24aa0990464f434a9"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/job/impl/ImportJobHandler.java": {
+    "mtime": 1781882381.7279623,
+    "ast_hash": "b80a5d4e017df677dfe732f6f36e13ec",
+    "semantic_hash": "b80a5d4e017df677dfe732f6f36e13ec"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/job/impl/JobServiceImpl.java": {
+    "mtime": 1781882381.7319593,
+    "ast_hash": "5e0bc09e1db18edb0694cd39b2a599a7",
+    "semantic_hash": "5e0bc09e1db18edb0694cd39b2a599a7"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/lifecycle/LifecycleService.java": {
+    "mtime": 1782036288.2355237,
+    "ast_hash": "8ae416f8b28c4bb6d7cc525f5521f8f2",
+    "semantic_hash": "8ae416f8b28c4bb6d7cc525f5521f8f2"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/manifest/ManifestConverter.java": {
+    "mtime": 1781882381.7359595,
+    "ast_hash": "75302c8bc5e7a0dfa95b7df8b56f6edd",
+    "semantic_hash": "75302c8bc5e7a0dfa95b7df8b56f6edd"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/manifest/ManifestService.java": {
+    "mtime": 1781882381.7379646,
+    "ast_hash": "43d4f8ea505d9ea717a436cf177b9e27",
+    "semantic_hash": "43d4f8ea505d9ea717a436cf177b9e27"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/manifest/ManifestServiceImpl.java": {
+    "mtime": 1781882381.7399676,
+    "ast_hash": "f7144aee365aae01d0901e7b6ef58d88",
+    "semantic_hash": "f7144aee365aae01d0901e7b6ef58d88"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/manifest/ManifestValidator.java": {
+    "mtime": 1781882381.743964,
+    "ast_hash": "f52563c621d0c43797459e6e4c091e52",
+    "semantic_hash": "f52563c621d0c43797459e6e4c091e52"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/semantic/SemanticService.java": {
+    "mtime": 1782036274.4547687,
+    "ast_hash": "6a94003ecb32fd03853e85fd3555736c",
+    "semantic_hash": "6a94003ecb32fd03853e85fd3555736c"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/upload/ExportService.java": {
+    "mtime": 1780928515.789375,
+    "ast_hash": "dde04669dbd05e8cbc6e95de3a02d9af",
+    "semantic_hash": "dde04669dbd05e8cbc6e95de3a02d9af"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/upload/ImportService.java": {
+    "mtime": 1780928515.789375,
+    "ast_hash": "57ed4a1adfa720feaef9c0f852fb1eec",
+    "semantic_hash": "57ed4a1adfa720feaef9c0f852fb1eec"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/upload/UploadService.java": {
+    "mtime": 1780928515.789375,
+    "ast_hash": "fa74653f8875e1716bdbaef1ffed61d6",
+    "semantic_hash": "fa74653f8875e1716bdbaef1ffed61d6"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/webhook/WebhookService.java": {
+    "mtime": 1781882381.7489655,
+    "ast_hash": "9b753bd02765490e8dd41ece74393a6b",
+    "semantic_hash": "9b753bd02765490e8dd41ece74393a6b"
+  },
+  "ontology-application/src/main/java/com/ontology/platform/application/service/webhook/impl/WebhookServiceImpl.java": {
+    "mtime": 1781882381.750963,
+    "ast_hash": "2199d8347b076719e80f79f074090f0f",
+    "semantic_hash": "2199d8347b076719e80f79f074090f0f"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/OntologyServiceTest.java": {
+    "mtime": 1781882381.7549634,
+    "ast_hash": "57639b48989ba506baf622509a7b722f",
+    "semantic_hash": "57639b48989ba506baf622509a7b722f"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/security/FilterSecurityValidatorTest.java": {
+    "mtime": 1781882381.7589624,
+    "ast_hash": "844323334b139a99be071d8e51d929f8",
+    "semantic_hash": "844323334b139a99be071d8e51d929f8"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/security/GraphTraversalDSLParserTest.java": {
+    "mtime": 1781882381.7619655,
+    "ast_hash": "49f55301aaf8e3f2f9d5924320250452",
+    "semantic_hash": "49f55301aaf8e3f2f9d5924320250452"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/AgentIntentServiceTest.java": {
+    "mtime": 1781882381.7639651,
+    "ast_hash": "ad233c5ff3ec68cb2c432ddfa0e740ad",
+    "semantic_hash": "ad233c5ff3ec68cb2c432ddfa0e740ad"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/AgentPolicySemanticServiceTest.java": {
+    "mtime": 1781882381.7659879,
+    "ast_hash": "8d026ef6f5edc66460e59df735d2c904",
+    "semantic_hash": "8d026ef6f5edc66460e59df735d2c904"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/BusinessMetricServiceTest.java": {
+    "mtime": 1781882381.7669895,
+    "ast_hash": "f0cd8c7c92a93ee4710d8d6b092cb5d2",
+    "semantic_hash": "f0cd8c7c92a93ee4710d8d6b092cb5d2"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/BusinessTermServiceTest.java": {
+    "mtime": 1781882381.7689881,
+    "ast_hash": "663eb5cc1a7ec6d7b29266aa5d9ddc85",
+    "semantic_hash": "663eb5cc1a7ec6d7b29266aa5d9ddc85"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/DepartmentServiceTest.java": {
+    "mtime": 1781882381.7699904,
+    "ast_hash": "e8ab8c976d770184b6153ebac8095daf",
+    "semantic_hash": "e8ab8c976d770184b6153ebac8095daf"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/EntityLifecycleSnapshotServiceTest.java": {
+    "mtime": 1781882381.7719903,
+    "ast_hash": "eb3e18397c691ea1896686e8e3a9ceca",
+    "semantic_hash": "eb3e18397c691ea1896686e8e3a9ceca"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/EpcChainServiceTest.java": {
+    "mtime": 1781882381.7729883,
+    "ast_hash": "3b3b3a7a06eecd5846e4fd7a1602affe",
+    "semantic_hash": "3b3b3a7a06eecd5846e4fd7a1602affe"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/EpcEdgeServiceTest.java": {
+    "mtime": 1781882381.7739878,
+    "ast_hash": "4333cb8668030e7b4081a85328a33c7d",
+    "semantic_hash": "4333cb8668030e7b4081a85328a33c7d"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/EpcModelRefServiceTest.java": {
+    "mtime": 1781882381.775987,
+    "ast_hash": "949ab7620bfa8a6bf9c9ab0e589b5646",
+    "semantic_hash": "949ab7620bfa8a6bf9c9ab0e589b5646"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/EpcNodeServiceTest.java": {
+    "mtime": 1781882381.7769918,
+    "ast_hash": "cf0d8a8a62e103400db6e29b2bf67d21",
+    "semantic_hash": "cf0d8a8a62e103400db6e29b2bf67d21"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/EpcProfileServiceTest.java": {
+    "mtime": 1781882381.7779882,
+    "ast_hash": "52c1216d65e13611e9a9ed63d2223824",
+    "semantic_hash": "52c1216d65e13611e9a9ed63d2223824"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/ErrorRecoveryServiceTest.java": {
+    "mtime": 1781882381.7789896,
+    "ast_hash": "94087a7f5aa87b537248f0ca6ae88282",
+    "semantic_hash": "94087a7f5aa87b537248f0ca6ae88282"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/IntentSlotServiceTest.java": {
+    "mtime": 1781882381.7805095,
+    "ast_hash": "231ee41d16204c30278969f20e0849e0",
+    "semantic_hash": "231ee41d16204c30278969f20e0849e0"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/MetadataTemplateServiceTest.java": {
+    "mtime": 1781882381.7825365,
+    "ast_hash": "8a96d9edee2c26863405421e9684cc66",
+    "semantic_hash": "8a96d9edee2c26863405421e9684cc66"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/ObjectTypeServiceTest.java": {
+    "mtime": 1780928515.789375,
+    "ast_hash": "b9b0bc0771b167d64c8e143f939bbab5",
+    "semantic_hash": "b9b0bc0771b167d64c8e143f939bbab5"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/OrchestrationServiceTest.java": {
+    "mtime": 1781882381.783538,
+    "ast_hash": "769167b6ddbf4c5e6aa7e2952b49f833",
+    "semantic_hash": "769167b6ddbf4c5e6aa7e2952b49f833"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/PositionEntryServiceTest.java": {
+    "mtime": 1781882381.7855363,
+    "ast_hash": "5a2886ec29a7d505b814cc656ede8b04",
+    "semantic_hash": "5a2886ec29a7d505b814cc656ede8b04"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/ProcessStepServiceTest.java": {
+    "mtime": 1781882381.786535,
+    "ast_hash": "3dbd323252bbaa962ec619f617fc161c",
+    "semantic_hash": "3dbd323252bbaa962ec619f617fc161c"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/RelationServiceTest.java": {
+    "mtime": 1780928515.7979064,
+    "ast_hash": "95d91a2924f4b6e7fe4bd8b038db2aaf",
+    "semantic_hash": "95d91a2924f4b6e7fe4bd8b038db2aaf"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/SemanticFieldMappingServiceTest.java": {
+    "mtime": 1781882381.787536,
+    "ast_hash": "04568f76bb81c4dc6c2fb06c917953cf",
+    "semantic_hash": "04568f76bb81c4dc6c2fb06c917953cf"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/SemanticRelationServiceTest.java": {
+    "mtime": 1781882381.7895367,
+    "ast_hash": "a0278f6afca092b235b754f11d3dfa45",
+    "semantic_hash": "a0278f6afca092b235b754f11d3dfa45"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/agent/AgentOrchestrationServiceTest.java": {
+    "mtime": 1781931573.655952,
+    "ast_hash": "fd237d61d0970ce8770538c9e93fee79",
+    "semantic_hash": "fd237d61d0970ce8770538c9e93fee79"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/epc/EpcGraphServiceTest.java": {
+    "mtime": 1782043089.9761872,
+    "ast_hash": "98e551aa3b440a0068f7ba2b20c66c38",
+    "semantic_hash": "98e551aa3b440a0068f7ba2b20c66c38"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/exchange/ExchangeImportServiceE2ETest.java": {
+    "mtime": 1782043099.131286,
+    "ast_hash": "cb211df724a90571bfa2b63193a40340",
+    "semantic_hash": "cb211df724a90571bfa2b63193a40340"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/exchange/ExchangeImportServiceTest.java": {
+    "mtime": 1782043095.497545,
+    "ast_hash": "a35b394e4d3155e31dad06ea97069286",
+    "semantic_hash": "a35b394e4d3155e31dad06ea97069286"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/exchange/ExchangePhase3cPublisherTest.java": {
+    "mtime": 1781882381.7935355,
+    "ast_hash": "88f05856e85002cb25c5fe8e1b22d6f3",
+    "semantic_hash": "88f05856e85002cb25c5fe8e1b22d6f3"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/exchange/ExchangePhase3cSemanticE2ETest.java": {
+    "mtime": 1782036300.8522334,
+    "ast_hash": "77e55d5c300a7d7dc1ecf9e863da6aa8",
+    "semantic_hash": "77e55d5c300a7d7dc1ecf9e863da6aa8"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/exchange/ExchangePhase3dPublisherTest.java": {
+    "mtime": 1782043088.6952875,
+    "ast_hash": "608e02a4af869762722fcca13be166ea",
+    "semantic_hash": "608e02a4af869762722fcca13be166ea"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/governance/impl/GovernanceServiceImplTest.java": {
+    "mtime": 1781882381.7975402,
+    "ast_hash": "79e8bd61e17e3b2b8d8c254298fbe803",
+    "semantic_hash": "79e8bd61e17e3b2b8d8c254298fbe803"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/manifest/ManifestConverterTest.java": {
+    "mtime": 1781882381.8005354,
+    "ast_hash": "2847f6a6798bf2e65e087e5fda998958",
+    "semantic_hash": "2847f6a6798bf2e65e087e5fda998958"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/manifest/ManifestE2ETest.java": {
+    "mtime": 1781918605.6961575,
+    "ast_hash": "baed2db8b7a8cebb43bad91f87830334",
+    "semantic_hash": "baed2db8b7a8cebb43bad91f87830334"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/manifest/ManifestValidatorTest.java": {
+    "mtime": 1781882381.8025334,
+    "ast_hash": "b50432feb84a4c300bfd8b0d75de4d0c",
+    "semantic_hash": "b50432feb84a4c300bfd8b0d75de4d0c"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/manifest/Project1ToProject2E2ETest.java": {
+    "mtime": 1781925671.2360857,
+    "ast_hash": "58eefe3807c6bcc760915dce0d918392",
+    "semantic_hash": "58eefe3807c6bcc760915dce0d918392"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/semantic/SemanticServiceTest.java": {
+    "mtime": 1781882381.8045344,
+    "ast_hash": "4b9687d6b48ca7adbc2ebc465cb58dd8",
+    "semantic_hash": "4b9687d6b48ca7adbc2ebc465cb58dd8"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/upload/ImportServiceTest.java": {
+    "mtime": 1781882342.5149045,
+    "ast_hash": "b418457ad4c4a5554fb15baf8bd742a3",
+    "semantic_hash": "b418457ad4c4a5554fb15baf8bd742a3"
+  },
+  "ontology-application/src/test/java/com/ontology/platform/application/service/upload/UploadServiceTest.java": {
+    "mtime": 1781882381.8078601,
+    "ast_hash": "60bbd2e6ced04ee8953318bdca4e617f",
+    "semantic_hash": "60bbd2e6ced04ee8953318bdca4e617f"
+  },
+  "ontology-application/src/test/resources/fixtures/manifest-e2e.json": {
+    "mtime": 1781918037.6759157,
+    "ast_hash": "59e6f30a52e2193722b2bb9b76beceed",
+    "semantic_hash": "59e6f30a52e2193722b2bb9b76beceed"
+  },
+  "ontology-application/src/test/resources/fixtures/project1-manifest-export.json": {
+    "mtime": 1781925004.2709796,
+    "ast_hash": "2fedf3bb99931673e05294384271d3f4",
+    "semantic_hash": "2fedf3bb99931673e05294384271d3f4"
+  },
+  "ontology-common/pom.xml": {
+    "mtime": 1780928515.7988975,
+    "ast_hash": "c310b70337cd63ba785923ac6362ec8b",
+    "semantic_hash": "c310b70337cd63ba785923ac6362ec8b"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/constant/ApiConstants.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "f34ffedc68e0a6befe16c51e402ce373",
+    "semantic_hash": "f34ffedc68e0a6befe16c51e402ce373"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/enums/ErrorCode.java": {
+    "mtime": 1781882381.8108594,
+    "ast_hash": "756e9f13ef4e277d279857fa26f17716",
+    "semantic_hash": "756e9f13ef4e277d279857fa26f17716"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/enums/FilterOperator.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "9ec7255e7d3e1f52bd1b896e3c3fce5c",
+    "semantic_hash": "9ec7255e7d3e1f52bd1b896e3c3fce5c"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/enums/OntologyStatus.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "a2dd49c93efa0f24931d1dc9a6bda8aa",
+    "semantic_hash": "a2dd49c93efa0f24931d1dc9a6bda8aa"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/enums/PropertyDataType.java": {
+    "mtime": 1780931362.7394524,
+    "ast_hash": "54f8e8c0cc492d1583584687f9ece9d7",
+    "semantic_hash": "54f8e8c0cc492d1583584687f9ece9d7"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/enums/RelationCardinality.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "900232035634484bffb783ceb4b89f8d",
+    "semantic_hash": "900232035634484bffb783ceb4b89f8d"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/enums/ReturnFormat.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "83a37a114ab5a738e2ee6d400897b89f",
+    "semantic_hash": "83a37a114ab5a738e2ee6d400897b89f"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/enums/TokenStatus.java": {
+    "mtime": 1781882342.5219474,
+    "ast_hash": "3f3dde5b3443243e18a174f43c22c5cb",
+    "semantic_hash": "3f3dde5b3443243e18a174f43c22c5cb"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/enums/TraversalDirection.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "b2b6141b107f7b8b960432264d5740e6",
+    "semantic_hash": "b2b6141b107f7b8b960432264d5740e6"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/enums/upload/ErrorHandling.java": {
+    "mtime": 1781882342.5239038,
+    "ast_hash": "c9c8fea65e160da113a366a779262e57",
+    "semantic_hash": "c9c8fea65e160da113a366a779262e57"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/enums/upload/FileType.java": {
+    "mtime": 1781882342.5249026,
+    "ast_hash": "3f0c4828ce73144e7cad6740abe08930",
+    "semantic_hash": "3f0c4828ce73144e7cad6740abe08930"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/enums/upload/ImportStatus.java": {
+    "mtime": 1781882342.5259044,
+    "ast_hash": "5088c78430e7b04c6bb9640040cbfa38",
+    "semantic_hash": "5088c78430e7b04c6bb9640040cbfa38"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/enums/upload/MergeStrategy.java": {
+    "mtime": 1781882342.5259044,
+    "ast_hash": "3227c3a1600f3a7e77ee9da414ffd219",
+    "semantic_hash": "3227c3a1600f3a7e77ee9da414ffd219"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/enums/upload/UploadStatus.java": {
+    "mtime": 1781882342.526907,
+    "ast_hash": "6fdd23797bff3448096ca0e95f3409df",
+    "semantic_hash": "6fdd23797bff3448096ca0e95f3409df"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/exception/BusinessException.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "b3f2f895d16c162d9eefdd42c4a7a89e",
+    "semantic_hash": "b3f2f895d16c162d9eefdd42c4a7a89e"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/exception/ResourceNotFoundException.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "27dba69f8f07a8dfbfcd7d60d7a18904",
+    "semantic_hash": "27dba69f8f07a8dfbfcd7d60d7a18904"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/exception/ValidationException.java": {
+    "mtime": 1781882342.5289044,
+    "ast_hash": "97eb1b5e33f6977e049bceeb4df718a7",
+    "semantic_hash": "97eb1b5e33f6977e049bceeb4df718a7"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/exception/upload/ImportException.java": {
+    "mtime": 1781882342.530927,
+    "ast_hash": "6b8b92487e2693b98d2e0bf690681199",
+    "semantic_hash": "6b8b92487e2693b98d2e0bf690681199"
+  },
+  "ontology-common/src/main/java/com/ontology/platform/common/exception/upload/UploadException.java": {
+    "mtime": 1781882342.531927,
+    "ast_hash": "5f41def5bd7e0e0236d114236b37f911",
+    "semantic_hash": "5f41def5bd7e0e0236d114236b37f911"
+  },
+  "ontology-domain/pom.xml": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "32204a425ebdb4c87e26634898f5c9a4",
+    "semantic_hash": "32204a425ebdb4c87e26634898f5c9a4"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/epc/EpcCoverageResponse.java": {
+    "mtime": 1782043033.5345135,
+    "ast_hash": "1168eb31606e88b8ad105523e2b18098",
+    "semantic_hash": "1168eb31606e88b8ad105523e2b18098"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/imports/EpcParsedRow.java": {
+    "mtime": 1781882381.8138647,
+    "ast_hash": "7e25f3820db9f1c8d3ea5aaf5d7de43c",
+    "semantic_hash": "7e25f3820db9f1c8d3ea5aaf5d7de43c"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/imports/EpcStepItem.java": {
+    "mtime": 1781882381.8165503,
+    "ast_hash": "16a8694ff0cbc71c8807eb75ce0f650e",
+    "semantic_hash": "16a8694ff0cbc71c8807eb75ce0f650e"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/imports/ExcelEDimRow.java": {
+    "mtime": 1781882381.817725,
+    "ast_hash": "f18fdc88a82244c9df28ce762cc6c1c9",
+    "semantic_hash": "f18fdc88a82244c9df28ce762cc6c1c9"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/imports/ExcelOntologyRow.java": {
+    "mtime": 1781882381.819768,
+    "ast_hash": "4f3264ca2a4fd485a7d3553fc7f90bef",
+    "semantic_hash": "4f3264ca2a4fd485a7d3553fc7f90bef"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/imports/ExchangeImportDocument.java": {
+    "mtime": 1781882381.8217478,
+    "ast_hash": "d1cf653a5f5f983a19e4e23b5ccd5ebb",
+    "semantic_hash": "d1cf653a5f5f983a19e4e23b5ccd5ebb"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/imports/ExchangeImportResponse.java": {
+    "mtime": 1781882381.823313,
+    "ast_hash": "0855faa4d24286464c4fa79ff4e73fe6",
+    "semantic_hash": "0855faa4d24286464c4fa79ff4e73fe6"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/imports/ImportResult.java": {
+    "mtime": 1781882381.82531,
+    "ast_hash": "8249bdcced526a12f6be611084d1699c",
+    "semantic_hash": "8249bdcced526a12f6be611084d1699c"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/imports/OntologyExchangeDocument.java": {
+    "mtime": 1782043066.4535756,
+    "ast_hash": "ba5d2fcf40beb18670fe6bc4724cbbcd",
+    "semantic_hash": "ba5d2fcf40beb18670fe6bc4724cbbcd"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/imports/YamlImportResult.java": {
+    "mtime": 1781882381.8283017,
+    "ast_hash": "b1b0cd0c9e4782b475aad0d94e2324df",
+    "semantic_hash": "b1b0cd0c9e4782b475aad0d94e2324df"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/imports/YamlManifest.java": {
+    "mtime": 1781882381.8313107,
+    "ast_hash": "7faa8fc8568cdda4b4f6da75019eb329",
+    "semantic_hash": "7faa8fc8568cdda4b4f6da75019eb329"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/lifecycle/EntityLifecycleResponse.java": {
+    "mtime": 1782036284.4608705,
+    "ast_hash": "00555cc7e8fcf925b6b1477c869e63c6",
+    "semantic_hash": "00555cc7e8fcf925b6b1477c869e63c6"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/semantic/BusinessTermResult.java": {
+    "mtime": 1781882381.8335693,
+    "ast_hash": "01c1938febe575f7b081222ad1839978",
+    "semantic_hash": "01c1938febe575f7b081222ad1839978"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/semantic/IntentResult.java": {
+    "mtime": 1781882381.834622,
+    "ast_hash": "d2be4144846e9763ae5323151c57cb56",
+    "semantic_hash": "d2be4144846e9763ae5323151c57cb56"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/semantic/IntentSlotResult.java": {
+    "mtime": 1781882381.835969,
+    "ast_hash": "3a4de9841f960c339e2bc8fb28d9cd62",
+    "semantic_hash": "3a4de9841f960c339e2bc8fb28d9cd62"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/semantic/SemanticLayerResponse.java": {
+    "mtime": 1781882381.8369958,
+    "ast_hash": "6728644543159bdb0349af26fbc6f50b",
+    "semantic_hash": "6728644543159bdb0349af26fbc6f50b"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/dto/semantic/SemanticRelationResult.java": {
+    "mtime": 1781882381.8380237,
+    "ast_hash": "1c0bf7cf9de627564d3a719c09eafbcd",
+    "semantic_hash": "1c0bf7cf9de627564d3a719c09eafbcd"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/ActionDefinition.java": {
+    "mtime": 1781882381.839998,
+    "ast_hash": "2afc17e9806eff8a9fd108e8dde00e47",
+    "semantic_hash": "2afc17e9806eff8a9fd108e8dde00e47"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/AgentIntent.java": {
+    "mtime": 1781882381.8420172,
+    "ast_hash": "abc1cc679ddfb11a1613e38a723fa096",
+    "semantic_hash": "abc1cc679ddfb11a1613e38a723fa096"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/AgentPolicySemantic.java": {
+    "mtime": 1781889832.524631,
+    "ast_hash": "e048c6ef9e809739e13137b09183eaea",
+    "semantic_hash": "e048c6ef9e809739e13137b09183eaea"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/ApiDefinition.java": {
+    "mtime": 1781882381.8452544,
+    "ast_hash": "7356de7d462d354aaa04529fa532de04",
+    "semantic_hash": "7356de7d462d354aaa04529fa532de04"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/BusinessMetric.java": {
+    "mtime": 1781882381.847293,
+    "ast_hash": "839bfb80f26811238293ad6e80be007a",
+    "semantic_hash": "839bfb80f26811238293ad6e80be007a"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/BusinessTerm.java": {
+    "mtime": 1781882381.8482718,
+    "ast_hash": "7e479b5617d972dbe15a84f2b900a49d",
+    "semantic_hash": "7e479b5617d972dbe15a84f2b900a49d"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/Causality.java": {
+    "mtime": 1781882381.8495765,
+    "ast_hash": "bd740129b22a53a6f63211146cbda79b",
+    "semantic_hash": "bd740129b22a53a6f63211146cbda79b"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/ComputeDefinition.java": {
+    "mtime": 1781882381.8510673,
+    "ast_hash": "7bca275523953e0813c0b41d925fcc28",
+    "semantic_hash": "7bca275523953e0813c0b41d925fcc28"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/Department.java": {
+    "mtime": 1781882381.852237,
+    "ast_hash": "8dfff29592b4ced6d1aac68b5d225487",
+    "semantic_hash": "8dfff29592b4ced6d1aac68b5d225487"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/DomainEvent.java": {
+    "mtime": 1781882381.8535933,
+    "ast_hash": "ddfb9681d3c37d77a021513010db3f42",
+    "semantic_hash": "ddfb9681d3c37d77a021513010db3f42"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/EntityLifecycleSnapshot.java": {
+    "mtime": 1781889460.2271214,
+    "ast_hash": "c02b0e322804fd40a56f40b4cb2b2a7d",
+    "semantic_hash": "c02b0e322804fd40a56f40b4cb2b2a7d"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/EpcChain.java": {
+    "mtime": 1781889977.7448897,
+    "ast_hash": "a178aed22f7339bbe7a930d89bf01483",
+    "semantic_hash": "a178aed22f7339bbe7a930d89bf01483"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/EpcEdge.java": {
+    "mtime": 1781889376.355136,
+    "ast_hash": "524b3791c269b7d5ae7d22831b94d9ef",
+    "semantic_hash": "524b3791c269b7d5ae7d22831b94d9ef"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/EpcModelRef.java": {
+    "mtime": 1781889374.7943523,
+    "ast_hash": "07c5344e9b197322eb16090b45048ba6",
+    "semantic_hash": "07c5344e9b197322eb16090b45048ba6"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/EpcNode.java": {
+    "mtime": 1781890097.0329034,
+    "ast_hash": "0d12e65dbaf5dc65f3313bc003810fb2",
+    "semantic_hash": "0d12e65dbaf5dc65f3313bc003810fb2"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/EpcProfile.java": {
+    "mtime": 1781889448.6958294,
+    "ast_hash": "87933caa3d205cf4512391dfff5bf1a3",
+    "semantic_hash": "87933caa3d205cf4512391dfff5bf1a3"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/EpcStep.java": {
+    "mtime": 1781882381.861897,
+    "ast_hash": "89dcc17570dad8a05758964f847eece0",
+    "semantic_hash": "89dcc17570dad8a05758964f847eece0"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/ErrorRecovery.java": {
+    "mtime": 1781889469.0989141,
+    "ast_hash": "0e4e389aced6c6c5d49cb994afcfc99d",
+    "semantic_hash": "0e4e389aced6c6c5d49cb994afcfc99d"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/GuardrailRule.java": {
+    "mtime": 1781882381.8649328,
+    "ast_hash": "72728e4ee49158998937adf11087db87",
+    "semantic_hash": "72728e4ee49158998937adf11087db87"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/IndicatorDefinition.java": {
+    "mtime": 1781882381.8659785,
+    "ast_hash": "80d8eba8804304015915580f25bae3f9",
+    "semantic_hash": "80d8eba8804304015915580f25bae3f9"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/IntentSlot.java": {
+    "mtime": 1781889765.6964192,
+    "ast_hash": "dda9fff9afba14907f6b075780d7b81d",
+    "semantic_hash": "dda9fff9afba14907f6b075780d7b81d"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/JobRecord.java": {
+    "mtime": 1781882381.8679514,
+    "ast_hash": "b9cb4745d5d52564257268c7c3911588",
+    "semantic_hash": "b9cb4745d5d52564257268c7c3911588"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/MetadataTemplate.java": {
+    "mtime": 1781882381.8699512,
+    "ast_hash": "257795543b729fabea7a3e8d8f943aac",
+    "semantic_hash": "257795543b729fabea7a3e8d8f943aac"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/NotificationDefinition.java": {
+    "mtime": 1781882381.8709795,
+    "ast_hash": "ae3ac212b77c0df3d7be53a2762b1e04",
+    "semantic_hash": "ae3ac212b77c0df3d7be53a2762b1e04"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/ObjectInstance.java": {
+    "mtime": 1781882381.8729541,
+    "ast_hash": "c3c8fb7fd690fa0bf121ae919f641fd4",
+    "semantic_hash": "c3c8fb7fd690fa0bf121ae919f641fd4"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/ObjectType.java": {
+    "mtime": 1781882342.533928,
+    "ast_hash": "7b2b42d34518a7ecde8f0b05d20d0fea",
+    "semantic_hash": "7b2b42d34518a7ecde8f0b05d20d0fea"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/Ontology.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "3e756d7619f881fd8078dd974eac03a4",
+    "semantic_hash": "3e756d7619f881fd8078dd974eac03a4"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/Orchestration.java": {
+    "mtime": 1781882381.8749535,
+    "ast_hash": "d07b76254206331c284ce63a02983050",
+    "semantic_hash": "d07b76254206331c284ce63a02983050"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/PolicyRule.java": {
+    "mtime": 1781882381.87696,
+    "ast_hash": "8f5e4c0cce32b2e1d86d77f2f2e9a883",
+    "semantic_hash": "8f5e4c0cce32b2e1d86d77f2f2e9a883"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/PositionEntry.java": {
+    "mtime": 1781882381.8779552,
+    "ast_hash": "fb3fa4ef286ba0c2ca0b187f1510b61a",
+    "semantic_hash": "fb3fa4ef286ba0c2ca0b187f1510b61a"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/ProbeDefinition.java": {
+    "mtime": 1781882381.8799531,
+    "ast_hash": "f2ba2ada790ba87d38dcad80e469b25a",
+    "semantic_hash": "f2ba2ada790ba87d38dcad80e469b25a"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/ProcessStep.java": {
+    "mtime": 1781882381.8804734,
+    "ast_hash": "fae6df8e3f65b1831a494e179cbe38f9",
+    "semantic_hash": "fae6df8e3f65b1831a494e179cbe38f9"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/QueryDefinition.java": {
+    "mtime": 1781882381.8825006,
+    "ast_hash": "e10694dc424998d81bab4c6c9aa57a84",
+    "semantic_hash": "e10694dc424998d81bab4c6c9aa57a84"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/Relation.java": {
+    "mtime": 1781882342.5359304,
+    "ast_hash": "7f700b7978a46efaac2e3f97c6998744",
+    "semantic_hash": "7f700b7978a46efaac2e3f97c6998744"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/ReportDefinition.java": {
+    "mtime": 1781882381.8835015,
+    "ast_hash": "00969be0cb052f25e5e64d458f3dc5eb",
+    "semantic_hash": "00969be0cb052f25e5e64d458f3dc5eb"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/SemanticFieldMapping.java": {
+    "mtime": 1781889772.4618433,
+    "ast_hash": "37dc2a5651395abbfe43d5afe0ae82ea",
+    "semantic_hash": "37dc2a5651395abbfe43d5afe0ae82ea"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/SemanticRelation.java": {
+    "mtime": 1781889762.2456155,
+    "ast_hash": "c87b8b8876f4a47d86a892c6a2e40131",
+    "semantic_hash": "c87b8b8876f4a47d86a892c6a2e40131"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/StateMachine.java": {
+    "mtime": 1781882381.8885026,
+    "ast_hash": "4c68ab353dc188026460f668f64702bd",
+    "semantic_hash": "4c68ab353dc188026460f668f64702bd"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/StateTransition.java": {
+    "mtime": 1781882381.889502,
+    "ast_hash": "7f39c8e3c92dad188d42f3902204846c",
+    "semantic_hash": "7f39c8e3c92dad188d42f3902204846c"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/ValidationRule.java": {
+    "mtime": 1781882381.89151,
+    "ast_hash": "124113986e27a9bf2e81cbe97af39e71",
+    "semantic_hash": "124113986e27a9bf2e81cbe97af39e71"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/WebhookSubscription.java": {
+    "mtime": 1781882381.8925574,
+    "ast_hash": "5d27cc7cb9967992fc18e9944770b186",
+    "semantic_hash": "5d27cc7cb9967992fc18e9944770b186"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/governance/AgentRole.java": {
+    "mtime": 1781882342.5393066,
+    "ast_hash": "1fe97d869b22a9627b0bb13c4411a554",
+    "semantic_hash": "1fe97d869b22a9627b0bb13c4411a554"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/governance/AgentToken.java": {
+    "mtime": 1781882342.5412824,
+    "ast_hash": "2db72aa8df0285f1723d4ac7d5f690fb",
+    "semantic_hash": "2db72aa8df0285f1723d4ac7d5f690fb"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/governance/ApprovalRequest.java": {
+    "mtime": 1781882342.542305,
+    "ast_hash": "fb45f4075d9be23383bcac51133f07e2",
+    "semantic_hash": "fb45f4075d9be23383bcac51133f07e2"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/governance/RolePermission.java": {
+    "mtime": 1781882342.5447962,
+    "ast_hash": "30fc67830ccd2fd0a963d5bf60f9ec1a",
+    "semantic_hash": "30fc67830ccd2fd0a963d5bf60f9ec1a"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/upload/ImportTask.java": {
+    "mtime": 1781882342.546828,
+    "ast_hash": "9d01b172350d9e38ba24d9dbe7f1b7fe",
+    "semantic_hash": "9d01b172350d9e38ba24d9dbe7f1b7fe"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/entity/upload/UploadTask.java": {
+    "mtime": 1781882381.8955297,
+    "ast_hash": "dd15e281f6087a3cc10632ead32bed52",
+    "semantic_hash": "dd15e281f6087a3cc10632ead32bed52"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/event/OntologyArchivedEvent.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "a5b71c349a4d35992dcb5bcbec59b7fc",
+    "semantic_hash": "a5b71c349a4d35992dcb5bcbec59b7fc"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/event/OntologyCreatedEvent.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "eb526e7b76cefb247725983e51065080",
+    "semantic_hash": "eb526e7b76cefb247725983e51065080"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/event/OntologyDeletedEvent.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "2b554f813d60bf7c5492ffb9a0f71a59",
+    "semantic_hash": "2b554f813d60bf7c5492ffb9a0f71a59"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/event/OntologyPublishedEvent.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "4965ad7fc499085407a94f6ef462d116",
+    "semantic_hash": "4965ad7fc499085407a94f6ef462d116"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/event/OntologyUpdatedEvent.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "fd272e3a16a93430f0639cec45329f76",
+    "semantic_hash": "fd272e3a16a93430f0639cec45329f76"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/port/AgentBridgePort.java": {
+    "mtime": 1781931573.6619506,
+    "ast_hash": "0ffda5cdef19a6604392287ab7d744bb",
+    "semantic_hash": "0ffda5cdef19a6604392287ab7d744bb"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/ApiDefinitionRepository.java": {
+    "mtime": 1781882381.8975341,
+    "ast_hash": "7d4f9c27705c39a9aa33a62c173b55fa",
+    "semantic_hash": "7d4f9c27705c39a9aa33a62c173b55fa"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/CausalityRepository.java": {
+    "mtime": 1781882381.8985348,
+    "ast_hash": "3724c75d04309fc54e36607b5e3c365d",
+    "semantic_hash": "3724c75d04309fc54e36607b5e3c365d"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/ComputeDefinitionRepository.java": {
+    "mtime": 1781882381.9005382,
+    "ast_hash": "0c085cdc47dbef8cb56c863d764b4299",
+    "semantic_hash": "0c085cdc47dbef8cb56c863d764b4299"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/DomainEventRepository.java": {
+    "mtime": 1781882381.9015353,
+    "ast_hash": "f218ef08fc3042590b80c91794432d66",
+    "semantic_hash": "f218ef08fc3042590b80c91794432d66"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/EpcStepRepository.java": {
+    "mtime": 1781882381.9045455,
+    "ast_hash": "ffc85b6ae4dc416d4d2627dcd0598b9e",
+    "semantic_hash": "ffc85b6ae4dc416d4d2627dcd0598b9e"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/GuardrailRuleRepository.java": {
+    "mtime": 1781882381.9065752,
+    "ast_hash": "b50997bb3c89c6e6c0dc23d7d3b3b729",
+    "semantic_hash": "b50997bb3c89c6e6c0dc23d7d3b3b729"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/IndicatorDefinitionRepository.java": {
+    "mtime": 1781882381.9080625,
+    "ast_hash": "3bc9f8c813cc0e55b2d46536ab142b0a",
+    "semantic_hash": "3bc9f8c813cc0e55b2d46536ab142b0a"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/NotificationDefinitionRepository.java": {
+    "mtime": 1781882381.909618,
+    "ast_hash": "526397844700e34d2d8934cd1133ea00",
+    "semantic_hash": "526397844700e34d2d8934cd1133ea00"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/ObjectInstanceRepository.java": {
+    "mtime": 1781882381.9116168,
+    "ast_hash": "34929eadaae3509b79f215e9033293ca",
+    "semantic_hash": "34929eadaae3509b79f215e9033293ca"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/ObjectTypeRepository.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "26f0fd69baaa12043752c0f4e6647099",
+    "semantic_hash": "26f0fd69baaa12043752c0f4e6647099"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/OntologyRepository.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "8d4a3939ed14bab83205ee0472a6c3b5",
+    "semantic_hash": "8d4a3939ed14bab83205ee0472a6c3b5"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/PolicyRuleRepository.java": {
+    "mtime": 1781882381.9146268,
+    "ast_hash": "d914fd51dcb2f2a46e02fac4724ea104",
+    "semantic_hash": "d914fd51dcb2f2a46e02fac4724ea104"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/ProbeDefinitionRepository.java": {
+    "mtime": 1781882381.9166255,
+    "ast_hash": "8f5c8b755fe192d513faebbab10f6ea8",
+    "semantic_hash": "8f5c8b755fe192d513faebbab10f6ea8"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/PropertyRepository.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "acb0e7199d6c56db6d3c50ab3826e346",
+    "semantic_hash": "acb0e7199d6c56db6d3c50ab3826e346"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/QueryDefinitionRepository.java": {
+    "mtime": 1781882381.9186246,
+    "ast_hash": "d8545eb78e45687fea66f2978f50e263",
+    "semantic_hash": "d8545eb78e45687fea66f2978f50e263"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/RelationRepository.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "0ce1c9bc000dcb08d0dfc831cdf8ce0c",
+    "semantic_hash": "0ce1c9bc000dcb08d0dfc831cdf8ce0c"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/ReportDefinitionRepository.java": {
+    "mtime": 1781882381.9196212,
+    "ast_hash": "388aa2661ac5a08e4ec5d8f08f98f186",
+    "semantic_hash": "388aa2661ac5a08e4ec5d8f08f98f186"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/ValidationRuleRepository.java": {
+    "mtime": 1781882381.9226224,
+    "ast_hash": "623a87d2b0418bdf1bde9e78e22ea0e3",
+    "semantic_hash": "623a87d2b0418bdf1bde9e78e22ea0e3"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/WebhookSubscriptionRepository.java": {
+    "mtime": 1781882381.9236207,
+    "ast_hash": "399b8b0c0895e28af59297121a215883",
+    "semantic_hash": "399b8b0c0895e28af59297121a215883"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/behavior/ActionDefinitionRepository.java": {
+    "mtime": 1781882381.9256213,
+    "ast_hash": "acf3b4a0ef48abb05e854d7f01bcf34c",
+    "semantic_hash": "acf3b4a0ef48abb05e854d7f01bcf34c"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/behavior/StateMachineRepository.java": {
+    "mtime": 1781882381.927616,
+    "ast_hash": "801f0facdd31bf31618d6445183db64d",
+    "semantic_hash": "801f0facdd31bf31618d6445183db64d"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/behavior/StateTransitionRepository.java": {
+    "mtime": 1781882381.9291065,
+    "ast_hash": "73633767e55068e111da70b22d1f6cff",
+    "semantic_hash": "73633767e55068e111da70b22d1f6cff"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/governance/AgentRoleRepository.java": {
+    "mtime": 1781882342.5515668,
+    "ast_hash": "44f6dd716151ae5ae888c4bead24a6d5",
+    "semantic_hash": "44f6dd716151ae5ae888c4bead24a6d5"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/governance/AgentTokenRepository.java": {
+    "mtime": 1781882342.5525687,
+    "ast_hash": "06ef0b95ca648a9838275dbe5d65a47a",
+    "semantic_hash": "06ef0b95ca648a9838275dbe5d65a47a"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/governance/ApprovalRepository.java": {
+    "mtime": 1781882342.5545719,
+    "ast_hash": "d5acbfe4d5da799cd2f81215112c69f9",
+    "semantic_hash": "d5acbfe4d5da799cd2f81215112c69f9"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/governance/RolePermissionRepository.java": {
+    "mtime": 1781882342.5555704,
+    "ast_hash": "f9c741dc65ca4a61114a1b7e1828b5bf",
+    "semantic_hash": "f9c741dc65ca4a61114a1b7e1828b5bf"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/upload/ImportTaskRepository.java": {
+    "mtime": 1781882342.557568,
+    "ast_hash": "00b30292fc955b6f178043217e50aebb",
+    "semantic_hash": "00b30292fc955b6f178043217e50aebb"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/repository/upload/UploadTaskRepository.java": {
+    "mtime": 1781882342.5585694,
+    "ast_hash": "3bf3b0d148a95ec23aff249d8ed3435a",
+    "semantic_hash": "3bf3b0d148a95ec23aff249d8ed3435a"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/service/GraphTraversalService.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "3941d6b08dac59c4fadbff9ff64befe6",
+    "semantic_hash": "3941d6b08dac59c4fadbff9ff64befe6"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/service/GraphWhitelistService.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "9e6b81e8c035272f23b99568331b212d",
+    "semantic_hash": "9e6b81e8c035272f23b99568331b212d"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/service/JobHandler.java": {
+    "mtime": 1781882381.9311073,
+    "ast_hash": "53bde6a65bd8ba462783eba7651194b1",
+    "semantic_hash": "53bde6a65bd8ba462783eba7651194b1"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/service/upload/DataExportService.java": {
+    "mtime": 1781882342.5605695,
+    "ast_hash": "3d21434152d32416a63560ec532b2aeb",
+    "semantic_hash": "3d21434152d32416a63560ec532b2aeb"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/service/upload/DataFileParser.java": {
+    "mtime": 1781882342.5605695,
+    "ast_hash": "8917538a0612c3ed7840d2e1d715ac41",
+    "semantic_hash": "8917538a0612c3ed7840d2e1d715ac41"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/service/upload/FileStorageService.java": {
+    "mtime": 1781882342.561569,
+    "ast_hash": "0e54d1ccfebf2307ea9cd8642836ebb5",
+    "semantic_hash": "0e54d1ccfebf2307ea9cd8642836ebb5"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/service/validation/ValidationContext.java": {
+    "mtime": 1781882381.9331088,
+    "ast_hash": "d8dde3701930653fe13b2575749bc885",
+    "semantic_hash": "d8dde3701930653fe13b2575749bc885"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/service/validation/ValidationIssue.java": {
+    "mtime": 1781882381.935108,
+    "ast_hash": "69ab58b100a14153c952c4cdfae1efc2",
+    "semantic_hash": "69ab58b100a14153c952c4cdfae1efc2"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/service/validation/ValidationPlugin.java": {
+    "mtime": 1781882381.9371026,
+    "ast_hash": "3dba96c455a7614bff7af13cff136a3c",
+    "semantic_hash": "3dba96c455a7614bff7af13cff136a3c"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/service/validation/ValidationReport.java": {
+    "mtime": 1781882381.938106,
+    "ast_hash": "e9c037a2e0abbd8aee72edf11e48dcf6",
+    "semantic_hash": "e9c037a2e0abbd8aee72edf11e48dcf6"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/vo/Property.java": {
+    "mtime": 1781882342.5645683,
+    "ast_hash": "47b8c35ce653cea866838a4469c38d87",
+    "semantic_hash": "47b8c35ce653cea866838a4469c38d87"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/vo/PropertyConstraint.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "4ed9ea704013ff3561502bf47639bcdc",
+    "semantic_hash": "4ed9ea704013ff3561502bf47639bcdc"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/vo/RelationProperty.java": {
+    "mtime": 1780928515.79968,
+    "ast_hash": "1e01b9126a31645a4388f279366cfc31",
+    "semantic_hash": "1e01b9126a31645a4388f279366cfc31"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/vo/manifest/ManifestDocument.java": {
+    "mtime": 1781931090.1761844,
+    "ast_hash": "2c6584a38c0473dfdfc6051feb86d98d",
+    "semantic_hash": "2c6584a38c0473dfdfc6051feb86d98d"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/vo/manifest/ManifestValidationResult.java": {
+    "mtime": 1781882381.9451063,
+    "ast_hash": "695c2f12fffebea252f303c00184dc57",
+    "semantic_hash": "695c2f12fffebea252f303c00184dc57"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/vo/manifest/ValidationError.java": {
+    "mtime": 1781882381.9481087,
+    "ast_hash": "29e58b17accd03fcbc10d41f95c8741c",
+    "semantic_hash": "29e58b17accd03fcbc10d41f95c8741c"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/vo/traversal/CypherQuery.java": {
+    "mtime": 1781882342.5675678,
+    "ast_hash": "c97b371956bd25261b6b0def0f280ef4",
+    "semantic_hash": "c97b371956bd25261b6b0def0f280ef4"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/vo/traversal/GraphTraversalRequest.java": {
+    "mtime": 1780928515.8097794,
+    "ast_hash": "6d6df35e30d74113780cc342a7ccafe7",
+    "semantic_hash": "6d6df35e30d74113780cc342a7ccafe7"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/vo/traversal/TraversalFilter.java": {
+    "mtime": 1780928515.8097794,
+    "ast_hash": "78ddfb129029b61a0efc2dd7d837ad4c",
+    "semantic_hash": "78ddfb129029b61a0efc2dd7d837ad4c"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/vo/traversal/TraversalFilterCondition.java": {
+    "mtime": 1780928515.8097794,
+    "ast_hash": "8c885c26c4114ab5eeccd36ef6bceaab",
+    "semantic_hash": "8c885c26c4114ab5eeccd36ef6bceaab"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/vo/traversal/TraversalPath.java": {
+    "mtime": 1780928515.8097794,
+    "ast_hash": "89c6f7dc19593c58acbe6f1654d2d26c",
+    "semantic_hash": "89c6f7dc19593c58acbe6f1654d2d26c"
+  },
+  "ontology-domain/src/main/java/com/ontology/platform/domain/vo/traversal/TraversalResult.java": {
+    "mtime": 1780928515.8097794,
+    "ast_hash": "bf6d04ef6cf9869f6ed7a063acd1e3ee",
+    "semantic_hash": "bf6d04ef6cf9869f6ed7a063acd1e3ee"
+  },
+  "ontology-domain/src/test/java/com/ontology/platform/domain/ObjectTypeTest.java": {
+    "mtime": 1781882381.9521008,
+    "ast_hash": "fa2b20fbdf22d70a79b1a1f2e1f6b460",
+    "semantic_hash": "fa2b20fbdf22d70a79b1a1f2e1f6b460"
+  },
+  "ontology-domain/src/test/java/com/ontology/platform/domain/OntologyTest.java": {
+    "mtime": 1781882381.9561095,
+    "ast_hash": "d666ad8610cc116bb6d7fe7723d344f5",
+    "semantic_hash": "d666ad8610cc116bb6d7fe7723d344f5"
+  },
+  "ontology-domain/src/test/java/com/ontology/platform/domain/PropertyConstraintTest.java": {
+    "mtime": 1780928515.8097794,
+    "ast_hash": "c043b3519b066f0607fd9f03b22af8b5",
+    "semantic_hash": "c043b3519b066f0607fd9f03b22af8b5"
+  },
+  "ontology-domain/src/test/java/com/ontology/platform/domain/PropertyTest.java": {
+    "mtime": 1781882381.9594674,
+    "ast_hash": "0a636a9afd97cc92cc71b942faa38280",
+    "semantic_hash": "0a636a9afd97cc92cc71b942faa38280"
+  },
+  "ontology-domain/src/test/java/com/ontology/platform/domain/RelationTest.java": {
+    "mtime": 1781882381.9634607,
+    "ast_hash": "fda50509e253ed0c5bbfe4bcb9b26385",
+    "semantic_hash": "fda50509e253ed0c5bbfe4bcb9b26385"
+  },
+  "ontology-domain/src/test/java/com/ontology/platform/domain/dto/imports/OntologyExchangeDocumentParseTest.java": {
+    "mtime": 1782043112.8631885,
+    "ast_hash": "2de7b03d0ba0400d160747b73e28ec70",
+    "semantic_hash": "2de7b03d0ba0400d160747b73e28ec70"
+  },
+  "ontology-domain/src/test/java/com/ontology/platform/domain/entity/RelationTest.java": {
+    "mtime": 1780928515.8097794,
+    "ast_hash": "21659283276dcacbd9f166ef46043f4c",
+    "semantic_hash": "21659283276dcacbd9f166ef46043f4c"
+  },
+  "ontology-domain/src/test/java/com/ontology/platform/domain/entity/upload/UploadTaskTest.java": {
+    "mtime": 1781882342.570567,
+    "ast_hash": "8fa939173f2fc010d7d7ece0ab66e681",
+    "semantic_hash": "8fa939173f2fc010d7d7ece0ab66e681"
+  },
+  "ontology-domain/src/test/java/com/ontology/platform/domain/factory/TestFactory.java": {
+    "mtime": 1780928515.8097794,
+    "ast_hash": "48d20ac2ed16eb692d8928222a112d32",
+    "semantic_hash": "48d20ac2ed16eb692d8928222a112d32"
+  },
+  "ontology-domain/src/test/java/com/ontology/platform/domain/vo/RelationPropertyTest.java": {
+    "mtime": 1781882342.5725684,
+    "ast_hash": "64296a2288b93f55147f54c3a408cab6",
+    "semantic_hash": "64296a2288b93f55147f54c3a408cab6"
+  },
+  "ontology-infrastructure/pom.xml": {
+    "mtime": 1781882381.9666448,
+    "ast_hash": "f306aa3209878075c7059c851647caf6",
+    "semantic_hash": "f306aa3209878075c7059c851647caf6"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/bridge/AgentBridgeService.java": {
+    "mtime": 1781931573.6589522,
+    "ast_hash": "aa68ff97db3131cb98ff9bba11b8df8a",
+    "semantic_hash": "aa68ff97db3131cb98ff9bba11b8df8a"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/config/AgeDataSourceConfig.java": {
+    "mtime": 1781882342.5783312,
+    "ast_hash": "30ecdd6482424d5ffa356475b48042c5",
+    "semantic_hash": "30ecdd6482424d5ffa356475b48042c5"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/config/GraphProperties.java": {
+    "mtime": 1781882381.9706717,
+    "ast_hash": "893c2be7c6035c594e8b22ea6eb2b85b",
+    "semantic_hash": "893c2be7c6035c594e8b22ea6eb2b85b"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/config/JpaConfig.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "221f3e4dfe8e5be04c67ee6c6655ef1b",
+    "semantic_hash": "221f3e4dfe8e5be04c67ee6c6655ef1b"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/config/MyBatisPlusConfig.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "9c38ee5e9275af5de5882cfa5db3356e",
+    "semantic_hash": "9c38ee5e9275af5de5882cfa5db3356e"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/config/RedisConfig.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "f91a74d8f43ac784fe33dd8780fc075f",
+    "semantic_hash": "f91a74d8f43ac784fe33dd8780fc075f"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/ActionDefinitionConverter.java": {
+    "mtime": 1781882381.9726765,
+    "ast_hash": "a597e19d621815f68e923e7271e1a348",
+    "semantic_hash": "a597e19d621815f68e923e7271e1a348"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/AgentRoleConverter.java": {
+    "mtime": 1781882381.9746797,
+    "ast_hash": "f49a01968887b8071dd0a7e143aa9cf6",
+    "semantic_hash": "f49a01968887b8071dd0a7e143aa9cf6"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/AgentTokenConverter.java": {
+    "mtime": 1781882381.9766736,
+    "ast_hash": "0950bdcd3837ee5bf14fc3d6248a19f0",
+    "semantic_hash": "0950bdcd3837ee5bf14fc3d6248a19f0"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/ApiDefinitionConverter.java": {
+    "mtime": 1781882381.9786737,
+    "ast_hash": "cb414b97a3fc0c9e28d7a8e982ee4e14",
+    "semantic_hash": "cb414b97a3fc0c9e28d7a8e982ee4e14"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/ApprovalRequestConverter.java": {
+    "mtime": 1781882381.980199,
+    "ast_hash": "ea417c783ddd6cba3edeaf47dc35f77a",
+    "semantic_hash": "ea417c783ddd6cba3edeaf47dc35f77a"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/CausalityConverter.java": {
+    "mtime": 1781882381.9822297,
+    "ast_hash": "9c2019798b3b8b2078cadabad460b6bc",
+    "semantic_hash": "9c2019798b3b8b2078cadabad460b6bc"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/ComputeDefinitionConverter.java": {
+    "mtime": 1781882381.9842265,
+    "ast_hash": "f2eb1cc204bc6e34d983f9140c6d3654",
+    "semantic_hash": "f2eb1cc204bc6e34d983f9140c6d3654"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/DomainEventConverter.java": {
+    "mtime": 1781882381.9862285,
+    "ast_hash": "e824d07bad1e17c55f9a8c59952a279e",
+    "semantic_hash": "e824d07bad1e17c55f9a8c59952a279e"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/EpcStepConverter.java": {
+    "mtime": 1781882381.9882274,
+    "ast_hash": "15b069daa402f8796746a60e983719e5",
+    "semantic_hash": "15b069daa402f8796746a60e983719e5"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/GuardrailRuleConverter.java": {
+    "mtime": 1781882381.989226,
+    "ast_hash": "3242fcd80bccedbc04fbb9a8e1c964dd",
+    "semantic_hash": "3242fcd80bccedbc04fbb9a8e1c964dd"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/ImportTaskConverter.java": {
+    "mtime": 1781882381.9912252,
+    "ast_hash": "929f6e7a07a7ed0bf806dfd1b544638c",
+    "semantic_hash": "929f6e7a07a7ed0bf806dfd1b544638c"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/IndicatorDefinitionConverter.java": {
+    "mtime": 1781882381.9922268,
+    "ast_hash": "6e4e503a9cf7a7c12bab745ede164511",
+    "semantic_hash": "6e4e503a9cf7a7c12bab745ede164511"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/JobRecordConverter.java": {
+    "mtime": 1781882381.9942293,
+    "ast_hash": "8ab37ebd485430d9b91ea4a5355c38e7",
+    "semantic_hash": "8ab37ebd485430d9b91ea4a5355c38e7"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/NotificationDefinitionConverter.java": {
+    "mtime": 1781882381.9962287,
+    "ast_hash": "bf8d408289a646445a90f400ef09c7b6",
+    "semantic_hash": "bf8d408289a646445a90f400ef09c7b6"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/ObjectInstanceConverter.java": {
+    "mtime": 1781882381.9982276,
+    "ast_hash": "26b0ca9fdc84b0cb8185e1ae25a48d49",
+    "semantic_hash": "26b0ca9fdc84b0cb8185e1ae25a48d49"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/ObjectTypeConverter.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "22f839726d43ef79303a76cd7892734d",
+    "semantic_hash": "22f839726d43ef79303a76cd7892734d"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/OntologyConverter.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "a0c907a51420bdf15e39c90fe999ee78",
+    "semantic_hash": "a0c907a51420bdf15e39c90fe999ee78"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/PolicyRuleConverter.java": {
+    "mtime": 1781882381.9992285,
+    "ast_hash": "0e88a33caebd2ad199b7b2409371776b",
+    "semantic_hash": "0e88a33caebd2ad199b7b2409371776b"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/ProbeDefinitionConverter.java": {
+    "mtime": 1781882382.0012257,
+    "ast_hash": "59c6418ad3216e5859b1e2d677ec8137",
+    "semantic_hash": "59c6418ad3216e5859b1e2d677ec8137"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/PropertyConverter.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "289344ff0b656cc3f559239de5b62c2d",
+    "semantic_hash": "289344ff0b656cc3f559239de5b62c2d"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/QueryDefinitionConverter.java": {
+    "mtime": 1781882382.0032265,
+    "ast_hash": "031276b28f1f7a489816947d2456723f",
+    "semantic_hash": "031276b28f1f7a489816947d2456723f"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/RelationConverter.java": {
+    "mtime": 1781882382.006239,
+    "ast_hash": "2bb2375a9fd8ab3842d0dc4805fb1784",
+    "semantic_hash": "2bb2375a9fd8ab3842d0dc4805fb1784"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/ReportDefinitionConverter.java": {
+    "mtime": 1781882382.008231,
+    "ast_hash": "e9fefa77cc626ffc7de182cf38e9e1ea",
+    "semantic_hash": "e9fefa77cc626ffc7de182cf38e9e1ea"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/RolePermissionConverter.java": {
+    "mtime": 1781882382.010225,
+    "ast_hash": "8cbce63d6cb481d8b7cc2a48b784f337",
+    "semantic_hash": "8cbce63d6cb481d8b7cc2a48b784f337"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/StateMachineConverter.java": {
+    "mtime": 1781882382.0122266,
+    "ast_hash": "a80c7cc6771d9071a36804d4f8b96093",
+    "semantic_hash": "a80c7cc6771d9071a36804d4f8b96093"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/StateTransitionConverter.java": {
+    "mtime": 1781882382.0132573,
+    "ast_hash": "d3e0f85be0b49cdffcea03b39133093d",
+    "semantic_hash": "d3e0f85be0b49cdffcea03b39133093d"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/UploadTaskConverter.java": {
+    "mtime": 1781882382.0162246,
+    "ast_hash": "cd80b97afa765694569cdb1db93fd3cd",
+    "semantic_hash": "cd80b97afa765694569cdb1db93fd3cd"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/ValidationRuleConverter.java": {
+    "mtime": 1781882382.017262,
+    "ast_hash": "f548d56b2219f2179a537d8f9397d059",
+    "semantic_hash": "f548d56b2219f2179a537d8f9397d059"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/converter/WebhookSubscriptionConverter.java": {
+    "mtime": 1781882382.0192637,
+    "ast_hash": "13234fa82ad289980b6a88565abef39d",
+    "semantic_hash": "13234fa82ad289980b6a88565abef39d"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/graph/AgeQueryExecutor.java": {
+    "mtime": 1781882342.5794072,
+    "ast_hash": "a5062fde0f018aa678dd9e3c97008a12",
+    "semantic_hash": "a5062fde0f018aa678dd9e3c97008a12"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/graph/GraphService.java": {
+    "mtime": 1781882382.0222468,
+    "ast_hash": "14c8289e542eb5dab3fc7d47c2fa4dc2",
+    "semantic_hash": "14c8289e542eb5dab3fc7d47c2fa4dc2"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/graph/impl/AgeQueryExecutorImpl.java": {
+    "mtime": 1781882342.5844338,
+    "ast_hash": "7b311cdbf51978adf3fc4d05449298fc",
+    "semantic_hash": "7b311cdbf51978adf3fc4d05449298fc"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/idempotency/IdempotencyService.java": {
+    "mtime": 1781882382.025231,
+    "ast_hash": "ab890b1369a2481c6e2c010b937623a6",
+    "semantic_hash": "ab890b1369a2481c6e2c010b937623a6"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/imports/ExcelBImportAdapter.java": {
+    "mtime": 1781882382.027225,
+    "ast_hash": "c525fdbe402470d52861f6a2cc5e8c36",
+    "semantic_hash": "c525fdbe402470d52861f6a2cc5e8c36"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/imports/ExcelCImportAdapter.java": {
+    "mtime": 1781882382.030227,
+    "ast_hash": "b896c4ce37ecb2066f88f2ad68e8e171",
+    "semantic_hash": "b896c4ce37ecb2066f88f2ad68e8e171"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/imports/ExcelEDimImportAdapter.java": {
+    "mtime": 1781882382.0312254,
+    "ast_hash": "9bfd03c2b5436d4fb4fe8af8951efd16",
+    "semantic_hash": "9bfd03c2b5436d4fb4fe8af8951efd16"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/imports/ExcelEpcImportAdapter.java": {
+    "mtime": 1781882382.0342278,
+    "ast_hash": "fa115d4dc9c9a90ea14f68163e5b54ee",
+    "semantic_hash": "fa115d4dc9c9a90ea14f68163e5b54ee"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/imports/ExcelExchangeMapper.java": {
+    "mtime": 1781882382.0362277,
+    "ast_hash": "e2a1092dbf4e900177654f9f6772988a",
+    "semantic_hash": "e2a1092dbf4e900177654f9f6772988a"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/imports/ExcelOntologyImportAdapter.java": {
+    "mtime": 1781882382.0382245,
+    "ast_hash": "cdfff2f3395c6c5326a32ec7cb2362bc",
+    "semantic_hash": "cdfff2f3395c6c5326a32ec7cb2362bc"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/imports/ManifestUpcasterV1ToV2.java": {
+    "mtime": 1782036620.4840248,
+    "ast_hash": "a1b770e3df60bc8c658fde0f40a3faa8",
+    "semantic_hash": "a1b770e3df60bc8c658fde0f40a3faa8"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/imports/YamlManifestConverter.java": {
+    "mtime": 1781882382.0432432,
+    "ast_hash": "91fd0dbc2547902ec19ef283b7487808",
+    "semantic_hash": "91fd0dbc2547902ec19ef283b7487808"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/imports/YamlManifestParser.java": {
+    "mtime": 1781882382.0462432,
+    "ast_hash": "32e3a68807a6ede459e3f58207e55fe8",
+    "semantic_hash": "32e3a68807a6ede459e3f58207e55fe8"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/job/JobPoller.java": {
+    "mtime": 1781882382.0492573,
+    "ast_hash": "e246811b3566bccb251453e78e8d47e0",
+    "semantic_hash": "e246811b3566bccb251453e78e8d47e0"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/job/JobQueueService.java": {
+    "mtime": 1781882382.0512414,
+    "ast_hash": "aca225fa7d0fe83ed2e6dbf980c45561",
+    "semantic_hash": "aca225fa7d0fe83ed2e6dbf980c45561"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/metrics/PlatformMetrics.java": {
+    "mtime": 1781882382.054243,
+    "ast_hash": "3cb813876956d46e4f54e12f217005fe",
+    "semantic_hash": "3cb813876956d46e4f54e12f217005fe"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ActionDefinitionPO.java": {
+    "mtime": 1781882382.056785,
+    "ast_hash": "b93416a0741507df78833e8185084875",
+    "semantic_hash": "b93416a0741507df78833e8185084875"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ActionDefinitionPOMapper.java": {
+    "mtime": 1781882382.0588999,
+    "ast_hash": "164be4aa233558fdcdc5a23811ed5425",
+    "semantic_hash": "164be4aa233558fdcdc5a23811ed5425"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/AgentIntentPO.java": {
+    "mtime": 1782036271.8719513,
+    "ast_hash": "2bfbdb08ac43e06074f5e89a4bf54469",
+    "semantic_hash": "2bfbdb08ac43e06074f5e89a4bf54469"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/AgentIntentPOMapper.java": {
+    "mtime": 1781882382.0618856,
+    "ast_hash": "f2ebf69f528dd7c3b69a37383b7748e7",
+    "semantic_hash": "f2ebf69f528dd7c3b69a37383b7748e7"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/AgentPolicySemanticPO.java": {
+    "mtime": 1782051387.984929,
+    "ast_hash": "29f6dba26696a7f7e4c8c0f75dc15ba1",
+    "semantic_hash": "29f6dba26696a7f7e4c8c0f75dc15ba1"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/AgentPolicySemanticPOMapper.java": {
+    "mtime": 1781882382.064914,
+    "ast_hash": "bcd0ab2bf8a017ecbe8fc8c49c602670",
+    "semantic_hash": "bcd0ab2bf8a017ecbe8fc8c49c602670"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/AgentRolePO.java": {
+    "mtime": 1781882382.0659595,
+    "ast_hash": "a49fc50b6ed44a834e24993e5c4f918a",
+    "semantic_hash": "a49fc50b6ed44a834e24993e5c4f918a"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/AgentRolePOMapper.java": {
+    "mtime": 1781882382.067933,
+    "ast_hash": "ab5bef66602895bb860e2c50d83193a9",
+    "semantic_hash": "ab5bef66602895bb860e2c50d83193a9"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/AgentTokenPO.java": {
+    "mtime": 1781882382.0709348,
+    "ast_hash": "15b49ce0208bc2c131842ce2c9e95739",
+    "semantic_hash": "15b49ce0208bc2c131842ce2c9e95739"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/AgentTokenPOMapper.java": {
+    "mtime": 1781882382.0719361,
+    "ast_hash": "d0f88cdb228f937daa8a756d98a110c1",
+    "semantic_hash": "d0f88cdb228f937daa8a756d98a110c1"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ApiDefinitionPO.java": {
+    "mtime": 1781882382.0739386,
+    "ast_hash": "799f0386d204f050bba66ef12e1f1c14",
+    "semantic_hash": "799f0386d204f050bba66ef12e1f1c14"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ApiDefinitionPOMapper.java": {
+    "mtime": 1781882382.075972,
+    "ast_hash": "3db0afb34639340fe91b773fd69455fe",
+    "semantic_hash": "3db0afb34639340fe91b773fd69455fe"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ApprovalRequestPO.java": {
+    "mtime": 1781882382.0779376,
+    "ast_hash": "c8483b463ee9f2e6324d7bea7304fecc",
+    "semantic_hash": "c8483b463ee9f2e6324d7bea7304fecc"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ApprovalRequestPOMapper.java": {
+    "mtime": 1781882382.0789359,
+    "ast_hash": "5f10377b40dbfedcaa80e612eb1ac7ce",
+    "semantic_hash": "5f10377b40dbfedcaa80e612eb1ac7ce"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/BusinessMetricPO.java": {
+    "mtime": 1781882382.0804613,
+    "ast_hash": "fe2c83ca8451b9c518ed19ad674763b0",
+    "semantic_hash": "fe2c83ca8451b9c518ed19ad674763b0"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/BusinessMetricPOMapper.java": {
+    "mtime": 1781882382.0824914,
+    "ast_hash": "07274027d3c04ccd35b30e8712064cef",
+    "semantic_hash": "07274027d3c04ccd35b30e8712064cef"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/BusinessTermPO.java": {
+    "mtime": 1781882382.0834923,
+    "ast_hash": "343efd2aa57485572ceb138efd6c4506",
+    "semantic_hash": "343efd2aa57485572ceb138efd6c4506"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/BusinessTermPOMapper.java": {
+    "mtime": 1781882382.0854905,
+    "ast_hash": "88ee4c7915572f7c28a9ba395797494e",
+    "semantic_hash": "88ee4c7915572f7c28a9ba395797494e"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/CausalityPO.java": {
+    "mtime": 1781882382.0864904,
+    "ast_hash": "e23286fb78dfd911ac4d45db460ffa04",
+    "semantic_hash": "e23286fb78dfd911ac4d45db460ffa04"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/CausalityPOMapper.java": {
+    "mtime": 1781882382.08849,
+    "ast_hash": "93992ffe301bbb600f55847bb416a6b4",
+    "semantic_hash": "93992ffe301bbb600f55847bb416a6b4"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ComputeDefinitionPO.java": {
+    "mtime": 1781882382.0894897,
+    "ast_hash": "746587604352d3158024d204679fd04d",
+    "semantic_hash": "746587604352d3158024d204679fd04d"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ComputeDefinitionPOMapper.java": {
+    "mtime": 1781882382.0914922,
+    "ast_hash": "61f4d7d35a08017b60a8b9c45cb38bf5",
+    "semantic_hash": "61f4d7d35a08017b60a8b9c45cb38bf5"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/DepartmentPO.java": {
+    "mtime": 1781882382.0924904,
+    "ast_hash": "aacfdf325a172a62f28dd6d5b3bca982",
+    "semantic_hash": "aacfdf325a172a62f28dd6d5b3bca982"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/DepartmentPOMapper.java": {
+    "mtime": 1781882382.0934901,
+    "ast_hash": "ec4e4f00a037994f282fe88b20953d7f",
+    "semantic_hash": "ec4e4f00a037994f282fe88b20953d7f"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/DomainEventPO.java": {
+    "mtime": 1781882382.095522,
+    "ast_hash": "c9a3d93d02c8c3fe4446ed09a79ceae2",
+    "semantic_hash": "c9a3d93d02c8c3fe4446ed09a79ceae2"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/DomainEventPOMapper.java": {
+    "mtime": 1781882382.0985222,
+    "ast_hash": "356d30ad0a14991eb7855d2fe54d9582",
+    "semantic_hash": "356d30ad0a14991eb7855d2fe54d9582"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EntityLifecycleSnapshotPO.java": {
+    "mtime": 1781882382.1005247,
+    "ast_hash": "edbfb70731a9938ed96df57ce4b60600",
+    "semantic_hash": "edbfb70731a9938ed96df57ce4b60600"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EntityLifecycleSnapshotPOMapper.java": {
+    "mtime": 1781882382.1015246,
+    "ast_hash": "1087cf1d791d0caa62ded2748ee59e1b",
+    "semantic_hash": "1087cf1d791d0caa62ded2748ee59e1b"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EpcChainPO.java": {
+    "mtime": 1782043022.242723,
+    "ast_hash": "34cd8a588330c316016118f996e066ce",
+    "semantic_hash": "34cd8a588330c316016118f996e066ce"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EpcChainPOMapper.java": {
+    "mtime": 1782043023.1775668,
+    "ast_hash": "12fb2c225d82b89ca5d8c4183d714a6c",
+    "semantic_hash": "12fb2c225d82b89ca5d8c4183d714a6c"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EpcEdgePO.java": {
+    "mtime": 1782043022.2467048,
+    "ast_hash": "8518ef9d465254bfe4ce32caaf16fcc7",
+    "semantic_hash": "8518ef9d465254bfe4ce32caaf16fcc7"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EpcEdgePOMapper.java": {
+    "mtime": 1781882382.1071427,
+    "ast_hash": "59452ac9c0d66fee49e65175c10aa988",
+    "semantic_hash": "59452ac9c0d66fee49e65175c10aa988"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EpcModelRefPO.java": {
+    "mtime": 1782043023.1775668,
+    "ast_hash": "046cd74295a05c9eefcfe1e3264d14b1",
+    "semantic_hash": "046cd74295a05c9eefcfe1e3264d14b1"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EpcModelRefPOMapper.java": {
+    "mtime": 1781882382.109949,
+    "ast_hash": "ee3c5c695a16fab36511a21578ad0b86",
+    "semantic_hash": "ee3c5c695a16fab36511a21578ad0b86"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EpcNodePO.java": {
+    "mtime": 1782043022.2467048,
+    "ast_hash": "a1e9d35c76afbc893460e15dce0fab47",
+    "semantic_hash": "a1e9d35c76afbc893460e15dce0fab47"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EpcNodePOMapper.java": {
+    "mtime": 1781882382.1130083,
+    "ast_hash": "249b194711b1b234fbd63ed3628ee989",
+    "semantic_hash": "249b194711b1b234fbd63ed3628ee989"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EpcProfilePO.java": {
+    "mtime": 1782043023.1775668,
+    "ast_hash": "a6e21d002c792065f87c680651e4d32c",
+    "semantic_hash": "a6e21d002c792065f87c680651e4d32c"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EpcProfilePOMapper.java": {
+    "mtime": 1781882382.1159787,
+    "ast_hash": "544b1757b7dfaf8eef6f777a316295f0",
+    "semantic_hash": "544b1757b7dfaf8eef6f777a316295f0"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EpcStepPO.java": {
+    "mtime": 1781882382.1172779,
+    "ast_hash": "a18b8afb7933336579217c15174bb141",
+    "semantic_hash": "a18b8afb7933336579217c15174bb141"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/EpcStepPOMapper.java": {
+    "mtime": 1781882382.1202774,
+    "ast_hash": "7066ff49c48b3a20833a204916388a90",
+    "semantic_hash": "7066ff49c48b3a20833a204916388a90"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ErrorRecoveryPO.java": {
+    "mtime": 1781882382.1213038,
+    "ast_hash": "f47f326b9bc57ff6701365551e693fdd",
+    "semantic_hash": "f47f326b9bc57ff6701365551e693fdd"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ErrorRecoveryPOMapper.java": {
+    "mtime": 1781882382.1238327,
+    "ast_hash": "c475e0ffe6ee0b1e351b287cab3f71e7",
+    "semantic_hash": "c475e0ffe6ee0b1e351b287cab3f71e7"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ExchangeImportPO.java": {
+    "mtime": 1781882382.1258364,
+    "ast_hash": "d9a395d2e9ec1c9ee0e0d5aeea4e6c5f",
+    "semantic_hash": "d9a395d2e9ec1c9ee0e0d5aeea4e6c5f"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ExchangeImportPOMapper.java": {
+    "mtime": 1781882382.1268256,
+    "ast_hash": "16bdedd0990c3beb2f86a10afeb8c45b",
+    "semantic_hash": "16bdedd0990c3beb2f86a10afeb8c45b"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/GuardrailRulePO.java": {
+    "mtime": 1781882382.1288235,
+    "ast_hash": "4b42d65ebf6b46018a72bf282f3a09e1",
+    "semantic_hash": "4b42d65ebf6b46018a72bf282f3a09e1"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/GuardrailRulePOMapper.java": {
+    "mtime": 1781882382.1318235,
+    "ast_hash": "85d533d97ae76af9bf3e6b49189fd180",
+    "semantic_hash": "85d533d97ae76af9bf3e6b49189fd180"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/IdempotencyRecordPO.java": {
+    "mtime": 1781882382.133839,
+    "ast_hash": "5ccfcc0e73f10888fd3f70f3d53f68c2",
+    "semantic_hash": "5ccfcc0e73f10888fd3f70f3d53f68c2"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/IdempotencyRecordPOMapper.java": {
+    "mtime": 1781882382.1348379,
+    "ast_hash": "9a712ec6812db0176dc0b95ead7e77bc",
+    "semantic_hash": "9a712ec6812db0176dc0b95ead7e77bc"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ImportTaskPO.java": {
+    "mtime": 1781882382.1368394,
+    "ast_hash": "ee673263792cbc1c7fd9ea69e48ee39b",
+    "semantic_hash": "ee673263792cbc1c7fd9ea69e48ee39b"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ImportTaskPOMapper.java": {
+    "mtime": 1781882382.1388457,
+    "ast_hash": "4b37ba9ea3a82eb59a392aa7f7c8d6bc",
+    "semantic_hash": "4b37ba9ea3a82eb59a392aa7f7c8d6bc"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/IndicatorDefinitionPO.java": {
+    "mtime": 1781882382.1418471,
+    "ast_hash": "4493268da7598994dfc0a0f0807f2f23",
+    "semantic_hash": "4493268da7598994dfc0a0f0807f2f23"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/IndicatorDefinitionPOMapper.java": {
+    "mtime": 1781882382.1438563,
+    "ast_hash": "a43e807c65f2fd29585283450b533427",
+    "semantic_hash": "a43e807c65f2fd29585283450b533427"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/IntentSlotPO.java": {
+    "mtime": 1781882382.1458416,
+    "ast_hash": "fec5703307af96ae2ea2863f930d4bda",
+    "semantic_hash": "fec5703307af96ae2ea2863f930d4bda"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/IntentSlotPOMapper.java": {
+    "mtime": 1781882382.1483686,
+    "ast_hash": "9749ad56da607bc6edf619ddf73d07d3",
+    "semantic_hash": "9749ad56da607bc6edf619ddf73d07d3"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/JobRecordPO.java": {
+    "mtime": 1781882382.150398,
+    "ast_hash": "32aa5a5c493f1e2d4bed6e49ef02a65c",
+    "semantic_hash": "32aa5a5c493f1e2d4bed6e49ef02a65c"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/JobRecordPOMapper.java": {
+    "mtime": 1781882382.1523962,
+    "ast_hash": "8eb4f6483ea8f7e44a36d2a8aeab744a",
+    "semantic_hash": "8eb4f6483ea8f7e44a36d2a8aeab744a"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/MetadataTemplatePO.java": {
+    "mtime": 1781882382.1534026,
+    "ast_hash": "b0b1863ef60e64bd0d4699ea75e0e210",
+    "semantic_hash": "b0b1863ef60e64bd0d4699ea75e0e210"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/MetadataTemplatePOMapper.java": {
+    "mtime": 1781882382.1553931,
+    "ast_hash": "3628556883d761543cdaa4fdfe107bcf",
+    "semantic_hash": "3628556883d761543cdaa4fdfe107bcf"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/NotificationDefinitionPO.java": {
+    "mtime": 1781882382.1575654,
+    "ast_hash": "5cb78e1bcde0cbfee0e20a8470cfdc84",
+    "semantic_hash": "5cb78e1bcde0cbfee0e20a8470cfdc84"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/NotificationDefinitionPOMapper.java": {
+    "mtime": 1781882382.1595976,
+    "ast_hash": "e90b0e4bc5f0dbb59600626d39a2a533",
+    "semantic_hash": "e90b0e4bc5f0dbb59600626d39a2a533"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ObjectInstancePO.java": {
+    "mtime": 1781882382.1619804,
+    "ast_hash": "a1ee6b4c59869f088de78bca0cfe8f39",
+    "semantic_hash": "a1ee6b4c59869f088de78bca0cfe8f39"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ObjectInstancePOMapper.java": {
+    "mtime": 1781882382.1640072,
+    "ast_hash": "363ed4a3edfca90aa85e393552fa3789",
+    "semantic_hash": "363ed4a3edfca90aa85e393552fa3789"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ObjectTypeMapper.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "fdd528c724f1263fc2054c39855bdfc4",
+    "semantic_hash": "fdd528c724f1263fc2054c39855bdfc4"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ObjectTypePO.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "9f31c01b25388a0e946f0d804b4dbf85",
+    "semantic_hash": "9f31c01b25388a0e946f0d804b4dbf85"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/OntologyPO.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "98c752b0917aa2240f5fd9f0970b9480",
+    "semantic_hash": "98c752b0917aa2240f5fd9f0970b9480"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/OntologyPOMapper.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "3579b27855f723b17455042834b0002f",
+    "semantic_hash": "3579b27855f723b17455042834b0002f"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/OrchestrationPO.java": {
+    "mtime": 1781882382.1660686,
+    "ast_hash": "d141f6df22ec1b398b3da364ca440a92",
+    "semantic_hash": "d141f6df22ec1b398b3da364ca440a92"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/OrchestrationPOMapper.java": {
+    "mtime": 1781882382.1672583,
+    "ast_hash": "e85d0d1ebdbaf3ffc514a6f19cb9b35c",
+    "semantic_hash": "e85d0d1ebdbaf3ffc514a6f19cb9b35c"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/PolicyRulePO.java": {
+    "mtime": 1781882382.1692855,
+    "ast_hash": "13b289ebb2664fb50965222fed3cb520",
+    "semantic_hash": "13b289ebb2664fb50965222fed3cb520"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/PolicyRulePOMapper.java": {
+    "mtime": 1781882382.1702857,
+    "ast_hash": "c8a5833f00eb2ad9d3c92b6a12a08f2f",
+    "semantic_hash": "c8a5833f00eb2ad9d3c92b6a12a08f2f"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/PositionEntryPO.java": {
+    "mtime": 1781882382.1715882,
+    "ast_hash": "d7b1fcf5f0427b0ecea8b2751c956e33",
+    "semantic_hash": "d7b1fcf5f0427b0ecea8b2751c956e33"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/PositionEntryPOMapper.java": {
+    "mtime": 1781882382.1736157,
+    "ast_hash": "13bb75613b5abd6a4df58a4186e8ed7d",
+    "semantic_hash": "13bb75613b5abd6a4df58a4186e8ed7d"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ProbeDefinitionPO.java": {
+    "mtime": 1781882382.1746473,
+    "ast_hash": "e6fb83f7020a5d97efcce9df5e772fd6",
+    "semantic_hash": "e6fb83f7020a5d97efcce9df5e772fd6"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ProbeDefinitionPOMapper.java": {
+    "mtime": 1781882382.1771047,
+    "ast_hash": "648ce521af4e62a1ad4a49c126d8a4ba",
+    "semantic_hash": "648ce521af4e62a1ad4a49c126d8a4ba"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ProcessStepPO.java": {
+    "mtime": 1781882382.179103,
+    "ast_hash": "f4d743e7765c5b493d7b67923239f90a",
+    "semantic_hash": "f4d743e7765c5b493d7b67923239f90a"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ProcessStepPOMapper.java": {
+    "mtime": 1781882382.1806877,
+    "ast_hash": "b54e4873e9b3cc56db575a2fe03360fd",
+    "semantic_hash": "b54e4873e9b3cc56db575a2fe03360fd"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/PropertyMapper.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "6826c068b17ba5601e3fdf5fd0b2c464",
+    "semantic_hash": "6826c068b17ba5601e3fdf5fd0b2c464"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/PropertyPO.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "ee19e753bb65c071f323adaf14615e7c",
+    "semantic_hash": "ee19e753bb65c071f323adaf14615e7c"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/QueryDefinitionPO.java": {
+    "mtime": 1781882382.1832464,
+    "ast_hash": "447c2048de9e5d8af62ee2c5e28c9fc4",
+    "semantic_hash": "447c2048de9e5d8af62ee2c5e28c9fc4"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/QueryDefinitionPOMapper.java": {
+    "mtime": 1781882382.1842437,
+    "ast_hash": "060edb9115352ff766d727004371979a",
+    "semantic_hash": "060edb9115352ff766d727004371979a"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/RateLimitConfigPO.java": {
+    "mtime": 1781882382.1862411,
+    "ast_hash": "b2243f07732fef6036b9298cda6a18ef",
+    "semantic_hash": "b2243f07732fef6036b9298cda6a18ef"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/RateLimitConfigPOMapper.java": {
+    "mtime": 1781882382.1885943,
+    "ast_hash": "d68cdd54d470d0562766c54f9565b10b",
+    "semantic_hash": "d68cdd54d470d0562766c54f9565b10b"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/RelationPO.java": {
+    "mtime": 1781882382.1910393,
+    "ast_hash": "e2e2821523aa225ea2e11b77ca642b95",
+    "semantic_hash": "e2e2821523aa225ea2e11b77ca642b95"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/RelationPOMapper.java": {
+    "mtime": 1781882382.1932852,
+    "ast_hash": "60d869e068439e0cff3429748017f4df",
+    "semantic_hash": "60d869e068439e0cff3429748017f4df"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ReportDefinitionPO.java": {
+    "mtime": 1781882382.1947327,
+    "ast_hash": "9ab24d718ca0522b05b22721a0c45873",
+    "semantic_hash": "9ab24d718ca0522b05b22721a0c45873"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ReportDefinitionPOMapper.java": {
+    "mtime": 1781882382.1970775,
+    "ast_hash": "928837f1c4dbdb329f8eeb9fb5ca45b6",
+    "semantic_hash": "928837f1c4dbdb329f8eeb9fb5ca45b6"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/RolePermissionPO.java": {
+    "mtime": 1781882382.199082,
+    "ast_hash": "c1709c02681751dab61d9583d0020d71",
+    "semantic_hash": "c1709c02681751dab61d9583d0020d71"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/RolePermissionPOMapper.java": {
+    "mtime": 1781882382.2000823,
+    "ast_hash": "3e776391b09ea84b6af7859d20c8d77b",
+    "semantic_hash": "3e776391b09ea84b6af7859d20c8d77b"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/SemanticFieldMappingPO.java": {
+    "mtime": 1781882382.2020807,
+    "ast_hash": "f2318562fedece258b81cf9c0d3cc298",
+    "semantic_hash": "f2318562fedece258b81cf9c0d3cc298"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/SemanticFieldMappingPOMapper.java": {
+    "mtime": 1781882382.2042835,
+    "ast_hash": "c5bd42d72ce3bd21bb89d478a77042eb",
+    "semantic_hash": "c5bd42d72ce3bd21bb89d478a77042eb"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/SemanticRelationPO.java": {
+    "mtime": 1781882382.2064533,
+    "ast_hash": "c5c1948791cb29847fcd0bab71159ea9",
+    "semantic_hash": "c5c1948791cb29847fcd0bab71159ea9"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/SemanticRelationPOMapper.java": {
+    "mtime": 1781882382.2074835,
+    "ast_hash": "2fd2b98b3f8d5f0ee16d09b21f3c84f8",
+    "semantic_hash": "2fd2b98b3f8d5f0ee16d09b21f3c84f8"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/StateMachinePO.java": {
+    "mtime": 1781882382.2084818,
+    "ast_hash": "5795d947ecddf6c5e16578c513f9c9ec",
+    "semantic_hash": "5795d947ecddf6c5e16578c513f9c9ec"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/StateMachinePOMapper.java": {
+    "mtime": 1781882382.2104552,
+    "ast_hash": "9b7420e43dbb371d84b03722cd28d4e6",
+    "semantic_hash": "9b7420e43dbb371d84b03722cd28d4e6"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/StateTransitionPO.java": {
+    "mtime": 1781882382.2124584,
+    "ast_hash": "a35fb60dca116bddce1cc114e949921d",
+    "semantic_hash": "a35fb60dca116bddce1cc114e949921d"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/StateTransitionPOMapper.java": {
+    "mtime": 1781882382.214466,
+    "ast_hash": "a5d22d68d379d83e751c201fda8c83df",
+    "semantic_hash": "a5d22d68d379d83e751c201fda8c83df"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/UploadTaskPO.java": {
+    "mtime": 1781882382.2164586,
+    "ast_hash": "e74918450173a8e0e005c5c8f60356cc",
+    "semantic_hash": "e74918450173a8e0e005c5c8f60356cc"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/UploadTaskPOMapper.java": {
+    "mtime": 1781882382.21946,
+    "ast_hash": "7dfc0375b95ac259cca6c0cf3fe7586b",
+    "semantic_hash": "7dfc0375b95ac259cca6c0cf3fe7586b"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ValidationRulePO.java": {
+    "mtime": 1781882382.2214582,
+    "ast_hash": "cfaaaad5d7581d3b22be8657a1537ab1",
+    "semantic_hash": "cfaaaad5d7581d3b22be8657a1537ab1"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/ValidationRulePOMapper.java": {
+    "mtime": 1781882382.2224572,
+    "ast_hash": "83869759400117adb512066b14040c94",
+    "semantic_hash": "83869759400117adb512066b14040c94"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/WebhookSubscriptionPO.java": {
+    "mtime": 1781882382.2244554,
+    "ast_hash": "efc38ee7237cad0df21245fcb5d47a0c",
+    "semantic_hash": "efc38ee7237cad0df21245fcb5d47a0c"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/persistence/WebhookSubscriptionPOMapper.java": {
+    "mtime": 1781882382.2254548,
+    "ast_hash": "661999112fbc66034f2faa900173ca3a",
+    "semantic_hash": "661999112fbc66034f2faa900173ca3a"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/ratelimit/RateLimiterService.java": {
+    "mtime": 1781882382.228455,
+    "ast_hash": "fb6a3ef1afcfe7eb89c6733ebb62d972",
+    "semantic_hash": "fb6a3ef1afcfe7eb89c6733ebb62d972"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/ApiDefinitionRepositoryImpl.java": {
+    "mtime": 1781882382.231698,
+    "ast_hash": "cb40d40ca6b693da3e86db6f0ba8527d",
+    "semantic_hash": "cb40d40ca6b693da3e86db6f0ba8527d"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/CausalityRepositoryImpl.java": {
+    "mtime": 1781882382.2336977,
+    "ast_hash": "b739aeba86cfca5c626c2431a0a3c834",
+    "semantic_hash": "b739aeba86cfca5c626c2431a0a3c834"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/ComputeDefinitionRepositoryImpl.java": {
+    "mtime": 1781882382.2361267,
+    "ast_hash": "dbe4c85b9ad330e90ac26244b8045fad",
+    "semantic_hash": "dbe4c85b9ad330e90ac26244b8045fad"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/DomainEventRepositoryImpl.java": {
+    "mtime": 1781882382.238125,
+    "ast_hash": "34b9a973893a485de4880c4a4be3ead4",
+    "semantic_hash": "34b9a973893a485de4880c4a4be3ead4"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/EpcStepRepositoryImpl.java": {
+    "mtime": 1781882382.240124,
+    "ast_hash": "9558ae4ab64fba31897bbcbe298b51d0",
+    "semantic_hash": "9558ae4ab64fba31897bbcbe298b51d0"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/GraphWhitelistServiceImpl.java": {
+    "mtime": 1781882342.5864322,
+    "ast_hash": "f42bb6a26726c0bde60d44b0474faec9",
+    "semantic_hash": "f42bb6a26726c0bde60d44b0474faec9"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/GuardrailRuleRepositoryImpl.java": {
+    "mtime": 1781882382.2421243,
+    "ast_hash": "428a5bca5553802a5afd0049d05da2a8",
+    "semantic_hash": "428a5bca5553802a5afd0049d05da2a8"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/IndicatorDefinitionRepositoryImpl.java": {
+    "mtime": 1781882382.2441468,
+    "ast_hash": "81fa09844c7260acf38bf64c09268ba0",
+    "semantic_hash": "81fa09844c7260acf38bf64c09268ba0"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/NotificationDefinitionRepositoryImpl.java": {
+    "mtime": 1781882382.2467854,
+    "ast_hash": "f0a3bd18e0fd3c48befab085bd20c570",
+    "semantic_hash": "f0a3bd18e0fd3c48befab085bd20c570"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/ObjectInstanceRepositoryImpl.java": {
+    "mtime": 1781882382.2488418,
+    "ast_hash": "2ac64946da9c473a50bcfd513f7064cf",
+    "semantic_hash": "2ac64946da9c473a50bcfd513f7064cf"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/ObjectTypeRepositoryImpl.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "6b2a49332e51020cd2b3e4e882fdf1eb",
+    "semantic_hash": "6b2a49332e51020cd2b3e4e882fdf1eb"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/OntologyRepositoryImpl.java": {
+    "mtime": 1780931362.746421,
+    "ast_hash": "b7b16afd536db1607caa9105cc228381",
+    "semantic_hash": "b7b16afd536db1607caa9105cc228381"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/PolicyRuleRepositoryImpl.java": {
+    "mtime": 1781882382.2508426,
+    "ast_hash": "f16bc40b9557bcfdc57e09f283b37cf5",
+    "semantic_hash": "f16bc40b9557bcfdc57e09f283b37cf5"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/ProbeDefinitionRepositoryImpl.java": {
+    "mtime": 1781882382.2528415,
+    "ast_hash": "9339b6ff1fba5ae1e231112bdcd17caa",
+    "semantic_hash": "9339b6ff1fba5ae1e231112bdcd17caa"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/PropertyRepositoryImpl.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "869e7e3fa3f1f02823041586fea8a99d",
+    "semantic_hash": "869e7e3fa3f1f02823041586fea8a99d"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/QueryDefinitionRepositoryImpl.java": {
+    "mtime": 1781882382.2548451,
+    "ast_hash": "0a8278da0dfd22b04cdff90d0629f00c",
+    "semantic_hash": "0a8278da0dfd22b04cdff90d0629f00c"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/RelationRepositoryImpl.java": {
+    "mtime": 1781882382.2580922,
+    "ast_hash": "4085bb84d5213741c7353702a196eef5",
+    "semantic_hash": "4085bb84d5213741c7353702a196eef5"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/ReportDefinitionRepositoryImpl.java": {
+    "mtime": 1781882382.2600904,
+    "ast_hash": "47bd117cd9181f91f40a6018a0d6897f",
+    "semantic_hash": "47bd117cd9181f91f40a6018a0d6897f"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/ValidationRuleRepositoryImpl.java": {
+    "mtime": 1781882382.262111,
+    "ast_hash": "6d7b3f68732d1fce831d3aec6c76a930",
+    "semantic_hash": "6d7b3f68732d1fce831d3aec6c76a930"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/WebhookSubscriptionRepositoryImpl.java": {
+    "mtime": 1781882382.2651117,
+    "ast_hash": "49508a99034e2884241588ecc6da34ba",
+    "semantic_hash": "49508a99034e2884241588ecc6da34ba"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/behavior/ActionDefinitionRepositoryImpl.java": {
+    "mtime": 1781882382.2681134,
+    "ast_hash": "363b43d19c38e1578c2a5ad6c4095149",
+    "semantic_hash": "363b43d19c38e1578c2a5ad6c4095149"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/behavior/StateMachineRepositoryImpl.java": {
+    "mtime": 1781882382.270113,
+    "ast_hash": "b03bc9a7e76589260f8984983cefa610",
+    "semantic_hash": "b03bc9a7e76589260f8984983cefa610"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/behavior/StateTransitionRepositoryImpl.java": {
+    "mtime": 1781882382.272117,
+    "ast_hash": "a1e6f5c15add840e352a92f6b94fbb7f",
+    "semantic_hash": "a1e6f5c15add840e352a92f6b94fbb7f"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/governance/AgentRoleRepositoryImpl.java": {
+    "mtime": 1781882382.2741146,
+    "ast_hash": "0e13f11abefbf011f621af2fceca38e0",
+    "semantic_hash": "0e13f11abefbf011f621af2fceca38e0"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/governance/AgentTokenRepositoryImpl.java": {
+    "mtime": 1781882382.2763255,
+    "ast_hash": "e87d21d16eeb26e9b39771526d7e0f92",
+    "semantic_hash": "e87d21d16eeb26e9b39771526d7e0f92"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/governance/ApprovalRepositoryImpl.java": {
+    "mtime": 1781882382.279356,
+    "ast_hash": "20620839f78f4a03852bb25c89ac1dba",
+    "semantic_hash": "20620839f78f4a03852bb25c89ac1dba"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/governance/RolePermissionRepositoryImpl.java": {
+    "mtime": 1781882382.2819324,
+    "ast_hash": "4dd73e34ba6f495bd5c7a8adf616deb4",
+    "semantic_hash": "4dd73e34ba6f495bd5c7a8adf616deb4"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/upload/ImportTaskRepositoryImpl.java": {
+    "mtime": 1781882382.284937,
+    "ast_hash": "c6d79620e00394126e16cdef3649f1af",
+    "semantic_hash": "c6d79620e00394126e16cdef3649f1af"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/repository/upload/UploadTaskRepositoryImpl.java": {
+    "mtime": 1781882382.2869384,
+    "ast_hash": "cf80264cdc6615c73b63d4e57640863d",
+    "semantic_hash": "cf80264cdc6615c73b63d4e57640863d"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/service/AgeGraphService.java": {
+    "mtime": 1781882342.6044412,
+    "ast_hash": "533d8a1123c54ef798ec2f4bfc6431b1",
+    "semantic_hash": "533d8a1123c54ef798ec2f4bfc6431b1"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/upload/LocalFileStorageService.java": {
+    "mtime": 1781882342.6084292,
+    "ast_hash": "9437d1a16821184f0035ce8bba124bf2",
+    "semantic_hash": "9437d1a16821184f0035ce8bba124bf2"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/upload/SimpleDataExportService.java": {
+    "mtime": 1781882342.610431,
+    "ast_hash": "77e33e523aab82675312a0aafefe4585",
+    "semantic_hash": "77e33e523aab82675312a0aafefe4585"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/upload/SimpleDataFileParser.java": {
+    "mtime": 1781882342.6134288,
+    "ast_hash": "58343eb4ffd9be2065acf5d7d802bfc9",
+    "semantic_hash": "58343eb4ffd9be2065acf5d7d802bfc9"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/validation/EpcVeValidator.java": {
+    "mtime": 1781882382.2889354,
+    "ast_hash": "1ef2ec80c52634f1949776fb9574fe29",
+    "semantic_hash": "1ef2ec80c52634f1949776fb9574fe29"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/validation/EpcVmValidator.java": {
+    "mtime": 1781882382.2909353,
+    "ast_hash": "60cc3a30e44355f7ce1ccf57f1696a27",
+    "semantic_hash": "60cc3a30e44355f7ce1ccf57f1696a27"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/validation/EpcVxValidator.java": {
+    "mtime": 1782051387.984929,
+    "ast_hash": "67a6cc79b5b0103e8029233153b92e6b",
+    "semantic_hash": "67a6cc79b5b0103e8029233153b92e6b"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/validation/LifecycleValidator.java": {
+    "mtime": 1782038567.0518453,
+    "ast_hash": "fdf0148f06e08b6ccd7fdcd20e7205dc",
+    "semantic_hash": "fdf0148f06e08b6ccd7fdcd20e7205dc"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/validation/OrganizationValidator.java": {
+    "mtime": 1781882382.2929332,
+    "ast_hash": "3a426448ac14e252e3fe1a3d354ed99e",
+    "semantic_hash": "3a426448ac14e252e3fe1a3d354ed99e"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/validation/SemanticValidator.java": {
+    "mtime": 1782036236.6944988,
+    "ast_hash": "f4761d66721e0235b833a7d19e5be8c8",
+    "semantic_hash": "f4761d66721e0235b833a7d19e5be8c8"
+  },
+  "ontology-infrastructure/src/main/java/com/ontology/platform/infrastructure/webhook/WebhookDispatcher.java": {
+    "mtime": 1781882382.296126,
+    "ast_hash": "4ada8abca853210afaea7704d44d8527",
+    "semantic_hash": "4ada8abca853210afaea7704d44d8527"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/converter/OntologyConverterTest.java": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "912a35f0a4b7ae6a6e947ddc57ccabca",
+    "semantic_hash": "912a35f0a4b7ae6a6e947ddc57ccabca"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/graph/GraphServiceTest.java": {
+    "mtime": 1781882382.3793828,
+    "ast_hash": "bb27fdc5fadd00f19a1e97d15c651ba2",
+    "semantic_hash": "bb27fdc5fadd00f19a1e97d15c651ba2"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/idempotency/IdempotencyServiceTest.java": {
+    "mtime": 1781882382.3829336,
+    "ast_hash": "371e02ae683b0814dfb029e113b68e15",
+    "semantic_hash": "371e02ae683b0814dfb029e113b68e15"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/imports/ExcelBImportAdapterTest.java": {
+    "mtime": 1781882382.3859346,
+    "ast_hash": "c9dff9e6d26446d54859e4015df373eb",
+    "semantic_hash": "c9dff9e6d26446d54859e4015df373eb"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/imports/ExcelCImportAdapterTest.java": {
+    "mtime": 1781882382.3879573,
+    "ast_hash": "682e9195678b29c2e5ecb688eebf15d1",
+    "semantic_hash": "682e9195678b29c2e5ecb688eebf15d1"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/imports/ExcelEDimImportAdapterTest.java": {
+    "mtime": 1781882382.389956,
+    "ast_hash": "2c4e6f73c3a9d26c2a78f194515c878c",
+    "semantic_hash": "2c4e6f73c3a9d26c2a78f194515c878c"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/imports/ExcelEpcImportAdapterTest.java": {
+    "mtime": 1781882382.3919568,
+    "ast_hash": "402599f03f90fd59e547113b4fdba412",
+    "semantic_hash": "402599f03f90fd59e547113b4fdba412"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/imports/ExcelExchangeE2ETest.java": {
+    "mtime": 1781934258.6932,
+    "ast_hash": "26d7d3380b9d8c839c6ee0bb3932f70e",
+    "semantic_hash": "26d7d3380b9d8c839c6ee0bb3932f70e"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/imports/ExcelOntologyImportAdapterTest.java": {
+    "mtime": 1781882382.3959558,
+    "ast_hash": "b4a202b360f4d6be2fceb58cef4f10de",
+    "semantic_hash": "b4a202b360f4d6be2fceb58cef4f10de"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/imports/ManifestUpcasterV1ToV2Test.java": {
+    "mtime": 1781882382.3989885,
+    "ast_hash": "67cbd78c90547341f0cb59aba02652cc",
+    "semantic_hash": "67cbd78c90547341f0cb59aba02652cc"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/imports/YamlManifestParserTest.java": {
+    "mtime": 1781882382.4025238,
+    "ast_hash": "d272dce06f0747430807a39ec368635a",
+    "semantic_hash": "d272dce06f0747430807a39ec368635a"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/job/JobQueueServiceTest.java": {
+    "mtime": 1781882382.4070559,
+    "ast_hash": "222c0200328b1f5f0ac1ac6a7ec839c0",
+    "semantic_hash": "222c0200328b1f5f0ac1ac6a7ec839c0"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/ratelimit/RateLimiterServiceTest.java": {
+    "mtime": 1781882382.410046,
+    "ast_hash": "196118b82579e423cd031f167e07efb6",
+    "semantic_hash": "196118b82579e423cd031f167e07efb6"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/CausalityRepositoryIT.java": {
+    "mtime": 1781882382.4140437,
+    "ast_hash": "b73d0c776131bec8518fb24d934d2aa9",
+    "semantic_hash": "b73d0c776131bec8518fb24d934d2aa9"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/CausalityRepositoryImplTest.java": {
+    "mtime": 1781882382.41704,
+    "ast_hash": "610d41efab9efccf5033decfb6816114",
+    "semantic_hash": "610d41efab9efccf5033decfb6816114"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/DomainEventRepositoryIT.java": {
+    "mtime": 1781882382.420041,
+    "ast_hash": "fe1d1cf2463e4e32c8316d1084c6b9e3",
+    "semantic_hash": "fe1d1cf2463e4e32c8316d1084c6b9e3"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/DomainEventRepositoryImplTest.java": {
+    "mtime": 1781882382.423041,
+    "ast_hash": "7d879f4f05478f51042dc1e439c9dfa7",
+    "semantic_hash": "7d879f4f05478f51042dc1e439c9dfa7"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/EpcStepRepositoryIT.java": {
+    "mtime": 1781882382.4250457,
+    "ast_hash": "2dc21db0091717fedbc32c7270767af1",
+    "semantic_hash": "2dc21db0091717fedbc32c7270767af1"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/EpcStepRepositoryImplTest.java": {
+    "mtime": 1781882382.428044,
+    "ast_hash": "242dc3e73c87b4eb7e8fc9ae281d05ea",
+    "semantic_hash": "242dc3e73c87b4eb7e8fc9ae281d05ea"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/ObjectInstanceRepositoryIT.java": {
+    "mtime": 1781882382.4300447,
+    "ast_hash": "ec1c57934d508447455d3ea77f840eb3",
+    "semantic_hash": "ec1c57934d508447455d3ea77f840eb3"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/ObjectInstanceRepositoryImplTest.java": {
+    "mtime": 1781882382.4320424,
+    "ast_hash": "fb190b628d00a13c4cd0c6031d9332d8",
+    "semantic_hash": "fb190b628d00a13c4cd0c6031d9332d8"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/OntologyRepositoryImplTest.java": {
+    "mtime": 1781882342.6184373,
+    "ast_hash": "eaf8a0fa093427ddf68df882149b385a",
+    "semantic_hash": "eaf8a0fa093427ddf68df882149b385a"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/PropertyRepositoryIT.java": {
+    "mtime": 1781882382.4350438,
+    "ast_hash": "eb8cc40ec1365f036d60cee9fb28334a",
+    "semantic_hash": "eb8cc40ec1365f036d60cee9fb28334a"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/RelationRepositoryIT.java": {
+    "mtime": 1781882382.437052,
+    "ast_hash": "71603097acb9b6b68f646a9679cb922e",
+    "semantic_hash": "71603097acb9b6b68f646a9679cb922e"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/RelationRepositoryImplTest.java": {
+    "mtime": 1781882382.4406152,
+    "ast_hash": "c73640c827fa103e5ec73a14e6f28548",
+    "semantic_hash": "c73640c827fa103e5ec73a14e6f28548"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/behavior/ActionDefinitionRepositoryIT.java": {
+    "mtime": 1781882382.4436362,
+    "ast_hash": "92170fbc92936715cb2d171b7094562d",
+    "semantic_hash": "92170fbc92936715cb2d171b7094562d"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/behavior/ActionDefinitionRepositoryImplTest.java": {
+    "mtime": 1781882382.4466372,
+    "ast_hash": "eff7d510d3b385230a52436ec7966496",
+    "semantic_hash": "eff7d510d3b385230a52436ec7966496"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/behavior/StateMachineRepositoryIT.java": {
+    "mtime": 1781882382.4486384,
+    "ast_hash": "b7f2bfa851372dfb2108a9a558c133ef",
+    "semantic_hash": "b7f2bfa851372dfb2108a9a558c133ef"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/behavior/StateMachineRepositoryImplTest.java": {
+    "mtime": 1781882382.450636,
+    "ast_hash": "9dd3b24d6a551a730ba40c9bc7677975",
+    "semantic_hash": "9dd3b24d6a551a730ba40c9bc7677975"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/behavior/StateTransitionRepositoryIT.java": {
+    "mtime": 1781882382.453642,
+    "ast_hash": "23ccc5db0bc4f184deeb4fcda25c5e4c",
+    "semantic_hash": "23ccc5db0bc4f184deeb4fcda25c5e4c"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/behavior/StateTransitionRepositoryImplTest.java": {
+    "mtime": 1781882382.4566364,
+    "ast_hash": "147f033959f3b8a2dde14623ef92e8ad",
+    "semantic_hash": "147f033959f3b8a2dde14623ef92e8ad"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/governance/AgentRoleRepositoryIT.java": {
+    "mtime": 1781882382.460184,
+    "ast_hash": "cd914f27c4a4497a2f1f772a3b542a13",
+    "semantic_hash": "cd914f27c4a4497a2f1f772a3b542a13"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/governance/AgentRoleRepositoryImplTest.java": {
+    "mtime": 1781882382.4621832,
+    "ast_hash": "e28f970fce344bb347a2fb389d76d952",
+    "semantic_hash": "e28f970fce344bb347a2fb389d76d952"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/governance/ApprovalRepositoryIT.java": {
+    "mtime": 1781882382.4641838,
+    "ast_hash": "fb4a27e22402013d0977144eff02dd89",
+    "semantic_hash": "fb4a27e22402013d0977144eff02dd89"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/governance/ApprovalRepositoryImplTest.java": {
+    "mtime": 1781882382.4674501,
+    "ast_hash": "0bebe717e651232993b2a7b81bcba250",
+    "semantic_hash": "0bebe717e651232993b2a7b81bcba250"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/governance/RolePermissionRepositoryIT.java": {
+    "mtime": 1781882382.4704974,
+    "ast_hash": "041bec92ce6464392d686cf095ae0678",
+    "semantic_hash": "041bec92ce6464392d686cf095ae0678"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/governance/RolePermissionRepositoryImplTest.java": {
+    "mtime": 1781882382.4734943,
+    "ast_hash": "f1d2973e89bd4d25893e7a45500198f4",
+    "semantic_hash": "f1d2973e89bd4d25893e7a45500198f4"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/upload/ImportTaskRepositoryIT.java": {
+    "mtime": 1781882382.4765193,
+    "ast_hash": "aafb1f53bdf35f59894ab9d0c9cb73e6",
+    "semantic_hash": "aafb1f53bdf35f59894ab9d0c9cb73e6"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/upload/ImportTaskRepositoryImplTest.java": {
+    "mtime": 1781882382.4794953,
+    "ast_hash": "a81c06b6ac67abfd46436f4790e67d13",
+    "semantic_hash": "a81c06b6ac67abfd46436f4790e67d13"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/upload/UploadTaskRepositoryIT.java": {
+    "mtime": 1781882382.4820485,
+    "ast_hash": "a1030095b8bf3d48d43f5ef39fb5f736",
+    "semantic_hash": "a1030095b8bf3d48d43f5ef39fb5f736"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/repository/upload/UploadTaskRepositoryImplTest.java": {
+    "mtime": 1781882382.4840467,
+    "ast_hash": "7b3d3f0377a06b7307440ecc370d92fd",
+    "semantic_hash": "7b3d3f0377a06b7307440ecc370d92fd"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/testsupport/ItSchemaHelper.java": {
+    "mtime": 1781882382.4880161,
+    "ast_hash": "66f4a6a2d268635c953bde6e7d02ea4d",
+    "semantic_hash": "66f4a6a2d268635c953bde6e7d02ea4d"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/testsupport/PostgresTestContainer.java": {
+    "mtime": 1781882382.490021,
+    "ast_hash": "03e9b8e8590b5c6a1676a743c37b865d",
+    "semantic_hash": "03e9b8e8590b5c6a1676a743c37b865d"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/validation/EpcVeValidatorTest.java": {
+    "mtime": 1781882382.4920173,
+    "ast_hash": "2c04811be1c9d76d6f9c6d86c98269af",
+    "semantic_hash": "2c04811be1c9d76d6f9c6d86c98269af"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/validation/EpcVmValidatorTest.java": {
+    "mtime": 1781882382.4940188,
+    "ast_hash": "048340748c0fb4784f8228db3f936ac8",
+    "semantic_hash": "048340748c0fb4784f8228db3f936ac8"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/validation/EpcVxValidatorTest.java": {
+    "mtime": 1782051387.984929,
+    "ast_hash": "820a72a8973b876ebed3e688cab66266",
+    "semantic_hash": "820a72a8973b876ebed3e688cab66266"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/validation/ImportGoldenValidationTest.java": {
+    "mtime": 1782051387.994132,
+    "ast_hash": "8695ddf5546f987b776367b09dd6f4f1",
+    "semantic_hash": "8695ddf5546f987b776367b09dd6f4f1"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/validation/LifecycleValidatorTest.java": {
+    "mtime": 1782038572.3433673,
+    "ast_hash": "ea799893e55f9a92de432c546bbc06bf",
+    "semantic_hash": "ea799893e55f9a92de432c546bbc06bf"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/validation/OrganizationValidatorTest.java": {
+    "mtime": 1781882382.4967282,
+    "ast_hash": "19b6b78b66f5841cda3ba4f4c36f574d",
+    "semantic_hash": "19b6b78b66f5841cda3ba4f4c36f574d"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/validation/SemanticValidatorTest.java": {
+    "mtime": 1782036733.1645432,
+    "ast_hash": "b80ce67d7b0cc8a4cf79b16091513ca5",
+    "semantic_hash": "b80ce67d7b0cc8a4cf79b16091513ca5"
+  },
+  "ontology-infrastructure/src/test/java/com/ontology/platform/infrastructure/webhook/WebhookDispatcherTest.java": {
+    "mtime": 1781882382.4997294,
+    "ast_hash": "cdeefc29f5e5dd9145423a262030c852",
+    "semantic_hash": "cdeefc29f5e5dd9145423a262030c852"
+  },
+  "ontology-infrastructure/src/test/resources/schema.sql": {
+    "mtime": 1781882382.505748,
+    "ast_hash": "76d53f1f673ff4d84ed36f71adf31447",
+    "semantic_hash": "76d53f1f673ff4d84ed36f71adf31447"
+  },
+  "pom.xml": {
+    "mtime": 1782035416.622779,
+    "ast_hash": "3d72901892109abffb46a7bc8a39f83d",
+    "semantic_hash": "3d72901892109abffb46a7bc8a39f83d"
+  },
+  "pptx_analysis.json": {
+    "mtime": 1780928515.816308,
+    "ast_hash": "dbfa87e6e65ef47911b774b185d4138f",
+    "semantic_hash": "dbfa87e6e65ef47911b774b185d4138f"
+  },
+  "scripts/gen-certs.sh": {
+    "mtime": 1781882382.5113657,
+    "ast_hash": "898c88599faa24b2688c507be9400d61",
+    "semantic_hash": "898c88599faa24b2688c507be9400d61"
+  },
+  "scripts/import_from_project1.py": {
+    "mtime": 1781882382.5133493,
+    "ast_hash": "31f08b9dba923504a2638ea0aeffea3a",
+    "semantic_hash": "31f08b9dba923504a2638ea0aeffea3a"
+  },
+  "scripts/startup.sh": {
+    "mtime": 1781882342.626431,
+    "ast_hash": "e6def7d041d199de8c71ce9807be4936",
+    "semantic_hash": "e6def7d041d199de8c71ce9807be4936"
+  },
+  "summarize_slides.py": {
+    "mtime": 1780928515.8313978,
+    "ast_hash": "0a2f84a576dd0a01db1cb1723573b77e",
+    "semantic_hash": "0a2f84a576dd0a01db1cb1723573b77e"
+  },
+  "tools/skill-index/.skill-index-state.json": {
+    "mtime": 1780928515.83233,
+    "ast_hash": "4805bc154ee2afae25cca309968ce4ca",
+    "semantic_hash": "4805bc154ee2afae25cca309968ce4ca"
+  },
+  "tools/skill-index/rebuild-skill-index.ps1": {
+    "mtime": 1780928515.833053,
+    "ast_hash": "e85688470ceb0fbfa5d0a5ee7b1e51b5",
+    "semantic_hash": "e85688470ceb0fbfa5d0a5ee7b1e51b5"
+  }
+}

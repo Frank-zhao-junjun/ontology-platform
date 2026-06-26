@@ -48,4 +48,14 @@ class ImportGoldenValidationTest {
                 .toList();
         assertThat(errors).isEmpty();
     }
+
+    @Test
+    @DisplayName("import golden JSON passes EpcVxValidator without errors")
+    void epcVxValidatorPasses() {
+        var issues = new EpcVxValidator().validate(new ValidationContext(doc, "strict", "test"));
+        List<ValidationIssue> errors = issues.stream()
+                .filter(i -> "error".equals(i.getSeverity()))
+                .toList();
+        assertThat(errors).isEmpty();
+    }
 }

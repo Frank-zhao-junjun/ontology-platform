@@ -5,6 +5,7 @@
 import type {
   ActionDefinitionResponse,
   EventDefinitionResponse,
+  EpcCoverageResponse,
   EpcStepResponse,
 } from './types.js';
 
@@ -67,6 +68,27 @@ class PlatformClient {
     const params = flowName ? `?flowName=${encodeURIComponent(flowName)}` : '';
     const res = await this.request<{ code: number; data: EpcStepResponse[] }>(
       `/api/v1/ontologies/${ontologyId}/epc${params}`
+    );
+    return res.data;
+  }
+
+  async queryEpcCoverage(ontologyId: string): Promise<EpcCoverageResponse> {
+    const res = await this.request<{ code: number; data: EpcCoverageResponse }>(
+      `/api/v1/ontologies/${ontologyId}/epc/coverage`
+    );
+    return res.data;
+  }
+
+  async querySemanticLayer(ontologyId: string): Promise<unknown> {
+    const res = await this.request<{ code: number; data: unknown }>(
+      `/api/v1/ontologies/${ontologyId}/semantic-layer`
+    );
+    return res.data;
+  }
+
+  async queryLifecycle(ontologyId: string, entityId: string): Promise<unknown> {
+    const res = await this.request<{ code: number; data: unknown }>(
+      `/api/v1/ontologies/${ontologyId}/lifecycle/${encodeURIComponent(entityId)}`
     );
     return res.data;
   }
