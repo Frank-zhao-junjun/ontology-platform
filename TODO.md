@@ -9,8 +9,9 @@
 ## 🔴 P0 — 阻塞联调
 
 | # | 任务 | 来源 | 说明 |
-|---|------|------|------|
-| 1 | Import 管道增强 | 差距分析 P0#2 | 支持 JSON 全量 + Excel parsedData 映射 |
+|---|------|------|:----:|
+| 1 | Import 管道增强 | 差距分析 P0#2 | ✅ 统一到 v2 管道，`Project1JsonToExchangeConverter` + autoPublish |
+| 4 | 校验器分层 | 差距分析 P0#5 | ✅ 106 条规则，7 插件 (VE/VM/VX/V-LC/V-AS/V-ORG/Manifest) |
 | 2 | 实体角色映射 | 差距分析 P0#3 | `child_entity` ↔ 存储层 `entity` 统一 |
 | 3 | businessScenarioId 支持 | 差距分析 P0#4 | 限界上下文下新增场景表或 JSONB 索引 |
 | 4 | 校验器分层 | 差距分析 P0#5 | V01-V11 保留 + 插件化 VE/VM/VX/V-LC/V-AS |
@@ -60,7 +61,8 @@
 
 | 项目 | CI | 测试规模 | 备注 |
 |------|:--:|----------|------|
-| 项目1 `D:\AI\Ontology` | `ci:check` ✅ | ~1049（760 unit + 259 integration + 30 e2e） | Manifest 编译导出就绪 |
-| 项目2 本仓库 | GitHub Actions ✅ | 174 unit | Import API + V12–V14 已上线 |
+| 项目1 `D:\AI\Ontology` | `ci:check` ✅ | ~1049（760 unit + 259 integration + 30 e2e） | Manifest 编译导出 + golden 验证 |
+| 项目2 本仓库 | GitHub Actions ✅ | 174 unit | Import API + V12–V14 + 校验器 106 rules |
+| **US-A01 联调** | ✅ | 6 E2E 场景 | Project1ToProject2E2ETest 全链路: import→validate→publish |
 
 详细导入进度见 [`docs/import/TODO.md`](./docs/import/TODO.md)。
