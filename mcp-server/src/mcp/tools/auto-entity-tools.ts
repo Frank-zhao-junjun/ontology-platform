@@ -12,6 +12,12 @@
 import type { ToolDefinition } from '../../types/index.js';
 import { toolRegistry } from './registry.js';
 import { loadOntologyModel, type OntologyModel } from '../../model-loader.js';
+import * as path from 'path';
+import * as fs from 'fs';
+
+// ── Persistence ──
+const PERSISTENCE_DIR = process.env.ONTOLOGY_PERSIST_DIR || path.join(process.cwd(), 'data');
+const PERSISTENCE_FILE = path.join(PERSISTENCE_DIR, '.ontology-model.persisted.json');
 
 // ── Staged state (not registered until apply) ──
 let _stagedModel: OntologyModel | null = null;
@@ -54,6 +60,32 @@ function buildEntityDetail(model: OntologyModel, entityId: string): Record<strin
   }
 
   return detail;
+}
+
+// ── Persistence helpers ──
+
+function persistModel(model: OntologyModel, state: 'staged' | 'applied' | 'disabled'): void {
+  const wrapper = JSON.stringify({ state, model, persistedAt: new Date().toISOString() }, null, 2);
+  try {
+    if (!fs.existsSync(PERSISTENCE_DIR)) {
+      fs.mkdirSync(PERSISTENCE_DIR, { recursive: true });
+    }
+    fs.writeFileSync(PERSISTENCE_FILE, wrapper, 'utf-8');
+    console.log(`[auto-entity] Model persisted (state=${state}) to ${PERSISTENCE_FILE}`);
+  } catch (err) {
+    console.error(`[auto-entity] Failed to persist model:`, err);
+  }
+}
+
+function clearPersistedModel(): void {
+  try {
+    if (fs.existsSync(PERSISTENCE_FILE)) {
+      fs.unlinkSync(PERSISTENCE_FILE);
+      console.log(`[auto-entity] Cleared persisted model`);
+    }
+  } catch (err) {
+    console.error(`[auto-entity] Failed to clear persisted model:`, err);
+  }
 }
 
 // ── upload_ontology_model tool ──
@@ -105,6 +137,8 @@ export const uploadOntologyModelTool: ToolDefinition = {
 
     // Store as staged
     _stagedModel = model;
+    // Persist staged model immediately (survives crash/restart)
+    persistModel(model, 'staged');
     _stagedEntityTools = [];
     _applied = false;
 
@@ -250,6 +284,9 @@ export const applyOntologyModelTool: ToolDefinition = {
     _stagedEntityTools = entityTools;
     toolRegistry.registerAll(entityTools);
 
+    // Persist to disk (state=applied)
+    persistModel(_stagedModel, 'applied');
+
     // Clear staged state
     _applied = true;
 
@@ -257,7 +294,7 @@ export const applyOntologyModelTool: ToolDefinition = {
       content: [{ type: 'text', text: JSON.stringify({
         success: true,
         applied: true,
-        message: `本体模型 "${_stagedModel.project.name}" 已注册到 MCP Server。`,
+        message: `本体模型 "${_stagedModel.project.name}" 已注册到 MCP Server。` + (PERSISTENCE_FILE ? `已持久化到 ${PERSISTENCE_FILE}` : ''),
         registeredTools: entityTools.length,
         entities: _stagedModel.entities.length,
         rules: _stagedModel.rules.length,
@@ -319,6 +356,8 @@ export const disableOntologyModelTool: ToolDefinition = {
     _registeredToolNames = [];
     _stagedEntityTools = [];
     _applied = false;
+    // Persist state=disabled — model data survives restart
+    if (_stagedModel) persistModel(_stagedModel, 'disabled');
 
     return {
       content: [{ type: 'text', text: JSON.stringify({
@@ -329,6 +368,112 @@ export const disableOntologyModelTool: ToolDefinition = {
     };
   },
 };
+
+// ── Auto-load from persistence on startup ──
+
+export function autoLoadPersistedModel(): boolean {
+  try {
+    if (!fs.existsSync(PERSISTENCE_FILE)) {
+      console.log('[auto-entity] No persisted model found — skipping auto-load');
+      return false;
+    }
+
+    const raw = fs.readFileSync(PERSISTENCE_FILE, 'utf-8');
+    const parsed = JSON.parse(raw);
+
+    // Support both wrapped format { state, model } and bare model (backward compat)
+    let model: OntologyModel;
+    let persistedState: 'staged' | 'applied' | 'disabled' = 'applied';
+    if (parsed.model && (typeof parsed.state === 'string' || typeof parsed.applied === 'boolean')) {
+      // Wrapper format: { state: 'staged'|'applied'|'disabled', model }
+      // Also handles old { applied: boolean, model } format
+      model = parsed.model as OntologyModel;
+      if (typeof parsed.state === 'string' && ['staged', 'applied', 'disabled'].includes(parsed.state)) {
+        persistedState = parsed.state;
+      } else if (parsed.applied === true) {
+        persistedState = 'applied';
+      } else if (parsed.applied === false) {
+        persistedState = 'staged';
+      }
+    } else {
+      // Legacy format — bare model, treat as applied
+      model = parsed as OntologyModel;
+      persistedState = 'applied';
+    }
+
+    if (!model.version || !model.project || !Array.isArray(model.entities)) {
+      console.warn('[auto-entity] Persisted model is invalid — clearing');
+      clearPersistedModel();
+      return false;
+    }
+
+    // Always load model into memory (for re-apply / re-preview)
+    _stagedModel = model;
+
+    if (persistedState === 'applied') {
+      // Rebuild and register entity tools
+      const entityTools: ToolDefinition[] = [];
+      for (const entity of model.entities) {
+        const entityName = entity.nameEn || entity.name.toLowerCase().replace(/\s+/g, '_');
+        const searchProperties: Record<string, unknown> = {
+          query: { type: 'string', description: `搜索关键词，匹配${entity.name}的${entity.attributes.slice(0, 3).map(a => a.name).join('、')}` },
+          page: { type: 'number', description: '页码，从1开始', default: 1 },
+          pageSize: { type: 'number', description: '每页条数', default: 20 },
+        };
+        for (const attr of entity.attributes.slice(0, 8)) {
+          searchProperties[attr.nameEn || attr.name] = {
+            type: mapAttributeType(attr.type),
+            description: attr.description || attr.name,
+          };
+        }
+
+        entityTools.push({
+          name: `search_${entityName}`,
+          description: `搜索${entity.name}列表。根据关键词或属性条件查询${entity.name}信息。${entity.description ? `定义：${entity.description}` : ''}`,
+          inputSchema: { type: 'object', properties: searchProperties },
+          domain: 'platform',
+          riskLevel: 'READ',
+          handler: async (innerArgs, _ctx) => ({
+            entity: entityName,
+            searchParams: innerArgs,
+            message: `搜索${entity.name} — 需要对接项目1 API 实现实际查询`,
+          }),
+        });
+
+        entityTools.push({
+          name: `get_${entityName}`,
+          description: `获取单个${entity.name}的详细信息。通过 ID 查询。`,
+          inputSchema: {
+            type: 'object',
+            properties: { id: { type: 'string', description: `${entity.name}的 ID` } },
+            required: ['id'],
+          },
+          domain: 'platform',
+          riskLevel: 'READ',
+          handler: async (innerArgs, _ctx) => ({
+            entity: entityName,
+            id: innerArgs.id,
+            message: `获取${entity.name}详情 — 需要对接项目1 API 实现`,
+          }),
+        });
+      }
+
+      // Register all entity tools
+      _registeredToolNames = entityTools.map(t => t.name);
+      _stagedEntityTools = entityTools;
+      toolRegistry.registerAll(entityTools);
+      _applied = true;
+
+      console.log(`[auto-entity] Auto-loaded persisted model "${model.project.name}" (${entityTools.length} tools, ${model.entities.length} entities, applied)`);
+    } else {
+      console.log(`[auto-entity] Loaded persisted model "${model.project.name}" as ${persistedState} (${model.entities.length} entities) — use apply_ontology_model to register`);
+    }
+    return true;
+  } catch (err) {
+    console.error('[auto-entity] Failed to auto-load persisted model:', err);
+    return false;
+  }
+}
 
 // ── Export for init.ts (now returns the three management tools) ──
 
