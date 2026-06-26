@@ -12,7 +12,7 @@
 |---|------|------|:----:|
 | 1 | Import 管道增强 | 差距分析 P0#2 | ✅ 统一到 v2 管道，`Project1JsonToExchangeConverter` + autoPublish |
 | 4 | 校验器分层 | 差距分析 P0#5 | ✅ 106 条规则，7 插件 (VE/VM/VX/V-LC/V-AS/V-ORG/Manifest) |
-| 2 | 实体角色映射 | 差距分析 P0#3 | `child_entity` ↔ 存储层 `entity` 统一 |
+| 2 | 实体角色映射 | 差距分析 P0#3 | ✅ v2 全链路统一 `aggregate_root`/`child_entity`，v1 type↔v2 entityRole 映射在 Converter 中已处理 |
 | 3 | businessScenarioId 支持 | 差距分析 P0#4 | ✅ Flyway V20 + BusinessScenario 全链路 (Entity/PO/Mapper/Service/Controller) |
 | 4 | 校验器分层 | 差距分析 P0#5 | V01-V11 保留 + 插件化 VE/VM/VX/V-LC/V-AS |
 
