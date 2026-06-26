@@ -81,11 +81,9 @@ public class OntologyImportController {
 
         // ── Build PO and insert ──
         String draftId = UUID.randomUUID().toString();
-        String ontologyId = UUID.randomUUID().toString();
-
         ManifestImportPO po = ManifestImportPO.builder()
                 .id(draftId)
-                .ontologyId(ontologyId)
+                .ontologyId(UUID.randomUUID().toString())
                 .externalId(externalId)
                 .tenantId("default")
                 .status("DRAFT")
@@ -102,23 +100,23 @@ public class OntologyImportController {
 
         try {
             manifestImportMapper.insert(po);
+
+            log.info("Ontology model imported: project={}, version={}, externalId={}, draftId={}, counts={}",
+                projectName, version, externalId, draftId, counts);
+
+            OntologyImportResponse response = OntologyImportResponse.builder()
+                .draftId(draftId)
+                .externalId(externalId)
+                .importedCounts(counts)
+                .build();
+
+            return ResponseEntity.ok(ApiResponse.success(response));
         } catch (DataIntegrityViolationException e) {
             log.warn("Duplicate import: externalId={}, version={}", externalId, version);
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(ApiResponse.error(409,
                             "DUPLICATE: 该模型版本已存在：" + externalId + " / " + version));
         }
-
-        log.info("Ontology model imported: project={}, version={}, externalId={}, draftId={}, counts={}",
-                projectName, version, externalId, draftId, counts);
-
-        OntologyImportResponse response = OntologyImportResponse.builder()
-                .draftId(draftId)
-                .externalId(externalId)
-                .importedCounts(counts)
-                .build();
-
-        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     private String toJsonString(Object obj) {

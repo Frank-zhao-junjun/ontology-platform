@@ -2,13 +2,13 @@
 # 开发环境配置 (profile: dev)
 # =============================================
 # 栈：PostgreSQL + Flyway + MyBatis-Plus（与生产一致，不用 Hibernate 建表）
-# 前置：本地 PostgreSQL；Phase 2 异步任务 / 限流 / Webhook 还需 Redis
-#   cd docker && docker compose up -d postgres redis
+# 前置：本地 PostgreSQL。
+#   cd docker && docker compose up -d postgres
 #
-# Flyway 脚本含 PG 专有语法（uuid-ossp、JSONB 等），H2 无法替代。
+# Redis: 开发环境通过 DevRedisConfig (no-op) 自动跳过，无需启动 Redis。
 
 server:
-  port: ${DEPLOY_RUN_PORT:-8080}
+  port: 8081
 
 spring:
   jpa:
@@ -18,12 +18,17 @@ spring:
     open-in-view: false
 
   flyway:
-    enabled: true
+    enabled: false
 
-management:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+
   health:
     redis:
-      enabled: ${REDIS_HEALTH_ENABLED:true}
+      enabled: false
 
 logging:
   level:

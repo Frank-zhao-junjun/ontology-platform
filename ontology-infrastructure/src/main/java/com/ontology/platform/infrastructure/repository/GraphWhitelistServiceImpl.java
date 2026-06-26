@@ -7,6 +7,7 @@ import com.ontology.platform.domain.repository.RelationRepository;
 import com.ontology.platform.domain.service.GraphWhitelistService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,11 @@ import java.util.concurrent.TimeUnit;
  * 图遍历白名单服务实现
  * Graph Whitelist Service Implementation
  * 
- * 使用Redis缓存白名单配置，提高查询性能
+ * 使用Redis缓存白名单配置，提高查询性能。
+ * Redis 可选 — 无 Redis 时直接从 DB 查询（无缓存降级）。
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class GraphWhitelistServiceImpl implements GraphWhitelistService {
     
     private final ObjectTypeRepository objectTypeRepository;
@@ -34,6 +35,22 @@ public class GraphWhitelistServiceImpl implements GraphWhitelistService {
     private static final String OBJECT_TYPES_KEY = "ontology:whitelist:objects:%s";
     private static final String PROPERTIES_KEY = "ontology:whitelist:props:%s:%s";
     private static final long CACHE_TTL_MINUTES = 30;
+
+    /**
+     * RedisTemplate is optional. When Redis is not available, 
+     * the service works without caching (DB-only).
+     */
+    public GraphWhitelistServiceImpl(
+            ObjectTypeRepository objectTypeRepository,
+            RelationRepository relationRepository,
+            @Autowired(required = false) RedisTemplate<String, Object> redisTemplate) {
+        this.objectTypeRepository = objectTypeRepository;
+        this.relationRepository = relationRepository;
+        this.redisTemplate = redisTemplate;
+        if (redisTemplate == null) {
+            log.warn("RedisTemplate not available — GraphWhitelistServiceImpl running without cache");
+        }
+    }
     
     private String relationTypesKey(String ontologyId) {
         return String.format(RELATION_TYPES_KEY, ontologyId);
@@ -89,15 +106,17 @@ public class GraphWhitelistServiceImpl implements GraphWhitelistService {
             return Set.of();
         }
         
-        try {
-            @SuppressWarnings("unchecked")
-            Set<String> cached = (Set<String>) redisTemplate.opsForValue()
-                    .get(relationTypesKey(ontologyId));
-            if (cached != null) {
-                return cached;
+        if (redisTemplate != null) {
+            try {
+                @SuppressWarnings("unchecked")
+                Set<String> cached = (Set<String>) redisTemplate.opsForValue()
+                        .get(relationTypesKey(ontologyId));
+                if (cached != null) {
+                    return cached;
+                }
+            } catch (Exception e) {
+                log.warn("Failed to get cached relation types: {}", e.getMessage());
             }
-        } catch (Exception e) {
-            log.warn("Failed to get cached relation types: {}", e.getMessage());
         }
         
         Set<String> relationTypes = new HashSet<>();
@@ -110,15 +129,17 @@ public class GraphWhitelistServiceImpl implements GraphWhitelistService {
             log.error("Failed to load relation types from DB: {}", e.getMessage());
         }
         
-        try {
-            redisTemplate.opsForValue().set(
-                relationTypesKey(ontologyId), 
-                relationTypes, 
-                CACHE_TTL_MINUTES, 
-                TimeUnit.MINUTES
-            );
-        } catch (Exception e) {
-            log.warn("Failed to cache relation types: {}", e.getMessage());
+        if (redisTemplate != null) {
+            try {
+                redisTemplate.opsForValue().set(
+                    relationTypesKey(ontologyId), 
+                    relationTypes, 
+                    CACHE_TTL_MINUTES, 
+                    TimeUnit.MINUTES
+                );
+            } catch (Exception e) {
+                log.warn("Failed to cache relation types: {}", e.getMessage());
+            }
         }
         
         return relationTypes;
@@ -130,15 +151,17 @@ public class GraphWhitelistServiceImpl implements GraphWhitelistService {
             return Set.of();
         }
         
-        try {
-            @SuppressWarnings("unchecked")
-            Set<String> cached = (Set<String>) redisTemplate.opsForValue()
-                    .get(objectTypesKey(ontologyId));
-            if (cached != null) {
-                return cached;
+        if (redisTemplate != null) {
+            try {
+                @SuppressWarnings("unchecked")
+                Set<String> cached = (Set<String>) redisTemplate.opsForValue()
+                        .get(objectTypesKey(ontologyId));
+                if (cached != null) {
+                    return cached;
+                }
+            } catch (Exception e) {
+                log.warn("Failed to get cached object types: {}", e.getMessage());
             }
-        } catch (Exception e) {
-            log.warn("Failed to get cached object types: {}", e.getMessage());
         }
         
         Set<String> objectTypes = new HashSet<>();
@@ -151,15 +174,17 @@ public class GraphWhitelistServiceImpl implements GraphWhitelistService {
             log.error("Failed to load object types from DB: {}", e.getMessage());
         }
         
-        try {
-            redisTemplate.opsForValue().set(
-                objectTypesKey(ontologyId), 
-                objectTypes, 
-                CACHE_TTL_MINUTES, 
-                TimeUnit.MINUTES
-            );
-        } catch (Exception e) {
-            log.warn("Failed to cache object types: {}", e.getMessage());
+        if (redisTemplate != null) {
+            try {
+                redisTemplate.opsForValue().set(
+                    objectTypesKey(ontologyId), 
+                    objectTypes, 
+                    CACHE_TTL_MINUTES, 
+                    TimeUnit.MINUTES
+                );
+            } catch (Exception e) {
+                log.warn("Failed to cache object types: {}", e.getMessage());
+            }
         }
         
         return objectTypes;
@@ -182,6 +207,7 @@ public class GraphWhitelistServiceImpl implements GraphWhitelistService {
     }
     
     public void clearCache(String ontologyId) {
+        if (redisTemplate == null) return;
         try {
             redisTemplate.delete(relationTypesKey(ontologyId));
             redisTemplate.delete(objectTypesKey(ontologyId));

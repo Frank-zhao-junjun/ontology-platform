@@ -1,8 +1,8 @@
 package com.ontology.platform.infrastructure.job;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class JobQueueService {
 
     private final StringRedisTemplate redis;
@@ -21,7 +20,22 @@ public class JobQueueService {
     private static final String PENDING_KEY = "job:pending";
     private static final Duration POP_TIMEOUT = Duration.ofSeconds(5);
 
+    /**
+     * StringRedisTemplate is optional. When Redis is not available,
+     * enqueue/dequeue will log warnings and return no-ops.
+     */
+    public JobQueueService(@Autowired(required = false) StringRedisTemplate redis) {
+        this.redis = redis;
+        if (redis == null) {
+            log.warn("StringRedisTemplate not available — JobQueueService running in no-op mode");
+        }
+    }
+
     public String enqueue(String jobType, Map<String, Object> payload, String tenantId, String agentId) {
+        if (redis == null) {
+            log.warn("Redis unavailable, job not enqueued: type={}", jobType);
+            return UUID.randomUUID().toString();
+        }
         var jobId = UUID.randomUUID().toString();
         try {
             var job = Map.of("id", jobId, "jobType", jobType,
@@ -36,6 +50,7 @@ public class JobQueueService {
     }
 
     public JobMessage dequeue() {
+        if (redis == null) return null;
         try {
             var raw = redis.opsForList().rightPopAndLeftPush(QUEUE_KEY, PENDING_KEY, POP_TIMEOUT);
             if (raw == null) return null;
@@ -47,16 +62,19 @@ public class JobQueueService {
     }
 
     public void ack(String jobId, String raw) {
+        if (redis == null) return;
         redis.opsForList().remove(PENDING_KEY, 1, raw);
         log.debug("Job acked: {}", jobId);
     }
 
     public void retry(String raw) {
+        if (redis == null) return;
         redis.opsForList().remove(PENDING_KEY, 1, raw);
         redis.opsForList().leftPush(QUEUE_KEY, raw);
     }
 
     public long queueSize() {
+        if (redis == null) return 0;
         var s = redis.opsForList().size(QUEUE_KEY);
         return s != null ? s : 0;
     }

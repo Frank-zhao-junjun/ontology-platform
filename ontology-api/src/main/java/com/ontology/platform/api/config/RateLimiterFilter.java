@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,7 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
+@ConditionalOnBean(RateLimiterService.class)
 @Order(10) // After RequestContextFilter (Order 0)
 @RequiredArgsConstructor
 public class RateLimiterFilter implements Filter {

@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,14 @@ import java.io.IOException;
  * Idempotency filter — handles Idempotency-Key header for all write operations.
  * Phase 2a / F02.
  *
+ * Only active when IdempotencyService bean is available (not in dev profile without Redis).
+ *
  * Supports: POST, PUT, PATCH, DELETE
  * Skips: GET, HEAD, OPTIONS (read-only, no idempotency needed)
  */
 @Slf4j
 @Component
+@ConditionalOnBean(IdempotencyService.class)
 @Order(Ordered.HIGHEST_PRECEDENCE + 10)
 @RequiredArgsConstructor
 public class IdempotencyFilter implements Filter {

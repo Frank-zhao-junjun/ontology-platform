@@ -7,9 +7,10 @@ import com.ontology.platform.domain.vo.traversal.CypherQuery;
 import com.ontology.platform.domain.vo.traversal.GraphTraversalRequest;
 import com.ontology.platform.domain.vo.traversal.TraversalFilter;
 import com.ontology.platform.domain.vo.traversal.TraversalFilterCondition;
-import com.ontology.platform.domain.vo.traversal.TraversalPath;
+import com.ontology.platform.domain.vo.traversal.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.*;

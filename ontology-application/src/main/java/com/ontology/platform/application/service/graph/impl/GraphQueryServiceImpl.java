@@ -12,6 +12,7 @@ import com.ontology.platform.domain.vo.traversal.*;
 import com.ontology.platform.infrastructure.graph.AgeQueryExecutor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

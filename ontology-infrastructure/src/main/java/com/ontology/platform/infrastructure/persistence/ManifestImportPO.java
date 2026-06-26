@@ -1,7 +1,6 @@
 package com.ontology.platform.infrastructure.persistence;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.*;
 
 import java.time.Instant;
@@ -32,7 +31,7 @@ public class ManifestImportPO {
     private String ontologyId;
 
     /**
-     * 外部ID（唯一标识之一）
+     * 外部ID（from project1 project.id）
      */
     @TableField("external_id")
     private String externalId;
@@ -44,7 +43,7 @@ public class ManifestImportPO {
     private String tenantId;
 
     /**
-     * 状态：DRAFT / PUBLISHED / ARCHIVED 等
+     * 状态（DRAFT / PUBLISHED / DISABLED）
      */
     @TableField("status")
     private String status;
@@ -56,13 +55,13 @@ public class ManifestImportPO {
     private String apiVersion;
 
     /**
-     * 清单版本（与external_id组成唯一约束）
+     * 清单版本
      */
     @TableField("manifest_version")
     private String manifestVersion;
 
     /**
-     * 源格式
+     * 来源格式
      */
     @TableField("source_format")
     private String sourceFormat;
