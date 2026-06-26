@@ -13,9 +13,11 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
- * Persists Phase 3b models (organization, metrics, process, metadata) on exchange publish.
+ * Persists Phase 3b models (object types, business scenarios, organization,
+ * metrics, process, metadata) on exchange publish.
  */
 @Slf4j
 @Service
@@ -29,10 +31,13 @@ public class ExchangePhase3bPublisher {
     private final OrchestrationPOMapper orchestrationMapper;
     private final ProcessStepPOMapper processStepMapper;
     private final MetadataTemplatePOMapper metadataTemplateMapper;
+    private final ObjectTypeMapper objectTypeMapper;
+    private final BusinessScenarioPOMapper businessScenarioMapper;
     private final ObjectMapper objectMapper;
 
     /**
-     * Persist organizationModel, metricsModel, processModel, and extensions.metadataList.
+     * Persist objectTypes, businessScenarios, organizationModel, metricsModel,
+     * processModel, and extensions.metadataList.
      *
      * @param ontologyId target ontology (uses metadata.id or project.id as fallback)
      * @param doc        parsed exchange document
@@ -47,6 +52,8 @@ public class ExchangePhase3bPublisher {
         var project = doc.getSpec().getProject();
         String effectiveOntologyId = resolveOntologyId(ontologyId, doc);
 
+        counts.put("objectTypes", persistObjectTypes(effectiveOntologyId, project));
+        counts.put("businessScenarios", persistBusinessScenarios(effectiveOntologyId, project));
         counts.put("departments", persistDepartments(effectiveOntologyId, project.getOrganizationModel()));
         counts.put("positions", persistPositions(effectiveOntologyId, project.getOrganizationModel()));
         counts.put("metrics", persistMetrics(effectiveOntologyId, project.getMetricsModel()));
@@ -65,6 +72,78 @@ public class ExchangePhase3bPublisher {
         }
         return doc.getSpec().getProject().getId();
     }
+
+    // ── ObjectType persistence (P0#2: entityRole mapping + P0#3: businessScenarioId) ──
+
+    private int persistObjectTypes(String ontologyId, OntologyExchangeDocument.OntologyProject project) {
+        if (project.getDataModel() == null || project.getDataModel().getEntities() == null) {
+            return 0;
+        }
+        int count = 0;
+        for (var entity : project.getDataModel().getEntities()) {
+            if (entity.getId() == null || entity.getId().isBlank()) {
+                continue;
+            }
+            Instant now = Instant.now();
+            String entityRole = entity.getEntityRole() != null ? entity.getEntityRole() : "aggregate_root";
+            // Normalize: any value other than child_entity → aggregate_root
+            if (!"child_entity".equals(entityRole)) {
+                entityRole = "aggregate_root";
+            }
+            // Use the entity's id as the object type name; use nameEn as displayName fallback
+            String name = entity.getNameEn() != null ? entity.getNameEn() : entity.getId();
+            String displayName = entity.getName() != null ? entity.getName() : name;
+
+            ObjectTypePO po = ObjectTypePO.builder()
+                    .id(UUID.randomUUID().toString())
+                    .ontologyId(ontologyId)
+                    .name(name)
+                    .displayName(displayName)
+                    .description(entity.getDescription())
+                    .primaryKey("id")
+                    .entityRole(entityRole)
+                    .parentAggregateId(entity.getParentAggregateId())
+                    .businessScenarioId(entity.getBusinessScenarioId())
+                    .instanceCount(0)
+                    .attributesJsonb("{}")
+                    .interfaceNames("[]")
+                    .createdAt(now)
+                    .updatedAt(now)
+                    .build();
+            objectTypeMapper.insert(po);
+            count++;
+        }
+        return count;
+    }
+
+    // ── BusinessScenario persistence (P0#3) ──
+
+    private int persistBusinessScenarios(String ontologyId, OntologyExchangeDocument.OntologyProject project) {
+        if (project.getDataModel() == null || project.getDataModel().getBusinessScenarios() == null) {
+            return 0;
+        }
+        int count = 0;
+        for (var bs : project.getDataModel().getBusinessScenarios()) {
+            if (bs.getId() == null || bs.getId().isBlank()) {
+                continue;
+            }
+            Instant now = Instant.now();
+            businessScenarioMapper.insert(BusinessScenarioPO.builder()
+                    .id(bs.getId())
+                    .ontologyId(ontologyId)
+                    .name(bs.getName())
+                    .nameEn(bs.getNameEn())
+                    .description(bs.getDescription())
+                    .projectId(bs.getProjectId())
+                    .createdAt(now)
+                    .updatedAt(now)
+                    .build());
+            count++;
+        }
+        return count;
+    }
+
+    // ── Original persistence methods (unchanged) ──
 
     private int persistDepartments(String ontologyId, OntologyExchangeDocument.OrganizationModel org) {
         if (org == null || org.getDepartments() == null) return 0;

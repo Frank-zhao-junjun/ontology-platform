@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ontology.platform.infrastructure.persistence.BusinessScenarioPOMapper">
+
+    <resultMap id="BaseResultMap" type="com.ontology.platform.infrastructure.persistence.BusinessScenarioPO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="ontology_id" property="ontologyId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="name_en" property="nameEn" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="project_id" property="projectId" jdbcType="VARCHAR"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectByOntologyId" resultMap="BaseResultMap">
+        SELECT id, ontology_id, name, name_en, description, project_id, created_at, updated_at
+        FROM business_scenario
+        WHERE ontology_id = #{ontologyId}
+        ORDER BY created_at ASC
+    </select>
+
+</mapper>

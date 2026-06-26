@@ -38,24 +38,74 @@ public class SemanticService {
         String trimmedPhrase = phrase.trim().toLowerCase();
         IntentResult bestMatch = null;
         int bestMatchScore = 0;
+        List<String> derivationChain = new ArrayList<>();
 
+        // ── Phase 1: Direct trigger phrase matching ──
         for (AgentIntentPO po : intents) {
             List<String> triggerPhrases = parseStringList(po.getTriggerPhrases());
             for (String trigger : triggerPhrases) {
-                if (trigger == null || trigger.isBlank()) {
-                    continue;
-                }
+                if (trigger == null || trigger.isBlank()) continue;
                 int score = matchScore(trimmedPhrase, trigger.trim().toLowerCase());
                 if (score > bestMatchScore) {
                     bestMatchScore = score;
                     bestMatch = toIntentResult(po, triggerPhrases, bestMatchScore);
+                    derivationChain.add("trigger_phrase: " + trigger);
+                }
+            }
+        }
+
+        // ── Phase 2: BusinessTerm + Synonym matching ──
+        List<BusinessTermPO> terms = loadBusinessTerms(ontologyId);
+        for (BusinessTermPO term : terms) {
+            // Match against term name, nameEn, and synonyms
+            int termScore = matchTerm(trimmedPhrase, term);
+            if (termScore > 0 && termScore > bestMatchScore) {
+                // Find intents related to this term's entity
+                for (AgentIntentPO po : intents) {
+                    if (term.getId().equals(po.getTargetEntityId())
+                            || term.getName().equalsIgnoreCase(po.getName())) {
+                        bestMatchScore = termScore + 2; // Bonus for semantic match
+                        bestMatch = toIntentResult(po, parseStringList(po.getTriggerPhrases()), bestMatchScore);
+                        derivationChain.add("business_term: " + term.getName()
+                                + (term.getNameEn() != null ? " (" + term.getNameEn() + ")" : ""));
+                        break;
+                    }
+                }
+            }
+        }
+
+        // ── Phase 3: SemanticRelation traversal ──
+        if (bestMatchScore < 5) {
+            Set<String> termIds = terms.stream().map(BusinessTermPO::getId).collect(Collectors.toSet());
+            List<SemanticRelationResult> relations = loadRelationsForTerms(termIds);
+            List<BusinessTermPO> expandedTerms = expandViaRelations(terms, relations, trimmedPhrase);
+            for (BusinessTermPO related : expandedTerms) {
+                for (AgentIntentPO po : intents) {
+                    if (related.getId().equals(po.getTargetEntityId())) {
+                        bestMatchScore = Math.max(bestMatchScore, 4);
+                        bestMatch = toIntentResult(po, parseStringList(po.getTriggerPhrases()), bestMatchScore);
+                        derivationChain.add("semantic_relation: " + related.getName());
+                    }
+                }
+            }
+        }
+
+        // ── Phase 4: Intent name / category keyword fallback ──
+        if (bestMatchScore < 3) {
+            for (AgentIntentPO po : intents) {
+                if (po.getName() != null && trimmedPhrase.contains(po.getName().toLowerCase())) {
+                    bestMatchScore = 3;
+                    bestMatch = toIntentResult(po, parseStringList(po.getTriggerPhrases()), bestMatchScore);
+                    derivationChain.add("intent_name: " + po.getName());
+                    break;
                 }
             }
         }
 
         if (bestMatch != null) {
-            log.info("Resolved intent: {} (actionId={}) for phrase={}, ontologyId={}",
-                    bestMatch.getId(), bestMatch.getActionId(), phrase, ontologyId);
+            bestMatch.setDerivationChain(derivationChain);
+            log.info("Resolved intent: {} (score={}, actionId={}) for phrase={}, ontologyId={}",
+                    bestMatch.getId(), bestMatchScore, bestMatch.getActionId(), phrase, ontologyId);
         }
         return bestMatch;
     }
@@ -151,6 +201,54 @@ public class SemanticService {
                 .relationType(po.getRelationType())
                 .description(po.getDescription())
                 .build();
+    }
+
+    private List<BusinessTermPO> loadBusinessTerms(String ontologyId) {
+        if (ontologyId != null && !ontologyId.isBlank()) {
+            return businessTermMapper.selectByOntologyId(ontologyId);
+        }
+        List<BusinessTermPO> all = businessTermMapper.selectList(null);
+        return all != null ? all : List.of();
+    }
+
+    /** Match a phrase against a BusinessTerm (name, nameEn, synonyms). */
+    private int matchTerm(String phrase, BusinessTermPO term) {
+        int score = 0;
+        if (term.getName() != null && phrase.contains(term.getName().toLowerCase())) score = 6;
+        if (term.getNameEn() != null && phrase.contains(term.getNameEn().toLowerCase())) score = Math.max(score, 5);
+        if (term.getSynonyms() != null) {
+            List<String> synonyms = parseStringList(term.getSynonyms());
+            for (String syn : synonyms) {
+                if (syn != null && phrase.contains(syn.toLowerCase())) {
+                    score = Math.max(score, 4);
+                }
+            }
+        }
+        return score;
+    }
+
+    /** Expand business terms via semantic relations — find related terms matching the phrase. */
+    private List<BusinessTermPO> expandViaRelations(List<BusinessTermPO> terms,
+                                                     List<SemanticRelationResult> relations,
+                                                     String phrase) {
+        List<BusinessTermPO> related = new ArrayList<>();
+        for (SemanticRelationResult rel : relations) {
+            for (BusinessTermPO term : terms) {
+                if (rel.getSourceTermId().equals(term.getId()) || rel.getTargetTermId().equals(term.getId())) {
+                    // Check if the related term also matches the phrase
+                    for (BusinessTermPO other : terms) {
+                        if (other.getId().equals(rel.getTargetTermId())
+                                || other.getId().equals(rel.getSourceTermId())) {
+                            if (other.getId().equals(term.getId())) continue;
+                            if (matchTerm(phrase, other) > 0) {
+                                related.add(other);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return related;
     }
 
     private int matchScore(String phrase, String trigger) {

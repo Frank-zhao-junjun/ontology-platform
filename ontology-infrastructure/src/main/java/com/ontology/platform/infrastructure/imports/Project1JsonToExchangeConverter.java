@@ -138,12 +138,18 @@ public class Project1JsonToExchangeConverter {
     private Entity buildEntity(JsonNode node) {
         String entityId = pathStr(node, "id");
         String entityName = pathStr(node, "name");
+        // Normalize entityRole: "entity" → "aggregate_root" for Project1 compatibility
+        String rawRole = pathStr(node, "entityRole");
+        if (rawRole == null) {
+            rawRole = pathStr(node, "kind");
+        }
+        String normalizedRole = normalizeEntityRole(rawRole);
         return Entity.builder()
                 .id(entityId)
                 .name(entityName)
                 .nameEn(pathStr(node, "nameEn"))
                 .description(pathStr(node, "description"))
-                .entityRole(pathStr(node, "kind") != null ? pathStr(node, "kind") : "entity")
+                .entityRole(normalizedRole)
                 .projectId(pathStr(node, "projectId"))
                 .businessScenarioId(pathStr(node, "businessScenarioId"))
                 .parentAggregateId(pathStr(node, "parentAggregateId"))
@@ -1052,5 +1058,19 @@ public class Project1JsonToExchangeConverter {
             if (item != null && !item.isNull()) result.add(item);
         }
         return result;
+    }
+
+    /**
+     * Normalize entityRole value for compatibility with Project1 formats.
+     * "entity" or unknown → "aggregate_root"
+     * "child_entity" → "child_entity"
+     * "aggregate_root" → "aggregate_root"
+     */
+    static String normalizeEntityRole(String role) {
+        if (role == null) return "aggregate_root";
+        return switch (role.trim().toLowerCase()) {
+            case "child_entity" -> "child_entity";
+            default -> "aggregate_root";
+        };
     }
 }

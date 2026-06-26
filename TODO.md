@@ -28,19 +28,19 @@
 ## 🔵 P2 — 文档与测试
 
 | # | 任务 | 来源 | 说明 |
-|---|------|------|------|
-| 9 | TDD v2 → v3 | 差距分析 P3#17 | 覆盖新校验规则与 V2 导入 |
-| 10 | PRD/故事地图 US-D → US-P | 差距分析 P3#16 | 交接条款更新 |
-| 11 | Docker E2E 验证 | TODO #3 | 本机待有 Docker/PostgreSQL 环境 |
-| 12 | 项目1 docs/shared/ 同步 | 审计发现 | ✅ 项目1 已建 `docs/shared/README.md` 跳转；权威源仍在本仓库 `docs/shared/` |
+||---|------|------|------|
+| 9 | TDD v2 → v3 | 差距分析 P3#17 | ✅ `TDD-本体建模平台-v3.0.md` |
+| 10 | PRD/故事地图 US-D → US-P | 差距分析 P3#16 | ✅ `PRD-本体建模平台-v3.0.md` |
+| 11 | Docker E2E 验证 | TODO #3 | ⛔ 本机待有 Docker/PostgreSQL 环境 |
+| 12 | 项目1 docs/shared/ 同步 | 审计发现 | ✅ 项目1 已建 `docs/shared/README.md` 跳转 |
 
 ## ⚪ P3 — 技术债务
 
 | # | 任务 | 来源 | 说明 |
 |---|------|------|------|
-| 13 | 规则/接口/指标 10 表代码层 | 数据映射 | validation_rule 等 10 表无 PO/Mapper/Service/Controller |
-| 14 | RelationRepositoryImpl → 数据库 | AGENTS.md | 当前内存存储，需替换为 PostgreSQL 实现 |
-| 15 | queryObjects 接入实际数据 | AGENTS.md | 当前返回空结果集 |
+| 13 | 规则/接口/指标 10 表代码层 | 数据映射 | validation_rule 等 10 表 | ✅ 全部有 Service + Controller |
+| 14 | RelationRepositoryImpl → 数据库 | AGENTS.md | 当前内存存储 | ✅ MyBatis-Plus 实现 |
+| 15 | queryObjects 接入实际数据 | AGENTS.md | 当前返回空结果集 | ✅ 分页查询全链路已实现 |
 
 ---
 

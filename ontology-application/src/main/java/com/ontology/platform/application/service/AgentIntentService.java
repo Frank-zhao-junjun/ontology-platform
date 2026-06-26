@@ -49,8 +49,12 @@ public class AgentIntentService {
     private void mapRequest(CreateAgentIntentRequest req, AgentIntent entity) {
         if (req.getName() != null) entity.setName(req.getName());
         if (req.getDescription() != null) entity.setDescription(req.getDescription());
+        if (req.getCategory() != null) entity.setCategory(req.getCategory());
+        if (req.getTargetEntityId() != null) entity.setTargetEntityId(req.getTargetEntityId());
         if (req.getTriggerPhrases() != null) entity.setTriggerPhrases(req.getTriggerPhrases());
         if (req.getActionId() != null) entity.setActionId(req.getActionId());
+        if (req.getPriority() != null) entity.setPriority(req.getPriority());
+        if (req.getRequiresConfirmation() != null) entity.setRequiresConfirmation(req.getRequiresConfirmation());
     }
 
     private AgentIntentPO toPO(AgentIntent entity) {
@@ -59,8 +63,12 @@ public class AgentIntentService {
                 .ontologyId(entity.getOntologyId())
                 .name(entity.getName())
                 .description(entity.getDescription())
+                .category(entity.getCategory())
+                .targetEntityId(entity.getTargetEntityId())
                 .triggerPhrases(entity.getTriggerPhrases())
                 .actionId(entity.getActionId())
+                .priority(entity.getPriority())
+                .requiresConfirmation(entity.getRequiresConfirmation())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
@@ -72,8 +80,12 @@ public class AgentIntentService {
                 .ontologyId(po.getOntologyId())
                 .name(po.getName())
                 .description(po.getDescription())
+                .category(po.getCategory())
+                .targetEntityId(po.getTargetEntityId())
                 .triggerPhrases(po.getTriggerPhrases())
                 .actionId(po.getActionId())
+                .priority(po.getPriority())
+                .requiresConfirmation(po.getRequiresConfirmation())
                 .createdAt(po.getCreatedAt())
                 .updatedAt(po.getUpdatedAt())
                 .build();
@@ -84,8 +96,12 @@ public class AgentIntentService {
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
+                .category(entity.getCategory())
+                .targetEntityId(entity.getTargetEntityId())
                 .triggerPhrases(entity.getTriggerPhrases())
                 .actionId(entity.getActionId())
+                .priority(entity.getPriority())
+                .requiresConfirmation(entity.getRequiresConfirmation())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();

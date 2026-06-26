@@ -23,4 +23,7 @@ public class IntentResult {
     @Builder.Default
     private List<IntentSlotResult> slots = new ArrayList<>();
     private int matchScore;
+    /** How the match was derived (trigger_phrase, business_term, semantic_relation, intent_name) */
+    @Builder.Default
+    private List<String> derivationChain = new ArrayList<>();
 }

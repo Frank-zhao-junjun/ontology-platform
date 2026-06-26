@@ -4,10 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontology.platform.domain.dto.imports.YamlImportResult;
 import com.ontology.platform.domain.dto.imports.YamlManifest;
-import com.ontology.platform.domain.dto.imports.YamlManifest.*;
 import com.ontology.platform.common.enums.PropertyDataType;
 import com.ontology.platform.common.enums.RelationCardinality;
-import com.ontology.platform.domain.entity.*;
+import com.ontology.platform.domain.entity.ActionDefinition;
+import com.ontology.platform.domain.entity.DomainEvent;
+import com.ontology.platform.domain.entity.ObjectType;
+import com.ontology.platform.domain.entity.Ontology;
+import com.ontology.platform.domain.entity.Relation;
+import com.ontology.platform.domain.entity.StateMachine;
 import com.ontology.platform.domain.vo.Property;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +41,7 @@ public class YamlManifestConverter {
         }
 
         List<String> warnings = new ArrayList<>();
-        Metadata meta = manifest.getMetadata();
+        YamlManifest.Metadata meta = manifest.getMetadata();
 
         // === 1. 创建 Ontology ===
         Ontology ontology = createOntology(meta);
@@ -47,11 +51,11 @@ public class YamlManifestConverter {
         Set<String> processedIds = new HashSet<>();
 
         if (manifest.getSpec() != null && manifest.getSpec().getSemantic() != null) {
-            Semantic sem = manifest.getSpec().getSemantic();
+            YamlManifest.Semantic sem = manifest.getSpec().getSemantic();
 
             // 2a. objectTypes
             if (sem.getObjectTypes() != null) {
-                for (ObjectTypeDef def : sem.getObjectTypes()) {
+                for (YamlManifest.ObjectTypeDef def : sem.getObjectTypes()) {
                     if (def.getId() == null || def.getId().isBlank()) {
                         warnings.add("跳过无 ID 的 ObjectType");
                         continue;
@@ -66,7 +70,7 @@ public class YamlManifestConverter {
 
             // 2b. businessScenarios → ObjectType (kind=scenario)
             if (sem.getBusinessScenarios() != null) {
-                for (BusinessScenario bs : sem.getBusinessScenarios()) {
+                for (YamlManifest.BusinessScenario bs : sem.getBusinessScenarios()) {
                     if (bs.getId() != null && !bs.getId().isBlank()) {
                         if (!processedIds.add(bs.getId())) continue;
                         objectTypes.add(createScenarioObjectType(ontology, bs));
@@ -76,7 +80,7 @@ public class YamlManifestConverter {
 
             // 2c. valueObjects → ObjectType (kind=value_object)
             if (sem.getValueObjects() != null) {
-                for (ValueObject vo : sem.getValueObjects()) {
+                for (YamlManifest.ValueObject vo : sem.getValueObjects()) {
                     if (vo.getId() != null && !vo.getId().isBlank()) {
                         if (!processedIds.add(vo.getId())) continue;
                         objectTypes.add(createValueObjectType(ontology, vo));
@@ -89,7 +93,7 @@ public class YamlManifestConverter {
         List<StateMachine> stateMachines = new ArrayList<>();
         if (manifest.getSpec() != null && manifest.getSpec().getSemantic() != null
                 && manifest.getSpec().getSemantic().getStateMachines() != null) {
-            for (StateMachineDef def : manifest.getSpec().getSemantic().getStateMachines()) {
+            for (YamlManifest.StateMachineDef def : manifest.getSpec().getSemantic().getStateMachines()) {
                 if (def.getId() != null && !def.getId().isBlank()) {
                     stateMachines.add(createStateMachine(ontology, def));
                 }
@@ -100,7 +104,7 @@ public class YamlManifestConverter {
         List<ActionDefinition> actions = new ArrayList<>();
         if (manifest.getSpec() != null && manifest.getSpec().getBehavior() != null
                 && manifest.getSpec().getBehavior().getActions() != null) {
-            for (ActionDef def : manifest.getSpec().getBehavior().getActions()) {
+            for (YamlManifest.ActionDef def : manifest.getSpec().getBehavior().getActions()) {
                 if (def.getId() != null && !def.getId().isBlank()) {
                     actions.add(createActionDefinition(ontology, def));
                 }
@@ -111,7 +115,7 @@ public class YamlManifestConverter {
         List<DomainEvent> domainEvents = new ArrayList<>();
         if (manifest.getSpec() != null && manifest.getSpec().getEvents() != null
                 && manifest.getSpec().getEvents().getDomainEvents() != null) {
-            for (DomainEventDef def : manifest.getSpec().getEvents().getDomainEvents()) {
+            for (YamlManifest.DomainEventDef def : manifest.getSpec().getEvents().getDomainEvents()) {
                 if (def.getId() != null && !def.getId().isBlank()) {
                     domainEvents.add(createDomainEvent(ontology, def));
                 }
@@ -134,7 +138,7 @@ public class YamlManifestConverter {
 
     // ==================== 实体映射方法 ====================
 
-    private Ontology createOntology(Metadata meta) {
+    private Ontology createOntology(YamlManifest.Metadata meta) {
         String description = meta.getDescription();
         if (meta.getBoundedContext() != null && !meta.getBoundedContext().isBlank()) {
             description = (description != null ? description : "")
@@ -157,7 +161,7 @@ public class YamlManifestConverter {
         );
     }
 
-    private ObjectType createObjectType(Ontology ontology, ObjectTypeDef def) {
+    private ObjectType createObjectType(Ontology ontology, YamlManifest.ObjectTypeDef def) {
         ObjectType ot = ObjectType.builder()
                 .id(UUID.randomUUID().toString())
                 .ontologyId(ontology.getName())
@@ -172,14 +176,14 @@ public class YamlManifestConverter {
 
         // 映射属性
         if (def.getProperties() != null) {
-            for (PropertyDef pdef : def.getProperties()) {
+            for (YamlManifest.PropertyDef pdef : def.getProperties()) {
                 ot.addProperty(toProperty(pdef));
             }
         }
 
         // 映射关系
         if (def.getRelations() != null) {
-            for (RelationDef rdef : def.getRelations()) {
+            for (YamlManifest.RelationDef rdef : def.getRelations()) {
                 ot.addRelation(toRelation(rdef));
             }
         }
@@ -187,7 +191,7 @@ public class YamlManifestConverter {
         return ot;
     }
 
-    private ObjectType createScenarioObjectType(Ontology ontology, BusinessScenario bs) {
+    private ObjectType createScenarioObjectType(Ontology ontology, YamlManifest.BusinessScenario bs) {
         return ObjectType.builder()
                 .id(UUID.randomUUID().toString())
                 .ontologyId(ontology.getName())
@@ -201,7 +205,7 @@ public class YamlManifestConverter {
                 .build();
     }
 
-    private ObjectType createValueObjectType(Ontology ontology, ValueObject vo) {
+    private ObjectType createValueObjectType(Ontology ontology, YamlManifest.ValueObject vo) {
         ObjectType ot = ObjectType.builder()
                 .id(UUID.randomUUID().toString())
                 .ontologyId(ontology.getName())
@@ -215,7 +219,7 @@ public class YamlManifestConverter {
                 .build();
 
         if (vo.getProperties() != null) {
-            for (PropertyDef pdef : vo.getProperties()) {
+            for (YamlManifest.PropertyDef pdef : vo.getProperties()) {
                 ot.addProperty(toProperty(pdef));
             }
         }
@@ -223,7 +227,7 @@ public class YamlManifestConverter {
         return ot;
     }
 
-    private StateMachine createStateMachine(Ontology ontology, StateMachineDef def) {
+    private StateMachine createStateMachine(Ontology ontology, YamlManifest.StateMachineDef def) {
         String statesJson = "[]";
         if (def.getStates() != null && !def.getStates().isEmpty()) {
             try {
@@ -236,7 +240,7 @@ public class YamlManifestConverter {
             initialState = def.getStates().stream()
                     .filter(s -> Boolean.TRUE.equals(s.getIsInitial()))
                     .findFirst()
-                    .map(StateDef::getCode)
+                    .map(YamlManifest.StateDef::getCode)
                     .orElse(null);
         }
 
@@ -249,7 +253,7 @@ public class YamlManifestConverter {
         );
     }
 
-    private ActionDefinition createActionDefinition(Ontology ontology, ActionDef def) {
+    private ActionDefinition createActionDefinition(Ontology ontology, YamlManifest.ActionDef def) {
         String riskLevel = "WRITE";
         if (def.getNameEn() != null && def.getNameEn().toLowerCase().contains("query")) {
             riskLevel = "READ";
@@ -280,7 +284,7 @@ public class YamlManifestConverter {
         );
     }
 
-    private DomainEvent createDomainEvent(Ontology ontology, DomainEventDef def) {
+    private DomainEvent createDomainEvent(Ontology ontology, YamlManifest.DomainEventDef def) {
         String payloadSchema = "{}";
         if (def.getPayloadSchema() != null && def.getPayloadSchema().getRequired() != null) {
             try {
@@ -300,7 +304,7 @@ public class YamlManifestConverter {
 
     // ==================== 辅助方法 ====================
 
-    private Property toProperty(PropertyDef pdef) {
+    private Property toProperty(YamlManifest.PropertyDef pdef) {
         PropertyDataType dataType = PropertyDataType.STRING;
         try {
             if (pdef.getDataType() != null) {
@@ -322,7 +326,7 @@ public class YamlManifestConverter {
                 .build();
     }
 
-    private Relation toRelation(RelationDef rdef) {
+    private Relation toRelation(YamlManifest.RelationDef rdef) {
         RelationCardinality cardinality = RelationCardinality.MANY_TO_ONE;
         try {
             if (rdef.getCardinality() != null) {
