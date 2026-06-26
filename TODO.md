@@ -21,7 +21,7 @@
 | # | 任务 | 来源 | 说明 |
 |---|------|------|------|
 | 5 | `resolve_intent` 接入 Semantic Layer | 差距分析 P2#12 | ✅ 4-phase: trigger→BusinessTerm synonym→SemanticRelation→name fallback |
-| 6 | `query_ontology` 增强 | 差距分析 P2#13 | 覆盖 Lifecycle 聚合 + EPC 覆盖报告 |
+| 6 | `query_ontology` 增强 | 差距分析 P2#13 | ✅ EPC coverage 含 uncovered actions/events；路径 /v1→/api/v1 修复 |
 | 7 | 组织上下文 | 差距分析 P2#14 | Agent 权限链：Position → Role → Permission |
 | 8 | 校验 API 暴露 | 差距分析 P2#15 | 完整 validationReport 端点 |
 
