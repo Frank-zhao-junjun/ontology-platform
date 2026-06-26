@@ -56,74 +56,49 @@ function buildEntityDetail(model: OntologyModel, entityId: string): Record<strin
   return detail;
 }
 
-// ── load_ontology_model tool ──
+// ── upload_ontology_model tool ──
 
-export const loadOntologyModelTool: ToolDefinition = {
-  name: 'load_ontology_model',
-  description: '加载本体模型（预览模式）。接受模型 JSON 内容（upload 模式）或文件路径。显示实体列表和规则概览，但不注册到 MCP Server。确认生效请调用 apply_ontology_model。',
+export const uploadOntologyModelTool: ToolDefinition = {
+  name: 'upload_ontology_model',
+  description: '上传本体模型（预览模式）。传入模型 JSON 正文，显示实体列表和规则概览，但不注册到 MCP Server。确认生效请调用 apply_ontology_model。',
   inputSchema: {
     type: 'object',
     properties: {
-      filePath: {
-        type: 'string',
-        description: 'ontology-model.json 文件路径（与 modelJson 二选一）',
-      },
       modelJson: {
         type: 'string',
-        description: '模型 JSON 正文内容（与 filePath 二选一，适用于上传场景）',
+        description: '从项目1导出的 .ontology-model.json 完整 JSON 内容',
       },
       entityId: {
         type: 'string',
         description: '可选：查看指定实体的详细信息',
       },
     },
+    required: ['modelJson'],
   },
   domain: 'platform',
   riskLevel: 'READ',
   handler: async (args) => {
-    const filePath = args.filePath as string | undefined;
-    const modelJson = args.modelJson as string | undefined;
+    const modelJson = args.modelJson as string;
     const entityId = args.entityId as string | undefined;
 
     let model: OntologyModel | null = null;
 
-    if (modelJson) {
-      // Upload mode: parse JSON content directly
-      try {
-        const parsed = JSON.parse(modelJson);
-        if (!parsed.version || !parsed.project || !Array.isArray(parsed.entities)) {
-          return {
-            content: [{ type: 'text', text: JSON.stringify({
-              success: false,
-              message: '模型 JSON 格式不正确：缺少 version / project / entities 字段',
-            }, null, 2) }],
-          };
-        }
-        model = parsed as OntologyModel;
-      } catch {
+    try {
+      const parsed = JSON.parse(modelJson);
+      if (!parsed.version || !parsed.project || !Array.isArray(parsed.entities)) {
         return {
           content: [{ type: 'text', text: JSON.stringify({
             success: false,
-            message: '模型 JSON 解析失败：不是有效的 JSON 格式',
+            message: '模型 JSON 格式不正确：缺少 version / project / entities 字段',
           }, null, 2) }],
         };
       }
-    } else if (filePath) {
-      // File path mode: read from disk
-      model = loadOntologyModel(filePath);
-      if (!model) {
-        return {
-          content: [{ type: 'text', text: JSON.stringify({
-            success: false,
-            message: `无法加载模型文件 "${filePath}"。请确认文件存在且格式正确。`,
-          }, null, 2) }],
-        };
-      }
-    } else {
+      model = parsed as OntologyModel;
+    } catch {
       return {
         content: [{ type: 'text', text: JSON.stringify({
           success: false,
-          message: '请提供 modelJson（上传模式）或 filePath（文件模式）。',
+          message: '模型 JSON 解析失败：不是有效的 JSON 格式',
         }, null, 2) }],
       };
     }
@@ -358,5 +333,5 @@ export const disableOntologyModelTool: ToolDefinition = {
 // ── Export for init.ts (now returns the three management tools) ──
 
 export function generateEntityTools(): ToolDefinition[] {
-  return [loadOntologyModelTool, applyOntologyModelTool, disableOntologyModelTool];
+  return [uploadOntologyModelTool, applyOntologyModelTool, disableOntologyModelTool];
 }
