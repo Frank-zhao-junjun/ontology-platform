@@ -11,10 +11,10 @@
 | # | 任务 | 来源 | 说明 |
 |---|------|------|:----:|
 | 1 | Import 管道增强 | 差距分析 P0#2 | ✅ 统一到 v2 管道，`Project1JsonToExchangeConverter` + autoPublish |
+| 1 | Import 管道增强 | 差距分析 P0#2 | ✅ 统一到 v2 管道，`Project1JsonToExchangeConverter` + autoPublish |
+| 2 | 实体角色映射 | 差距分析 P0#3 | ✅ v2 全链路统一 `aggregate_root`/`child_entity` |
+| 3 | businessScenarioId 支持 | 差距分析 P0#4 | ✅ Flyway V20 + BusinessScenario 全链路 |
 | 4 | 校验器分层 | 差距分析 P0#5 | ✅ 106 条规则，7 插件 (VE/VM/VX/V-LC/V-AS/V-ORG/Manifest) |
-| 2 | 实体角色映射 | 差距分析 P0#3 | ✅ v2 全链路统一 `aggregate_root`/`child_entity`，v1 type↔v2 entityRole 映射在 Converter 中已处理 |
-| 3 | businessScenarioId 支持 | 差距分析 P0#4 | ✅ Flyway V20 + BusinessScenario 全链路 (Entity/PO/Mapper/Service/Controller) |
-| 4 | 校验器分层 | 差距分析 P0#5 | V01-V11 保留 + 插件化 VE/VM/VX/V-LC/V-AS |
 
 ## 🟡 P1 — MCP 运行时
 
@@ -51,9 +51,12 @@
 | Phase 0 | 基础 CRUD + 图查询 |
 | Phase 1 | Manifest V01-V11 + MCP Server |
 | Phase 2 | JobQueue + RateLimiter + Webhook + Agent 编排 + CI |
-| Phase 3a | V2 交换契约 + Import API |
-| Phase 3b-d | V12-V14 新域 19 表全链路 |
+| Phase 3a | V2 交换契约 + Import API + 校验器 106 rules |
+| Phase 3b-d | V12-V14 新域 19 表全链路 + BusinessScenario + GovernanceRole |
+| P1 MCP | resolve_intent (4-phase) + query_ontology (EPC coverage) + 组织上下文 + 校验 API |
+| Phase 2 | JobQueue + RateLimiter + Webhook + Agent 编排 + CI |
 | E2E | 6 场景跨项目导入/导出（`Project1ToProject2E2ETest`） |
+| P0 | 差距分析 6 项全部关闭 |
 | 测试 | **174** tests, 0 failures · CI ~1m26s |
 | 文档 | README / TODO / import TODO 与项目1 双向链接（2026-06-26） |
 

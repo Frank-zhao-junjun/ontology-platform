@@ -2,7 +2,7 @@
 
 > 此项目也被称为**项目2**。
 
-企业级本体服务治理平台，基于 DDD 分层架构，为上游本体建模工具（**项目1**：[`D:\AI\Ontology`](../Ontology)）产出的本体模型提供持久化、查询、校验、发布、Agent 编排（ACP 协议接入 Kimi/Claude/Codex）、V12-V14 领域模型（19 张新表）、CI 自动构建测试（1m26s）、跨项目 E2E 导入/导出测试（6 个场景），以及 Phase 2 异步任务、Webhook、幂等与限流能力。MCP Server 将 REST API 暴露为 AI Agent 可调用的 MCP 工具。
+企业级本体服务治理平台，基于 DDD 分层架构，为上游本体建模工具（**项目1**：[`D:\AI\Ontology`](../Ontology)）产出的本体模型提供持久化、查询、校验、发布、Agent 编排（ACP 协议接入 Kimi/Claude/Codex）、V12-V14 领域模型（19+2 张新表）、106 条校验规则（7 插件）、CI 自动构建测试（1m26s）、跨项目 E2E 导入/导出测试（6 个场景）、MCP 语义意图解析（4-phase）、组织上下文权限链（Position→Role→Permission），以及 Phase 2 异步任务、Webhook、幂等与限流能力。MCP Server 将 REST API 暴露为 AI Agent 可调用的 MCP 工具。
 
 **仓库**: [Frank-zhao-junjun/ontology-platform](https://github.com/Frank-zhao-junjun/ontology-platform)
 
@@ -172,12 +172,17 @@ npm test       # Vitest
 | 图遍历 | `/api/v1/ontologies/{id}/graph/*` | traverse / paths / subgraph |
 | Agent 编排 | `/api/v1/agents/*` | Agent 任务提交/查询（Kimi/Claude/Codex） |
 | Manifest | `/api/v1/manifests/*` | 导入、预览、发布、导出 |
-| 项目1导入 | `/api/v1/ontologies/import` | 接收项目1导出的本体模型 JSON |
-| 行为/事件/EPC | `/api/v1/ontologies/{id}/actions|events|epc` | 领域定义查询 |
-| V12 组织/指标 | `/api/v1/ontologies/{id}/departments\|positions\|business-metrics\|orchestrations\|process-steps` | 部门、岗位、业务指标、编排、流程步骤 |
-| V12 元数据/术语 | `/api/v1/ontologies/{id}/metadata-templates|business-terms|agent-intents` | 元数据模板、业务术语、Agent 意图 |
-| V13 语义 | `/api/v1/ontologies/{id}/semantic-relations|intent-slots|agent-policies-semantic|error-recoveries|semantic-field-mappings|entity-lifecycle-snapshots` | 语义关系、意图槽位、策略、容错、字段映射、生命周期 |
+| **项目1导入** | `/api/v1/ontologies/import` | 项目1 JSON → v2 pipeline + autoPublish |
+| **Exchange v2** | `/api/v2/exchanges/*` | import(JSON/Excel/Markdown) + validate(no-persist) + publish |
+| 行为/事件/EPC | `/api/v1/ontologies/{id}/actions\|events\|epc` | 领域定义查询 |
+| **EPC 覆盖** | `/api/v1/ontologies/{id}/epc/coverage` | 覆盖率报告（含未覆盖 actions/events） |
+| **语义层** | `/api/v1/ontologies/{id}/semantic-layer` + `/api/v2/semantic/resolve-intent` | 语义层查询 + 意图解析（4-phase） |
+| **生命周期** | `/api/v1/ontologies/{id}/lifecycle/{entityId}` | 实体生命周期快照查询 |
+| V12 组织/指标 | `/api/v1/ontologies/{id}/departments\|positions\|business-metrics\|orchestrations\|process-steps` | 部门、岗位、指标、编排、流程 |
+| V12 元数据/术语/意图 | `/api/v1/ontologies/{id}/metadata-templates\|business-terms\|agent-intents` | 元数据模板、业务术语、Agent 意图 |
+| V13 语义 | `/api/v1/ontologies/{id}/semantic-relations\|intent-slots\|agent-policies-semantic\|error-recoveries\|semantic-field-mappings\|entity-lifecycle-snapshots` | 语义关系、槽位、策略、容错、字段映射、生命周期 |
 | V14 EPC | `/api/v1/ontologies/{id}/epc-chains\|epc-nodes\|epc-edges\|epc-model-refs\|epc-profiles` | EPC 链/节点/边/模型引用/配置 |
+| **治理角色** | `/api/v1/ontologies/{id}/governance-roles` | 角色 + 权限 CRUD（Position→Role→Permission 链） |
 | 治理 | `/api/v1/governance/*` | Token、角色、权限、审批 |
 | 上传/导入 | `/api/v1/uploads/*`, `/api/v1/imports/*` | 分片上传与导入任务 |
 | 异步任务 | `/api/v1/jobs` | 提交/查询/取消 Job（Phase 2） |
