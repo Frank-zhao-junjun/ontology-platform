@@ -13,14 +13,14 @@
 | 1 | Import 管道增强 | 差距分析 P0#2 | ✅ 统一到 v2 管道，`Project1JsonToExchangeConverter` + autoPublish |
 | 4 | 校验器分层 | 差距分析 P0#5 | ✅ 106 条规则，7 插件 (VE/VM/VX/V-LC/V-AS/V-ORG/Manifest) |
 | 2 | 实体角色映射 | 差距分析 P0#3 | `child_entity` ↔ 存储层 `entity` 统一 |
-| 3 | businessScenarioId 支持 | 差距分析 P0#4 | 限界上下文下新增场景表或 JSONB 索引 |
+| 3 | businessScenarioId 支持 | 差距分析 P0#4 | ✅ Flyway V20 + BusinessScenario 全链路 (Entity/PO/Mapper/Service/Controller) |
 | 4 | 校验器分层 | 差距分析 P0#5 | V01-V11 保留 + 插件化 VE/VM/VX/V-LC/V-AS |
 
 ## 🟡 P1 — MCP 运行时
 
 | # | 任务 | 来源 | 说明 |
 |---|------|------|------|
-| 5 | `resolve_intent` 接入 Semantic Layer | 差距分析 P2#12 | Intent → Action 查询，非硬编码 |
+| 5 | `resolve_intent` 接入 Semantic Layer | 差距分析 P2#12 | ✅ 4-phase: trigger→BusinessTerm synonym→SemanticRelation→name fallback |
 | 6 | `query_ontology` 增强 | 差距分析 P2#13 | 覆盖 Lifecycle 聚合 + EPC 覆盖报告 |
 | 7 | 组织上下文 | 差距分析 P2#14 | Agent 权限链：Position → Role → Permission |
 | 8 | 校验 API 暴露 | 差距分析 P2#15 | 完整 validationReport 端点 |
