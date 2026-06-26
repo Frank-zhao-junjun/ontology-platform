@@ -77,6 +77,19 @@ export const listOntologyEntitiesTool: ToolDefinition = {
         }));
       }
 
+      // Show business rules that constrain this entity (Feature 3)
+      const entityRules = model.rules.filter(r => r.entity === entity.id || r.entity === entity.nameEn);
+      if (entityRules.length > 0) {
+        detail.businessRules = entityRules.map(r => ({
+          id: r.id,
+          name: r.name,
+          description: r.description || '',
+          field: r.field || '',
+          condition: r.condition,
+          severity: r.severity,
+        }));
+      }
+
       return {
         content: [{ type: 'text', text: JSON.stringify(detail, null, 2) }],
       };

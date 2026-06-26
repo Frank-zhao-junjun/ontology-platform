@@ -4,10 +4,11 @@
 
 import type { ToolDefinition } from '../../types/index.js';
 import { platformClient } from '../../client/platform-client.js';
+import { evaluateRules } from '../../rule-engine.js';
 
 export const validateInstructionTool: ToolDefinition = {
   name: 'validate_instruction',
-  description: '校验 Agent 操作指令是否符合本体行为定义的前置规则',
+  description: '校验 Agent 操作指令是否符合本体行为定义的前置规则和业务约束。检查：1) 行为是否存在 2) 风险等级是否需要审批 3) 必填字段是否完整 4) 业务规则是否满足（金额范围、数据格式等）',
   inputSchema: {
     type: 'object',
     properties: {
@@ -132,16 +133,52 @@ export const validateInstructionTool: ToolDefinition = {
       };
     }
 
+    // ── Business Rule Evaluation (Feature 3: Constraint-as-Rules) ──
+    const ruleResults = evaluateRules(entityId, name, params);
+    const failedRules = ruleResults.filter(r => !r.passed);
+    const allRulesPass = failedRules.length === 0;
+
+    if (!allRulesPass) {
+      return {
+        content: [{ type: 'text', text: JSON.stringify({
+          valid: false,
+          message: `业务规则校验未通过: ${failedRules.map(r => r.reason || r.ruleName).join('；')}`,
+          ruleResults,
+          entityId,
+        }) }],
+        structuredContent: {
+          status: 'error',
+          data: { valid: false, ruleResults, entityId },
+          metadata: {
+            version: '1.0.0',
+            generated_at: new Date().toISOString(),
+            trace_id: crypto.randomUUID(),
+          },
+          error: {
+            code: 'RULE_VIOLATION',
+            message: `Rules failed: ${failedRules.map(r => r.ruleName).join(', ')}`,
+          },
+        },
+      };
+    }
+
+    const hasRules = ruleResults.length > 0 ? ` (${ruleResults.length} rules checked, all passed)` : '';
     return {
       content: [{ type: 'text', text: JSON.stringify({
         valid: true,
-        message: `Action "${name}" validation passed`,
+        message: `Action "${name}" validation passed${hasRules}`,
         action: { name: action.name, type: action.actionType, riskLevel: action.riskLevel },
         entityId,
+        ruleResults: hasRules ? ruleResults : undefined,
       }) }],
       structuredContent: {
         status: 'success',
-        data: { valid: true, action: { name: action.name, riskLevel: action.riskLevel }, entityId },
+        data: {
+          valid: true,
+          action: { name: action.name, riskLevel: action.riskLevel },
+          entityId,
+          ruleEvaluations: hasRules ? ruleResults : undefined,
+        },
         metadata: {
           version: '1.0.0',
           generated_at: new Date().toISOString(),
