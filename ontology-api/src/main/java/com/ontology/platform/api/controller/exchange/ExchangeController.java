@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * REST controller for Phase 3a v2 exchange import pipeline.
- * Manages importing, querying, and publishing OntologyExchange documents.
+ * Manages importing, querying, publishing, and standalone validation.
  */
 @Slf4j
 @RestController
@@ -132,5 +133,23 @@ public class ExchangeController {
 
         ExchangeImportResponse response = exchangeService.publishImport(id);
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /**
+     * Validate an ontology exchange document without persisting.
+     * Returns full validation report with all plugin issues (VE/VM/VX/V-LC/V-AS/V-ORG).
+     */
+    @PostMapping("/validate")
+    @Operation(summary = "校验文档（不持久化）",
+            description = "对 v2 OntologyExchange JSON 执行完整校验（106条规则），返回报告。用于CI门禁/设计台预检")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> validateExchange(
+            @Valid @RequestBody ExchangeImportDocument request) {
+
+        log.info("REST: Validate exchange document (no persist)");
+
+        Map<String, Object> report = exchangeService.validateOnly(
+                request.getDocument(), request.getValidationMode());
+
+        return ResponseEntity.ok(ApiResponse.success(report));
     }
 }

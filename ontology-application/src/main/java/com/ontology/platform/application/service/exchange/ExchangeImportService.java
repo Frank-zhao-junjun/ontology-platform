@@ -8,6 +8,7 @@ import com.ontology.platform.common.exception.ResourceNotFoundException;
 import com.ontology.platform.common.enums.ErrorCode;
 import com.ontology.platform.domain.dto.imports.ExchangeImportResponse;
 import com.ontology.platform.domain.dto.imports.OntologyExchangeDocument;
+import com.ontology.platform.domain.service.validation.ValidationIssue;
 import com.ontology.platform.domain.service.validation.ValidationReport;
 import com.ontology.platform.infrastructure.imports.ExcelExchangeMapper;
 import com.ontology.platform.infrastructure.imports.MarkdownExchangeMapper;
@@ -238,6 +239,50 @@ public class ExchangeImportService {
             log.warn("Full document parse skipped for validation: {}", e.getMessage());
             return null;
         }
+    }
+
+    /**
+     * Validate a JSON document without persisting — returns full validation report.
+     * Used by standalone validation API (P1#8) for pre-import / CI gate checks.
+     */
+    @Transactional(readOnly = true)
+    public Map<String, Object> validateOnly(String jsonDocument, String validationMode) {
+        if (jsonDocument == null || jsonDocument.isBlank()) {
+            return Map.of("valid", false, "error", "Document must not be empty");
+        }
+
+        JsonNode root;
+        try { root = objectMapper.readTree(jsonDocument); }
+        catch (JsonProcessingException e) {
+            return Map.of("valid", false, "error", "Invalid JSON: " + e.getMessage());
+        }
+
+        try { validateEnvelope(root); }
+        catch (BusinessException e) {
+            return Map.of("valid", false, "error", e.getMessage(), "issues", List.of());
+        }
+
+        OntologyExchangeDocument doc = parseDocumentLenient(jsonDocument);
+        String mode = (validationMode != null && !validationMode.isBlank()) ? validationMode : "strict";
+        ValidationReport report = (doc != null)
+                ? validationService.validate(doc, mode)
+                : ValidationReport.builder().issues(List.of(
+                        ValidationIssue.builder().code("PARSE_ERROR").severity("error")
+                                .message("Document parse failed").build())).mode(mode).build();
+
+        int totalEntities = (doc != null && doc.getSpec() != null && doc.getSpec().getProject() != null
+                && doc.getSpec().getProject().getDataModel() != null
+                && doc.getSpec().getProject().getDataModel().getEntities() != null)
+                ? doc.getSpec().getProject().getDataModel().getEntities().size() : 0;
+
+        return Map.of(
+                "valid", report.isValid(),
+                "mode", mode,
+                "totalEntities", totalEntities,
+                "warningCount", report.warningCount(),
+                "errorCount", report.errorCount(),
+                "issues", report.getIssues()
+        );
     }
 
     private String buildValidationReportJson(int totalEntities, ValidationReport report) {
