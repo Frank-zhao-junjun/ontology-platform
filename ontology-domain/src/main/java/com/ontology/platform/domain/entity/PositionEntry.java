@@ -16,6 +16,8 @@ public class PositionEntry {
     private String nameEn;
     private String description;
     private String departmentId;
+    /** Governance role ID — links Position → Role → Permission chain */
+    private String roleId;
     private String responsibilities;
     private Instant createdAt;
     private Instant updatedAt;

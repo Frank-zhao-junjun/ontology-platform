@@ -22,6 +22,8 @@ public class PositionEntryPO {
     private String description;
     @TableField("department_id")
     private String departmentId;
+    @TableField("role_id")
+    private String roleId;
     @TableField("responsibilities")
     private String responsibilities;
     @TableField("created_at")

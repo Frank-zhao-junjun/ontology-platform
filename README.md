@@ -1,4 +1,6 @@
-# Ontology Platform — 本体模型服务平台
+# Ontology Platform — 本体建模平台
+
+> 此项目也被称为**项目2**。
 
 企业级本体服务治理平台，基于 DDD 分层架构，为上游本体建模工具（**项目1**：[`D:\AI\Ontology`](../Ontology)）产出的本体模型提供持久化、查询、校验、发布、Agent 编排（ACP 协议接入 Kimi/Claude/Codex）、V12-V14 领域模型（19 张新表）、CI 自动构建测试（1m26s）、跨项目 E2E 导入/导出测试（6 个场景），以及 Phase 2 异步任务、Webhook、幂等与限流能力。MCP Server 将 REST API 暴露为 AI Agent 可调用的 MCP 工具。
 

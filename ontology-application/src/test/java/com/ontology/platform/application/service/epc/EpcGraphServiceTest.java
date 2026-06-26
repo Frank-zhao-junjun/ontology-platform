@@ -22,12 +22,15 @@ class EpcGraphServiceTest {
     @Mock private EpcEdgePOMapper epcEdgeMapper;
     @Mock private EpcModelRefPOMapper epcModelRefMapper;
     @Mock private EpcProfilePOMapper epcProfileMapper;
+    @Mock private ActionDefinitionPOMapper actionDefinitionMapper;
+    @Mock private DomainEventPOMapper domainEventMapper;
 
     @Test
     @DisplayName("should aggregate EPC coverage for ontology")
     void getCoverage() {
         EpcGraphService service = new EpcGraphService(
-                epcChainMapper, epcNodeMapper, epcEdgeMapper, epcModelRefMapper, epcProfileMapper);
+                epcChainMapper, epcNodeMapper, epcEdgeMapper, epcModelRefMapper, epcProfileMapper,
+                actionDefinitionMapper, domainEventMapper);
 
         when(epcChainMapper.selectByOntologyId("manufacturing-ontology")).thenReturn(List.of(
                 EpcChainPO.builder()
