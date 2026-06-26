@@ -1,90 +1,39 @@
 package com.ontology.platform.infrastructure.job;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * No-op job queue — Redis not adopted, all jobs acknowledged immediately.
+ * Scheduled polling via {@link JobPoller} returns no messages.
+ */
 @Slf4j
 @Service
 public class JobQueueService {
 
-    private final StringRedisTemplate redis;
-    private static final ObjectMapper mapper = new ObjectMapper();
-    private static final String QUEUE_KEY = "job:queue";
-    private static final String PENDING_KEY = "job:pending";
-    private static final Duration POP_TIMEOUT = Duration.ofSeconds(5);
-
-    /**
-     * StringRedisTemplate is optional. When Redis is not available,
-     * enqueue/dequeue will log warnings and return no-ops.
-     */
-    public JobQueueService(@Autowired(required = false) StringRedisTemplate redis) {
-        this.redis = redis;
-        if (redis == null) {
-            log.warn("StringRedisTemplate not available — JobQueueService running in no-op mode");
-        }
-    }
-
     public String enqueue(String jobType, Map<String, Object> payload, String tenantId, String agentId) {
-        if (redis == null) {
-            log.warn("Redis unavailable, job not enqueued: type={}", jobType);
-            return UUID.randomUUID().toString();
-        }
         var jobId = UUID.randomUUID().toString();
-        try {
-            var job = Map.of("id", jobId, "jobType", jobType,
-                    "tenantId", tenantId, "agentId", agentId != null ? agentId : "",
-                    "payload", payload);
-            redis.opsForList().leftPush(QUEUE_KEY, mapper.writeValueAsString(job));
-            log.debug("Job enqueued: id={}, type={}", jobId, jobType);
-        } catch (Exception e) {
-            throw new JobQueueException("Failed to enqueue job", e);
-        }
+        log.debug("Job enqueued (no-op): id={}, type={}", jobId, jobType);
         return jobId;
     }
 
     public JobMessage dequeue() {
-        if (redis == null) return null;
-        try {
-            var raw = redis.opsForList().rightPopAndLeftPush(QUEUE_KEY, PENDING_KEY, POP_TIMEOUT);
-            if (raw == null) return null;
-            return parse(raw);
-        } catch (Exception e) {
-            log.error("Dequeue failed", e);
-            return null;
-        }
+        return null; // queue always empty
     }
 
     public void ack(String jobId, String raw) {
-        if (redis == null) return;
-        redis.opsForList().remove(PENDING_KEY, 1, raw);
-        log.debug("Job acked: {}", jobId);
+        log.debug("Job acked (no-op): {}", jobId);
     }
 
     public void retry(String raw) {
-        if (redis == null) return;
-        redis.opsForList().remove(PENDING_KEY, 1, raw);
-        redis.opsForList().leftPush(QUEUE_KEY, raw);
+        log.debug("Job retry (no-op)");
     }
 
     public long queueSize() {
-        if (redis == null) return 0;
-        var s = redis.opsForList().size(QUEUE_KEY);
-        return s != null ? s : 0;
-    }
-
-    @SuppressWarnings("unchecked")
-    private JobMessage parse(String raw) throws Exception {
-        var map = mapper.readValue(raw, Map.class);
-        return new JobMessage((String) map.get("id"), (String) map.get("jobType"),
-                (String) map.get("tenantId"), (String) map.get("agentId"),
-                (Map<String, Object>) map.get("payload"), raw);
+        return 0;
     }
 
     public record JobMessage(String id, String jobType, String tenantId,

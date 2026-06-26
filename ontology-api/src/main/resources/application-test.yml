@@ -30,12 +30,6 @@ spring:
   flyway:
     enabled: false
 
-  # Redis配置（Mock）
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
 # MyBatis-Plus配置
 mybatis-plus:
   configuration:

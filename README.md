@@ -1,8 +1,20 @@
 # Ontology Platform — 本体模型服务平台
 
-企业级本体服务治理平台，基于 DDD 分层架构，为上游本体建模工具产出的本体模型提供持久化、查询、校验、发布、Agent 编排（ACP 协议接入 Kimi/Claude/Codex）、V12-V14 领域模型（19 张新表）、CI 自动构建测试（1m26s）、跨项目 E2E 导入/导出测试（6 个场景），以及 Phase 2 异步任务、Webhook、幂等与限流能力。MCP Server 将 REST API 暴露为 AI Agent 可调用的 MCP 工具。
+企业级本体服务治理平台，基于 DDD 分层架构，为上游本体建模工具（**项目1**：[`D:\AI\Ontology`](../Ontology)）产出的本体模型提供持久化、查询、校验、发布、Agent 编排（ACP 协议接入 Kimi/Claude/Codex）、V12-V14 领域模型（19 张新表）、CI 自动构建测试（1m26s）、跨项目 E2E 导入/导出测试（6 个场景），以及 Phase 2 异步任务、Webhook、幂等与限流能力。MCP Server 将 REST API 暴露为 AI Agent 可调用的 MCP 工具。
 
 **仓库**: [Frank-zhao-junjun/ontology-platform](https://github.com/Frank-zhao-junjun/ontology-platform)
+
+## 双项目分工
+
+| 项目 | 路径 | 技术栈 | 职责 |
+|------|------|--------|------|
+| **项目1** Ontology | [`../Ontology`](../Ontology) | Next.js 16 · React 19 · Vitest | A→B→C→EPC 建模、E1–E8 要素库、Manifest 编译导出 |
+| **项目2** Ontology Platform | 本仓库 | Spring Boot 3.2 · PostgreSQL · MCP | 持久化、发布、治理、Agent 编排、V12–V14 域 |
+
+- 项目1 `pnpm run ci:check` 全绿（2026-06-26）：~**1049** tests · lint 0 error
+- 项目2 `mvn test`：**174** tests · 0 failures · CI ~1m26s
+- 对接文档：[`docs/shared/项目1-项目2对接差距分析.md`](docs/shared/项目1-项目2对接差距分析.md) · [`docs/project1-to-project2-mapping.md`](docs/project1-to-project2-mapping.md)
+- 项目1 共享文档跳转：[`../Ontology/docs/shared/README.md`](../Ontology/docs/shared/README.md)
 
 ## 技术栈
 
@@ -162,7 +174,7 @@ npm test       # Vitest
 | 行为/事件/EPC | `/api/v1/ontologies/{id}/actions|events|epc` | 领域定义查询 |
 | V12 组织/指标 | `/api/v1/ontologies/{id}/departments\|positions\|business-metrics\|orchestrations\|process-steps` | 部门、岗位、业务指标、编排、流程步骤 |
 | V12 元数据/术语 | `/api/v1/ontologies/{id}/metadata-templates|business-terms|agent-intents` | 元数据模板、业务术语、Agent 意图 |
-|| V13 语义 | `/api/v1/ontologies/{id}/semantic-relations|intent-slots|agent-policies-semantic|error-recoveries|semantic-field-mappings|entity-lifecycle-snapshots` | 语义关系、意图槽位、策略、容错、字段映射、生命周期 |
+| V13 语义 | `/api/v1/ontologies/{id}/semantic-relations|intent-slots|agent-policies-semantic|error-recoveries|semantic-field-mappings|entity-lifecycle-snapshots` | 语义关系、意图槽位、策略、容错、字段映射、生命周期 |
 | V14 EPC | `/api/v1/ontologies/{id}/epc-chains\|epc-nodes\|epc-edges\|epc-model-refs\|epc-profiles` | EPC 链/节点/边/模型引用/配置 |
 | 治理 | `/api/v1/governance/*` | Token、角色、权限、审批 |
 | 上传/导入 | `/api/v1/uploads/*`, `/api/v1/imports/*` | 分片上传与导入任务 |
@@ -232,6 +244,7 @@ Manifest v2 交换契约见 [ontology-manifest-spec-v2.md](docs/shared/ontology-
 | Phase 1 Spec | [docs/superpowers/specs/phase1-spec-v1.md](docs/superpowers/specs/phase1-spec-v1.md) |
 | Phase 2 Spec | [docs/superpowers/specs/phase2-spec-v1.md](docs/superpowers/specs/phase2-spec-v1.md) |
 | 工作日志 | [WORKLOG-2026-06-14.md](WORKLOG-2026-06-14.md) · [WORKLOG-2026-06-16.md](WORKLOG-2026-06-16.md) · [WORKLOG-2026-06-19.md](WORKLOG-2026-06-19.md) · [WORKLOG-2026-06-20.md](WORKLOG-2026-06-20.md) · [WORKLOG-2026-06-26.md](WORKLOG-2026-06-26.md) |
+| 项目1 README / TODO | [`../Ontology/README.md`](../Ontology/README.md) · [`../Ontology/docs/TODO.md`](../Ontology/docs/TODO.md) |
 
 ## 测试
 

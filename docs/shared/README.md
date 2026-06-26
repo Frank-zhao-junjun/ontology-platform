@@ -1,6 +1,15 @@
-# Shared Documents — 本体建模平台
+# Shared Documents — 本体模型服务平台
 
 版本：v2.1 | 2026-06-26
+
+## 双项目链接
+
+| 项目 | README | TODO | CI |
+|------|--------|------|-----|
+| 项目1 建模工具 | [`../../../Ontology/README.md`](../../../Ontology/README.md) | [`../../../Ontology/docs/TODO.md`](../../../Ontology/docs/TODO.md) | `pnpm run ci:check` ✅ ~1049 tests |
+| 项目2 治理平台 | [`../../README.md`](../../README.md) | [`../../TODO.md`](../../TODO.md) | `mvn test` ✅ 174 tests |
+
+项目1 侧 `docs/shared/` 为跳转页，**本目录为权威源**。
 
 ## 文档索引
 

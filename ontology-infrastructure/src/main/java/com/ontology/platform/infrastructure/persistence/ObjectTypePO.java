@@ -67,6 +67,36 @@ public class ObjectTypePO {
     private Integer instanceCount;
 
     /**
+     * 实体角色: aggregate_root / child_entity
+     */
+    @TableField("entity_role")
+    private String entityRole;
+
+    /**
+     * 父聚合根 ID (child_entity 必须填写)
+     */
+    @TableField("parent_aggregate_id")
+    private String parentAggregateId;
+
+    /**
+     * 所属业务场景 ID
+     */
+    @TableField("business_scenario_id")
+    private String businessScenarioId;
+
+    /**
+     * 子领域
+     */
+    @TableField("sub_domain")
+    private String subDomain;
+
+    /**
+     * 扩展属性 JSONB
+     */
+    @TableField("attributes_jsonb")
+    private String attributesJsonb;
+
+    /**
      * 接口名称列表（JSON存储）
      */
     @TableField("interface_names")

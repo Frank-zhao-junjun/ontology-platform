@@ -31,6 +31,21 @@ public class ObjectTypeResponse {
     @Schema(description = "父对象类型ID")
     private String parentId;
 
+    @Schema(description = "实体角色: aggregate_root | child_entity")
+    private String entityRole;
+
+    @Schema(description = "父聚合根 ID")
+    private String parentAggregateId;
+
+    @Schema(description = "所属业务场景 ID")
+    private String businessScenarioId;
+
+    @Schema(description = "子领域")
+    private String subDomain;
+
+    @Schema(description = "扩展属性 JSONB (metadataTemplateId, referenceKind, masterDataType 等)")
+    private String attributesJsonb;
+
     @Builder.Default
     @Schema(description = "实现的接口列表")
     private List<String> interfaceNames = new ArrayList<>();

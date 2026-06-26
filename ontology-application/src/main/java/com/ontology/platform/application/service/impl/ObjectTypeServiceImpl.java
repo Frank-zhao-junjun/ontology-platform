@@ -52,9 +52,13 @@ public class ObjectTypeServiceImpl implements ObjectTypeService {
                 request.getName(),
                 request.getDisplayName(),
                 request.getDescription(),
-                request.getPrimaryKey()
+                request.getPrimaryKey(),
+                request.getEntityRole(),
+                request.getBusinessScenarioId()
         );
         objectType.setParentId(request.getParentId());
+        objectType.setParentAggregateId(request.getParentAggregateId());
+        objectType.setSubDomain(request.getSubDomain());
         objectType.setInterfaceNames(request.getInterfaceNames() != null ? request.getInterfaceNames() : new ArrayList<>());
 
         objectType = objectTypeRepository.save(objectType);
@@ -96,6 +100,25 @@ public class ObjectTypeServiceImpl implements ObjectTypeService {
 
         if (request.getInterfaceNames() != null) {
             objectType.setInterfaceNames(request.getInterfaceNames());
+        }
+
+        if (request.getEntityRole() != null) {
+            objectType.setEntityRole(request.getEntityRole());
+        }
+        if (request.getParentAggregateId() != null) {
+            objectType.setParentAggregateId(request.getParentAggregateId());
+        }
+        if (request.getBusinessScenarioId() != null) {
+            objectType.setBusinessScenarioId(request.getBusinessScenarioId());
+        }
+        if (request.getSubDomain() != null) {
+            objectType.setSubDomain(request.getSubDomain());
+        }
+        if (request.getParentId() != null) {
+            objectType.setParentId(request.getParentId());
+        }
+        if (request.getAttributesJsonb() != null) {
+            objectType.setAttributesJsonb(request.getAttributesJsonb());
         }
 
         objectType = objectTypeRepository.update(objectType);
@@ -310,6 +333,11 @@ public class ObjectTypeServiceImpl implements ObjectTypeService {
                 .description(objectType.getDescription())
                 .primaryKey(objectType.getPrimaryKey())
                 .parentId(objectType.getParentId())
+                .entityRole(objectType.getEntityRole())
+                .parentAggregateId(objectType.getParentAggregateId())
+                .businessScenarioId(objectType.getBusinessScenarioId())
+                .subDomain(objectType.getSubDomain())
+                .attributesJsonb(objectType.getAttributesJsonb())
                 .interfaceNames(objectType.getInterfaceNames())
                 .instanceCount(objectType.getInstanceCount())
                 .createdAt(objectType.getCreatedAt())
@@ -327,6 +355,11 @@ public class ObjectTypeServiceImpl implements ObjectTypeService {
         response.setDescription(objectType.getDescription());
         response.setPrimaryKey(objectType.getPrimaryKey());
         response.setParentId(objectType.getParentId());
+        response.setEntityRole(objectType.getEntityRole());
+        response.setParentAggregateId(objectType.getParentAggregateId());
+        response.setBusinessScenarioId(objectType.getBusinessScenarioId());
+        response.setSubDomain(objectType.getSubDomain());
+        response.setAttributesJsonb(objectType.getAttributesJsonb());
         response.setInterfaceNames(objectType.getInterfaceNames());
         response.setInstanceCount(objectType.getInstanceCount());
         response.setCreatedAt(objectType.getCreatedAt());

@@ -27,6 +27,23 @@ public class ObjectType {
     private String primaryKey;
     private String parentId;
 
+    /** 实体角色: aggregate_root | child_entity */
+    @Builder.Default
+    private String entityRole = "aggregate_root";
+
+    /** 父聚合根 ID (child_entity 必须填写) */
+    private String parentAggregateId;
+
+    /** 所属业务场景 ID */
+    private String businessScenarioId;
+
+    /** 子领域 (SubDomain) */
+    private String subDomain;
+
+    /** 扩展属性 JSONB (metadataTemplateId, referenceKind, masterDataType 等) */
+    @Builder.Default
+    private String attributesJsonb = "{}";
+
     @Builder.Default
     private List<String> interfaceNames = new ArrayList<>();
 
@@ -58,6 +75,35 @@ public class ObjectType {
                 .displayName(displayName)
                 .description(description)
                 .primaryKey(primaryKey)
+                .entityRole("aggregate_root")
+                .attributesJsonb("{}")
+                .instanceCount(0)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
+    }
+
+    /**
+     * 创建新的对象类型（含实体角色和业务场景）
+     */
+    public static ObjectType create(
+            String ontologyId,
+            String name,
+            String displayName,
+            String description,
+            String primaryKey,
+            String entityRole,
+            String businessScenarioId) {
+        return ObjectType.builder()
+                .id(UUID.randomUUID().toString())
+                .ontologyId(ontologyId)
+                .name(name)
+                .displayName(displayName)
+                .description(description)
+                .primaryKey(primaryKey)
+                .entityRole(entityRole != null ? entityRole : "aggregate_root")
+                .businessScenarioId(businessScenarioId)
+                .attributesJsonb("{}")
                 .instanceCount(0)
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())

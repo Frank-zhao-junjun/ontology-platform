@@ -1,6 +1,6 @@
 openapi: "3.0.3"
 info:
-  title: "本体建模平台 API"
+  title: "本体模型服务平台 API"
   description: "Ontology Platform REST API — 本体 CRUD、Manifest 导入/导出、行为/事件/EPC 查询、治理、异步任务与 Webhook（Phase 2）"
   version: "2.1.0"
   contact:

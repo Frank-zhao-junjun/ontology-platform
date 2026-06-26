@@ -78,8 +78,8 @@ public class OntologyImportController {
         String validationMode = request.getValidationMode() != null
                 ? request.getValidationMode() : "strict";
 
-        // ── Compute counts from raw JSON (backward compat) ──
-        Map<String, Integer> counts = computeCounts(root);
+        // ── Compute counts from the converted v2 document (format-independent) ──
+        Map<String, Integer> counts = computeCounts(doc);
 
         // ── Delegate to unified v2 pipeline ──
         ExchangeImportResponse importResponse;
@@ -118,15 +118,76 @@ public class OntologyImportController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    private Map<String, Integer> computeCounts(JsonNode root) {
+    /**
+     * Compute import counts from the v2 exchange document (format-independent).
+     * Works for both raw Project1 JSON and v1 Manifest input formats.
+     */
+    private Map<String, Integer> computeCounts(OntologyExchangeDocument doc) {
         Map<String, Integer> counts = new HashMap<>();
-        counts.put("entities", root.has("entities") ? root.get("entities").size() : 0);
-        counts.put("stateMachines", root.has("stateMachines") ? root.get("stateMachines").size() : 0);
-        counts.put("rules", root.has("rules") ? root.get("rules").size() : 0);
-        counts.put("metrics", root.has("metrics") ? root.get("metrics").size() : 0);
-        counts.put("dataSources", root.has("dataSources") ? root.get("dataSources").size() : 0);
-        counts.put("businessChain", root.has("businessChain") ? 1 : 0);
-        counts.put("governance", root.has("governance") ? 1 : 0);
+        OntologyExchangeDocument.OntologyProject project = doc.getSpec() != null
+                ? doc.getSpec().getProject() : null;
+        if (project == null) return counts;
+
+        // dataModel
+        var dataModel = project.getDataModel();
+        counts.put("entities", dataModel != null && dataModel.getEntities() != null
+                ? dataModel.getEntities().size() : 0);
+
+        // behaviorModel
+        var behaviorModel = project.getBehaviorModel();
+        counts.put("stateMachines", behaviorModel != null && behaviorModel.getStateMachines() != null
+                ? behaviorModel.getStateMachines().size() : 0);
+        counts.put("actions", behaviorModel != null && behaviorModel.getActions() != null
+                ? behaviorModel.getActions().size() : 0);
+
+        // ruleModel
+        var ruleModel = project.getRuleModel();
+        counts.put("rules", ruleModel != null && ruleModel.getRules() != null
+                ? ruleModel.getRules().size() : 0);
+
+        // eventModel
+        var eventModel = project.getEventModel();
+        counts.put("events", eventModel != null && eventModel.getEvents() != null
+                ? eventModel.getEvents().size() : 0);
+
+        // governanceModel
+        var governanceModel = project.getGovernanceModel();
+        counts.put("governance", governanceModel != null && governanceModel.getRoles() != null
+                ? governanceModel.getRoles().size() : 0);
+
+        // dataSourcesModel
+        var dataSourcesModel = project.getDataSourcesModel();
+        counts.put("dataSources", dataSourcesModel != null && dataSourcesModel.getSources() != null
+                ? dataSourcesModel.getSources().size() : 0);
+
+        // metricsModel
+        var metricsModel = project.getMetricsModel();
+        counts.put("metrics", metricsModel != null && metricsModel.getMetrics() != null
+                ? metricsModel.getMetrics().size() : 0);
+
+        // processModel
+        var processModel = project.getProcessModel();
+        counts.put("orchestrations", processModel != null && processModel.getOrchestrations() != null
+                ? processModel.getOrchestrations().size() : 0);
+
+        // organizationModel
+        var orgModel = project.getOrganizationModel();
+        counts.put("departments", orgModel != null && orgModel.getDepartments() != null
+                ? orgModel.getDepartments().size() : 0);
+        counts.put("positions", orgModel != null && orgModel.getPositions() != null
+                ? orgModel.getPositions().size() : 0);
+
+        // agentSemanticLayer
+        var asl = project.getAgentSemanticLayer();
+        counts.put("intents", asl != null && asl.getIntents() != null ? asl.getIntents().size() : 0);
+        counts.put("businessTerms", asl != null && asl.getBusinessTerms() != null
+                ? asl.getBusinessTerms().size() : 0);
+
+        // epcModel
+        var epcModel = project.getEpcModel();
+        counts.put("epcChains", epcModel != null && epcModel.getChains() != null
+                ? epcModel.getChains().size() : 0);
+
         return counts;
     }
 }

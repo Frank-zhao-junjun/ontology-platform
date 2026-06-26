@@ -1,7 +1,8 @@
 # 项目2 — TODO
 
 > 最后更新：2026-06-26
-> 最新合并：`main ← 2d95763`
+> 最新合并：`main ← 174913f`（docs 整理）
+> 项目1 待办：[`../../../Ontology/docs/TODO.md`](../../../Ontology/docs/TODO.md)
 
 ---
 
@@ -77,4 +78,5 @@
 | 日期 | 内容 |
 |------|------|
 | 06-26 | Swagger DTO 补全 ✅ · README 更新 ✅ · Cursor agent CLI 不再维护（改用 Hermes）✅ |
-| — | **P3 所有任务完成。新需求请在此添加。** |
+| 06-26 | 项目1 `ci:check` 全绿（~1049 tests）· 双项目 README/TODO 互链 ✅ |
+| — | **P3 文档类任务完成。联调阻塞项见根目录 [`TODO.md`](../../TODO.md) P0。** |

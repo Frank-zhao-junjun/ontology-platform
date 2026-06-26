@@ -22,7 +22,12 @@ class EpcVmValidatorTest {
 
         var dm = new OntologyExchangeDocument.DataModel();
         dm.setEntities(List.of(ids).stream()
-                .map(id -> OntologyExchangeDocument.Entity.builder().id(id).name(id).entityRole("aggregate_root").businessScenarioId("s1").build())
+                .map(id -> OntologyExchangeDocument.Entity.builder()
+                        .id(id).name(id).entityRole("aggregate_root").businessScenarioId("s1")
+                        .attributes(List.of(
+                                OntologyExchangeDocument.Attribute.builder()
+                                        .id(id + "-status").name("status").dataType("STRING").build()))
+                        .build())
                 .toList());
         project.setDataModel(dm);
         return doc;

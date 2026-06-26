@@ -1,6 +1,6 @@
 ---
 name: ontology-platform-best-practices
-description: 本体建模平台开发最佳实践 — 文档闭环、Spec原子化、层级分工、测试策略、Worklog规范
+description: 本体模型服务平台开发最佳实践 — 文档闭环、Spec原子化、层级分工、测试策略、Worklog规范
 version: 1.0.0
 tags: [ddd, spec-driven, spring-boot, mcp, java, nodejs]
 ---

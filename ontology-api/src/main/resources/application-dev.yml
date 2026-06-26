@@ -4,8 +4,6 @@
 # 栈：PostgreSQL + Flyway + MyBatis-Plus（与生产一致，不用 Hibernate 建表）
 # 前置：本地 PostgreSQL。
 #   cd docker && docker compose up -d postgres
-#
-# Redis: 开发环境通过 DevRedisConfig (no-op) 自动跳过，无需启动 Redis。
 
 server:
   port: 8081
@@ -19,16 +17,6 @@ spring:
 
   flyway:
     enabled: false
-
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
-      - org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration
-      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
-
-  health:
-    redis:
-      enabled: false
 
 logging:
   level:

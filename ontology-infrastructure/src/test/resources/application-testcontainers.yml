@@ -29,12 +29,6 @@ spring:
   flyway:
     enabled: false
 
-  # Redis：集成测试只关注 PG/AGE，禁用 Redis 自动配置
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
-      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
-
 # MyBatis-Plus：复用主模块的 mapper xml 位置
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml

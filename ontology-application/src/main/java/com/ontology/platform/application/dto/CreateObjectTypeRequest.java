@@ -43,6 +43,18 @@ public class CreateObjectTypeRequest {
     @Schema(description = "父对象类型ID")
     private String parentId;
 
+    @Schema(description = "实体角色: aggregate_root | child_entity", example = "aggregate_root")
+    private String entityRole;
+
+    @Schema(description = "父聚合根 ID (child_entity 时必填)")
+    private String parentAggregateId;
+
+    @Schema(description = "所属业务场景 ID")
+    private String businessScenarioId;
+
+    @Schema(description = "子领域")
+    private String subDomain;
+
     @Builder.Default
     @Schema(description = "实现的接口列表")
     private List<String> interfaceNames = new ArrayList<>();

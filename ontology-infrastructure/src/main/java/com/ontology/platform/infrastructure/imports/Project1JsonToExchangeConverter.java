@@ -114,6 +114,9 @@ public class Project1JsonToExchangeConverter {
                 .dataSourcesModel(buildDataSourcesModel(root))
                 .metricsModel(buildMetricsModel(root))
                 .processModel(buildProcessModel(root))
+                .organizationModel(buildOrganizationModel(root))
+                .agentSemanticLayer(buildAgentSemanticLayer(root))
+                .epcModel(buildEpcModel(root))
                 .createdAt(Instant.now().toString())
                 .updatedAt(Instant.now().toString())
                 .build();
@@ -422,6 +425,225 @@ public class Project1JsonToExchangeConverter {
         return ProcessModel.builder().orchestrations(orchestrations).build();
     }
 
+    // ── OrganizationModel (raw format) ──
+
+    private OrganizationModel buildOrganizationModel(JsonNode root) {
+        JsonNode orgNode = root.get("organization");
+        if (orgNode == null) return OrganizationModel.builder().build();
+
+        List<Department> departments = new ArrayList<>();
+        JsonNode deptsNode = orgNode.get("departments");
+        if (deptsNode != null && deptsNode.isArray()) {
+            for (JsonNode d : deptsNode) {
+                departments.add(Department.builder()
+                        .id(pathStr(d, "id"))
+                        .name(pathStr(d, "name"))
+                        .nameEn(pathStr(d, "nameEn"))
+                        .description(pathStr(d, "description"))
+                        .parentDepartmentId(pathStr(d, "parentDepartmentId"))
+                        .build());
+            }
+        }
+
+        List<Position> positions = new ArrayList<>();
+        JsonNode posNode = orgNode.get("positions");
+        if (posNode != null && posNode.isArray()) {
+            for (JsonNode p : posNode) {
+                List<String> responsibilities = new ArrayList<>();
+                JsonNode respNode = p.get("responsibilities");
+                if (respNode != null && respNode.isArray()) {
+                    for (JsonNode r : respNode) responsibilities.add(r.asText());
+                }
+                positions.add(Position.builder()
+                        .id(pathStr(p, "id"))
+                        .name(pathStr(p, "name"))
+                        .nameEn(pathStr(p, "nameEn"))
+                        .description(pathStr(p, "description"))
+                        .departmentId(pathStr(p, "departmentId"))
+                        .responsibilities(responsibilities)
+                        .build());
+            }
+        }
+
+        return OrganizationModel.builder()
+                .departments(departments)
+                .positions(positions)
+                .build();
+    }
+
+    // ── AgentSemanticLayer (raw format) ──
+
+    private AgentSemanticLayer buildAgentSemanticLayer(JsonNode root) {
+        JsonNode aslNode = root.get("agentSemanticLayer");
+        if (aslNode == null) return AgentSemanticLayer.builder().build();
+
+        List<Intent> intents = new ArrayList<>();
+        JsonNode intentsNode = aslNode.get("intents");
+        if (intentsNode != null && intentsNode.isArray()) {
+            for (JsonNode intent : intentsNode) {
+                intents.add(Intent.builder()
+                        .id(pathStr(intent, "id"))
+                        .name(pathStr(intent, "name"))
+                        .description(pathStr(intent, "description"))
+                        .category(pathStr(intent, "category"))
+                        .targetEntityId(pathStr(intent, "targetEntityId"))
+                        .actionId(pathStr(intent, "actionId"))
+                        .priority(intent.has("priority") ? intent.get("priority").asInt() : null)
+                        .requiresConfirmation(intent.has("requiresConfirmation") ? intent.get("requiresConfirmation").asBoolean() : null)
+                        .build());
+            }
+        }
+
+        List<BusinessTerm> businessTerms = new ArrayList<>();
+        JsonNode termsNode = aslNode.get("businessTerms");
+        if (termsNode != null && termsNode.isArray()) {
+            for (JsonNode t : termsNode) {
+                businessTerms.add(BusinessTerm.builder()
+                        .id(pathStr(t, "id"))
+                        .name(pathStr(t, "name"))
+                        .nameEn(pathStr(t, "nameEn"))
+                        .definition(pathStr(t, "definition"))
+                        .build());
+            }
+        }
+
+        List<SemanticRelation> semanticRelations = new ArrayList<>();
+        JsonNode relsNode = aslNode.get("semanticRelations");
+        if (relsNode != null && relsNode.isArray()) {
+            for (JsonNode r : relsNode) {
+                semanticRelations.add(SemanticRelation.builder()
+                        .id(pathStr(r, "id"))
+                        .sourceTermId(pathStr(r, "sourceTermId"))
+                        .targetTermId(pathStr(r, "targetTermId"))
+                        .relationType(pathStr(r, "relationType"))
+                        .description(pathStr(r, "description"))
+                        .build());
+            }
+        }
+
+        List<SemanticAgentPolicy> agentPolicies = new ArrayList<>();
+        JsonNode policiesNode = aslNode.get("agentPolicies");
+        if (policiesNode != null && policiesNode.isArray()) {
+            for (JsonNode policy : policiesNode) {
+                agentPolicies.add(SemanticAgentPolicy.builder()
+                        .id(pathStr(policy, "id"))
+                        .roleId(pathStr(policy, "roleId"))
+                        .defaultDeny(policy.has("defaultDeny") ? policy.get("defaultDeny").asBoolean() : null)
+                        .build());
+            }
+        }
+
+        List<SemanticErrorRecovery> errorRecoveries = new ArrayList<>();
+        JsonNode errNode = aslNode.get("errorRecoveries");
+        if (errNode != null && errNode.isArray()) {
+            for (JsonNode er : errNode) {
+                errorRecoveries.add(SemanticErrorRecovery.builder()
+                        .id(pathStr(er, "id"))
+                        .actionId(pathStr(er, "actionId"))
+                        .errorPattern(pathStr(er, "errorPattern"))
+                        .recoveryStrategy(pathStr(er, "recoveryStrategy"))
+                        .maxRetries(er.has("maxRetries") ? er.get("maxRetries").asInt() : null)
+                        .fallbackActionId(pathStr(er, "fallbackActionId"))
+                        .description(pathStr(er, "description"))
+                        .build());
+            }
+        }
+
+        List<SemanticFieldMapping> fieldMappings = new ArrayList<>();
+        JsonNode fmNode = aslNode.get("fieldMappings");
+        if (fmNode != null && fmNode.isArray()) {
+            for (JsonNode fm : fmNode) {
+                fieldMappings.add(SemanticFieldMapping.builder()
+                        .id(pathStr(fm, "id"))
+                        .entityId(pathStr(fm, "entityId"))
+                        .fieldNameEn(pathStr(fm, "fieldNameEn"))
+                        .businessTermId(pathStr(fm, "businessTermId"))
+                        .mappingType(pathStr(fm, "mappingType"))
+                        .transformRule(pathStr(fm, "transformRule"))
+                        .build());
+            }
+        }
+
+        return AgentSemanticLayer.builder()
+                .intents(intents)
+                .businessTerms(businessTerms)
+                .semanticRelations(semanticRelations)
+                .agentPolicies(agentPolicies)
+                .errorRecoveries(errorRecoveries)
+                .fieldMappings(fieldMappings)
+                .build();
+    }
+
+    // ── EpcModel (raw format) ──
+
+    private EpcModel buildEpcModel(JsonNode root) {
+        JsonNode epcNode = root.get("epc");
+        if (epcNode == null) return EpcModel.builder().build();
+
+        List<EpcChain> chains = new ArrayList<>();
+        JsonNode chainsNode = epcNode.get("chains");
+        if (chainsNode != null && chainsNode.isArray()) {
+            for (JsonNode chain : chainsNode) {
+                List<EpcNode> nodes = new ArrayList<>();
+                JsonNode nodesNode = chain.get("nodes");
+                if (nodesNode != null && nodesNode.isArray()) {
+                    for (JsonNode n : nodesNode) {
+                        nodes.add(EpcNode.builder()
+                                .id(pathStr(n, "id"))
+                                .nodeType(pathStr(n, "nodeType"))
+                                .name(pathStr(n, "name"))
+                                .description(pathStr(n, "description"))
+                                .refType(pathStr(n, "refType"))
+                                .refId(pathStr(n, "refId"))
+                                .sortOrder(n.has("sortOrder") ? n.get("sortOrder").asInt() : null)
+                                .build());
+                    }
+                }
+                List<EpcEdge> edges = new ArrayList<>();
+                JsonNode edgesNode = chain.get("edges");
+                if (edgesNode != null && edgesNode.isArray()) {
+                    for (JsonNode e : edgesNode) {
+                        edges.add(EpcEdge.builder()
+                                .id(pathStr(e, "id"))
+                                .sourceNodeId(pathStr(e, "sourceNodeId"))
+                                .targetNodeId(pathStr(e, "targetNodeId"))
+                                .edgeType(pathStr(e, "edgeType"))
+                                .label(pathStr(e, "label"))
+                                .conditionExpr(pathStr(e, "conditionExpr"))
+                                .sortOrder(e.has("sortOrder") ? e.get("sortOrder").asInt() : null)
+                                .build());
+                    }
+                }
+                chains.add(EpcChain.builder()
+                        .id(pathStr(chain, "id"))
+                        .name(pathStr(chain, "name"))
+                        .aggregateRootId(pathStr(chain, "aggregateRootId"))
+                        .description(pathStr(chain, "description"))
+                        .chainType(pathStr(chain, "chainType"))
+                        .nodes(nodes)
+                        .edges(edges)
+                        .build());
+            }
+        }
+
+        List<EpcProfile> profiles = new ArrayList<>();
+        JsonNode profilesNode = epcNode.get("profiles");
+        if (profilesNode != null && profilesNode.isArray()) {
+            for (JsonNode p : profilesNode) {
+                profiles.add(EpcProfile.builder()
+                        .id(pathStr(p, "id"))
+                        .chainId(pathStr(p, "chainId"))
+                        .profileVersion(pathStr(p, "profileVersion"))
+                        .build());
+            }
+        }
+
+        return EpcModel.builder()
+                .chains(chains)
+                .profiles(profiles)
+                .build();
+    }
+
     // ═══════════════════════════════════════════════════════════════
     // 格式 2: v1 Manifest 格式 {apiVersion, kind, spec:{semantic, ...}}
     // ═══════════════════════════════════════════════════════════════
@@ -473,6 +695,11 @@ public class Project1JsonToExchangeConverter {
                 .eventModel(buildEventModelFromV1(spec))
                 .governanceModel(buildGovernanceModelFromV1(spec))
                 .dataSourcesModel(buildDataSourcesModelFromV1(spec))
+                .metricsModel(buildMetricsModelFromV1(spec))
+                .processModel(buildProcessModelFromV1(spec))
+                .organizationModel(buildOrganizationModelFromV1(spec))
+                .agentSemanticLayer(buildAgentSemanticLayerFromV1(spec))
+                .epcModel(buildEpcModelFromV1(spec))
                 .build();
     }
 
@@ -599,6 +826,208 @@ public class Project1JsonToExchangeConverter {
                     .build());
         }
         return DataSourcesModel.builder().sources(sources).build();
+    }
+
+    private MetricsModel buildMetricsModelFromV1(JsonNode spec) {
+        if (spec == null) return MetricsModel.builder().build();
+        JsonNode metricsNode = spec.get("metrics");
+        if (metricsNode == null || !metricsNode.isArray()) return MetricsModel.builder().build();
+
+        List<BusinessMetric> metrics = new ArrayList<>();
+        for (JsonNode m : metricsNode) {
+            metrics.add(BusinessMetric.builder()
+                    .id(pathStr(m, "id")).name(pathStr(m, "name"))
+                    .nameEn(pathStr(m, "nameEn")).description(pathStr(m, "description"))
+                    .formula(pathStr(m, "formula")).dataSourceRef(pathStr(m, "dataSourceRef"))
+                    .period(pathStr(m, "period")).targetEntity(pathStr(m, "targetEntity"))
+                    .build());
+        }
+        return MetricsModel.builder().metrics(metrics).build();
+    }
+
+    private ProcessModel buildProcessModelFromV1(JsonNode spec) {
+        if (spec == null) return ProcessModel.builder().build();
+        JsonNode processNode = spec.get("process");
+        if (processNode == null) return ProcessModel.builder().build();
+
+        List<Orchestration> orchestrations = new ArrayList<>();
+        JsonNode orchNode = processNode.get("orchestrations");
+        if (orchNode != null && orchNode.isArray()) {
+            for (JsonNode o : orchNode) {
+                List<ProcessStep> steps = new ArrayList<>();
+                JsonNode stepsNode = o.get("steps");
+                if (stepsNode != null && stepsNode.isArray()) {
+                    for (int i = 0; i < stepsNode.size(); i++) {
+                        JsonNode step = stepsNode.get(i);
+                        steps.add(ProcessStep.builder()
+                                .id(pathStr(step, "id") != null ? pathStr(step, "id") : "step-" + i)
+                                .name(pathStr(step, "name"))
+                                .type(pathStr(step, "type"))
+                                .description(pathStr(step, "description"))
+                                .build());
+                    }
+                }
+                orchestrations.add(Orchestration.builder()
+                        .id(pathStr(o, "id")).name(pathStr(o, "name"))
+                        .description(pathStr(o, "description")).steps(steps)
+                        .build());
+            }
+        }
+        return ProcessModel.builder()
+                .id(pathStr(processNode, "id")).name(pathStr(processNode, "name"))
+                .version(pathStr(processNode, "version")).domain(pathStr(processNode, "domain"))
+                .orchestrations(orchestrations)
+                .build();
+    }
+
+    private OrganizationModel buildOrganizationModelFromV1(JsonNode spec) {
+        if (spec == null) return OrganizationModel.builder().build();
+        JsonNode orgNode = spec.get("organization");
+        if (orgNode == null) return OrganizationModel.builder().build();
+
+        // Reuse raw format converter
+        return buildOrganizationModelFromOrgNode(orgNode);
+    }
+
+    private OrganizationModel buildOrganizationModelFromOrgNode(JsonNode orgNode) {
+        List<Department> departments = new ArrayList<>();
+        JsonNode deptsNode = orgNode.get("departments");
+        if (deptsNode != null && deptsNode.isArray()) {
+            for (JsonNode d : deptsNode) {
+                departments.add(Department.builder()
+                        .id(pathStr(d, "id")).name(pathStr(d, "name"))
+                        .nameEn(pathStr(d, "nameEn")).description(pathStr(d, "description"))
+                        .parentDepartmentId(pathStr(d, "parentDepartmentId")).build());
+            }
+        }
+        List<Position> positions = new ArrayList<>();
+        JsonNode posNode = orgNode.get("positions");
+        if (posNode != null && posNode.isArray()) {
+            for (JsonNode p : posNode) {
+                List<String> responsibilities = new ArrayList<>();
+                JsonNode respNode = p.get("responsibilities");
+                if (respNode != null && respNode.isArray()) {
+                    for (JsonNode r : respNode) responsibilities.add(r.asText());
+                }
+                positions.add(Position.builder()
+                        .id(pathStr(p, "id")).name(pathStr(p, "name"))
+                        .nameEn(pathStr(p, "nameEn")).description(pathStr(p, "description"))
+                        .departmentId(pathStr(p, "departmentId"))
+                        .responsibilities(responsibilities).build());
+            }
+        }
+        return OrganizationModel.builder().departments(departments).positions(positions).build();
+    }
+
+    private AgentSemanticLayer buildAgentSemanticLayerFromV1(JsonNode spec) {
+        if (spec == null) return AgentSemanticLayer.builder().build();
+        JsonNode aslNode = spec.get("agentSemanticLayer");
+        if (aslNode == null) return AgentSemanticLayer.builder().build();
+
+        // We already have buildAgentSemanticLayer for raw, but that reads from root
+        // For v1, the node is directly spec.agentSemanticLayer — convert inline
+        List<Intent> intents = new ArrayList<>();
+        JsonNode intentsNode = aslNode.get("intents");
+        if (intentsNode != null && intentsNode.isArray()) {
+            for (JsonNode intent : intentsNode) {
+                intents.add(Intent.builder()
+                        .id(pathStr(intent, "id")).name(pathStr(intent, "name"))
+                        .description(pathStr(intent, "description")).category(pathStr(intent, "category"))
+                        .targetEntityId(pathStr(intent, "targetEntityId")).actionId(pathStr(intent, "actionId"))
+                        .priority(intent.has("priority") ? intent.get("priority").asInt() : null)
+                        .requiresConfirmation(intent.has("requiresConfirmation") ? intent.get("requiresConfirmation").asBoolean() : null)
+                        .build());
+            }
+        }
+        List<BusinessTerm> businessTerms = new ArrayList<>();
+        JsonNode termsNode = aslNode.get("businessTerms");
+        if (termsNode != null && termsNode.isArray()) {
+            for (JsonNode t : termsNode) {
+                businessTerms.add(BusinessTerm.builder()
+                        .id(pathStr(t, "id")).name(pathStr(t, "name"))
+                        .nameEn(pathStr(t, "nameEn")).definition(pathStr(t, "definition")).build());
+            }
+        }
+        List<SemanticRelation> semanticRelations = new ArrayList<>();
+        JsonNode relsNode = aslNode.get("semanticRelations");
+        if (relsNode != null && relsNode.isArray()) {
+            for (JsonNode r : relsNode) {
+                semanticRelations.add(SemanticRelation.builder()
+                        .id(pathStr(r, "id")).sourceTermId(pathStr(r, "sourceTermId"))
+                        .targetTermId(pathStr(r, "targetTermId")).relationType(pathStr(r, "relationType"))
+                        .description(pathStr(r, "description")).build());
+            }
+        }
+        List<SemanticAgentPolicy> agentPolicies = new ArrayList<>();
+        JsonNode policiesNode = aslNode.get("agentPolicies");
+        if (policiesNode != null && policiesNode.isArray()) {
+            for (JsonNode policy : policiesNode) {
+                agentPolicies.add(SemanticAgentPolicy.builder()
+                        .id(pathStr(policy, "id")).roleId(pathStr(policy, "roleId"))
+                        .defaultDeny(policy.has("defaultDeny") ? policy.get("defaultDeny").asBoolean() : null)
+                        .build());
+            }
+        }
+        return AgentSemanticLayer.builder()
+                .intents(intents).businessTerms(businessTerms)
+                .semanticRelations(semanticRelations).agentPolicies(agentPolicies)
+                .build();
+    }
+
+    private EpcModel buildEpcModelFromV1(JsonNode spec) {
+        if (spec == null) return EpcModel.builder().build();
+        JsonNode epcNode = spec.get("epc");
+        if (epcNode == null) return EpcModel.builder().build();
+
+        List<EpcChain> chains = new ArrayList<>();
+        JsonNode chainsNode = epcNode.get("chains");
+        if (chainsNode != null && chainsNode.isArray()) {
+            for (JsonNode chain : chainsNode) {
+                List<EpcNode> nodes = new ArrayList<>();
+                JsonNode nodesNode = chain.get("nodes");
+                if (nodesNode != null && nodesNode.isArray()) {
+                    for (JsonNode n : nodesNode) {
+                        nodes.add(EpcNode.builder()
+                                .id(pathStr(n, "id")).nodeType(pathStr(n, "nodeType"))
+                                .name(pathStr(n, "name")).description(pathStr(n, "description"))
+                                .refType(pathStr(n, "refType")).refId(pathStr(n, "refId"))
+                                .sortOrder(n.has("sortOrder") ? n.get("sortOrder").asInt() : null)
+                                .build());
+                    }
+                }
+                List<EpcEdge> edges = new ArrayList<>();
+                JsonNode edgesNode = chain.get("edges");
+                if (edgesNode != null && edgesNode.isArray()) {
+                    for (JsonNode e : edgesNode) {
+                        edges.add(EpcEdge.builder()
+                                .id(pathStr(e, "id")).sourceNodeId(pathStr(e, "sourceNodeId"))
+                                .targetNodeId(pathStr(e, "targetNodeId")).edgeType(pathStr(e, "edgeType"))
+                                .label(pathStr(e, "label")).conditionExpr(pathStr(e, "conditionExpr"))
+                                .sortOrder(e.has("sortOrder") ? e.get("sortOrder").asInt() : null)
+                                .build());
+                    }
+                }
+                chains.add(EpcChain.builder()
+                        .id(pathStr(chain, "id")).name(pathStr(chain, "name"))
+                        .aggregateRootId(pathStr(chain, "aggregateRootId"))
+                        .description(pathStr(chain, "description")).chainType(pathStr(chain, "chainType"))
+                        .nodes(nodes).edges(edges).build());
+            }
+        }
+
+        List<EpcProfile> profiles = new ArrayList<>();
+        JsonNode profilesNode = epcNode.get("profiles");
+        if (profilesNode != null && profilesNode.isArray()) {
+            for (JsonNode p : profilesNode) {
+                profiles.add(EpcProfile.builder()
+                        .id(pathStr(p, "id"))
+                        .chainId(pathStr(p, "chainId"))
+                        .profileVersion(pathStr(p, "profileVersion"))
+                        .build());
+            }
+        }
+
+        return EpcModel.builder().chains(chains).profiles(profiles).build();
     }
 
     // ═══════════════════════════════════════════════════════════════

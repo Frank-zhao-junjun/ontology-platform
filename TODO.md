@@ -2,6 +2,7 @@
 
 > 最后更新：2026-06-26
 > 来源：[P1 短期](./docs/import/TODO.md)、[差距分析](./docs/shared/项目1-项目2对接差距分析.md)、[数据映射](./docs/project1-to-project2-mapping.md)
+> 项目1 待办：[`../Ontology/docs/TODO.md`](../Ontology/docs/TODO.md)
 
 ---
 
@@ -30,7 +31,7 @@
 | 9 | TDD v2 → v3 | 差距分析 P3#17 | 覆盖新校验规则与 V2 导入 |
 | 10 | PRD/故事地图 US-D → US-P | 差距分析 P3#16 | 交接条款更新 |
 | 11 | Docker E2E 验证 | TODO #3 | 本机待有 Docker/PostgreSQL 环境 |
-| 12 | 项目1 docs/shared/ 同步 | 审计发现 | 项目1 侧建立对项目2 权威文档的引用 |
+| 12 | 项目1 docs/shared/ 同步 | 审计发现 | ✅ 项目1 已建 `docs/shared/README.md` 跳转；权威源仍在本仓库 `docs/shared/` |
 
 ## ⚪ P3 — 技术债务
 
@@ -51,5 +52,15 @@
 | Phase 2 | JobQueue + RateLimiter + Webhook + Agent 编排 + CI |
 | Phase 3a | V2 交换契约 + Import API |
 | Phase 3b-d | V12-V14 新域 19 表全链路 |
-| E2E | 6 场景跨项目导入/导出 |
-| 测试 | 174 tests, 0 failures |
+| E2E | 6 场景跨项目导入/导出（`Project1ToProject2E2ETest`） |
+| 测试 | **174** tests, 0 failures · CI ~1m26s |
+| 文档 | README / TODO / import TODO 与项目1 双向链接（2026-06-26） |
+
+### 联调状态（2026-06-26）
+
+| 项目 | CI | 测试规模 | 备注 |
+|------|:--:|----------|------|
+| 项目1 `D:\AI\Ontology` | `ci:check` ✅ | ~1049（760 unit + 259 integration + 30 e2e） | Manifest 编译导出就绪 |
+| 项目2 本仓库 | GitHub Actions ✅ | 174 unit | Import API + V12–V14 已上线 |
+
+详细导入进度见 [`docs/import/TODO.md`](./docs/import/TODO.md)。

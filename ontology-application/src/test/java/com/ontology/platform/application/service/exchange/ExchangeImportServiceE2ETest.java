@@ -5,6 +5,7 @@ import com.ontology.platform.common.exception.BusinessException;
 import com.ontology.platform.common.exception.ResourceNotFoundException;
 import com.ontology.platform.domain.dto.imports.ExchangeImportResponse;
 import com.ontology.platform.infrastructure.imports.ExcelExchangeMapper;
+import com.ontology.platform.infrastructure.imports.MarkdownExchangeMapper;
 import com.ontology.platform.infrastructure.persistence.ExchangeImportPO;
 import com.ontology.platform.infrastructure.persistence.ExchangeImportPOMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,6 +75,9 @@ class ExchangeImportServiceE2ETest {
 
     @Mock
     private ExcelExchangeMapper excelExchangeMapper;
+
+    @Mock
+    private MarkdownExchangeMapper markdownExchangeMapper;
 
     private ObjectMapper objectMapper;
 
