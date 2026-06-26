@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies")
+@RequestMapping("/api/v1/ontologies")
 @RequiredArgsConstructor
 @Tag(name = "Ontology", description = "本体管理API")
 public class OntologyController {

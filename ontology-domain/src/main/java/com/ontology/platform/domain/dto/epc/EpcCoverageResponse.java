@@ -23,6 +23,12 @@ public class EpcCoverageResponse {
     @Builder.Default
     private List<String> aggregateRootIds = new ArrayList<>();
     private double coverageRatio;
+    /** Actions not covered by any EPC chain */
+    @Builder.Default
+    private List<String> uncoveredActions = new ArrayList<>();
+    /** Events not covered by any EPC chain */
+    @Builder.Default
+    private List<String> uncoveredEvents = new ArrayList<>();
     @Builder.Default
     private List<ChainSummary> chains = new ArrayList<>();
 
