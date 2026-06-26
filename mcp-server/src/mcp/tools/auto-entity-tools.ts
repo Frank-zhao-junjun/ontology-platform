@@ -17,6 +17,7 @@ import { loadOntologyModel, type OntologyModel } from '../../model-loader.js';
 let _stagedModel: OntologyModel | null = null;
 let _stagedEntityTools: ToolDefinition[] = [];
 let _applied = false;
+let _registeredToolNames: string[] = [];
 
 // ── Helpers ──
 
@@ -233,6 +234,7 @@ export const applyOntologyModelTool: ToolDefinition = {
     }
 
     // Register all entity tools
+    _registeredToolNames = entityTools.map(t => t.name);
     _stagedEntityTools = entityTools;
     toolRegistry.registerAll(entityTools);
 
@@ -253,8 +255,71 @@ export const applyOntologyModelTool: ToolDefinition = {
   },
 };
 
-// ── Export for init.ts (now returns only the two management tools) ──
+// ── disable_ontology_model tool ──
+
+export const disableOntologyModelTool: ToolDefinition = {
+  name: 'disable_ontology_model',
+  description: '停用当前已注册的本体模型。从 MCP Server 中移除所有实体相关的 search_*/get_* 工具。模型变更的完整步骤：先 disable 旧模型，再 load 新模型预览，最后 apply 新模型。',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      confirm: {
+        type: 'boolean',
+        description: '确认停用。必须为 true 才会执行。',
+      },
+    },
+    required: ['confirm'],
+  },
+  domain: 'platform',
+  riskLevel: 'WRITE',
+  handler: async (args) => {
+    const confirm = args.confirm === true;
+
+    if (!confirm) {
+      return {
+        content: [{ type: 'text', text: JSON.stringify({
+          success: false,
+          message: '未确认。请设置 confirm: true 重新调用。',
+        }, null, 2) }],
+      };
+    }
+
+    if (_registeredToolNames.length === 0) {
+      return {
+        content: [{ type: 'text', text: JSON.stringify({
+          success: true,
+          message: '当前没有已注册的本体模型工具。',
+          removedTools: 0,
+        }, null, 2) }],
+      };
+    }
+
+    // Remove each registered tool using the new registry methods
+    let removedCount = 0;
+    for (const name of _registeredToolNames) {
+      if (toolRegistry.removeByName(name)) removedCount++;
+    }
+
+    // Also remove any leftovers by prefix (edge cases)
+    removedCount += toolRegistry.removeByPrefix('search_');
+    removedCount += toolRegistry.removeByPrefix('get_');
+
+    _registeredToolNames = [];
+    _stagedEntityTools = [];
+    _applied = false;
+
+    return {
+      content: [{ type: 'text', text: JSON.stringify({
+        success: true,
+        message: `已停用本体模型，移除了 ${removedCount} 个工具。`,
+        removedTools: removedCount,
+      }, null, 2) }],
+    };
+  },
+};
+
+// ── Export for init.ts (now returns the three management tools) ──
 
 export function generateEntityTools(): ToolDefinition[] {
-  return [loadOntologyModelTool, applyOntologyModelTool];
+  return [loadOntologyModelTool, applyOntologyModelTool, disableOntologyModelTool];
 }

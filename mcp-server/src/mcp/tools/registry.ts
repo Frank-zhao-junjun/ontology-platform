@@ -109,6 +109,26 @@ class ToolRegistry {
   clear(): void {
     this.tools.clear();
   }
+
+  /** Remove all tools whose name starts with the given prefix. Returns count removed. */
+  removeByPrefix(prefix: string): number {
+    let removed = 0;
+    for (const [name] of this.tools) {
+      if (name.startsWith(prefix)) {
+        this.tools.delete(name);
+        removed++;
+      }
+    }
+    return removed;
+  }
+
+  /** Remove a single tool by exact name (versioned or unversioned). */
+  removeByName(name: string): boolean {
+    const direct = this.tools.delete(name);
+    if (direct) return true;
+    // Also try versioned suffix
+    return this.tools.delete(name + '_v1');
+  }
 }
 
 export const toolRegistry = new ToolRegistry();
