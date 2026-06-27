@@ -639,6 +639,7 @@ public class Project1JsonToExchangeConverter {
                 profiles.add(EpcProfile.builder()
                         .id(pathStr(p, "id"))
                         .chainId(pathStr(p, "chainId"))
+                        .profileData(pathStr(p, "profileData"))
                         .profileVersion(pathStr(p, "profileVersion"))
                         .build());
             }
@@ -1028,6 +1029,7 @@ public class Project1JsonToExchangeConverter {
                 profiles.add(EpcProfile.builder()
                         .id(pathStr(p, "id"))
                         .chainId(pathStr(p, "chainId"))
+                        .profileData(pathStr(p, "profileData"))
                         .profileVersion(pathStr(p, "profileVersion"))
                         .build());
             }
