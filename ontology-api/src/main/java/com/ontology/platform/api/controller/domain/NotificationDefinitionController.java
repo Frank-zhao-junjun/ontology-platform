@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/notifications")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/notifications")
 @RequiredArgsConstructor
 @Tag(name = "通知定义", description = "消息通知渠道")
 public class NotificationDefinitionController {

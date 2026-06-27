@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/indicators")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/indicators")
 @RequiredArgsConstructor
 @Tag(name = "指标定义", description = "业务指标")
 public class IndicatorDefinitionController {

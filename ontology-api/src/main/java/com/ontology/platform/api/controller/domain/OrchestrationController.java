@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/orchestrations")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/orchestrations")
 @RequiredArgsConstructor
 @Tag(name = "编排", description = "编排管理")
 public class OrchestrationController {

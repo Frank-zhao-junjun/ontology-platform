@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/process-steps")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/process-steps")
 @RequiredArgsConstructor
 @Tag(name = "流程步骤", description = "流程步骤管理")
 public class ProcessStepController {

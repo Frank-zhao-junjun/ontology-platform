@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/apis")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/apis")
 @RequiredArgsConstructor
 @Tag(name = "API定义", description = "外部接口")
 public class ApiDefinitionController {

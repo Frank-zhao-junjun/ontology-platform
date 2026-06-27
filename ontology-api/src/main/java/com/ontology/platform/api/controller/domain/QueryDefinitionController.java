@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/queries")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/queries")
 @RequiredArgsConstructor
 @Tag(name = "查询定义", description = "数据查询模板")
 public class QueryDefinitionController {

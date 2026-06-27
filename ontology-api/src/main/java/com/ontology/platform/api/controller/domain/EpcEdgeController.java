@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/epc/edges")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/epc/edges")
 @RequiredArgsConstructor
 @Tag(name = "EPC边")
 public class EpcEdgeController {

@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/reports")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/reports")
 @RequiredArgsConstructor
 @Tag(name = "报表定义", description = "数据报表")
 public class ReportDefinitionController {

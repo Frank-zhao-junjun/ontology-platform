@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/metadata-templates")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/metadata-templates")
 @RequiredArgsConstructor
 @Tag(name = "元数据模板", description = "元数据模板管理")
 public class MetadataTemplateController {

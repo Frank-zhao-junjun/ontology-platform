@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/semantic-relations")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/semantic-relations")
 @RequiredArgsConstructor
 @Tag(name = "语义关系")
 public class SemanticRelationController {

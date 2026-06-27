@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/positions")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/positions")
 @RequiredArgsConstructor
 @Tag(name = "岗位", description = "岗位管理")
 public class PositionEntryController {

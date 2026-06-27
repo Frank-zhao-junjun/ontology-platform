@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/lifecycle-snapshots")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/lifecycle-snapshots")
 @RequiredArgsConstructor
 @Tag(name = "生命周期快照")
 public class EntityLifecycleSnapshotController {

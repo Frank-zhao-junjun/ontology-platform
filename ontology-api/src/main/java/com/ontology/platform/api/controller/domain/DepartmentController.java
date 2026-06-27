@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/departments")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/departments")
 @RequiredArgsConstructor
 @Tag(name = "部门", description = "部门管理")
 public class DepartmentController {

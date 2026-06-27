@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/validations")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/validations")
 @RequiredArgsConstructor
 @Tag(name = "校验规则", description = "规则验证定义")
 public class ValidationRuleController {

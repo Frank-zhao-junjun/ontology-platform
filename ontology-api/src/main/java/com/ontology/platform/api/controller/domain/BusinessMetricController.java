@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/metrics")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/metrics")
 @RequiredArgsConstructor
 @Tag(name = "业务指标", description = "业务指标管理")
 public class BusinessMetricController {

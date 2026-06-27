@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/probes")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/probes")
 @RequiredArgsConstructor
 @Tag(name = "探针定义", description = "健康探测")
 public class ProbeDefinitionController {

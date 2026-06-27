@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/semantic-field-mappings")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/semantic-field-mappings")
 @RequiredArgsConstructor
 @Tag(name = "字段映射")
 public class SemanticFieldMappingController {

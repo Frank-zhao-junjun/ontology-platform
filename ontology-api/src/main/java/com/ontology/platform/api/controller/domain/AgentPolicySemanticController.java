@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/agent-policies")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/agent-policies")
 @RequiredArgsConstructor
 @Tag(name = "Agent策略")
 public class AgentPolicySemanticController {

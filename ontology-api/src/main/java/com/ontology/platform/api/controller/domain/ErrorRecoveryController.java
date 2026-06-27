@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/error-recoveries")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/error-recoveries")
 @RequiredArgsConstructor
 @Tag(name = "错误恢复")
 public class ErrorRecoveryController {

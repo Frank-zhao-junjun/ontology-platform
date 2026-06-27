@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/policies")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/policies")
 @RequiredArgsConstructor
 @Tag(name = "策略规则", description = "访问策略")
 public class PolicyRuleController {

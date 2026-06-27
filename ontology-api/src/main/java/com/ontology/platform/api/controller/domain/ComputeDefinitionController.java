@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/compute")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/compute")
 @RequiredArgsConstructor
 @Tag(name = "计算定义", description = "公式计算")
 public class ComputeDefinitionController {

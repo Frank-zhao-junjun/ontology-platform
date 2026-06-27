@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/business-terms")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/business-terms")
 @RequiredArgsConstructor
 @Tag(name = "业务术语", description = "业务术语管理")
 public class BusinessTermController {

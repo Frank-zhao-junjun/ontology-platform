@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/agent-intents")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/agent-intents")
 @RequiredArgsConstructor
 @Tag(name = "Agent意图", description = "Agent意图管理")
 public class AgentIntentController {

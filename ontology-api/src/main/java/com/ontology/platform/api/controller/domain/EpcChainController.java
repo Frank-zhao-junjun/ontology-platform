@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/epc/chains")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/epc/chains")
 @RequiredArgsConstructor
 @Tag(name = "EPC链")
 public class EpcChainController {

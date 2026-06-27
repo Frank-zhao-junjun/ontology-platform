@@ -104,13 +104,13 @@ springdoc:
     operations-sorter: alpha
   group-configs:
     - group: 'ontology'
-      paths-to-match: '/v1/ontologies/**'
+      paths-to-match: '/api/v1/ontologies/**'
       packages-to-scan: com.ontology.platform.api.controller
     - group: 'object-types'
-      paths-to-match: '/v1/object-types/**'
+      paths-to-match: '/api/v1/object-types/**'
       packages-to-scan: com.ontology.platform.api.controller
     - group: 'objects'
-      paths-to-match: '/v1/objects/**'
+      paths-to-match: '/api/v1/objects/**'
       packages-to-scan: com.ontology.platform.api.controller
 
 # Actuator配置

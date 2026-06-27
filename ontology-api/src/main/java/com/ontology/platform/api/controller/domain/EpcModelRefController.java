@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/epc/model-refs")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/epc/model-refs")
 @RequiredArgsConstructor
 @Tag(name = "EPC模型引用")
 public class EpcModelRefController {

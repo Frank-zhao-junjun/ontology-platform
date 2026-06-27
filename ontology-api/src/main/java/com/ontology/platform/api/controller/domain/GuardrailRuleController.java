@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/ontologies/{ontologyId}/guardrails")
+@RequestMapping("/api/v1/ontologies/{ontologyId}/guardrails")
 @RequiredArgsConstructor
 @Tag(name = "护栏规则", description = "安全护栏")
 public class GuardrailRuleController {
