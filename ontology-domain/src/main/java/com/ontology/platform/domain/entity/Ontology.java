@@ -47,6 +47,10 @@ public class Ontology {
     @Builder.Default
     private List<ObjectType> objectTypes = new ArrayList<>();
 
+    // 领域事件收集（瞬态，不持久化）
+    @Builder.Default
+    private transient List<Object> domainEvents = new ArrayList<>();
+
     // ==================== 工厂方法 ====================
 
     /**
@@ -290,15 +294,23 @@ public class Ontology {
     }
 
     /**
-     * 发布领域事件
-     * 使用Spring的事件发布机制
+     * 收集领域事件（暂存于瞬态列表，由应用层发布）
+     * 使用Spring的ApplicationEventPublisher在应用层统一发布
      */
     private void publishEvent(Object event) {
-        if (event instanceof OntologyCreatedEvent) {
-            // 事件已在create方法中发布
+        if (event != null) {
+            this.domainEvents.add(event);
         }
-        // 实际发布需要通过Spring的ApplicationEventPublisher
-        // 这里记录日志，生产环境会通过事件监听器处理
+    }
+
+    /**
+     * 获取并清除所有待发布的领域事件
+     * 由应用层在持久化后调用，通过 Spring ApplicationEventPublisher 发布
+     */
+    public List<Object> getDomainEvents() {
+        List<Object> events = List.copyOf(this.domainEvents);
+        this.domainEvents.clear();
+        return events;
     }
 
     // ==================== 领域事件发布方法（供外部调用） ====================

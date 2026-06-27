@@ -2,8 +2,9 @@ package com.ontology.platform.application.service.impl.upload;
 
 import com.ontology.platform.application.dto.upload.ExportRequest;
 import com.ontology.platform.application.service.upload.ExportService;
-import com.ontology.platform.common.enums.PropertyDataType;
+import com.ontology.platform.domain.entity.ObjectInstance;
 import com.ontology.platform.domain.entity.ObjectType;
+import com.ontology.platform.domain.repository.ObjectInstanceRepository;
 import com.ontology.platform.domain.repository.ObjectTypeRepository;
 import com.ontology.platform.domain.service.upload.DataExportService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 public class ExportServiceImpl implements ExportService {
 
     private final ObjectTypeRepository objectTypeRepository;
+    private final ObjectInstanceRepository objectInstanceRepository;
     private final DataExportService dataExportService;
 
     private final Map<String, ExportTaskInfo> exportTasks = new ConcurrentHashMap<>();
@@ -148,38 +150,25 @@ public class ExportServiceImpl implements ExportService {
         return queryDataPage(objectType, request, 1, limit);
     }
 
-    private List<Map<String, Object>> queryDataPage(ObjectType objectType, 
+    private List<Map<String, Object>> queryDataPage(ObjectType objectType,
             ExportRequest request, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        List<ObjectInstance> instances = objectInstanceRepository.findByObjectTypeId(
+                objectType.getId(), offset, pageSize);
+
         List<Map<String, Object>> result = new ArrayList<>();
         var properties = objectType.getProperties();
-        int startIndex = (page - 1) * pageSize;
-        int endIndex = Math.min(startIndex + pageSize, 100);
 
-        for (int i = startIndex; i < endIndex; i++) {
+        for (ObjectInstance instance : instances) {
             Map<String, Object> row = new LinkedHashMap<>();
+            Map<String, Object> coreData = instance.getCoreData();
             for (var prop : properties) {
-                row.put(prop.getName(), getSampleValue(prop.getDataType(), i));
+                row.put(prop.getName(), coreData != null ? coreData.get(prop.getName()) : null);
             }
             result.add(row);
         }
-        
-        return result;
-    }
 
-    private Object getSampleValue(PropertyDataType dataType, int index) {
-        return switch (dataType) {
-            case STRING -> "Sample_" + index;
-            case TEXT -> "Sample text content for row " + index;
-            case INTEGER -> index;
-            case DECIMAL -> index * 1.5;
-            case BOOLEAN -> index % 2 == 0;
-            case DATE -> "2026-01-15";
-            case DATETIME -> "2026-01-15T10:30:00Z";
-            case UUID -> UUID.randomUUID().toString();
-            case ENUM -> "A";
-            case ARRAY -> List.of("item1", "item2");
-            case OBJECT, JSON -> Map.of("key", "value", "index", index);
-        };
+        return result;
     }
 
     private void writeCsvData(List<Map<String, Object>> data, OutputStream outputStream) {

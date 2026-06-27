@@ -20,6 +20,7 @@ import com.ontology.platform.domain.vo.traversal.GraphTraversalRequest;
 import com.ontology.platform.domain.vo.traversal.TraversalResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +46,7 @@ public class OntologyServiceImpl implements OntologyService {
     private final PropertyRepository propertyRepository;
     private final ObjectInstanceRepository objectInstanceRepository;
     private final GraphQueryService graphQueryService;
+    private final ApplicationEventPublisher eventPublisher;
 
     // ==================== 本体管理 ====================
 
@@ -68,6 +70,9 @@ public class OntologyServiceImpl implements OntologyService {
 
         ontology = ontologyRepository.save(ontology);
         log.info("Ontology created: id={}", ontology.getId());
+
+        // 发布领域事件
+        flushDomainEvents(ontology);
 
         return toOntologyResponse(ontology);
     }
@@ -107,6 +112,8 @@ public class OntologyServiceImpl implements OntologyService {
         ontology = ontologyRepository.update(ontology);
         log.info("Ontology updated: id={}", id);
 
+        flushDomainEvents(ontology);
+
         return toOntologyResponse(ontology);
     }
 
@@ -116,8 +123,11 @@ public class OntologyServiceImpl implements OntologyService {
         log.info("Deleting ontology: id={}", id);
         Ontology ontology = ontologyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Ontology", id));
+        ontology.markAsDeleted("system");
         ontologyRepository.deleteById(id);
         log.info("Ontology deleted: id={}", id);
+
+        flushDomainEvents(ontology);
     }
 
     @Override
@@ -130,6 +140,8 @@ public class OntologyServiceImpl implements OntologyService {
         ontology.publish();
         ontology = ontologyRepository.update(ontology);
         log.info("Ontology published: id={}", id);
+
+        flushDomainEvents(ontology);
 
         return toOntologyResponse(ontology);
     }
@@ -144,6 +156,8 @@ public class OntologyServiceImpl implements OntologyService {
         ontology.archive();
         ontology = ontologyRepository.update(ontology);
         log.info("Ontology archived: id={}", id);
+
+        flushDomainEvents(ontology);
 
         return toOntologyResponse(ontology);
     }
@@ -815,5 +829,20 @@ public class OntologyServiceImpl implements OntologyService {
                 .createdAt(relation.getCreatedAt())
                 .updatedAt(relation.getUpdatedAt())
                 .build();
+    }
+
+    /**
+     * 发布本体聚合根中暂存的领域事件
+     * 必须在事务提交前调用，确保事件与数据变更在同一事务中
+     */
+    private void flushDomainEvents(Ontology ontology) {
+        for (Object event : ontology.getDomainEvents()) {
+            try {
+                eventPublisher.publishEvent(event);
+                log.debug("Domain event published: {}", event.getClass().getSimpleName());
+            } catch (Exception e) {
+                log.error("Failed to publish domain event: {}", event.getClass().getSimpleName(), e);
+            }
+        }
     }
 }

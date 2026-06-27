@@ -33,7 +33,7 @@ public class OntologyConverter {
                 .createdBy(po.getCreatedBy())
                 .createdAt(po.getCreatedAt())
                 .updatedAt(po.getUpdatedAt())
-                .deleted(false)
+                .deleted(po.getDeleted() != null ? po.getDeleted() : false)
                 .build();
     }
 
@@ -58,6 +58,7 @@ public class OntologyConverter {
                 .createdBy(entity.getCreatedBy())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
+                .deleted(entity.isDeleted())
                 .build();
     }
 

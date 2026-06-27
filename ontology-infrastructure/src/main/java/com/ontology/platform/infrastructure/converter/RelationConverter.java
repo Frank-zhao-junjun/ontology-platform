@@ -1,5 +1,8 @@
 package com.ontology.platform.infrastructure.converter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontology.platform.domain.entity.Relation;
 import com.ontology.platform.domain.vo.RelationProperty;
 import com.ontology.platform.infrastructure.persistence.RelationPO;
@@ -16,6 +19,8 @@ import java.util.List;
 @Slf4j
 @Component
 public class RelationConverter {
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * PO 转换为 Entity
@@ -40,8 +45,9 @@ public class RelationConverter {
                 .updatedAt(po.getUpdatedAt())
                 .build();
 
-        // 属性暂不持久化（与原实现保持一致）
-        relation.setProperties(new ArrayList<>());
+        // 从 extended_data 反序列化属性列表
+        List<RelationProperty> properties = deserializeProperties(po.getExtendedData());
+        relation.setProperties(properties);
         return relation;
     }
 
@@ -64,6 +70,7 @@ public class RelationConverter {
                 .cardinality(relation.getCardinality() != null ? relation.getCardinality().getValue() : null)
                 .reverseName(relation.getReverseName())
                 .reverseDisplayName(relation.getReverseDisplayName())
+                .extendedData(serializeProperties(relation.getProperties()))
                 .createdAt(relation.getCreatedAt())
                 .updatedAt(relation.getUpdatedAt())
                 .build();
@@ -84,10 +91,33 @@ public class RelationConverter {
     }
 
     /**
-     * 提取 Entity 的属性列表（占位，关系属性暂未持久化）
+     * 将 RelationProperty 列表序列化为 JSON 字符串
      */
-    @SuppressWarnings("unused")
-    private List<RelationProperty> extractProperties(Relation relation) {
-        return relation.getProperties() != null ? relation.getProperties() : new ArrayList<>();
+    private String serializeProperties(List<RelationProperty> properties) {
+        if (properties == null || properties.isEmpty()) {
+            return null;
+        }
+        try {
+            return objectMapper.writeValueAsString(properties);
+        } catch (JsonProcessingException e) {
+            log.error("Failed to serialize relation properties", e);
+            return null;
+        }
+    }
+
+    /**
+     * 从 JSON 字符串反序列化为 RelationProperty 列表
+     */
+    private List<RelationProperty> deserializeProperties(String extendedData) {
+        if (extendedData == null || extendedData.isBlank()) {
+            return new ArrayList<>();
+        }
+        try {
+            return objectMapper.readValue(extendedData,
+                    new TypeReference<List<RelationProperty>>() {});
+        } catch (JsonProcessingException e) {
+            log.error("Failed to deserialize relation properties from extended_data", e);
+            return new ArrayList<>();
+        }
     }
 }

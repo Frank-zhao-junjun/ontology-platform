@@ -97,6 +97,12 @@ public class OntologyPO {
     private Instant updatedAt;
 
     /**
+     * 软删除标记
+     */
+    @TableField("deleted")
+    private Boolean deleted;
+
+    /**
      * 获取枚举类型的状态
      */
     public OntologyStatus getStatusEnum() {
