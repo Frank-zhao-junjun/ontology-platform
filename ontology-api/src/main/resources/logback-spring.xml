@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds">
     <!-- 定义日志文件路径 -->
-    <property name="LOG_PATH" value="${LOG_PATH:-logs}"/>
+    <property name="LOG_PATH" value="${LOG_PATH:-/tmp/logs}"/>
     <property name="APP_NAME" value="ontology-platform"/>
 
     <!-- 控制台输出格式 -->
@@ -82,7 +82,6 @@
     <springProfile name="dev">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="APP_FILE"/>
         </root>
         <logger name="com.ontology.platform" level="DEBUG"/>
         <logger name="org.springframework.web" level="DEBUG"/>
