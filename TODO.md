@@ -1,6 +1,6 @@
 # TODO — Ontology Platform
 
-> 最后更新：2026-06-26
+> 最后更新：2026-06-30
 > 来源：[P1 短期](./docs/import/TODO.md)、[差距分析](./docs/shared/项目1-项目2对接差距分析.md)、[数据映射](./docs/project1-to-project2-mapping.md)
 > 项目1 待办：[`../Ontology/docs/TODO.md`](../Ontology/docs/TODO.md)
 
