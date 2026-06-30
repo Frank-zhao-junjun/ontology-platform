@@ -1,7 +1,7 @@
 [project]
 sub_id = "3411f195"
 name = "ontology-platform"
-requires = ["java-17"]
+requires = ["java-25"]
 project_type = ""
 entrypoint = "ontology-api/src/main/java/com/ontology/platform/api/OntologyPlatformApplication.java"
 
