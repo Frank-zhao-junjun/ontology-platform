@@ -31,7 +31,7 @@
 ||---|------|------|------|
 | 9 | TDD v2 → v3 | 差距分析 P3#17 | ✅ `TDD-本体建模平台-v3.0.md` |
 | 10 | PRD/故事地图 US-D → US-P | 差距分析 P3#16 | ✅ `PRD-本体建模平台-v3.0.md` |
-| 11 | Docker E2E 验证 | TODO #3 | ⛔ 本机待有 Docker/PostgreSQL 环境 |
+| 11 | Docker E2E 验证 | TODO #3 | ✅ GitHub Actions E2E workflow + integration-test profile |
 | 12 | 项目1 docs/shared/ 同步 | 审计发现 | ✅ 项目1 已建 `docs/shared/README.md` 跳转 |
 
 ## ⚪ P3 — 技术债务
