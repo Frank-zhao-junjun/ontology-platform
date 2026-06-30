@@ -32,7 +32,7 @@ class ProcessStepControllerTest {
         ProcessStepResponse resp = ProcessStepResponse.builder().id("test-id").build();
         when(processStepService.create(any(), any(), any())).thenReturn(resp);
 
-        mockMvc.perform(post("/v1/ontologies/onto-1/process-steps")
+        mockMvc.perform(post("/api/v1/ontologies/onto-1/process-steps")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"test\"}"))
                 .andExpect(status().isCreated());
@@ -40,7 +40,7 @@ class ProcessStepControllerTest {
 
     @Test
     void list_shouldReturn200() throws Exception {
-        mockMvc.perform(get("/v1/ontologies/onto-1/process-steps"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/process-steps"))
                 .andExpect(status().isOk());
     }
 
@@ -49,7 +49,7 @@ class ProcessStepControllerTest {
         ProcessStepResponse resp = ProcessStepResponse.builder().id("id-1").build();
         when(processStepService.getById("id-1")).thenReturn(resp);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/process-steps/id-1"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/process-steps/id-1"))
                 .andExpect(status().isOk());
     }
 
@@ -57,13 +57,13 @@ class ProcessStepControllerTest {
     void getById_shouldReturn404_whenNotFound() throws Exception {
         when(processStepService.getById("nonexistent")).thenReturn(null);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/process-steps/nonexistent"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/process-steps/nonexistent"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void delete_shouldReturn204() throws Exception {
-        mockMvc.perform(delete("/v1/ontologies/onto-1/process-steps/id-1"))
+        mockMvc.perform(delete("/api/v1/ontologies/onto-1/process-steps/id-1"))
                 .andExpect(status().isNoContent());
     }
 }

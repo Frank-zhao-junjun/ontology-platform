@@ -32,7 +32,7 @@ class SemanticRelationControllerTest {
         SemanticRelationResponse resp = SemanticRelationResponse.builder().id("test-id").build();
         when(semanticRelationService.create(any(), any(), any())).thenReturn(resp);
 
-        mockMvc.perform(post("/v1/ontologies/onto-1/semantic-relations")
+        mockMvc.perform(post("/api/v1/ontologies/onto-1/semantic-relations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"test\"}"))
                 .andExpect(status().isCreated());
@@ -40,7 +40,7 @@ class SemanticRelationControllerTest {
 
     @Test
     void list_shouldReturn200() throws Exception {
-        mockMvc.perform(get("/v1/ontologies/onto-1/semantic-relations"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/semantic-relations"))
                 .andExpect(status().isOk());
     }
 
@@ -49,7 +49,7 @@ class SemanticRelationControllerTest {
         SemanticRelationResponse resp = SemanticRelationResponse.builder().id("id-1").build();
         when(semanticRelationService.getById("id-1")).thenReturn(resp);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/semantic-relations/id-1"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/semantic-relations/id-1"))
                 .andExpect(status().isOk());
     }
 
@@ -57,13 +57,13 @@ class SemanticRelationControllerTest {
     void getById_shouldReturn404_whenNotFound() throws Exception {
         when(semanticRelationService.getById("nonexistent")).thenReturn(null);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/semantic-relations/nonexistent"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/semantic-relations/nonexistent"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void delete_shouldReturn204() throws Exception {
-        mockMvc.perform(delete("/v1/ontologies/onto-1/semantic-relations/id-1"))
+        mockMvc.perform(delete("/api/v1/ontologies/onto-1/semantic-relations/id-1"))
                 .andExpect(status().isNoContent());
     }
 }

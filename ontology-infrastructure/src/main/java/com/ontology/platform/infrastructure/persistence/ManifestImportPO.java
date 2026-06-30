@@ -1,6 +1,7 @@
 package com.ontology.platform.infrastructure.persistence;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.*;
 
 import java.time.Instant;
@@ -31,7 +32,7 @@ public class ManifestImportPO {
     private String ontologyId;
 
     /**
-     * 外部ID（from project1 project.id）
+     * 外部ID（唯一标识之一）
      */
     @TableField("external_id")
     private String externalId;
@@ -43,7 +44,7 @@ public class ManifestImportPO {
     private String tenantId;
 
     /**
-     * 状态（DRAFT / PUBLISHED / DISABLED）
+     * 状态：DRAFT / PUBLISHED / ARCHIVED 等
      */
     @TableField("status")
     private String status;
@@ -55,13 +56,13 @@ public class ManifestImportPO {
     private String apiVersion;
 
     /**
-     * 清单版本
+     * 清单版本（与external_id组成唯一约束）
      */
     @TableField("manifest_version")
     private String manifestVersion;
 
     /**
-     * 来源格式
+     * 源格式
      */
     @TableField("source_format")
     private String sourceFormat;
@@ -69,19 +70,19 @@ public class ManifestImportPO {
     /**
      * 原始内容（JSONB）
      */
-    @TableField("raw_content")
+    @TableField(value = "raw_content", typeHandler = JacksonTypeHandler.class)
     private String rawContent;
 
     /**
      * 导入计数（JSONB）
      */
-    @TableField("imported_counts")
+    @TableField(value = "imported_counts", typeHandler = JacksonTypeHandler.class)
     private String importedCounts;
 
     /**
      * 校验错误列表（JSONB）
      */
-    @TableField("validation_errors")
+    @TableField(value = "validation_errors", typeHandler = JacksonTypeHandler.class)
     private String validationErrors;
 
     /**

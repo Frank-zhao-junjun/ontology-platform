@@ -414,6 +414,27 @@
                 <spring.profiles.active>prod</spring.profiles.active>
             </properties>
         </profile>
+        <profile>
+            <id>integration-test</id>
+            <build>
+                <plugins>
+                    <!-- Failsafe 负责运行 *IT.java / *E2ETest.java 集成测试 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>integration-tests</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <scm>

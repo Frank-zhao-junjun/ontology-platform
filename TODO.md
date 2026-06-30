@@ -11,7 +11,6 @@
 | # | 任务 | 来源 | 说明 |
 |---|------|------|:----:|
 | 1 | Import 管道增强 | 差距分析 P0#2 | ✅ 统一到 v2 管道，`Project1JsonToExchangeConverter` + autoPublish |
-| 1 | Import 管道增强 | 差距分析 P0#2 | ✅ 统一到 v2 管道，`Project1JsonToExchangeConverter` + autoPublish |
 | 2 | 实体角色映射 | 差距分析 P0#3 | ✅ v2 全链路统一 `aggregate_root`/`child_entity` |
 | 3 | businessScenarioId 支持 | 差距分析 P0#4 | ✅ Flyway V20 + BusinessScenario 全链路 |
 | 4 | 校验器分层 | 差距分析 P0#5 | ✅ 106 条规则，7 插件 (VE/VM/VX/V-LC/V-AS/V-ORG/Manifest) |
@@ -28,17 +27,36 @@
 ## 🔵 P2 — 文档与测试
 
 | # | 任务 | 来源 | 说明 |
-||---|------|------|------|
+|---|------|------|------|
 | 9 | TDD v2 → v3 | 差距分析 P3#17 | ✅ `TDD-本体建模平台-v3.0.md` |
 | 10 | PRD/故事地图 US-D → US-P | 差距分析 P3#16 | ✅ `PRD-本体建模平台-v3.0.md` |
-| 11 | Docker E2E 验证 | TODO #3 | ⛔ 本机待有 Docker/PostgreSQL 环境 |
+| 11 | Docker E2E 验证 | TODO #3 | ✅ GitHub Actions E2E 工作流 + `integration-test` Maven profile |
 | 12 | 项目1 docs/shared/ 同步 | 审计发现 | ✅ 项目1 已建 `docs/shared/README.md` 跳转 |
+
+### P2#11 使用方式
+
+```bash
+# 本地运行 E2E 测试（需要 Docker）
+# 方案 A：由 Testcontainers 自动拉取并启动 apache/age 容器（推荐）
+mvn verify -Pintegration-test
+
+# 方案 B：手动启动 AGE 容器后运行（如本地已有容器环境）
+docker run -d --name ontology-pg \
+  -e POSTGRES_USER=ontology \
+  -e POSTGRES_PASSWORD=ontology123 \
+  -e POSTGRES_DB=ontology \
+  -p 5432:5432 \
+  apache/age:1.5.0
+mvn verify -Pintegration-test
+```
+
+**CI 自动运行**：push 到 `main` 或 `release/**` 分支时自动触发 `.github/workflows/e2e.yml`。
 
 ## ⚪ P3 — 技术债务
 
 | # | 任务 | 来源 | 说明 |
 |---|------|------|------|
-| 13 | 规则/接口/指标 10 表代码层 | 数据映射 | validation_rule 等 10 表 | ✅ 全部有 Service + Controller |
+| 13 | 规则/接口/指标 10 表代码层 | 数据映射 | ✅ validation_rule 等 10 表全部有 Service + Controller |
 | 14 | RelationRepositoryImpl → 数据库 | AGENTS.md | 当前内存存储 | ✅ MyBatis-Plus 实现 |
 | 15 | queryObjects 接入实际数据 | AGENTS.md | 当前返回空结果集 | ✅ 分页查询全链路已实现 |
 
@@ -57,7 +75,7 @@
 | Phase 2 | JobQueue + RateLimiter + Webhook + Agent 编排 + CI |
 | E2E | 6 场景跨项目导入/导出（`Project1ToProject2E2ETest`） |
 | P0 | 差距分析 6 项全部关闭 |
-| 测试 | **174** tests, 0 failures · CI ~1m26s |
+| 测试 | **176** tests, 0 failures · `mvn test` ~59s / `mvn verify -Pintegration-test` ~1m35s |
 | 文档 | README / TODO / import TODO 与项目1 双向链接（2026-06-26） |
 
 ### 联调状态（2026-06-26）

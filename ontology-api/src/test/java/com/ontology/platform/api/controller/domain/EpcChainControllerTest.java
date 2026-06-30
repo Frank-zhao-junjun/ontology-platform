@@ -32,7 +32,7 @@ class EpcChainControllerTest {
         EpcChainResponse resp = EpcChainResponse.builder().id("test-id").build();
         when(epcChainService.create(any(), any(), any())).thenReturn(resp);
 
-        mockMvc.perform(post("/v1/ontologies/onto-1/epc/chains")
+        mockMvc.perform(post("/api/v1/ontologies/onto-1/epc/chains")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"test\"}"))
                 .andExpect(status().isCreated());
@@ -40,7 +40,7 @@ class EpcChainControllerTest {
 
     @Test
     void list_shouldReturn200() throws Exception {
-        mockMvc.perform(get("/v1/ontologies/onto-1/epc/chains"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/epc/chains"))
                 .andExpect(status().isOk());
     }
 
@@ -49,7 +49,7 @@ class EpcChainControllerTest {
         EpcChainResponse resp = EpcChainResponse.builder().id("id-1").build();
         when(epcChainService.getById("id-1")).thenReturn(resp);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/epc/chains/id-1"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/epc/chains/id-1"))
                 .andExpect(status().isOk());
     }
 
@@ -57,13 +57,13 @@ class EpcChainControllerTest {
     void getById_shouldReturn404_whenNotFound() throws Exception {
         when(epcChainService.getById("nonexistent")).thenReturn(null);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/epc/chains/nonexistent"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/epc/chains/nonexistent"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void delete_shouldReturn204() throws Exception {
-        mockMvc.perform(delete("/v1/ontologies/onto-1/epc/chains/id-1"))
+        mockMvc.perform(delete("/api/v1/ontologies/onto-1/epc/chains/id-1"))
                 .andExpect(status().isNoContent());
     }
 }

@@ -64,7 +64,7 @@ class OntologyControllerTest {
 
     private ObjectMapper objectMapper;
 
-    private static final String BASE_URL = "/v1/ontologies";
+    private static final String BASE_URL = "/api/v1/ontologies";
     private static final String TEST_ONTOLOGY_ID = UUID.randomUUID().toString();
     private static final String TEST_USER_ID = "test-user";
 

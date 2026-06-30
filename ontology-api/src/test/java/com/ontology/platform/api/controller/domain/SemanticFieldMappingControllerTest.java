@@ -32,7 +32,7 @@ class SemanticFieldMappingControllerTest {
         SemanticFieldMappingResponse resp = SemanticFieldMappingResponse.builder().id("test-id").build();
         when(semanticFieldMappingService.create(any(), any(), any())).thenReturn(resp);
 
-        mockMvc.perform(post("/v1/ontologies/onto-1/semantic-field-mappings")
+        mockMvc.perform(post("/api/v1/ontologies/onto-1/semantic-field-mappings")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"test\"}"))
                 .andExpect(status().isCreated());
@@ -40,7 +40,7 @@ class SemanticFieldMappingControllerTest {
 
     @Test
     void list_shouldReturn200() throws Exception {
-        mockMvc.perform(get("/v1/ontologies/onto-1/semantic-field-mappings"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/semantic-field-mappings"))
                 .andExpect(status().isOk());
     }
 
@@ -49,7 +49,7 @@ class SemanticFieldMappingControllerTest {
         SemanticFieldMappingResponse resp = SemanticFieldMappingResponse.builder().id("id-1").build();
         when(semanticFieldMappingService.getById("id-1")).thenReturn(resp);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/semantic-field-mappings/id-1"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/semantic-field-mappings/id-1"))
                 .andExpect(status().isOk());
     }
 
@@ -57,13 +57,13 @@ class SemanticFieldMappingControllerTest {
     void getById_shouldReturn404_whenNotFound() throws Exception {
         when(semanticFieldMappingService.getById("nonexistent")).thenReturn(null);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/semantic-field-mappings/nonexistent"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/semantic-field-mappings/nonexistent"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void delete_shouldReturn204() throws Exception {
-        mockMvc.perform(delete("/v1/ontologies/onto-1/semantic-field-mappings/id-1"))
+        mockMvc.perform(delete("/api/v1/ontologies/onto-1/semantic-field-mappings/id-1"))
                 .andExpect(status().isNoContent());
     }
 }

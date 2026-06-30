@@ -32,7 +32,7 @@ class DepartmentControllerTest {
         DepartmentResponse resp = DepartmentResponse.builder().id("test-id").build();
         when(departmentService.create(any(), any(), any())).thenReturn(resp);
 
-        mockMvc.perform(post("/v1/ontologies/onto-1/departments")
+        mockMvc.perform(post("/api/v1/ontologies/onto-1/departments")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"test\"}"))
                 .andExpect(status().isCreated());
@@ -40,7 +40,7 @@ class DepartmentControllerTest {
 
     @Test
     void list_shouldReturn200() throws Exception {
-        mockMvc.perform(get("/v1/ontologies/onto-1/departments"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/departments"))
                 .andExpect(status().isOk());
     }
 
@@ -49,7 +49,7 @@ class DepartmentControllerTest {
         DepartmentResponse resp = DepartmentResponse.builder().id("id-1").build();
         when(departmentService.getById("id-1")).thenReturn(resp);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/departments/id-1"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/departments/id-1"))
                 .andExpect(status().isOk());
     }
 
@@ -57,13 +57,13 @@ class DepartmentControllerTest {
     void getById_shouldReturn404_whenNotFound() throws Exception {
         when(departmentService.getById("nonexistent")).thenReturn(null);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/departments/nonexistent"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/departments/nonexistent"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void delete_shouldReturn204() throws Exception {
-        mockMvc.perform(delete("/v1/ontologies/onto-1/departments/id-1"))
+        mockMvc.perform(delete("/api/v1/ontologies/onto-1/departments/id-1"))
                 .andExpect(status().isNoContent());
     }
 }

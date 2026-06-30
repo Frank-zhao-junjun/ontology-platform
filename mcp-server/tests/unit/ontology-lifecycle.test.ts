@@ -1,12 +1,11 @@
 // =============================================
 // Ontology Model Lifecycle Tests
-//   upload → staged (not in registry)
-//   apply  → registered (Agent visible)
-//   disable → back to staged
-//   re-apply → re-registered without re-upload
+//   upload  → auto-registered (Agent visible)
+//   disable → back to empty
+//   re-upload → replaces previous registration
 //
 // NOTE: Uses dynamic imports so vi.resetModules() can clear module-level
-// state (_stagedModel, _applied, etc.) between every test.
+// state between every test.
 // =============================================
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
@@ -60,6 +59,29 @@ const SAMPLE_MODEL = JSON.stringify({
   governance: { roles: [] },
 });
 
+/** Alternative model with 1 entity to verify replacement */
+const SAMPLE_MODEL_ALT = JSON.stringify({
+  version: '1',
+  project: { name: 'AltProject', id: 'TP-002' },
+  entities: [
+    {
+      id: 'customer',
+      name: '客户',
+      nameEn: 'customer',
+      description: '客户信息',
+      attributes: [
+        { name: '客户编码', nameEn: 'code', type: 'string', required: true },
+      ],
+      relations: [],
+    },
+  ],
+  stateMachines: [],
+  rules: [],
+  metrics: [],
+  dataSources: [],
+  governance: { roles: [] },
+});
+
 /** Parse the text content from a handler result */
 function parseResult(result: unknown): Record<string, unknown> {
   const content = (result as { content: Array<{ type: string; text: string }> }).content;
@@ -69,14 +91,13 @@ function parseResult(result: unknown): Record<string, unknown> {
 // ── Tests ──
 
 describe('Ontology Model Lifecycle', () => {
-  // Each test gets fresh module-level state in auto-entity-tools.ts
   beforeEach(async () => {
     vi.resetModules();
   });
 
-  // ── Phase 1: Upload → Staged ──
+  // ── Phase 1: Upload → Auto-registered ──
 
-  describe('Phase 1: upload → staged', () => {
+  describe('Phase 1: upload → auto-registered', () => {
     let uploadOntologyModelTool: ToolDefinition;
     let toolRegistry: typeof import('../../src/mcp/tools/registry.js')['toolRegistry'];
 
@@ -89,15 +110,19 @@ describe('Ontology Model Lifecycle', () => {
       uploadOntologyModelTool = mod.uploadOntologyModelTool;
     });
 
-    it('uploads and shows preview (staged=true, applied=false)', async () => {
+    it('uploads and registers entity tools immediately', async () => {
       const result = await uploadOntologyModelTool.handler({ modelJson: SAMPLE_MODEL }, mockCtx);
       const data = parseResult(result);
 
       expect(data.success).toBe(true);
-      expect(data.staged).toBe(true);
-      expect(data.applied).toBe(false);
+      expect(data.registered).toBe(true);
       expect(data.entities).toHaveLength(2);
       expect((data.entities as Array<Record<string, unknown>>)[0].name).toBe('物料');
+
+      expect(toolRegistry.getTool('search_material')).toBeDefined();
+      expect(toolRegistry.getTool('get_material')).toBeDefined();
+      expect(toolRegistry.getTool('search_vendor')).toBeDefined();
+      expect(toolRegistry.getTool('get_vendor')).toBeDefined();
     });
 
     it('uploads with entityId returns detail view', async () => {
@@ -108,19 +133,9 @@ describe('Ontology Model Lifecycle', () => {
       const data = parseResult(result);
 
       expect(data.success).toBe(true);
-      expect(data.staged).toBe(true);
-      expect(data.applied).toBe(false);
+      expect(data.registered).toBe(true);
       expect((data.entity as Record<string, unknown>).id).toBe('material');
       expect((data.entity as Record<string, unknown>).attributes).toHaveLength(2);
-    });
-
-    it('does NOT register any tools on upload', async () => {
-      await uploadOntologyModelTool.handler({ modelJson: SAMPLE_MODEL }, mockCtx);
-
-      expect(toolRegistry.getTool('search_material')).toBeUndefined();
-      expect(toolRegistry.getTool('get_material')).toBeUndefined();
-      expect(toolRegistry.getTool('search_vendor')).toBeUndefined();
-      expect(toolRegistry.getTool('get_vendor')).toBeUndefined();
     });
 
     it('rejects invalid JSON', async () => {
@@ -138,71 +153,10 @@ describe('Ontology Model Lifecycle', () => {
     });
   });
 
-  // ── Phase 2: Apply → Registered ──
+  // ── Phase 2: Disable → Removed ──
 
-  describe('Phase 2: apply → registered', () => {
+  describe('Phase 2: disable → removed', () => {
     let uploadOntologyModelTool: ToolDefinition;
-    let applyOntologyModelTool: ToolDefinition;
-    let toolRegistry: typeof import('../../src/mcp/tools/registry.js')['toolRegistry'];
-
-    beforeEach(async () => {
-      vi.resetModules();
-      const reg = await import('../../src/mcp/tools/registry.js');
-      toolRegistry = reg.toolRegistry;
-      toolRegistry.clear();
-      const mod = await import('../../src/mcp/tools/auto-entity-tools.js');
-      uploadOntologyModelTool = mod.uploadOntologyModelTool;
-      applyOntologyModelTool = mod.applyOntologyModelTool;
-    });
-
-    it('rejects apply without confirm', async () => {
-      await uploadOntologyModelTool.handler({ modelJson: SAMPLE_MODEL }, mockCtx);
-
-      const result = await applyOntologyModelTool.handler({ confirm: false }, mockCtx);
-      const data = parseResult(result);
-      expect(data.success).toBe(false);
-      expect(toolRegistry.getTool('search_material')).toBeUndefined();
-    });
-
-    it('rejects apply without prior upload', async () => {
-      // Fresh module — _stagedModel is null
-      const result = await applyOntologyModelTool.handler({ confirm: true }, mockCtx);
-      const data = parseResult(result);
-      expect(data.success).toBe(false);
-      expect((data.message as string)).toContain('尚未');
-    });
-
-    it('registers entity tools after apply', async () => {
-      await uploadOntologyModelTool.handler({ modelJson: SAMPLE_MODEL }, mockCtx);
-
-      const result = await applyOntologyModelTool.handler({ confirm: true }, mockCtx);
-      const data = parseResult(result);
-
-      expect(data.success).toBe(true);
-      expect(data.applied).toBe(true);
-      expect(data.registeredTools).toBe(4); // 2 entities × (search_ + get_)
-
-      expect(toolRegistry.getTool('search_material')).toBeDefined();
-      expect(toolRegistry.getTool('get_material')).toBeDefined();
-      expect(toolRegistry.getTool('search_vendor')).toBeDefined();
-      expect(toolRegistry.getTool('get_vendor')).toBeDefined();
-    });
-
-    it('blocks double-apply', async () => {
-      await uploadOntologyModelTool.handler({ modelJson: SAMPLE_MODEL }, mockCtx);
-      await applyOntologyModelTool.handler({ confirm: true }, mockCtx);
-
-      const result = await applyOntologyModelTool.handler({ confirm: true }, mockCtx);
-      const data = parseResult(result);
-      expect(data.applied).toBe(true); // returns "already applied"
-    });
-  });
-
-  // ── Phase 3: Disable → Back to Staged ──
-
-  describe('Phase 3: disable → back to staged', () => {
-    let uploadOntologyModelTool: ToolDefinition;
-    let applyOntologyModelTool: ToolDefinition;
     let disableOntologyModelTool: ToolDefinition;
     let toolRegistry: typeof import('../../src/mcp/tools/registry.js')['toolRegistry'];
 
@@ -213,13 +167,11 @@ describe('Ontology Model Lifecycle', () => {
       toolRegistry.clear();
       const mod = await import('../../src/mcp/tools/auto-entity-tools.js');
       uploadOntologyModelTool = mod.uploadOntologyModelTool;
-      applyOntologyModelTool = mod.applyOntologyModelTool;
       disableOntologyModelTool = mod.disableOntologyModelTool;
     });
 
     it('rejects disable without confirm', async () => {
       await uploadOntologyModelTool.handler({ modelJson: SAMPLE_MODEL }, mockCtx);
-      await applyOntologyModelTool.handler({ confirm: true }, mockCtx);
 
       const result = await disableOntologyModelTool.handler({ confirm: false }, mockCtx);
       const data = parseResult(result);
@@ -229,7 +181,6 @@ describe('Ontology Model Lifecycle', () => {
 
     it('removes all entity tools from registry', async () => {
       await uploadOntologyModelTool.handler({ modelJson: SAMPLE_MODEL }, mockCtx);
-      await applyOntologyModelTool.handler({ confirm: true }, mockCtx);
 
       const result = await disableOntologyModelTool.handler({ confirm: true }, mockCtx);
       const data = parseResult(result);
@@ -251,11 +202,10 @@ describe('Ontology Model Lifecycle', () => {
     });
   });
 
-  // ── Phase 4: Re-apply without re-upload ──
+  // ── Phase 3: Re-upload replaces previous registration ──
 
-  describe('Phase 4: re-apply after disable (no re-upload)', () => {
+  describe('Phase 3: re-upload replaces previous registration', () => {
     let uploadOntologyModelTool: ToolDefinition;
-    let applyOntologyModelTool: ToolDefinition;
     let disableOntologyModelTool: ToolDefinition;
     let toolRegistry: typeof import('../../src/mcp/tools/registry.js')['toolRegistry'];
 
@@ -266,29 +216,36 @@ describe('Ontology Model Lifecycle', () => {
       toolRegistry.clear();
       const mod = await import('../../src/mcp/tools/auto-entity-tools.js');
       uploadOntologyModelTool = mod.uploadOntologyModelTool;
-      applyOntologyModelTool = mod.applyOntologyModelTool;
       disableOntologyModelTool = mod.disableOntologyModelTool;
     });
 
-    it('re-registers tools from staged model', async () => {
+    it('replaces old entity tools with new ones on re-upload', async () => {
       await uploadOntologyModelTool.handler({ modelJson: SAMPLE_MODEL }, mockCtx);
-      await applyOntologyModelTool.handler({ confirm: true }, mockCtx);
       expect(toolRegistry.getTool('search_material')).toBeDefined();
+      expect(toolRegistry.getTool('search_customer')).toBeUndefined();
 
-      await disableOntologyModelTool.handler({ confirm: true }, mockCtx);
-      expect(toolRegistry.getTool('search_material')).toBeUndefined();
-
-      // Re-apply — NO re-upload needed. _stagedModel is still set,
-      // _applied was reset to false by disable.
-      const result = await applyOntologyModelTool.handler({ confirm: true }, mockCtx);
+      const result = await uploadOntologyModelTool.handler({ modelJson: SAMPLE_MODEL_ALT }, mockCtx);
       const data = parseResult(result);
 
       expect(data.success).toBe(true);
-      expect(data.applied).toBe(true);
-      expect(toolRegistry.getTool('search_material')).toBeDefined();
-      expect(toolRegistry.getTool('get_material')).toBeDefined();
-      expect(toolRegistry.getTool('search_vendor')).toBeDefined();
-      expect(toolRegistry.getTool('get_vendor')).toBeDefined();
+      expect(data.registered).toBe(true);
+
+      // Old tools removed
+      expect(toolRegistry.getTool('search_material')).toBeUndefined();
+      expect(toolRegistry.getTool('get_material')).toBeUndefined();
+      expect(toolRegistry.getTool('search_vendor')).toBeUndefined();
+
+      // New tools registered
+      expect(toolRegistry.getTool('search_customer')).toBeDefined();
+      expect(toolRegistry.getTool('get_customer')).toBeDefined();
+    });
+
+    it('disable after re-upload removes only current tools', async () => {
+      await uploadOntologyModelTool.handler({ modelJson: SAMPLE_MODEL_ALT }, mockCtx);
+      await disableOntologyModelTool.handler({ confirm: true }, mockCtx);
+
+      expect(toolRegistry.getTool('search_customer')).toBeUndefined();
+      expect(toolRegistry.getTool('get_customer')).toBeUndefined();
     });
   });
 });

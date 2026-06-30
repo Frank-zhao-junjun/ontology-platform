@@ -32,7 +32,7 @@ class IntentSlotControllerTest {
         IntentSlotResponse resp = IntentSlotResponse.builder().id("test-id").build();
         when(intentSlotService.create(any(), any(), any())).thenReturn(resp);
 
-        mockMvc.perform(post("/v1/ontologies/onto-1/intent-slots")
+        mockMvc.perform(post("/api/v1/ontologies/onto-1/intent-slots")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"test\"}"))
                 .andExpect(status().isCreated());
@@ -40,7 +40,7 @@ class IntentSlotControllerTest {
 
     @Test
     void list_shouldReturn200() throws Exception {
-        mockMvc.perform(get("/v1/ontologies/onto-1/intent-slots"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/intent-slots"))
                 .andExpect(status().isOk());
     }
 
@@ -49,7 +49,7 @@ class IntentSlotControllerTest {
         IntentSlotResponse resp = IntentSlotResponse.builder().id("id-1").build();
         when(intentSlotService.getById("id-1")).thenReturn(resp);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/intent-slots/id-1"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/intent-slots/id-1"))
                 .andExpect(status().isOk());
     }
 
@@ -57,13 +57,13 @@ class IntentSlotControllerTest {
     void getById_shouldReturn404_whenNotFound() throws Exception {
         when(intentSlotService.getById("nonexistent")).thenReturn(null);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/intent-slots/nonexistent"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/intent-slots/nonexistent"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void delete_shouldReturn204() throws Exception {
-        mockMvc.perform(delete("/v1/ontologies/onto-1/intent-slots/id-1"))
+        mockMvc.perform(delete("/api/v1/ontologies/onto-1/intent-slots/id-1"))
                 .andExpect(status().isNoContent());
     }
 }

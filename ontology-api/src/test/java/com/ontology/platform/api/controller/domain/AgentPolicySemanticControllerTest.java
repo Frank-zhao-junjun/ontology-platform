@@ -32,7 +32,7 @@ class AgentPolicySemanticControllerTest {
         AgentPolicySemanticResponse resp = AgentPolicySemanticResponse.builder().id("test-id").build();
         when(agentPolicySemanticService.create(any(), any(), any())).thenReturn(resp);
 
-        mockMvc.perform(post("/v1/ontologies/onto-1/agent-policies")
+        mockMvc.perform(post("/api/v1/ontologies/onto-1/agent-policies")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"test\"}"))
                 .andExpect(status().isCreated());
@@ -40,7 +40,7 @@ class AgentPolicySemanticControllerTest {
 
     @Test
     void list_shouldReturn200() throws Exception {
-        mockMvc.perform(get("/v1/ontologies/onto-1/agent-policies"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/agent-policies"))
                 .andExpect(status().isOk());
     }
 
@@ -49,7 +49,7 @@ class AgentPolicySemanticControllerTest {
         AgentPolicySemanticResponse resp = AgentPolicySemanticResponse.builder().id("id-1").build();
         when(agentPolicySemanticService.getById("id-1")).thenReturn(resp);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/agent-policies/id-1"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/agent-policies/id-1"))
                 .andExpect(status().isOk());
     }
 
@@ -57,13 +57,13 @@ class AgentPolicySemanticControllerTest {
     void getById_shouldReturn404_whenNotFound() throws Exception {
         when(agentPolicySemanticService.getById("nonexistent")).thenReturn(null);
 
-        mockMvc.perform(get("/v1/ontologies/onto-1/agent-policies/nonexistent"))
+        mockMvc.perform(get("/api/v1/ontologies/onto-1/agent-policies/nonexistent"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void delete_shouldReturn204() throws Exception {
-        mockMvc.perform(delete("/v1/ontologies/onto-1/agent-policies/id-1"))
+        mockMvc.perform(delete("/api/v1/ontologies/onto-1/agent-policies/id-1"))
                 .andExpect(status().isNoContent());
     }
 }
