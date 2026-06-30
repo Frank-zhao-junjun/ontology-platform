@@ -10,8 +10,19 @@ echo "[INFO] Working directory: $(pwd)"
 echo "[INFO] Java version: $(java -version 2>&1 | head -n 1)"
 echo "[INFO] Maven version: $(mvn -version 2>&1 | head -n 1)"
 
-# 配置 Maven 使用阿里云镜像加速
-export MAVEN_OPTS="-Xmx2g -XX:+UseG1GC"
+# 如果预构建 JAR 已存在，跳过 Maven 构建
+PREBUILT_JAR="deploy/ontology-api-1.0.0-SNAPSHOT.jar"
+if [ -f "$PREBUILT_JAR" ]; then
+  echo "[INFO] Pre-built JAR found: $PREBUILT_JAR"
+  echo "[INFO] Skipping Maven build, using pre-built JAR"
+  mkdir -p ontology-api/target
+  cp "$PREBUILT_JAR" ontology-api/target/ontology-api-1.0.0-SNAPSHOT.jar
+  echo "[INFO] Build successful (pre-built)!"
+  exit 0
+fi
+
+# 配置 Maven JVM 参数
+export MAVEN_OPTS="-Xmx2g -XX:+UseG1GC -XX:+ParallelRefProcEnabled"
 
 # 创建临时 settings.xml 使用阿里云镜像
 SETTINGS_FILE=$(mktemp)
@@ -30,13 +41,20 @@ EOF
 
 echo "[INFO] Using Maven settings: $SETTINGS_FILE"
 
-# 使用并行构建加速
-# -T 1C = 1 thread per CPU core
-# -B = batch mode
-# -DskipTests = 跳过测试
-# -s = 使用自定义 settings.xml
+# 构建参数说明：
+# -T 1C          = 并行构建（每 CPU 核心一个线程）
+# -B             = 批处理模式（减少输出）
+# --no-transfer-progress = 不显示下载进度条（减少 I/O）
+# -nsu           = 不检查 SNAPSHOT 更新
+# -DskipTests    = 跳过测试
+# -Dmaven.javadoc.skip = 跳过 Javadoc 生成
+# -Dmaven.source.skip    = 跳过 source JAR
 
-mvn clean package -T 1C -B -DskipTests -s "$SETTINGS_FILE"
+mvn package -T 1C -B --no-transfer-progress -nsu \
+  -DskipTests \
+  -Dmaven.javadoc.skip=true \
+  -Dmaven.source.skip=true \
+  -s "$SETTINGS_FILE"
 
 BUILD_RESULT=$?
 

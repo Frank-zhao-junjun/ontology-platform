@@ -32,7 +32,13 @@ while getopts "p:s:h" opt; do
   esac
 done
 
+# 优先使用预构建 JAR
 JAR_FILE="ontology-api/target/ontology-api-1.0.0-SNAPSHOT.jar"
+PREBUILT_JAR="deploy/ontology-api-1.0.0-SNAPSHOT.jar"
+
+if [ ! -f "$JAR_FILE" ] && [ -f "$PREBUILT_JAR" ]; then
+  JAR_FILE="$PREBUILT_JAR"
+fi
 
 if [ ! -f "$JAR_FILE" ]; then
   echo "[ERROR] JAR file not found: $JAR_FILE"
