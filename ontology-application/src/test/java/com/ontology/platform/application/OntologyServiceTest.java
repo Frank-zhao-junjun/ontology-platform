@@ -57,6 +57,9 @@ class OntologyServiceTest {
     @Mock
     private RelationRepository relationRepository;
 
+    @Mock
+    private org.springframework.context.ApplicationEventPublisher eventPublisher;
+
     @InjectMocks
     private com.ontology.platform.application.service.impl.OntologyServiceImpl ontologyService;
 

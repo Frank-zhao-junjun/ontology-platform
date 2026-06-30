@@ -4,6 +4,25 @@
 
 ---
 
+## [2026-06-30] 联调与 CI 加固
+
+### Added
+- **GitHub Actions E2E 流水线**：`.github/workflows/e2e.yml`，main/release 分支 push/PR 自动触发
+- **Maven `integration-test` profile**：绑定 `maven-failsafe-plugin`，统一运行 `*IT.java` / `*E2ETest.java`
+- **Docker E2E 使用说明**：`TODO.md` P2#11 补充本地 `mvn verify -Pintegration-test` 与 CI 触发方式
+
+### Fixed
+- **编译修复**：恢复 `OntologyImportRequest` / `OntologyImportResponse` 被误删的字段（`autoPublish`、`validationMode`、`status`、`totalEntities`、`warnings`）
+- **测试路径修复**：21 个 Controller 测试由 `/v1/` 同步为 `/api/v1/`，修复 111 个测试失败
+- **MCP 编译修复**：`auto-entity-tools.ts` 去除重复 import/常量，修正含 `*/` 的 JSDoc 注释
+- **MCP 测试修复**：按 upload 自动注册的新行为重写 `ontology-lifecycle.test.ts`
+
+### Changed
+- 全量测试规模：Maven 174 → **176** tests，MCP 28 tests，合计 **204 tests / 0 failures**
+- `TODO.md` 最后更新日期更新为 2026-06-30
+
+---
+
 ## [Phase 3] — 2026-06-19 ~ 2026-06-26
 
 ### Added
