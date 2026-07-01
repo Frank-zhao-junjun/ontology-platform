@@ -1,0 +1,355 @@
+{
+  "apiVersion": "ontology.platform/v2",
+  "kind": "OntologyExchange",
+  "metadata": {
+    "id": "p1-lifecycle-semantic-001",
+    "version": "1.0.0",
+    "name": "生命周期与语义层导入测试",
+    "displayName": "生命周期与语义层导入测试 — 含EntityLifecycle/AgentSemanticLayer JSON",
+    "description": "从 Project 1 导出的模块化 JSON，包含 EntityLifecycle 和 AgentSemanticLayer 数据",
+    "source": "ontology-designer",
+    "status": "DRAFT",
+    "projectId": "proj-manufacturing",
+    "exportedAt": "2026-07-01T00:00:00Z",
+    "exporterVersion": "2.0.0"
+  },
+  "spec": {
+    "project": {
+      "id": "proj-manufacturing",
+      "name": "生产制造本体",
+      "description": "包含 EntityLifecycle + AgentSemanticLayer 的完整本体",
+      "domain": {
+        "id": "dom-manufacturing",
+        "name": "生产制造",
+        "nameEn": "Manufacturing",
+        "description": "生产制造领域"
+      },
+      "dataModel": {
+        "id": "dm-mfg",
+        "name": "生产制造数据模型",
+        "version": "1.0.0",
+        "domain": "manufacturing",
+        "entities": [
+          {
+            "id": "production-order",
+            "name": "生产订单",
+            "nameEn": "ProductionOrder",
+            "projectId": "proj-manufacturing",
+            "businessScenarioId": "scenario-mts",
+            "description": "生产制造的核心聚合根",
+            "entityRole": "aggregate_root",
+            "attributes": [
+              {"id": "attr-order-id", "name": "订单号", "nameEn": "orderId", "dataType": "string", "required": true},
+              {"id": "attr-status", "name": "状态", "nameEn": "status", "dataType": "string", "required": true},
+              {"id": "attr-qty", "name": "数量", "nameEn": "quantity", "dataType": "integer", "required": true}
+            ]
+          },
+          {
+            "id": "quality-inspection",
+            "name": "质检记录",
+            "nameEn": "QualityInspection",
+            "projectId": "proj-manufacturing",
+            "businessScenarioId": "scenario-mts",
+            "description": "质量检验记录",
+            "entityRole": "aggregate_root",
+            "attributes": [
+              {"id": "attr-insp-id", "name": "检验单号", "nameEn": "inspectionId", "dataType": "string", "required": true},
+              {"id": "attr-result", "name": "结果", "nameEn": "result", "dataType": "string", "required": true}
+            ]
+          }
+        ]
+      },
+      "behaviorModel": {
+        "id": "bm-mfg",
+        "name": "生产制造行为模型",
+        "version": "1.0.0",
+        "domain": "manufacturing",
+        "stateMachines": [
+          {
+            "id": "sm-order-lifecycle",
+            "name": "订单生命周期",
+            "entity": "production-order",
+            "statusField": "status",
+            "states": [
+              {"id": "st-draft", "name": "草稿", "description": "订单初始状态", "isInitial": true, "isFinal": false},
+              {"id": "st-released", "name": "已下达", "description": "订单已下达", "isInitial": false, "isFinal": false},
+              {"id": "st-in-progress", "name": "生产中", "description": "订单正在执行", "isInitial": false, "isFinal": false},
+              {"id": "st-completed", "name": "已完成", "description": "订单已完成", "isInitial": false, "isFinal": true},
+              {"id": "st-cancelled", "name": "已取消", "description": "订单已取消", "isInitial": false, "isFinal": true}
+            ],
+            "transitions": [
+              {"id": "tr-release", "name": "下达", "from": "st-draft", "to": "st-released", "trigger": "manual"},
+              {"id": "tr-start-prod", "name": "开始生产", "from": "st-released", "to": "st-in-progress", "trigger": "manual"},
+              {"id": "tr-complete", "name": "完成", "from": "st-in-progress", "to": "st-completed", "trigger": "automatic"},
+              {"id": "tr-cancel", "name": "取消", "from": "st-draft", "to": "st-cancelled", "trigger": "manual"}
+            ]
+          },
+          {
+            "id": "sm-inspection-lifecycle",
+            "name": "质检生命周期",
+            "entity": "quality-inspection",
+            "statusField": "status",
+            "states": [
+              {"id": "st-pending", "name": "待检验", "description": "待检验", "isInitial": true, "isFinal": false},
+              {"id": "st-passed", "name": "合格", "description": "质检合格", "isInitial": false, "isFinal": true},
+              {"id": "st-failed", "name": "不合格", "description": "质检不合格", "isInitial": false, "isFinal": true}
+            ],
+            "transitions": [
+              {"id": "tr-pass", "name": "合格判定", "from": "st-pending", "to": "st-passed", "trigger": "manual"},
+              {"id": "tr-fail", "name": "不合格判定", "from": "st-pending", "to": "st-failed", "trigger": "manual"}
+            ]
+          }
+        ],
+        "actions": [
+          {
+            "id": "act-release-order",
+            "name": "下达生产订单",
+            "nameEn": "releaseProductionOrder",
+            "description": "将生产订单从草稿状态下达",
+            "targetEntityId": "production-order",
+            "actionType": "transition",
+            "triggerPhrases": ["下达订单", "发布生产指令"]
+          },
+          {
+            "id": "act-complete-inspection",
+            "name": "完成质检",
+            "nameEn": "completeInspection",
+            "description": "对质检记录进行合格/不合格判定",
+            "targetEntityId": "quality-inspection",
+            "actionType": "transition",
+            "triggerPhrases": ["完成检验", "判定结果"]
+          }
+        ]
+      },
+      "agentSemanticLayer": {
+        "intents": [
+          {
+            "id": "int-release-order",
+            "name": "下达生产订单",
+            "description": "用户意图下达一个生产订单",
+            "category": "production",
+            "targetEntityId": "production-order",
+            "triggerPhrases": ["下达生产订单", "发布生产指令", "开始生产"],
+            "actionId": "act-release-order",
+            "priority": 10,
+            "requiresConfirmation": true,
+            "slotFilling": {
+              "slots": [
+                {
+                  "id": "slot-order-id",
+                  "paramName": "orderId",
+                  "displayName": "订单号",
+                  "name": "订单号",
+                  "prompt": "请输入生产订单号",
+                  "slotType": "string",
+                  "required": true,
+                  "examples": ["PO-2026-001", "PO-2026-002"]
+                },
+                {
+                  "id": "slot-qty",
+                  "paramName": "quantity",
+                  "displayName": "数量",
+                  "name": "数量",
+                  "prompt": "请输入生产数量",
+                  "slotType": "integer",
+                  "required": false,
+                  "examples": ["100", "500"]
+                }
+              ],
+              "requiredSlots": ["slot-order-id"],
+              "fillOrder": ["slot-order-id", "slot-qty"],
+              "allowBatchFill": false
+            }
+          },
+          {
+            "id": "int-check-status",
+            "name": "查询订单状态",
+            "description": "用户意图查询生产订单的当前状态",
+            "category": "inquiry",
+            "targetEntityId": "production-order",
+            "triggerPhrases": ["查询订单状态", "订单进度", "生产到哪了"],
+            "priority": 5,
+            "requiresConfirmation": false
+          }
+        ],
+        "businessTerms": [
+          {
+            "id": "term-production-order",
+            "name": "生产订单",
+            "nameEn": "ProductionOrder",
+            "definition": "生产执行的核心指令文档，包含产品、数量、计划日期等信息",
+            "synonyms": ["工单", "制造订单", "生产指令"]
+          },
+          {
+            "id": "term-quality-inspection",
+            "name": "质检记录",
+            "nameEn": "QualityInspection",
+            "definition": "对产品或工序进行质量检验后的结果记录",
+            "synonyms": ["检验记录", "质检报告"]
+          },
+          {
+            "id": "term-order-status",
+            "name": "订单状态",
+            "nameEn": "OrderStatus",
+            "definition": "生产订单在其生命周期中的当前阶段状态",
+            "synonyms": ["状态", "阶段"]
+          }
+        ],
+        "semanticRelations": [
+          {
+            "id": "rel-prod-insp",
+            "sourceTermId": "term-production-order",
+            "targetTermId": "term-quality-inspection",
+            "relationType": "has_inspection",
+            "description": "生产订单关联质检记录"
+          },
+          {
+            "id": "rel-prod-status",
+            "sourceTermId": "term-production-order",
+            "targetTermId": "term-order-status",
+            "relationType": "has_status",
+            "description": "生产订单具有状态属性"
+          }
+        ],
+        "agentPolicies": [
+          {
+            "id": "ap-prod-manager",
+            "roleId": "role-prod-manager",
+            "allowedMcpTools": ["release_order", "cancel_order", "query_order"],
+            "allowedAggregateRootIds": ["production-order"],
+            "defaultDeny": false
+          },
+          {
+            "id": "ap-qa-inspector",
+            "roleId": "role-qa-inspector",
+            "allowedMcpTools": ["complete_inspection", "query_inspection"],
+            "allowedAggregateRootIds": ["production-order", "quality-inspection"],
+            "defaultDeny": false
+          }
+        ],
+        "errorRecoveries": [
+          {
+            "id": "er-release-fallback",
+            "actionId": "act-release-order",
+            "errorPattern": "ORDER_NOT_FOUND",
+            "recoveryStrategy": "retry_with_new_id",
+            "maxRetries": 3,
+            "fallbackActionId": "act-release-order",
+            "description": "当订单号不存在时，提示用户重新输入"
+          },
+          {
+            "id": "er-inspection-retry",
+            "actionId": "act-complete-inspection",
+            "errorPattern": "INSPECTION_ALREADY_COMPLETED",
+            "recoveryStrategy": "notify_user",
+            "maxRetries": 1,
+            "description": "质检已完成时通知用户"
+          }
+        ],
+        "fieldMappings": [
+          {
+            "id": "fm-order-id",
+            "entityId": "production-order",
+            "fieldNameEn": "orderId",
+            "businessTermId": "term-production-order",
+            "mappingType": "direct",
+            "transformRule": "none"
+          },
+          {
+            "id": "fm-status",
+            "entityId": "production-order",
+            "fieldNameEn": "status",
+            "businessTermId": "term-order-status",
+            "mappingType": "direct",
+            "transformRule": "none"
+          }
+        ]
+      }
+    },
+    "lifecycle": {
+      "byEntityId": {
+        "production-order": {
+          "entityId": "production-order",
+          "entityNameEn": "ProductionOrder",
+          "statusField": "status",
+          "stateMachine": {
+            "id": "sm-order-lifecycle",
+            "states": [
+              {"name": "DRAFT", "isInitial": true, "isFinal": false},
+              {"name": "RELEASED", "isInitial": false, "isFinal": false},
+              {"name": "IN_PROGRESS", "isInitial": false, "isFinal": false},
+              {"name": "COMPLETED", "isInitial": false, "isFinal": true},
+              {"name": "CANCELLED", "isInitial": false, "isFinal": true}
+            ],
+            "transitions": [
+              {"from": "DRAFT", "to": "RELEASED", "trigger": "release"},
+              {"from": "RELEASED", "to": "IN_PROGRESS", "trigger": "start_production"},
+              {"from": "IN_PROGRESS", "to": "COMPLETED", "trigger": "complete"},
+              {"from": "DRAFT", "to": "CANCELLED", "trigger": "cancel"}
+            ]
+          },
+          "actionsByState": {
+            "DRAFT": ["release", "cancel"],
+            "RELEASED": ["start_production", "cancel"],
+            "IN_PROGRESS": ["complete"],
+            "COMPLETED": [],
+            "CANCELLED": []
+          },
+          "rulesByState": {
+            "RELEASED": ["validate_materials_available", "validate_capacity"],
+            "IN_PROGRESS": ["validate_quality_gate"]
+          },
+          "eventsByState": {
+            "RELEASED": ["evt-order-released"],
+            "COMPLETED": ["evt-order-completed"],
+            "CANCELLED": ["evt-order-cancelled"]
+          },
+          "rolesByState": {
+            "DRAFT": ["planner"],
+            "RELEASED": ["planner", "production_manager"],
+            "IN_PROGRESS": ["operator", "production_manager"],
+            "COMPLETED": ["production_manager"],
+            "CANCELLED": ["production_manager"]
+          },
+          "auditTrail": [
+            {"timestamp": "2026-07-01T08:00:00Z", "action": "created", "userId": "system"},
+            {"timestamp": "2026-07-01T08:30:00Z", "action": "released", "userId": "planner-001"}
+          ],
+          "stats": {
+            "avgTimeInDraft": "2.5h",
+            "avgTimeInProgress": "8h",
+            "totalTransitions": 4
+          }
+        },
+        "quality-inspection": {
+          "entityId": "quality-inspection",
+          "entityNameEn": "QualityInspection",
+          "statusField": "result",
+          "stateMachine": {
+            "id": "sm-inspection-lifecycle",
+            "states": [
+              {"name": "PENDING", "isInitial": true, "isFinal": false},
+              {"name": "PASSED", "isInitial": false, "isFinal": true},
+              {"name": "FAILED", "isInitial": false, "isFinal": true}
+            ],
+            "transitions": [
+              {"from": "PENDING", "to": "PASSED", "trigger": "pass"},
+              {"from": "PENDING", "to": "FAILED", "trigger": "fail"}
+            ]
+          },
+          "actionsByState": {
+            "PENDING": ["pass", "fail"],
+            "PASSED": [],
+            "FAILED": []
+          },
+          "rulesByState": {
+            "PENDING": ["validate_inspection_data"]
+          },
+          "stats": {
+            "avgTimePending": "1h"
+          }
+        }
+      }
+    }
+  }
+}

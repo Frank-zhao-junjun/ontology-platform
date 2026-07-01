@@ -1,0 +1,96 @@
+{
+  "apiVersion": "ontology.platform/v1",
+  "kind": "OntologyManifest",
+  "metadata": {
+    "id": "p1-entity-role-001",
+    "version": "1.0.0",
+    "name": "实体角色映射回归测试",
+    "displayName": "实体角色映射回归测试 — 验证 aggregate_root / child_entity 角色映射",
+    "description": "针对 P0#3 差距项：验证 Project1 child_entity ↔ Project2 entity 角色统一为 child_entity",
+    "compiledAt": "2026-07-01T00:00:00Z",
+    "compiledBy": "e2e-test-agent",
+    "source": "ontology-designer",
+    "status": "DRAFT"
+  },
+  "spec": {
+    "semantic": {
+      "objectTypes": [
+        {
+          "id": "order",
+          "name": "订单",
+          "nameEn": "Order",
+          "kind": "aggregate_root",
+          "description": "订单聚合根"
+        },
+        {
+          "id": "order-line",
+          "name": "订单行",
+          "nameEn": "OrderLine",
+          "kind": "child_entity",
+          "aggregateRootId": "order",
+          "description": "订单下的明细行（child_entity）"
+        },
+        {
+          "id": "customer",
+          "name": "客户",
+          "nameEn": "Customer",
+          "kind": "aggregate_root",
+          "description": "客户聚合根"
+        },
+        {
+          "id": "contact",
+          "name": "联系人",
+          "nameEn": "Contact",
+          "kind": "child_entity",
+          "aggregateRootId": "customer",
+          "description": "客户下的联系人（child_entity）"
+        }
+      ]
+    },
+    "behavior": {
+      "actions": [
+        {
+          "id": "create-order",
+          "name": "创建订单",
+          "nameEn": "createOrder",
+          "aggregateRootId": "order",
+          "description": "创建新订单"
+        },
+        {
+          "id": "create-customer",
+          "name": "创建客户",
+          "nameEn": "createCustomer",
+          "aggregateRootId": "customer",
+          "description": "创建新客户"
+        }
+      ],
+      "rules": [
+        {
+          "id": "rule-order-qty-positive",
+          "name": "订单数量必须为正",
+          "type": "validation",
+          "expression": "order_qty > 0",
+          "errorMessage": "订单数量必须大于零"
+        }
+      ]
+    },
+    "events": {
+      "domainEvents": [
+        {
+          "id": "evt-order-created",
+          "name": "订单已创建",
+          "nameEn": "order_created",
+          "aggregateRootId": "order",
+          "triggerActionId": "create-order"
+        },
+        {
+          "id": "evt-customer-created",
+          "name": "客户已创建",
+          "nameEn": "customer_created",
+          "aggregateRootId": "customer",
+          "triggerActionId": "create-customer"
+        }
+      ]
+    }
+  }
+}

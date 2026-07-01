@@ -38,6 +38,34 @@ public class Relation {
     private List<RelationProperty> properties = new ArrayList<>();
 
     /**
+     * 校验关联的源端和目标端 ObjectType 必须属于同一个 ontology
+     *
+     * @param ontologyId       关系的 ontologyId
+     * @param sourceOntologyId 源端 ObjectType 的 ontologyId
+     * @param targetOntologyId 目标端 ObjectType 的 ontologyId
+     * @throws IllegalArgumentException 如果任一 ontologyId 为 null，或它们不相等
+     */
+    public static void validateSameOntology(String ontologyId, String sourceOntologyId, String targetOntologyId) {
+        if (ontologyId == null) {
+            throw new IllegalArgumentException("Relation ontologyId must not be null");
+        }
+        if (sourceOntologyId == null) {
+            throw new IllegalArgumentException("Source ObjectType ontologyId must not be null");
+        }
+        if (targetOntologyId == null) {
+            throw new IllegalArgumentException("Target ObjectType ontologyId must not be null");
+        }
+        if (!ontologyId.equals(sourceOntologyId)) {
+            throw new IllegalArgumentException(
+                    "Relation ontologyId [" + ontologyId + "] does not match source ObjectType ontologyId [" + sourceOntologyId + "]");
+        }
+        if (!ontologyId.equals(targetOntologyId)) {
+            throw new IllegalArgumentException(
+                    "Relation ontologyId [" + ontologyId + "] does not match target ObjectType ontologyId [" + targetOntologyId + "]");
+        }
+    }
+
+    /**
      * 创建新的关系
      */
     public static Relation create(

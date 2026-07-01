@@ -80,6 +80,18 @@ public class ManifestDocument {
         private String kind; private List<String> businessScenarioIds;
         private String description; private String aggregateRootId;
         private List<PropertyDef> properties;
+        /**
+         * 项目1 (Project 1) Entity 的 subDomain 字段。
+         * 项目2 无直接对应字段，此处保留以便数据不静默丢失。
+         * 映射文档: subDomain → ❌ 无直接对应，可用 parent_id 模拟层级
+         */
+        private String subDomain;
+        /**
+         * 项目1 (Project 1) Entity 的 scenario 字段。
+         * 项目2 无直接对应字段，此处保留以便数据不静默丢失。
+         * 映射文档: scenario → ❌ 无直接对应
+         */
+        private String scenario;
     }
 
     @Data @Builder @NoArgsConstructor @AllArgsConstructor

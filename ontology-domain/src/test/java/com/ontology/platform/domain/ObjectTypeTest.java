@@ -333,6 +333,41 @@ class ObjectTypeTest {
             // Assert
             assertThat(objectType.getParentId()).isNull();
         }
+
+        @Test
+        @DisplayName("设置自身ID为父类型应抛出异常（自引用检测）")
+        void shouldRejectSelfReference() {
+            // Arrange
+            ObjectType objectType = ObjectType.create(
+                    TEST_ONTOLOGY_ID, TEST_NAME, TEST_DISPLAY_NAME, TEST_DESCRIPTION, TEST_PRIMARY_KEY);
+            String ownId = objectType.getId();
+
+            // Act & Assert
+            assertThatThrownBy(() -> objectType.setParent(ownId))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("self as parent")
+                    .hasMessageContaining(ownId);
+
+            // Verify parentId was NOT modified
+            assertThat(objectType.getParentId()).isNull();
+        }
+
+        @Test
+        @DisplayName("设置自身ID为父类型不应影响前置设置的有效父类型")
+        void shouldPreserveExistingParentWhenSelfReferenceRejected() {
+            // Arrange
+            ObjectType objectType = ObjectType.create(
+                    TEST_ONTOLOGY_ID, TEST_NAME, TEST_DISPLAY_NAME, TEST_DESCRIPTION, TEST_PRIMARY_KEY);
+            String validParentId = UUID.randomUUID().toString();
+            objectType.setParent(validParentId);
+
+            // Act & Assert
+            assertThatThrownBy(() -> objectType.setParent(objectType.getId()))
+                    .isInstanceOf(IllegalArgumentException.class);
+
+            // Verify original parent was preserved
+            assertThat(objectType.getParentId()).isEqualTo(validParentId);
+        }
     }
 
     @Nested

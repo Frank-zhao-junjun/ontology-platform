@@ -1,0 +1,77 @@
+{
+  "apiVersion": "ontology.platform/v1",
+  "kind": "OntologyManifest",
+  "metadata": {
+    "id": "p1-minimal-001",
+    "version": "1.0.0",
+    "name": "最小本体",
+    "displayName": "最小本体 — 单实体",
+    "description": "从 Project 1 导出的最小本体模型，仅包含 1 个聚合根",
+    "boundedContext": "core",
+    "domainTags": ["core", "minimal"],
+    "compiledAt": "2026-07-01T00:00:00Z",
+    "compiledBy": "e2e-test-agent",
+    "source": "ontology-designer",
+    "status": "DRAFT"
+  },
+  "spec": {
+    "semantic": {
+      "objectTypes": [
+        {
+          "id": "customer",
+          "name": "客户",
+          "nameEn": "Customer",
+          "kind": "aggregate_root",
+          "description": "客户聚合根"
+        }
+      ],
+      "stateMachines": [
+        {
+          "id": "sm-customer-lifecycle",
+          "name": "客户生命周期",
+          "objectTypeId": "customer",
+          "states": [
+            {"name": "ACTIVE", "isInitial": true, "isFinal": false},
+            {"name": "INACTIVE", "isInitial": false, "isFinal": true}
+          ],
+          "transitions": [
+            {"from": "ACTIVE", "to": "INACTIVE", "trigger": "deactivate"}
+          ]
+        }
+      ]
+    },
+    "behavior": {
+      "actions": [
+        {
+          "id": "deactivate-customer",
+          "name": "停用客户",
+          "nameEn": "deactivateCustomer",
+          "aggregateRootId": "customer",
+          "description": "将客户状态从 ACTIVE 变更为 INACTIVE",
+          "preRuleIds": ["rule-no-pending-orders"],
+          "publishesEventIds": ["evt-customer-deactivated"]
+        }
+      ],
+      "rules": [
+        {
+          "id": "rule-no-pending-orders",
+          "name": "无待处理订单",
+          "type": "validation",
+          "expression": "pending_order_count == 0",
+          "errorMessage": "客户有待处理订单，无法停用"
+        }
+      ]
+    },
+    "events": {
+      "domainEvents": [
+        {
+          "id": "evt-customer-deactivated",
+          "name": "客户已停用",
+          "nameEn": "customer_deactivated",
+          "aggregateRootId": "customer",
+          "triggerActionId": "deactivate-customer"
+        }
+      ]
+    }
+  }
+}

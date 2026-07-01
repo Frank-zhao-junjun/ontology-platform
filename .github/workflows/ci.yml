@@ -40,8 +40,16 @@ jobs:
       - name: Compile
         run: mvn compile -B -q
 
-      - name: Run tests
-        run: mvn test -B
+      - name: Run tests with coverage
+        run: mvn verify -Pcoverage-check -B
+
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: '**/target/site/jacoco/'
+          retention-days: 7
 
       - name: Upload test reports
         if: always()

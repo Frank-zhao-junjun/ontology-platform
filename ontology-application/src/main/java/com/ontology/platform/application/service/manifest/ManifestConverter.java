@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ontology.platform.domain.vo.manifest.ManifestDocument;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ManifestConverter {
 
     private final ObjectMapper objectMapper;
@@ -84,12 +86,20 @@ public class ManifestConverter {
 
         List<ManifestDocument.ObjectType> objectTypes = new ArrayList<>();
         for (JsonNode ot : nonNullArray(semantic.path("objectTypes"))) {
+            String scenario = pathStr(ot, "scenario");
+            String subDomain = pathStr(ot, "subDomain");
+            if (scenario != null || subDomain != null) {
+                log.info("Preserving Project1 fields: objectType '{}' has scenario='{}', subDomain='{}'",
+                        pathStr(ot, "id"), scenario, subDomain);
+            }
             objectTypes.add(ManifestDocument.ObjectType.builder()
                     .id(pathStr(ot, "id"))
                     .name(pathStr(ot, "name"))
                     .nameEn(pathStr(ot, "nameEn"))
                     .kind(pathStr(ot, "kind"))
                     .description(pathStr(ot, "description"))
+                    .scenario(scenario)
+                    .subDomain(subDomain)
                     .build());
         }
 

@@ -160,18 +160,13 @@ public class PropertyConstraint {
      */
     private boolean validateMinValue(Object value) {
         if (value == null) return true;
-        
-        BigDecimal minValue = (BigDecimal) this.value;
-        BigDecimal actualValue;
-        
-        if (value instanceof BigDecimal) {
-            actualValue = (BigDecimal) value;
-        } else if (value instanceof Number) {
-            actualValue = new BigDecimal(value.toString());
-        } else {
-            return false; // 非数值类型无法比较
-        }
-        
+
+        BigDecimal minValue = toBigDecimal(this.value);
+        if (minValue == null) return false;
+
+        BigDecimal actualValue = toBigDecimal(value);
+        if (actualValue == null) return false;
+
         return actualValue.compareTo(minValue) >= 0;
     }
 
@@ -180,18 +175,13 @@ public class PropertyConstraint {
      */
     private boolean validateMaxValue(Object value) {
         if (value == null) return true;
-        
-        BigDecimal maxValue = (BigDecimal) this.value;
-        BigDecimal actualValue;
-        
-        if (value instanceof BigDecimal) {
-            actualValue = (BigDecimal) value;
-        } else if (value instanceof Number) {
-            actualValue = new BigDecimal(value.toString());
-        } else {
-            return false;
-        }
-        
+
+        BigDecimal maxValue = toBigDecimal(this.value);
+        if (maxValue == null) return false;
+
+        BigDecimal actualValue = toBigDecimal(value);
+        if (actualValue == null) return false;
+
         return actualValue.compareTo(maxValue) <= 0;
     }
 
@@ -199,9 +189,11 @@ public class PropertyConstraint {
      * 验证最小长度约束
      */
     private boolean validateMinLength(Object value) {
-        int minLength = (Integer) this.value;
+        Integer minLength = toInteger(this.value);
+        if (minLength == null) return false;
+
         int actualLength;
-        
+
         if (value instanceof String) {
             actualLength = ((String) value).length();
         } else if (value instanceof List) {
@@ -211,7 +203,7 @@ public class PropertyConstraint {
         } else {
             return false;
         }
-        
+
         return actualLength >= minLength;
     }
 
@@ -219,9 +211,11 @@ public class PropertyConstraint {
      * 验证最大长度约束
      */
     private boolean validateMaxLength(Object value) {
-        int maxLength = (Integer) this.value;
+        Integer maxLength = toInteger(this.value);
+        if (maxLength == null) return false;
+
         int actualLength;
-        
+
         if (value instanceof String) {
             actualLength = ((String) value).length();
         } else if (value instanceof List) {
@@ -231,7 +225,7 @@ public class PropertyConstraint {
         } else {
             return false;
         }
-        
+
         return actualLength <= maxLength;
     }
 
@@ -243,6 +237,9 @@ public class PropertyConstraint {
             return false;
         }
         
+        if (!(this.value instanceof String)) {
+            return false;
+        }
         String pattern = (String) this.value;
         try {
             return Pattern.matches(pattern, (String) value);
@@ -256,6 +253,9 @@ public class PropertyConstraint {
      */
     @SuppressWarnings("unchecked")
     private boolean validateEnumValues(Object value) {
+        if (!(this.value instanceof List)) {
+            return false;
+        }
         List<String> enumValues = (List<String>) this.value;
         return enumValues.contains(value.toString());
     }
@@ -270,8 +270,23 @@ public class PropertyConstraint {
     }
 
     /**
-     * 获取错误消息
+     * 安全转换为 BigDecimal，避免 ClassCastException。
+     * 当 this.value 通过 Builder 直接设置非 BigDecimal 值时提供防护。
      */
+    private static BigDecimal toBigDecimal(Object val) {
+        if (val instanceof BigDecimal bd) return bd;
+        if (val instanceof Number num) return new BigDecimal(num.toString());
+        return null;
+    }
+
+    /**
+     * 安全转换为 Integer，避免 ClassCastException。
+     */
+    private static Integer toInteger(Object val) {
+        if (val instanceof Integer i) return i;
+        if (val instanceof Number num) return num.intValue();
+        return null;
+    }
     public String getErrorMessage(Object value) {
         return errorMessage;
     }

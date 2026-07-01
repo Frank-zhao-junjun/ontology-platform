@@ -383,4 +383,80 @@ class RelationTest {
             assertThat(relation.getCardinality()).isEqualTo(originalCardinality);
         }
     }
+
+    @Nested
+    @DisplayName("validateSameOntology - 跨本体校验")
+    class ValidateSameOntologyTests {
+
+        private static final String SAME_ONTOLOGY_ID = UUID.randomUUID().toString();
+        private static final String DIFFERENT_ONTOLOGY_ID = UUID.randomUUID().toString();
+
+        @Test
+        @DisplayName("相同的 ontologyId 应通过校验")
+        void shouldPassWhenSameOntology() {
+            // Act & Assert — no exception expected
+            assertThatNoException().isThrownBy(() ->
+                    Relation.validateSameOntology(SAME_ONTOLOGY_ID, SAME_ONTOLOGY_ID, SAME_ONTOLOGY_ID));
+        }
+
+        @Test
+        @DisplayName("源端 ontologyId 不同应抛出 IllegalArgumentException")
+        void shouldThrowWhenSourceOntologyDiffers() {
+            // Act & Assert
+            assertThatThrownBy(() ->
+                    Relation.validateSameOntology(SAME_ONTOLOGY_ID, DIFFERENT_ONTOLOGY_ID, SAME_ONTOLOGY_ID))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("source");
+        }
+
+        @Test
+        @DisplayName("目标端 ontologyId 不同应抛出 IllegalArgumentException")
+        void shouldThrowWhenTargetOntologyDiffers() {
+            // Act & Assert
+            assertThatThrownBy(() ->
+                    Relation.validateSameOntology(SAME_ONTOLOGY_ID, SAME_ONTOLOGY_ID, DIFFERENT_ONTOLOGY_ID))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("target");
+        }
+
+        @Test
+        @DisplayName("关系的 ontologyId 为 null 应抛出 IllegalArgumentException")
+        void shouldThrowWhenRelationOntologyIdIsNull() {
+            // Act & Assert
+            assertThatThrownBy(() ->
+                    Relation.validateSameOntology(null, SAME_ONTOLOGY_ID, SAME_ONTOLOGY_ID))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("Relation ontologyId must not be null");
+        }
+
+        @Test
+        @DisplayName("源端 ObjectType 的 ontologyId 为 null 应抛出 IllegalArgumentException")
+        void shouldThrowWhenSourceOntologyIdIsNull() {
+            // Act & Assert
+            assertThatThrownBy(() ->
+                    Relation.validateSameOntology(SAME_ONTOLOGY_ID, null, SAME_ONTOLOGY_ID))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("Source ObjectType ontologyId must not be null");
+        }
+
+        @Test
+        @DisplayName("目标端 ObjectType 的 ontologyId 为 null 应抛出 IllegalArgumentException")
+        void shouldThrowWhenTargetOntologyIdIsNull() {
+            // Act & Assert
+            assertThatThrownBy(() ->
+                    Relation.validateSameOntology(SAME_ONTOLOGY_ID, SAME_ONTOLOGY_ID, null))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("Target ObjectType ontologyId must not be null");
+        }
+
+        @Test
+        @DisplayName("源端和目标端与关系不同但彼此相同也应抛出")
+        void shouldThrowWhenBothSourceAndTargetDifferFromRelation() {
+            // Act & Assert
+            assertThatThrownBy(() ->
+                    Relation.validateSameOntology(SAME_ONTOLOGY_ID, DIFFERENT_ONTOLOGY_ID, DIFFERENT_ONTOLOGY_ID))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("source");
+        }
+    }
 }

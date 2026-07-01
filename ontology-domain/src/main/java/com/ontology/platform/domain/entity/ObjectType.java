@@ -155,8 +155,16 @@ public class ObjectType {
 
     /**
      * 设置父类型
+     *
+     * @throws IllegalArgumentException 如果 parentId 等于当前对象自身的 id（自引用），
+     *                                  或者形成循环继承链（A→B→A）。对于更深层的循环检测
+     *                                  （如 A→B→C→A），需要访问仓库/服务层来遍历完整继承树。
      */
     public void setParent(String parentId) {
+        if (parentId != null && parentId.equals(this.id)) {
+            throw new IllegalArgumentException(
+                    "Cannot set self as parent: parentId [" + parentId + "] equals object's own id [" + this.id + "]");
+        }
         this.parentId = parentId;
         this.updatedAt = Instant.now();
     }

@@ -98,5 +98,87 @@ class PropertyConstraintTest {
             PropertyConstraint constraint = PropertyConstraint.minValue(new BigDecimal("10"), null);
             assertThat(constraint.validate(null)).isTrue();
         }
+
+        @Test
+        @DisplayName("Builder 直接构造 MIN_VALUE 传 Integer 不会抛 ClassCastException")
+        void builderMinValueWithIntegerShouldNotThrow() {
+            // 绕过工厂方法，模拟不安全构造
+            PropertyConstraint constraint = PropertyConstraint.builder()
+                    .type(PropertyConstraint.ConstraintType.MIN_VALUE)
+                    .value(5) // Integer, 不是 BigDecimal
+                    .build();
+
+            // 修复后应安全处理，不会抛 ClassCastException
+            assertThatCode(() -> constraint.validate(10))
+                    .doesNotThrowAnyException();
+            assertThat(constraint.validate(10)).isTrue();
+            assertThat(constraint.validate(3)).isFalse();
+        }
+
+        @Test
+        @DisplayName("Builder 直接构造 MAX_VALUE 传 Double 不会抛 ClassCastException")
+        void builderMaxValueWithDoubleShouldNotThrow() {
+            PropertyConstraint constraint = PropertyConstraint.builder()
+                    .type(PropertyConstraint.ConstraintType.MAX_VALUE)
+                    .value(100.5) // Double, 不是 BigDecimal
+                    .build();
+
+            assertThatCode(() -> constraint.validate(50))
+                    .doesNotThrowAnyException();
+            assertThat(constraint.validate(50)).isTrue();
+            assertThat(constraint.validate(101)).isFalse();
+        }
+
+        @Test
+        @DisplayName("Builder 直接构造 MIN_VALUE 传非数字值返回 false")
+        void builderMinValueWithNonNumericShouldReturnFalse() {
+            PropertyConstraint constraint = PropertyConstraint.builder()
+                    .type(PropertyConstraint.ConstraintType.MIN_VALUE)
+                    .value("not-a-number")
+                    .build();
+
+            // toBigDecimal 返回 null → validateMinValue 返回 false
+            assertThat(constraint.validate(10)).isFalse();
+        }
+
+        @Test
+        @DisplayName("Builder 直接构造 MIN_LENGTH 传 Double 安全转换为 int")
+        void builderMinLengthWithDoubleShouldNotThrow() {
+            PropertyConstraint constraint = PropertyConstraint.builder()
+                    .type(PropertyConstraint.ConstraintType.MIN_LENGTH)
+                    .value(5.9) // Double, 不是 Integer
+                    .build();
+
+            assertThatCode(() -> constraint.validate("hello world"))
+                    .doesNotThrowAnyException();
+            assertThat(constraint.validate("hello world")).isTrue(); // 11 chars >= 5
+            assertThat(constraint.validate("hi")).isFalse(); // 2 chars < 5
+        }
+
+        @Test
+        @DisplayName("PATTERN 约束存储非字符串值应返回 false 而非抛异常")
+        void patternWithNonStringValueShouldNotThrow() {
+            PropertyConstraint constraint = PropertyConstraint.builder()
+                    .type(PropertyConstraint.ConstraintType.PATTERN)
+                    .value(12345) // Integer, 不是 String
+                    .build();
+
+            assertThatCode(() -> constraint.validate("hello"))
+                    .doesNotThrowAnyException();
+            assertThat(constraint.validate("hello")).isFalse();
+        }
+
+        @Test
+        @DisplayName("ENUM_VALUES 约束存储非列表值应返回 false 而非抛异常")
+        void enumValuesWithNonListValueShouldNotThrow() {
+            PropertyConstraint constraint = PropertyConstraint.builder()
+                    .type(PropertyConstraint.ConstraintType.ENUM_VALUES)
+                    .value("not-a-list") // String, 不是 List
+                    .build();
+
+            assertThatCode(() -> constraint.validate("RED"))
+                    .doesNotThrowAnyException();
+            assertThat(constraint.validate("RED")).isFalse();
+        }
     }
 }

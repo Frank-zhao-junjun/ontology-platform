@@ -1,0 +1,359 @@
+{
+  "apiVersion": "ontology.platform/v1",
+  "kind": "OntologyManifest",
+  "metadata": {
+    "id": "p1-full-domain-001",
+    "version": "3.0.0",
+    "name": "全域本体（含V12-V14）",
+    "displayName": "全领域本体 — 组织/语义层/EPC",
+    "description": "覆盖 V12 组织模型 + V13 语义层 + V14 EPC 链的完整本体",
+    "boundedContext": "enterprise",
+    "domainTags": ["organization", "semantic", "epc", "manufacturing", "quality"],
+    "compiledAt": "2026-07-01T00:00:00Z",
+    "compiledBy": "e2e-test-agent",
+    "source": "ontology-designer",
+    "status": "DRAFT"
+  },
+  "spec": {
+    "semantic": {
+      "boundedContext": {
+        "id": "bc-enterprise",
+        "name": "企业全域",
+        "nameEn": "Enterprise",
+        "description": "涵盖生产、质量、组织管理的企业级限界上下文"
+      },
+      "businessScenarios": [
+        {
+          "id": "scenario-mts",
+          "name": "面向库存生产",
+          "nameEn": "MTS",
+          "description": "MTS 按库存生产模式",
+          "applicableObjectTypeIds": ["production-order", "operation"]
+        },
+        {
+          "id": "scenario-mto",
+          "name": "面向订单生产",
+          "nameEn": "MTO",
+          "description": "MTO 按订单生产模式",
+          "applicableObjectTypeIds": ["production-order", "sales-order"]
+        }
+      ],
+      "valueObjects": [
+        {
+          "id": "vo-address",
+          "name": "地址",
+          "nameEn": "Address",
+          "properties": [
+            {"id": "prop-street", "name": "街道", "nameEn": "street", "dataType": "string", "required": true},
+            {"id": "prop-city", "name": "城市", "nameEn": "city", "dataType": "string", "required": true},
+            {"id": "prop-zip", "name": "邮编", "nameEn": "zipCode", "dataType": "string", "required": false}
+          ]
+        },
+        {
+          "id": "vo-money",
+          "name": "金额",
+          "nameEn": "Money",
+          "properties": [
+            {"id": "prop-amount", "name": "数量", "nameEn": "amount", "dataType": "float", "required": true},
+            {"id": "prop-currency", "name": "币种", "nameEn": "currency", "dataType": "string", "required": true}
+          ]
+        }
+      ],
+      "objectTypes": [
+        {
+          "id": "production-order",
+          "name": "生产订单",
+          "nameEn": "ProductionOrder",
+          "kind": "aggregate_root",
+          "businessScenarioIds": ["scenario-mts", "scenario-mto"],
+          "description": "生产执行的核心聚合根",
+          "properties": [
+            {"id": "order-id", "name": "订单号", "nameEn": "orderId", "dataType": "string", "required": true, "isPrimary": true},
+            {"id": "order-qty", "name": "订单数量", "nameEn": "orderQty", "dataType": "integer", "required": true},
+            {"id": "order-status", "name": "状态", "nameEn": "status", "dataType": "string", "isState": true},
+            {"id": "planned-date", "name": "计划日期", "nameEn": "plannedDate", "dataType": "date", "required": true},
+            {"id": "customer-ref", "name": "客户编号", "nameEn": "customerRef", "dataType": "string", "required": false}
+          ]
+        },
+        {
+          "id": "sales-order",
+          "name": "销售订单",
+          "nameEn": "SalesOrder",
+          "kind": "aggregate_root",
+          "businessScenarioIds": ["scenario-mto"],
+          "description": "客户销售订单聚合根",
+          "properties": [
+            {"id": "so-id", "name": "销售单号", "nameEn": "salesOrderId", "dataType": "string", "required": true, "isPrimary": true},
+            {"id": "so-amount", "name": "金额", "nameEn": "amount", "dataType": "float", "required": true},
+            {"id": "so-status", "name": "状态", "nameEn": "status", "dataType": "string", "isState": true}
+          ]
+        },
+        {
+          "id": "operation",
+          "name": "工序",
+          "nameEn": "Operation",
+          "kind": "child_entity",
+          "aggregateRootId": "production-order",
+          "businessScenarioIds": ["scenario-mts"],
+          "description": "生产订单下的工序步骤",
+          "properties": [
+            {"id": "op-number", "name": "工序号", "nameEn": "opNumber", "dataType": "integer", "required": true},
+            {"id": "op-name", "name": "工序名称", "nameEn": "opName", "dataType": "string", "required": true},
+            {"id": "op-duration", "name": "工时", "nameEn": "duration", "dataType": "integer", "required": false}
+          ]
+        },
+        {
+          "id": "quality-inspection",
+          "name": "质检记录",
+          "nameEn": "QualityInspection",
+          "kind": "aggregate_root",
+          "businessScenarioIds": ["scenario-mts"],
+          "description": "质量检验记录聚合根",
+          "properties": [
+            {"id": "qi-id", "name": "质检编号", "nameEn": "inspectionId", "dataType": "string", "required": true, "isPrimary": true},
+            {"id": "qi-result", "name": "检验结果", "nameEn": "result", "dataType": "string", "required": true, "enumValues": ["PASS", "FAIL", "PENDING"]}
+          ]
+        }
+      ]
+    },
+    "behavior": {
+      "actions": [
+        {
+          "id": "release-order",
+          "name": "下达生产订单",
+          "nameEn": "releaseProductionOrder",
+          "aggregateRootId": "production-order",
+          "description": "将生产订单从草稿变更为已下达",
+          "inputSchema": {"plannedDate": "string", "qty": "integer"},
+          "preRuleIds": ["rule-qty-positive"],
+          "publishesEventIds": ["evt-order-released"],
+          "domain": "manufacturing",
+          "riskLevel": "medium"
+        },
+        {
+          "id": "complete-order",
+          "name": "完成生产订单",
+          "nameEn": "completeProductionOrder",
+          "aggregateRootId": "production-order",
+          "description": "标记生产订单为完成状态",
+          "publishesEventIds": ["evt-order-completed"],
+          "domain": "manufacturing",
+          "riskLevel": "low"
+        },
+        {
+          "id": "approve-inspection",
+          "name": "审批质检记录",
+          "nameEn": "approveInspection",
+          "aggregateRootId": "quality-inspection",
+          "description": "通过质检审批",
+          "publishesEventIds": ["evt-inspection-approved"],
+          "domain": "quality",
+          "riskLevel": "high"
+        },
+        {
+          "id": "create-sales-order",
+          "name": "创建销售订单",
+          "nameEn": "createSalesOrder",
+          "aggregateRootId": "sales-order",
+          "description": "根据客户需求创建销售订单",
+          "domain": "sales",
+          "riskLevel": "medium"
+        }
+      ],
+      "rules": [
+        {
+          "id": "rule-qty-positive",
+          "name": "数量必须大于零",
+          "description": "生产订单数量不能为负",
+          "expression": "orderQty > 0"
+        },
+        {
+          "id": "rule-inspector-required",
+          "name": "质检员必须指派",
+          "description": "质检记录必须指定质检员",
+          "expression": "inspectorId != null"
+        },
+        {
+          "id": "rule-amount-positive",
+          "name": "金额必须大于零",
+          "description": "销售订单金额必须大于零",
+          "expression": "amount > 0"
+        }
+      ],
+      "stateMachines": [
+        {
+          "id": "sm-production-order",
+          "name": "生产订单生命周期",
+          "aggregateRootId": "production-order",
+          "states": [
+            {"name": "DRAFT", "initial": true, "final": false},
+            {"name": "RELEASED", "initial": false, "final": false},
+            {"name": "COMPLETED", "initial": false, "final": true},
+            {"name": "CANCELLED", "initial": false, "final": true}
+          ],
+          "transitions": [
+            {"from": "DRAFT", "to": "RELEASED", "trigger": "release", "guard": "qty_positive"},
+            {"from": "RELEASED", "to": "COMPLETED", "trigger": "complete"},
+            {"from": "RELEASED", "to": "CANCELLED", "trigger": "cancel"}
+          ]
+        },
+        {
+          "id": "sm-inspection",
+          "name": "质检生命周期",
+          "aggregateRootId": "quality-inspection",
+          "states": [
+            {"name": "PENDING", "initial": true, "final": false},
+            {"name": "PASSED", "initial": false, "final": true},
+            {"name": "FAILED", "initial": false, "final": true}
+          ],
+          "transitions": [
+            {"from": "PENDING", "to": "PASSED", "trigger": "approve"},
+            {"from": "PENDING", "to": "FAILED", "trigger": "reject"}
+          ]
+        }
+      ]
+    },
+    "events": {
+      "domainEvents": [
+        {
+          "id": "evt-order-released",
+          "name": "生产订单已下达",
+          "nameEn": "order_released",
+          "eventType": "domain_event",
+          "severity": "info",
+          "aggregateRootId": "production-order",
+          "payloadSchema": {"orderId": "string", "releasedAt": "string"}
+        },
+        {
+          "id": "evt-order-completed",
+          "name": "生产订单已完成",
+          "nameEn": "order_completed",
+          "eventType": "domain_event",
+          "severity": "info",
+          "aggregateRootId": "production-order",
+          "payloadSchema": {"orderId": "string", "completedAt": "string"}
+        },
+        {
+          "id": "evt-inspection-approved",
+          "name": "质检已通过",
+          "nameEn": "inspection_approved",
+          "eventType": "domain_event",
+          "severity": "info",
+          "aggregateRootId": "quality-inspection",
+          "payloadSchema": {"inspectionId": "string", "inspector": "string"}
+        },
+        {
+          "id": "evt-so-created",
+          "name": "销售订单已创建",
+          "nameEn": "sales_order_created",
+          "eventType": "domain_event",
+          "severity": "info",
+          "aggregateRootId": "sales-order",
+          "payloadSchema": {"salesOrderId": "string", "amount": "number"}
+        }
+      ],
+      "causalities": [
+        {
+          "id": "causality-release-complete",
+          "causeEventId": "evt-order-released",
+          "effectEventId": "evt-order-completed",
+          "description": "订单下达后最终完成"
+        },
+        {
+          "id": "causality-inspect-after-release",
+          "causeEventId": "evt-order-released",
+          "effectEventId": "evt-inspection-approved",
+          "description": "订单下达后触发质检"
+        }
+      ]
+    },
+    "governance": {
+      "roles": [
+        {
+          "id": "role-prod-manager",
+          "name": "生产经理",
+          "code": "PROD_MGR",
+          "permissions": ["release-order", "complete-order"]
+        },
+        {
+          "id": "role-qa-inspector",
+          "name": "质检员",
+          "code": "QA_INSPECTOR",
+          "permissions": ["approve-inspection"]
+        },
+        {
+          "id": "role-sales-rep",
+          "name": "销售代表",
+          "code": "SALES_REP",
+          "permissions": ["create-sales-order"]
+        }
+      ],
+      "agentPolicies": [
+        {
+          "id": "policy-prod-agent",
+          "name": "生产执行Agent策略",
+          "agentRoleId": "role-prod-manager",
+          "allowedTools": ["release-order", "complete-order"]
+        },
+        {
+          "id": "policy-qa-agent",
+          "name": "质检Agent策略",
+          "agentRoleId": "role-qa-inspector",
+          "allowedTools": ["approve-inspection"]
+        }
+      ]
+    },
+    "dataSources": [
+      {
+        "id": "ds-sap",
+        "name": "SAP ERP",
+        "code": "SAP_ERP",
+        "sourceType": "api",
+        "connectionConfig": {
+          "baseUrl": "https://sap.example.com/api",
+          "authType": "oauth2",
+          "timeoutMs": 30000
+        }
+      },
+      {
+        "id": "ds-mes",
+        "name": "MES 系统",
+        "code": "MES_SYSTEM",
+        "sourceType": "database",
+        "connectionConfig": {
+          "jdbcUrl": "jdbc:postgresql://mes-db:5432/mes",
+          "maxPoolSize": 10
+        }
+      },
+      {
+        "id": "ds-crm",
+        "name": "CRM 系统",
+        "code": "CRM_API",
+        "sourceType": "api",
+        "connectionConfig": {
+          "baseUrl": "https://crm.example.com/graphql",
+          "authMethod": "token"
+        }
+      }
+    ],
+    "epc": [
+      {
+        "id": "epc-production-flow",
+        "flowName": "生产执行全流程（V14 EPC链）",
+        "steps": [
+          {"stepOrder": 1, "triggerEventId": "evt-order-released", "actionId": "release-order", "conditions": ["rule-qty-positive"], "guards": ["order_ready"]},
+          {"stepOrder": 2, "triggerEventId": "evt-inspection-approved", "actionId": "approve-inspection", "conditions": ["quality_check_done"]},
+          {"stepOrder": 3, "triggerEventId": "evt-order-completed", "actionId": "complete-order"}
+        ]
+      },
+      {
+        "id": "epc-sales-to-production",
+        "flowName": "销售转生产流程（跨域V12+V14）",
+        "steps": [
+          {"stepOrder": 1, "triggerEventId": "evt-so-created", "actionId": "create-sales-order"},
+          {"stepOrder": 2, "triggerEventId": "evt-order-released", "actionId": "release-order"}
+        ]
+      }
+    ]
+  }
+}

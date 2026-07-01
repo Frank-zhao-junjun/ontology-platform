@@ -16,16 +16,26 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -237,6 +247,20 @@ class ExchangeImportServiceTest {
         }
 
         @Test
+        @DisplayName("should roll back when mapper.insert throws RuntimeException — no stale data retained")
+        void importExchangeInsertFailure() {
+            when(mapper.insert(any())).thenThrow(new RuntimeException("DB connection lost"));
+
+            assertThatThrownBy(() -> service.importExchange(VALID_MINIMAL_JSON, "strict"))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessageContaining("DB connection lost");
+
+            // Verify insert was *attempted* but threw — in a @Transactional context this means
+            // no record is committed; the mock verifies the call was made but no response returned.
+            verify(mapper).insert(any());
+        }
+
+        @Test
         @DisplayName("should default to strict mode when validationMode is blank")
         void importExchangeDefaultMode() {
             when(mapper.insert(any())).thenReturn(1);
@@ -245,6 +269,83 @@ class ExchangeImportServiceTest {
 
             assertThat(response.getStatus()).isEqualTo("passed");
             verify(mapper).insert(any());
+        }
+
+        @Test
+        @DisplayName("concurrent import of same ontology — both succeed, no duplicate detection (known limitation)")
+        void concurrentImportSameOntology() throws Exception {
+            when(mapper.insert(any())).thenReturn(1);
+
+            int threadCount = 2;
+            ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+            CountDownLatch readyLatch = new CountDownLatch(threadCount);
+            CountDownLatch startLatch = new CountDownLatch(1);
+            CountDownLatch doneLatch = new CountDownLatch(threadCount);
+
+            // Collect results from both threads
+            ExchangeImportResponse[] results = new ExchangeImportResponse[threadCount];
+            Throwable[] exceptions = new Throwable[threadCount];
+
+            for (int i = 0; i < threadCount; i++) {
+                final int idx = i;
+                executor.submit(() -> {
+                    try {
+                        readyLatch.countDown();
+                        startLatch.await();  // wait for both threads to be ready
+                        results[idx] = service.importExchange(VALID_MINIMAL_JSON, "strict");
+                    } catch (Throwable t) {
+                        exceptions[idx] = t;
+                    } finally {
+                        doneLatch.countDown();
+                    }
+                });
+            }
+
+            // Wait for both threads to be ready, then fire them simultaneously
+            readyLatch.await(5, TimeUnit.SECONDS);
+            startLatch.countDown();
+
+            // Wait for both to finish
+            boolean completed = doneLatch.await(10, TimeUnit.SECONDS);
+            executor.shutdown();
+
+            assertThat(completed)
+                    .as("Both threads should complete within timeout")
+                    .isTrue();
+
+            // Verify no exceptions occurred
+            for (int i = 0; i < threadCount; i++) {
+                assertThat(exceptions[i])
+                        .as("Thread %d should not throw", i)
+                        .isNull();
+            }
+
+            // Verify both returned successful responses
+            for (int i = 0; i < threadCount; i++) {
+                assertThat(results[i]).as("Result %d", i).isNotNull();
+                assertThat(results[i].getStatus()).as("Result %d status", i).isEqualTo("passed");
+            }
+
+            // Both results should have different IDs (no dedup)
+            assertThat(results[0].getId()).isNotEqualTo(results[1].getId());
+
+            // Verify exactly 2 inserts happened
+            verify(mapper, times(2)).insert(any());
+
+            // Capture both inserts and verify no data corruption
+            ArgumentCaptor<ExchangeImportPO> poCaptor = ArgumentCaptor.forClass(ExchangeImportPO.class);
+            verify(mapper, times(2)).insert(poCaptor.capture());
+            List<ExchangeImportPO> allPOs = poCaptor.getAllValues();
+
+            assertThat(allPOs).hasSize(2);
+            // Both records should have the same metadataName
+            assertThat(allPOs.get(0).getMetadataName()).isEqualTo("测试本体");
+            assertThat(allPOs.get(1).getMetadataName()).isEqualTo("测试本体");
+            // Both records should have the same metadataId
+            assertThat(allPOs.get(0).getMetadataId()).isEqualTo("test-ontology");
+            assertThat(allPOs.get(1).getMetadataId()).isEqualTo("test-ontology");
+            // Both records should have unique IDs
+            assertThat(allPOs.get(0).getId()).isNotEqualTo(allPOs.get(1).getId());
         }
     }
 
@@ -354,6 +455,150 @@ class ExchangeImportServiceTest {
                     .hasMessageContaining("Cannot publish");
 
             verify(mapper, never()).updateById(any());
+        }
+
+        @Test
+        @DisplayName("should roll back when phase3bPublisher throws — updateById never called")
+        void publishImportRollbackWhenPhase3bFails() {
+            ExchangeImportPO po = ExchangeImportPO.builder()
+                    .id("test-id")
+                    .metadataId("test-ontology")
+                    .validationStatus("passed")
+                    .rawDocument(VALID_MINIMAL_JSON)
+                    .build();
+
+            when(mapper.selectById("test-id")).thenReturn(po);
+            when(phase3bPublisher.publish(anyString(), any())).thenThrow(new RuntimeException("Phase3b failure"));
+
+            assertThatThrownBy(() -> service.publishImport("test-id"))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessageContaining("Phase3b failure");
+
+            // In a @Transactional context the update would be rolled back;
+            // at the mock level we verify updateById was never reached.
+            verify(mapper, never()).updateById(any());
+            // Subsequent publishers should never be called either
+            verify(phase3cPublisher, never()).publish(anyString(), any(), anyString());
+            verify(phase3cLifecyclePublisher, never()).publish(anyString(), any(), anyString());
+            verify(phase3dPublisher, never()).publish(anyString(), any(), anyString());
+        }
+
+        @Test
+        @DisplayName("should roll back when phase3cPublisher throws mid-publish — no dirty update")
+        void publishImportRollbackWhenPhase3cFails() {
+            ExchangeImportPO po = ExchangeImportPO.builder()
+                    .id("test-id")
+                    .metadataId("test-ontology")
+                    .validationStatus("passed")
+                    .rawDocument(VALID_MINIMAL_JSON)
+                    .build();
+
+            when(mapper.selectById("test-id")).thenReturn(po);
+            when(phase3bPublisher.publish(anyString(), any())).thenReturn(java.util.Map.of());
+            when(phase3cPublisher.publish(anyString(), any(), anyString())).thenThrow(new RuntimeException("Phase3c failure"));
+
+            assertThatThrownBy(() -> service.publishImport("test-id"))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessageContaining("Phase3c failure");
+
+            // updateById must not be called — no dirty "published" status
+            verify(mapper, never()).updateById(any());
+            // Later publishers should never be called
+            verify(phase3cLifecyclePublisher, never()).publish(anyString(), any(), anyString());
+            verify(phase3dPublisher, never()).publish(anyString(), any(), anyString());
+        }
+
+        @Test
+        @DisplayName("should roll back when phase3dPublisher throws after previous publishers succeed")
+        void publishImportRollbackWhenPhase3dFails() {
+            ExchangeImportPO po = ExchangeImportPO.builder()
+                    .id("test-id")
+                    .metadataId("test-ontology")
+                    .validationStatus("passed")
+                    .rawDocument(VALID_MINIMAL_JSON)
+                    .build();
+
+            when(mapper.selectById("test-id")).thenReturn(po);
+            when(phase3bPublisher.publish(anyString(), any())).thenReturn(java.util.Map.of());
+            when(phase3cPublisher.publish(anyString(), any(), anyString())).thenReturn(java.util.Map.of());
+            when(phase3cLifecyclePublisher.publish(anyString(), any(), anyString())).thenReturn(java.util.Map.of());
+            when(phase3dPublisher.publish(anyString(), any(), anyString())).thenThrow(new RuntimeException("Phase3d failure"));
+
+            assertThatThrownBy(() -> service.publishImport("test-id"))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessageContaining("Phase3d failure");
+
+            // updateById must not be called — no dirty "published" status
+            verify(mapper, never()).updateById(any());
+            // Verify execution order: phase3b → phase3c → phase3cLifecycle were all called before the crash
+            InOrder inOrder = inOrder(phase3bPublisher, phase3cPublisher, phase3cLifecyclePublisher, phase3dPublisher);
+            inOrder.verify(phase3bPublisher).publish(anyString(), any());
+            inOrder.verify(phase3cPublisher).publish(anyString(), any(), anyString());
+            inOrder.verify(phase3cLifecyclePublisher).publish(anyString(), any(), anyString());
+            inOrder.verify(phase3dPublisher).publish(anyString(), any(), anyString());
+            // No further ordered calls after the exception
+            verify(mapper, never()).updateById(any());
+        }
+    }
+
+    @Nested
+    @DisplayName("@Transactional annotation verification")
+    class TransactionalAnnotationTests {
+
+        @Test
+        @DisplayName("service class should be annotated with @Transactional")
+        void classHasTransactional() {
+            Transactional annotation = ExchangeImportService.class.getAnnotation(Transactional.class);
+            assertThat(annotation).as("ExchangeImportService should have @Transactional at class level").isNotNull();
+        }
+
+        @Test
+        @DisplayName("importExchange() should inherit class-level @Transactional")
+        void importExchangeInheritsTransactional() throws Exception {
+            Method method = ExchangeImportService.class.getMethod("importExchange", String.class, String.class);
+            Transactional annotation = method.getAnnotation(Transactional.class);
+            // No method-level annotation = inherits class-level @Transactional
+            assertThat(annotation).as("importExchange should not have its own @Transactional — inherits class-level").isNull();
+        }
+
+        @Test
+        @DisplayName("publishImport() should inherit class-level @Transactional")
+        void publishImportInheritsTransactional() throws Exception {
+            Method method = ExchangeImportService.class.getMethod("publishImport", String.class);
+            Transactional annotation = method.getAnnotation(Transactional.class);
+            // No method-level annotation = inherits class-level @Transactional
+            assertThat(annotation).as("publishImport should not have its own @Transactional — inherits class-level").isNull();
+        }
+
+        @Test
+        @DisplayName("getImportStatus() should have @Transactional(readOnly = true)")
+        void getImportStatusHasReadOnlyTransactional() throws Exception {
+            Method method = ExchangeImportService.class.getMethod("getImportStatus", String.class);
+            Transactional annotation = method.getAnnotation(Transactional.class);
+            assertThat(annotation).as("getImportStatus should have @Transactional(readOnly = true)").isNotNull();
+            assertThat(annotation.readOnly()).as("getImportStatus should be readOnly=true").isTrue();
+        }
+
+        @Test
+        @DisplayName("validateOnly() should have @Transactional(readOnly = true)")
+        void validateOnlyHasReadOnlyTransactional() throws Exception {
+            Method method = ExchangeImportService.class.getMethod("validateOnly", String.class, String.class);
+            Transactional annotation = method.getAnnotation(Transactional.class);
+            assertThat(annotation).as("validateOnly should have @Transactional(readOnly = true)").isNotNull();
+            assertThat(annotation.readOnly()).as("validateOnly should be readOnly=true").isTrue();
+        }
+
+        @Test
+        @DisplayName("all publishers should have @Transactional for same-transaction participation")
+        void publishersHaveTransactional() {
+            assertThat(ExchangePhase3bPublisher.class.getAnnotation(Transactional.class))
+                    .as("ExchangePhase3bPublisher should have @Transactional").isNotNull();
+            assertThat(ExchangePhase3cPublisher.class.getAnnotation(Transactional.class))
+                    .as("ExchangePhase3cPublisher should have @Transactional").isNotNull();
+            assertThat(ExchangePhase3cLifecyclePublisher.class.getAnnotation(Transactional.class))
+                    .as("ExchangePhase3cLifecyclePublisher should have @Transactional").isNotNull();
+            assertThat(ExchangePhase3dPublisher.class.getAnnotation(Transactional.class))
+                    .as("ExchangePhase3dPublisher should have @Transactional").isNotNull();
         }
     }
 }

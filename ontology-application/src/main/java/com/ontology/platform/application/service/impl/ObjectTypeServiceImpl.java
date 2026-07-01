@@ -56,6 +56,10 @@ public class ObjectTypeServiceImpl implements ObjectTypeService {
                 request.getEntityRole(),
                 request.getBusinessScenarioId()
         );
+        // 循环继承检测：验证 parentId 不会形成 A→B→...→A 环
+        if (request.getParentId() != null) {
+            checkParentCycle(null, request.getParentId());
+        }
         objectType.setParentId(request.getParentId());
         objectType.setParentAggregateId(request.getParentAggregateId());
         objectType.setSubDomain(request.getSubDomain());
@@ -115,6 +119,10 @@ public class ObjectTypeServiceImpl implements ObjectTypeService {
             objectType.setSubDomain(request.getSubDomain());
         }
         if (request.getParentId() != null) {
+            if (request.getParentId().equals(id)) {
+                throw new ValidationException("不能将自身设为父类型", "parentId: " + request.getParentId());
+            }
+            checkParentCycle(id, request.getParentId());
             objectType.setParentId(request.getParentId());
         }
         if (request.getAttributesJsonb() != null) {
@@ -253,6 +261,40 @@ public class ObjectTypeServiceImpl implements ObjectTypeService {
         }
 
         return responses;
+    }
+
+    /**
+     * 循环继承检测：遍历 parentId 的祖先链，检查是否会出现 A→B→...→A 环。
+     * <p>
+     * 对于新建对象 (currentId == null)，只需检查 parentId 是否合法（自引用在实体层已校验）。
+     * 对于已有对象，需确保祖先链中不包含当前对象自身。
+     *
+     * @param currentId 当前正在设置父类型的对象 ID（新建时为 null）
+     * @param parentId  拟设置的父类型 ID
+     * @throws ValidationException 如果检测到循环继承链
+     */
+    private void checkParentCycle(String currentId, String parentId) {
+        java.util.Set<String> visited = new java.util.HashSet<>();
+        String cursor = parentId;
+        int maxDepth = 50; // 最大遍历深度，防止意外无限循环
+
+        while (cursor != null && maxDepth-- > 0) {
+            if (cursor.equals(currentId)) {
+                throw new ValidationException(
+                    "检测到循环继承链",
+                    "currentId: " + currentId + ", parentId: " + parentId
+                );
+            }
+            if (!visited.add(cursor)) {
+                // 祖先链中已存在环（数据异常），中断检测
+                log.warn("Parent chain already contains a cycle at id={}", cursor);
+                throw new ValidationException("继承链数据异常，存在已有循环", "id: " + cursor);
+            }
+            final String nextCursor = cursor;
+            cursor = objectTypeRepository.findById(cursor)
+                .map(ObjectType::getParentId)
+                .orElse(null);
+        }
     }
 
     private void validateConstraintDefinition(ConstraintDefinition constraintDef) {
