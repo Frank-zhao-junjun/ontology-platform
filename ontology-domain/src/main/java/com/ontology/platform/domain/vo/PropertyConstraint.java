@@ -271,11 +271,19 @@ public class PropertyConstraint {
 
     /**
      * 安全转换为 BigDecimal，避免 ClassCastException。
-     * 当 this.value 通过 Builder 直接设置非 BigDecimal 值时提供防护。
+     * 当 this.value 通过 Builder 直接设置非 BigDecimal 值时提供防护，
+     * 同时兼容数值格式的字符串。
      */
     private static BigDecimal toBigDecimal(Object val) {
         if (val instanceof BigDecimal bd) return bd;
         if (val instanceof Number num) return new BigDecimal(num.toString());
+        if (val instanceof String s) {
+            try {
+                return new BigDecimal(s);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
         return null;
     }
 

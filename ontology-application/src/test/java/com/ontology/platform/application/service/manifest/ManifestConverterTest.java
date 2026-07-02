@@ -125,6 +125,70 @@ class ManifestConverterTest {
     }
 
     @Test
+    @DisplayName("TC-4: tags 字段导入 — metadata.tags/domainTags 作为已知差距被记录（不静默丢失）")
+    void tagsFieldIsReportedAsLoss() {
+        String json = """
+                {
+                  "apiVersion": "ontology.platform/v1",
+                  "kind": "OntologyManifest",
+                  "metadata": {
+                    "id": "tags-test",
+                    "name": "标签测试",
+                    "version": "1.0.0",
+                    "tags": ["manufacturing", "production"],
+                    "domainTags": ["manufacturing"]
+                  },
+                  "spec": {
+                    "semantic": {
+                      "objectTypes": [
+                        {"id": "OT-001", "name": "带标签实体", "kind": "aggregate_root"}
+                      ]
+                    }
+                  }
+                }
+                """;
+
+        ManifestDocument doc = converter.convert(json);
+
+        assertThat(doc).isNotNull();
+        assertThat(doc.getMetadata().getId()).isEqualTo("tags-test");
+        // Metadata 当前无 tags 字段；domainTags 也未被映射 → 作为已知差距记录
+        assertThat(doc.getMetadata().getDomainTags()).isNullOrEmpty();
+        assertThat(doc.getObjectTypes()).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("TC-5: scenario/subDomain 字段被保留在 ObjectType 中")
+    void scenarioAndSubDomainFieldsArePreserved() {
+        String json = """
+                {
+                  "apiVersion": "ontology.platform/v1",
+                  "kind": "OntologyManifest",
+                  "metadata": {"id": "scenario-test", "name": "场景测试", "version": "1.0.0"},
+                  "spec": {
+                    "semantic": {
+                      "objectTypes": [
+                        {"id": "OT-001", "name": "实体1", "kind": "aggregate_root", "scenario": "prod", "subDomain": "mfg"},
+                        {"id": "OT-002", "name": "实体2", "kind": "child_entity", "scenario": "qc"},
+                        {"id": "OT-003", "name": "实体3", "kind": "aggregate_root", "subDomain": "inspection"}
+                      ]
+                    }
+                  }
+                }
+                """;
+
+        ManifestDocument doc = converter.convert(json);
+
+        assertThat(doc.getObjectTypes()).hasSize(3);
+        assertThat(doc.getObjectTypes().get(0).getScenario()).isEqualTo("prod");
+        assertThat(doc.getObjectTypes().get(0).getSubDomain()).isEqualTo("mfg");
+        assertThat(doc.getObjectTypes().get(1).getScenario()).isEqualTo("qc");
+        assertThat(doc.getObjectTypes().get(1).getSubDomain()).isNull();
+        assertThat(doc.getObjectTypes().get(2).getScenario()).isNull();
+        assertThat(doc.getObjectTypes().get(2).getSubDomain()).isEqualTo("inspection");
+    }
+
+    @Test
     @DisplayName("StateMachine 在 semantic 中→ 映射到 behavior.stateMachines")
     void shouldConvertStateMachinesFromSemantic() {
         String json = """

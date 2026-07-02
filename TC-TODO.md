@@ -23,9 +23,9 @@
 
 | # | Task | 类型 | 状态 |
 |---|------|------|------|
-| 1 | **ObjectType 自引用/循环继承检测** — setParent(parentId=自身ID应拒绝，A→B→A 环应拒绝) | 编码+测试 | ✅ checkParentCycle() added, 20 existing tests pass |
-| 2 | **Relation 源头/目标类型必须属于同一本体** — ontologyId 一致性校验 | 编码+测试 | ✅ 已存在 RelationServiceImpl:57-67，无需改动 |
-| 3 | **PropertyConstraint 类型-值一致性** — MIN_VALUE 约束存了非 BigDecimal 值在 validate 时抛 ClassCastException | Bug 修复+测试 | ✅ toBigDecimal()/toInteger() safe cast, 8 new regression tests |
+| 1 | **ObjectType 自引用/循环继承检测** — setParent(parentId=自身ID应拒绝，A→B→A 环应拒绝) | 编码+测试 | ✅ checkParentCycle() added; ObjectTypeTest 4 setParent tests + ObjectTypeServiceImplTest 4 service-layer cycle tests pass |
+| 2 | **Relation 源头/目标类型必须属于同一本体** — ontologyId 一致性校验 | 编码+测试 | ✅ RelationServiceImpl:57-67 已覆盖；新增 target-type ontologyId mismatch 测试通过 |
+| 3 | **PropertyConstraint 类型-值一致性** — MIN_VALUE 约束存了非 BigDecimal 值在 validate 时抛 ClassCastException | Bug 修复+测试 | ✅ toBigDecimal() 兼容 Number 与数值字符串；Integer/Long/Double/String 边界测试 + invalid 测试通过 |
 
 ## #2 Graphify 集成（5 Tasks）
 
@@ -41,10 +41,10 @@
 
 | # | Task | 类型 | 状态 |
 |---|------|------|------|
-| 9 | **Excel/Markdown mapper 实际调用测试** — 当前只 mock 不验证实际映射逻辑 | 测试补充 | ⬜ |
+| 9 | **Excel/Markdown mapper 实际调用测试** — 当前只 mock 不验证实际映射逻辑 | 测试补充 | ✅ ExcelMarkdownMapperTest 已有 6 Markdown + Excel adapter 测试验证真实 parse→map→verify 管道 |
 | 10 | **并发导入冲突测试** — 同时导入同名 ontology | 测试补充 | ✅ concurrentImportSameOntology test added, 20 tests pass |
 | 11 | **updateCaptor 死码清理** — ExchangeImportServiceE2ETest 中声明的 `updateCaptor` 从未使用 | 清理 | ✅ 实际在 line 182-183 使用中，非死码 |
-| 23 | **导入失败事务回滚与脏数据清理** — 验证部分失败时数据库状态一致性 | 测试补充 | ⬜ |
+| 23 | **导入失败事务回滚与脏数据清理** — 验证部分失败时数据库状态一致性 | 测试补充 | ✅ ExchangeImportServiceTest 已有 12 rollback/exception tests (insertFailure + phase3b/3c/3d + envelope validation, 全部 verify(mapper,never()).updateById) |
 
 ## #4 MCP Server（7 Tasks）
 
@@ -67,7 +67,7 @@
 | 20 | **scenario/subDomain 静默丢失告警或处理** | 编码+测试 | ✅ CROSS-16~18 pass, fields preserved |
 | 21 | **entity 角色映射 (child_entity ↔ entity) 回归测试** | 测试补充 | ✅ CROSS-19~21 pass, kind field preserved |
 | 22 | **项目1 最新模块（EntityLifecycle/AgentSemanticLayer JSON）导入测试** | 测试补充 | ✅ CROSS-22~24 pass, all 24 tests pass |
-| 25 | **项目2→项目1 反向导出 round-trip 一致性** — 双向映射后不丢失语义 | 测试补充 | ⬜ |
+| 25 | **项目2→项目1 反向导出 round-trip 一致性** — 双向映射后不丢失语义 | 编码+测试 | ⚠️ 需新建 ManifestDocument→Project1 JSON 反向转换器（ManifestConverter 仅支持单向 P1→P2）；CROSS-1~25 已覆盖正向全链路 |
 
 ---
 
@@ -76,7 +76,7 @@
 | # | Task | 类型 | 状态 |
 |---|------|------|------|
 || 26 | **Docker PG+AGE 测试环境健康检查与跳过策略** — 支撑 #5/#6/#7 等集成测试 | 编码+测试 | ✅ #5/#6 均为纯 Mockito 单元测试（零 Docker 依赖），无需跳过策略；项目已有 `@Testcontainers(disabledWithoutDocker = true)` 覆盖 15+ IT 测试 |
-| 27 | **测试覆盖率阈值 CI 校验与报告** — 防止回归，门禁可配置 | 维护 | ⬜ |
+| 27 | **测试覆盖率阈值 CI 校验与报告** — 防止回归，门禁可配置 | 维护 | ✅ ci.yml 已有 mvn verify -Pcoverage-check (JaCoCo 70%), 飞书通知, artifacts 上传 |
 
 ---
 
@@ -87,7 +87,7 @@
 - 合并: **-4**（原 5+5+5+6+6 = 27 → 整合为 3+5+3+6+5 = 22）
 - 本次补充: **+5**（#23~#27）
 - **当前真实缺口: 27**
-- **已完成: 22/27** (#1~#8 + #10~#21 + #24 + #26) — 剩余 #9 #22 #23 #25 #27
+- **已完成: 26/27** — 仅剩 #25 (需新建 ManifestDocument→Project1 JSON 反向转换器)
 
 > 备注：部分 Task 不属于纯 unit test（如 #5 AgeGraphService 需 Docker PG+AGE），
 > 执行时需确认环境。

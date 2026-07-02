@@ -180,5 +180,70 @@ class PropertyConstraintTest {
                     .doesNotThrowAnyException();
             assertThat(constraint.validate("RED")).isFalse();
         }
+
+        @Test
+        @DisplayName("Builder 直接构造 MIN_VALUE 传 Integer 边界值应正确比较")
+        void builderMinValueWithIntegerBoundary() {
+            PropertyConstraint constraint = PropertyConstraint.builder()
+                    .type(PropertyConstraint.ConstraintType.MIN_VALUE)
+                    .value(10)
+                    .build();
+
+            assertThat(constraint.validate(10)).isTrue();
+            assertThat(constraint.validate(11)).isTrue();
+            assertThat(constraint.validate(9)).isFalse();
+        }
+
+        @Test
+        @DisplayName("Builder 直接构造 MIN_VALUE 传 Long 边界值应正确比较")
+        void builderMinValueWithLongBoundary() {
+            PropertyConstraint constraint = PropertyConstraint.builder()
+                    .type(PropertyConstraint.ConstraintType.MIN_VALUE)
+                    .value(10L)
+                    .build();
+
+            assertThat(constraint.validate(10L)).isTrue();
+            assertThat(constraint.validate(11L)).isTrue();
+            assertThat(constraint.validate(9L)).isFalse();
+        }
+
+        @Test
+        @DisplayName("Builder 直接构造 MIN_VALUE 传 Double 边界值应正确比较")
+        void builderMinValueWithDoubleBoundary() {
+            PropertyConstraint constraint = PropertyConstraint.builder()
+                    .type(PropertyConstraint.ConstraintType.MIN_VALUE)
+                    .value(10.0)
+                    .build();
+
+            assertThat(constraint.validate(10.0)).isTrue();
+            assertThat(constraint.validate(10.1)).isTrue();
+            assertThat(constraint.validate(9.9)).isFalse();
+        }
+
+        @Test
+        @DisplayName("Builder 直接构造 MIN_VALUE 传数值字符串应正确解析并比较")
+        void builderMinValueWithNumericStringBoundary() {
+            PropertyConstraint constraint = PropertyConstraint.builder()
+                    .type(PropertyConstraint.ConstraintType.MIN_VALUE)
+                    .value("10")
+                    .build();
+
+            assertThat(constraint.validate(10)).isTrue();
+            assertThat(constraint.validate(11)).isTrue();
+            assertThat(constraint.validate(9)).isFalse();
+        }
+
+        @Test
+        @DisplayName("Builder 直接构造 MIN_VALUE 传非法字符串应返回 false")
+        void builderMinValueWithInvalidStringReturnsFalse() {
+            PropertyConstraint constraint = PropertyConstraint.builder()
+                    .type(PropertyConstraint.ConstraintType.MIN_VALUE)
+                    .value("not-a-number")
+                    .build();
+
+            assertThatCode(() -> constraint.validate(10))
+                    .doesNotThrowAnyException();
+            assertThat(constraint.validate(10)).isFalse();
+        }
     }
 }

@@ -465,6 +465,172 @@ class Project1JsonToExchangeConverterTest {
         assertThat(profile.getProfileVersion()).isEqualTo("3.0");
     }
 
+    // ==================== Entity role mapping (Project1 ↔ Project2) ====================
+
+    @Test
+    @DisplayName("normalizeEntityRole: kind=entity maps to child_entity")
+    void entityKindMapsToChildEntity() {
+        assertThat(Project1JsonToExchangeConverter.normalizeEntityRole("entity")).isEqualTo("child_entity");
+    }
+
+    @Test
+    @DisplayName("normalizeEntityRole: kind=aggregate_root stays aggregate_root")
+    void aggregateRootKindStaysAggregateRoot() {
+        assertThat(Project1JsonToExchangeConverter.normalizeEntityRole("aggregate_root")).isEqualTo("aggregate_root");
+    }
+
+    @Test
+    @DisplayName("normalizeEntityRole: entityRole=child_entity stays child_entity")
+    void childEntityRoleStaysChildEntity() {
+        assertThat(Project1JsonToExchangeConverter.normalizeEntityRole("child_entity")).isEqualTo("child_entity");
+    }
+
+    @Test
+    @DisplayName("normalizeEntityRole: null or unknown defaults to aggregate_root")
+    void nullOrUnknownRoleDefaultsToAggregateRoot() {
+        assertThat(Project1JsonToExchangeConverter.normalizeEntityRole(null)).isEqualTo("aggregate_root");
+        assertThat(Project1JsonToExchangeConverter.normalizeEntityRole("unknown")).isEqualTo("aggregate_root");
+        assertThat(Project1JsonToExchangeConverter.normalizeEntityRole("  ")).isEqualTo("aggregate_root");
+    }
+
+    @Test
+    @DisplayName("Raw format: entity kind is converted to child_entity")
+    void rawFormat_entityKind_convertedToChildEntity() {
+        String json = """
+                {
+                  "version": "1.0",
+                  "project": { "id": "proj-1", "name": "Test Project" },
+                  "entities": [
+                    { "id": "ent-1", "name": "聚合根", "kind": "aggregate_root" },
+                    { "id": "ent-2", "name": "子实体", "kind": "entity" },
+                    { "id": "ent-3", "name": "子实体2", "entityRole": "child_entity" }
+                  ]
+                }
+                """;
+
+        OntologyExchangeDocument doc = converter.convert(json);
+
+        assertThat(doc).isNotNull();
+        var entities = doc.getSpec().getProject().getDataModel().getEntities();
+        assertThat(entities).hasSize(3);
+        assertThat(entities.get(0).getEntityRole()).isEqualTo("aggregate_root");
+        assertThat(entities.get(1).getEntityRole()).isEqualTo("child_entity");
+        assertThat(entities.get(2).getEntityRole()).isEqualTo("child_entity");
+    }
+
+    @Test
+    @DisplayName("V1 Manifest: objectType kind=entity is converted to child_entity")
+    void v1Manifest_entityKind_convertedToChildEntity() {
+        String json = """
+                {
+                  "apiVersion": "ontology.platform/v1",
+                  "kind": "OntologyManifest",
+                  "metadata": { "id": "manifest-role", "name": "Role Test" },
+                  "spec": {
+                    "semantic": {
+                      "objectTypes": [
+                        { "id": "ot-1", "name": "聚合根", "kind": "aggregate_root" },
+                        { "id": "ot-2", "name": "子实体", "kind": "entity" }
+                      ]
+                    }
+                  }
+                }
+                """;
+
+        OntologyExchangeDocument doc = converter.convert(json);
+
+        assertThat(doc).isNotNull();
+        var entities = doc.getSpec().getProject().getDataModel().getEntities();
+        assertThat(entities).hasSize(2);
+        assertThat(entities.get(0).getEntityRole()).isEqualTo("aggregate_root");
+        assertThat(entities.get(1).getEntityRole()).isEqualTo("child_entity");
+    }
+
+    // ==================== AgentSemanticLayer / EntityLifecycle (Project1 latest modules) ====================
+
+    @Test
+    @DisplayName("Raw format: AgentSemanticLayer JSON is imported into v2 exchange document")
+    void rawFormat_agentSemanticLayer_imported() {
+        String json = """
+                {
+                  "version": "1.0",
+                  "project": { "id": "proj-asl", "name": "ASL Project" },
+                  "agentSemanticLayer": {
+                    "intents": [
+                      {
+                        "id": "int-release-order",
+                        "name": "下达生产订单",
+                        "category": "production",
+                        "actionId": "act-release-order",
+                        "priority": 10,
+                        "requiresConfirmation": true
+                      }
+                    ],
+                    "businessTerms": [
+                      {
+                        "id": "term-production-order",
+                        "name": "生产订单",
+                        "nameEn": "ProductionOrder",
+                        "definition": "制造执行的核心单据"
+                      }
+                    ],
+                    "semanticRelations": [
+                      {
+                        "id": "rel-prod-insp",
+                        "sourceTermId": "term-production-order",
+                        "targetTermId": "term-quality-inspection",
+                        "relationType": "has_inspection"
+                      }
+                    ],
+                    "agentPolicies": [
+                      {
+                        "id": "ap-prod-manager",
+                        "roleId": "role-prod-manager",
+                        "defaultDeny": false
+                      }
+                    ],
+                    "errorRecoveries": [
+                      {
+                        "id": "er-release-fallback",
+                        "actionId": "act-release-order",
+                        "errorPattern": "ORDER_NOT_FOUND",
+                        "recoveryStrategy": "retry_with_new_id",
+                        "maxRetries": 3
+                      }
+                    ],
+                    "fieldMappings": [
+                      {
+                        "id": "fm-order-id",
+                        "entityId": "production-order",
+                        "fieldNameEn": "orderId",
+                        "businessTermId": "term-production-order",
+                        "mappingType": "direct"
+                      }
+                    ]
+                  }
+                }
+                """;
+
+        OntologyExchangeDocument doc = converter.convert(json);
+
+        assertThat(doc).isNotNull();
+        var asl = doc.getSpec().getProject().getAgentSemanticLayer();
+        assertThat(asl).isNotNull();
+        assertThat(asl.getIntents()).hasSize(1);
+        assertThat(asl.getIntents().get(0).getId()).isEqualTo("int-release-order");
+        assertThat(asl.getIntents().get(0).getPriority()).isEqualTo(10);
+        assertThat(asl.getBusinessTerms()).hasSize(1);
+        assertThat(asl.getBusinessTerms().get(0).getNameEn()).isEqualTo("ProductionOrder");
+        assertThat(asl.getSemanticRelations()).hasSize(1);
+        assertThat(asl.getSemanticRelations().get(0).getRelationType()).isEqualTo("has_inspection");
+        assertThat(asl.getAgentPolicies()).hasSize(1);
+        assertThat(asl.getAgentPolicies().get(0).getRoleId()).isEqualTo("role-prod-manager");
+        assertThat(asl.getErrorRecoveries()).hasSize(1);
+        assertThat(asl.getErrorRecoveries().get(0).getMaxRetries()).isEqualTo(3);
+        assertThat(asl.getFieldMappings()).hasSize(1);
+        assertThat(asl.getFieldMappings().get(0).getMappingType()).isEqualTo("direct");
+    }
+
     // ==================== Null / blank input ====================
 
     @Test

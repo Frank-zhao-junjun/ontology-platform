@@ -138,7 +138,7 @@ public class Project1JsonToExchangeConverter {
     private Entity buildEntity(JsonNode node) {
         String entityId = pathStr(node, "id");
         String entityName = pathStr(node, "name");
-        // Normalize entityRole: "entity" → "aggregate_root" for Project1 compatibility
+        // Normalize entityRole: "entity" → "child_entity" for Project1 compatibility
         String rawRole = pathStr(node, "entityRole");
         if (rawRole == null) {
             rawRole = pathStr(node, "kind");
@@ -1064,13 +1064,15 @@ public class Project1JsonToExchangeConverter {
 
     /**
      * Normalize entityRole value for compatibility with Project1 formats.
-     * "entity" or unknown → "aggregate_root"
+     * "entity" → "child_entity"
      * "child_entity" → "child_entity"
      * "aggregate_root" → "aggregate_root"
+     * null or unknown → "aggregate_root"
      */
     static String normalizeEntityRole(String role) {
         if (role == null) return "aggregate_root";
         return switch (role.trim().toLowerCase()) {
+            case "entity" -> "child_entity";
             case "child_entity" -> "child_entity";
             default -> "aggregate_root";
         };
