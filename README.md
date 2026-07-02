@@ -14,9 +14,11 @@
 | **项目2** Ontology Platform | 本仓库 | Spring Boot 3.2 · PostgreSQL · MCP | 持久化、发布、治理、Agent 编排、V12–V14 域 |
 
 - 项目1 `pnpm run ci:check` 全绿（2026-06-26）：~**1049** tests · lint 0 error
-- 项目2 `mvn test`：**174** tests · 0 failures · CI ~1m26s
+- 项目2 `mvn test`：**220+** tests · 0 failures · CI ~59s
+- MCP Server `npm test`：**177** tests · 10 files · 0 failures
 - 对接文档：[`docs/shared/项目1-项目2对接差距分析.md`](docs/shared/项目1-项目2对接差距分析.md) · [`docs/project1-to-project2-mapping.md`](docs/project1-to-project2-mapping.md)
 - 项目1 共享文档跳转：[`../Ontology/docs/shared/README.md`](../Ontology/docs/shared/README.md)
+- Bug 排查与测试闭环：[`TC-TODO.md`](TC-TODO.md) — 26/27 完成（2026-07-02）
 
 ## 技术栈
 
@@ -214,27 +216,30 @@ Manifest v2 交换契约见 [ontology-manifest-spec-v2.md](docs/shared/ontology-
 
 - **触发**: `main` / `release/**` 分支 push 或 PR
 - **环境**: `ubuntu-latest`, JDK 21 (Temurin), Maven 依赖缓存
-- **步骤**: Checkout → `mvn compile -B -q` → `mvn test -B` → 上传测试报告（7天保留）
-- **运行耗时**: 约 1 分 26 秒
-- **测试统计**: 全量 174 tests, 0 failures（2026-06-26）
+- **步骤**: Checkout → `mvn compile -B -q` → `mvn verify -Pcoverage-check` → 上传 JaCoCo 报告 + 测试报告（7天保留）→ 飞书通知
+- **运行耗时**: 约 59 秒
+- **覆盖率**: JaCoCo 指令覆盖率 ≥ 70%
+- **测试统计**: Java 220+ tests + MCP 177 tests, 0 failures（2026-07-02）
 
 ## 跨项目 E2E 测试
 
 项目内置了从**项目1（OntologyManifest JSON 格式）→ 项目2（本平台）**的完整导入/导出端到端测试：
 
-| 测试 | 场景 | 验证点 |
-|:----:|------|:------:|
-| CROSS-1 | 导入 + 预览（完整 JSON） | ManifestConverter → JSON → 结构化数据 |
-| CROSS-2 | 发布 | 合法化 → 持久化 → 状态变更 |
-| CROSS-3 | 按 Agent 名称导出 | 过滤导出 → 字段完整性 |
-| CROSS-4 | 按 ID 精确导出 | 单条导出 → 结构正确性 |
-| CROSS-5 | 最小合法清单 | 最小 JSON 能通过验证 |
-| CROSS-6 | 非法 JSON 拒绝 | 格式错误 → 400 拒绝 |
+| 测试组 | 用例 | 场景 | 验证点 |
+|:------:|:----:|------|:------:|
+| CROSS-1~6 | 6 | 基础管线 | ManifestConverter → JSON 转换 → 结构化数据 → 发布 → 导出 |
+| CROSS-7~9 | 3 | 最小清单 | 最小 JSON 通过验证 → 导入 → 全生命周期 |
+| CROSS-10~12 | 3 | 全领域 (V12-V14) | Governance + Properties + EPC chains 完整映射 |
+| CROSS-13~15 | 3 | Tags 已知差距 | tags/domainTags 丢失验证 + 导入可用 + 全链路 |
+| CROSS-16~18 | 3 | scenario/subDomain | 字段保留 → 导入 → 全生命周期不丢失 |
+| CROSS-19~21 | 3 | entity 角色映射 | aggregate_root / child_entity 角色保留回归 |
+| CROSS-22~24 | 3 | 最新模块 | EntityLifecycle + AgentSemanticLayer 导入验证 |
+| CROSS-25 | 1 | Round-trip | 导入→导出→再导入→再导出 全等比对 |
 
-**测试文件**: [`Project1ToProject2E2ETest.java`](ontology-application/src/test/java/com/ontology/platform/application/manifest/Project1ToProject2E2ETest.java)  
-**Fixture**: [`project1-manifest-export.json`](ontology-application/src/test/resources/fixtures/project1-manifest-export.json)
+**测试文件**: [`Project1ToProject2E2ETest.java`](ontology-application/src/test/java/com/ontology/platform/application/service/manifest/Project1ToProject2E2ETest.java)  
+**Fixtures**: [`ontology-application/src/test/resources/fixtures/`](ontology-application/src/test/resources/fixtures/)（7 个 fixture 文件）
 
-覆盖场景：Kimi/Codex 两种 Agent 类型、2 个本体、6 维度状态机、语义层信息。
+覆盖场景：Kimi/Claude/Codex Agent 类型、多本体、6 维度状态机、语义层、生命周期、V12-V14 新域。
 执行：`mvn test -pl ontology-application -am -Dtest="Project1ToProject2E2ETest"`
 
 ## 文档索引
@@ -256,23 +261,26 @@ Manifest v2 交换契约见 [ontology-manifest-spec-v2.md](docs/shared/ontology-
 ## 测试
 
 ```bash
-# 后端单元测试（174 tests, 0 failures）
+# 后端单元测试（220+ tests, 0 failures）
 mvn test
+
+# 覆盖率校验（JaCoCo ≥ 70%）
+mvn verify -Pcoverage-check
+
+# 集成测试（需 Docker — Testcontainers PG+AGE）
+mvn verify -Pintegration-test
 
 # 指定模块测试
 mvn test -pl ontology-application
 
-# 跨项目 E2E 导入/导出测试（6 个场景）
+# 跨项目 E2E 导入/导出测试（25 个场景）
 mvn test -pl ontology-application -am -Dtest="Project1ToProject2E2ETest"
 
 # Agent 编排测试（11 tests）
 mvn test -pl ontology-application -am -Dtest="*Agent*"
 
-# MCP Server
+# MCP Server（177 tests）
 cd mcp-server && npm test
-
-# 测试覆盖率（可选）
-mvn test jacoco:report
 ```
 
 > Integration Test（Testcontainers PG/Redis）需在 Docker 可用环境下单独执行；详见 TDD v2.0。
